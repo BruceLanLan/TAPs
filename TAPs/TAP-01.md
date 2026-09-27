@@ -3,7 +3,7 @@ tap: 1
 title: TAP Purpose and Process
 description: What a TAP is, the four types of TAPs, how a TAP moves from idea to final, and how TAPs are written and reviewed.
 author: TapeOut (@TapeOutProtocol)
-discussions-to: TBD
+discussions-to: https://github.com/TapeOutProtocol/TAPs/pull/1
 status: Draft
 type: Process
 created: 2026-09-27
