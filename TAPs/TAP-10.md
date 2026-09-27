@@ -3,7 +3,7 @@ tap: 10
 title: DeWEB Access and Messaging Layers
 description: How clients open TapeOut on-chain websites through tape:// names and exchange encrypted messages between circuit containers, verifying everything they read against the chain.
 author: TapeOut (@TapeOutProtocol)
-discussions-to: TBD
+discussions-to: https://github.com/TapeOutProtocol/TAPs/pull/2
 status: Draft
 type: Standards
 version: 1.1
