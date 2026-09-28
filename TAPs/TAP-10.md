@@ -8,7 +8,7 @@ status: Draft
 type: Standards
 version: 1.1
 created: 2026-09-17
-updated: 2026-09-27
+updated: 2026-09-28
 license: CC0-1.0
 ---
 
@@ -76,17 +76,16 @@ Notation: `‖` is byte concatenation. `uint256(x)` is the 32-byte big-endian en
 
 ### 2.1 Chain table
 
-The chain table is part of this specification. Each chain has two fixed numbers that must not be confused: its **index** is the bit position in the receiving-chains bitmap (§14.3) and never appears in names; its **area code** marks the chain in names (§3.1).
+The chain table is part of this specification. The **area code** is used in names (§3.1). The **bitmap bit** is used only in messaging keys (§14.3). They are different numbers: always take each from this table.
 
-| Index | Chain | chainId | Area code | Short name | Finality tag | Max pin lag (blocks) | Status |
+| Bitmap bit | Chain | chainId | Area code | Short name | Finality tag | Max pin lag (blocks) | Status |
 |---|---|---|---|---|---|---|---|
 | 0 | BNB Smart Chain | 56 | none | `bnb` | `finalized` | 400 | Active |
 | 1 | Base | 8453 | `3` | `base` | `safe` | 150 | Active since 2026-09-19 |
 | 2 | X Layer | 196 | `2` | `xlayer` | `safe` | 300 | Active since 2026-09-19 |
 
-- A chain becomes active when the TapeOut circuit protocol, the site contracts and a reviewed hub implementation are deployed on it and listed under Deployments. Indexes are never reused or renumbered; new chains are appended.
+- A chain becomes active when the TapeOut circuit protocol, the site contracts and a reviewed hub implementation are deployed on it and listed under Deployments. Bitmap bits are never reused or renumbered; new chains are appended.
 - Area codes are assigned once and never changed or reused. `0` and `1` are reserved and never assigned. BNB Smart Chain has no area code, so each of its containers has exactly one name.
-- The index order (Base 1, X Layer 2) and the area codes (X Layer 2, Base 3) differ, and both are fixed: indexes are inside every published key's bitmap, area codes inside every name. This table is the only place that relates them.
 - The finality tag is used in §17. The max pin lag bounds how far a pinned block may fall behind the highest head reported by any operator (§5.3); each value is about five minutes of blocks on that chain.
 - The short name identifies a chain in configuration only. It is not part of any name or display form.
 
@@ -256,7 +255,7 @@ A name is activated when either of the following holds at the pinned block. In b
 Consequences and rules:
 
 - Nobody can squat a name: if someone pays for `4246.0.tape` with their own container, clients ignore it, because the container derived from the name is not theirs;
-- Paying: the container's effective holder (holds the circuit NFT, container opened, not listed on the market) calls `DomainBinding.bind(name or domain, container, months)` with `msg.value = months × monthlyFee()` in the chain's native coin, 1 to 120 months, at most ten years ahead, non-refundable. Clients **MUST** read the fee from the chain and **MUST NOT** hard-code it;
+- Paying: the container's holder calls `DomainBinding.bind(name or domain, container, months)` with `msg.value = months × monthlyFee()`, in the chain's native coin (BNB, ETH or OKB). The payment contract, not the client, enforces who may pay and for how long (Appendix A). The fee is set by the contract owner, differs per chain and can change at any time (`FeeChanged`). A client that helps a holder pay **MUST** read `monthlyFee()` from the chain at the time of payment and **MUST NOT** hard-code a fee. Deciding whether a site is activated needs only `isLive` and `isContainerLive`, never the fee;
 - `DomainBinding.syncContainer(domain, container)` copies an existing name-level expiry into the container-level record; anyone may call it, and it can only raise the expiry;
 - When the circuit NFT changes hands, the payment record stays with the container;
 - On-chain data is public and anyone can read it. The fee is enforced only by compliant shells displaying only activated sites, not by any technical block on reading. Official shells **MUST** display only sites in state `ok`, and documentation **SHOULD** say plainly that the fee can be bypassed.
@@ -604,7 +603,7 @@ The fixed domain makes EIP-4361-aware wallets warn when any other site asks for 
 
 ### 14.3 Publishing and receiving chains
 
-The holder calls `publishKey(processor contract, #ID, 1, k, publicKey, chains)` on the hub of the container's home chain. `chains` is the **receiving-chains bitmap**: bit `i` set means the holder reads its inbox on the chain with index `i` in §2.1. It **MUST NOT** be 0. A client **SHOULD** publish all active chains and **SHOULD NOT** set bits of chains it does not read.
+The holder calls `publishKey(processor contract, #ID, 1, k, publicKey, chains)` on the hub of the container's home chain. `chains` is the **receiving-chains bitmap**: bit `i` set means the holder reads its inbox on the chain whose bitmap bit is `i` in §2.1. It **MUST NOT** be 0. A client **SHOULD** publish all active chains and **SHOULD NOT** set bits of chains it does not read.
 
 A client **SHOULD** skip the transaction when `keyFor` already reports the same key, `keyIndex` and bitmap as usable, and **SHOULD NOT** publish twice for one request (for example after a wallet timeout it **MUST** re-read `keyFor` before trying again).
 
@@ -832,7 +831,7 @@ This section answers: if I build on TAP-10, what will change, what will not, and
 
 1. The on-chain names of §3.1, including the `.tape` suffix, and the rule that the URL host is the complete on-chain name (§3.2);
 2. The processor number (the index in `factory.cpuAt`, from 0, append-only) and the #ID (the circuit's token ID);
-3. The chain indexes and area codes of §2.1; new chains are only appended;
+3. The bitmap bits and area codes of §2.1; new chains are only appended;
 4. The derivation of a container from a processor contract and #ID; a client never accepts a container someone reports (§4);
 5. The verification rule of §7.1: a length or SHA-256 mismatch means the file is not displayed;
 6. Agreement (§5.2): disagreement means rejection, never a majority vote;
@@ -1076,7 +1075,7 @@ Writes (for site owners; the holder, or an operator set with `setOperator`): `pu
 | `isContainerLive(address container)` | `bool` | Any name or domain of this container is paid and not expired; reverts on implementations that lack it |
 | `containerPaidUntil(address container)` | `uint40` | |
 | `monthlyFee()` | `uint256` | Fee per 30 days, in the chain's native coin (wei) |
-| `bind(string name, address container, uint256 months)` payable | — | §6.3; the name must be lowercase and contain a dot |
+| `bind(string name, address container, uint256 months)` payable | — | §6.3. Only the container's effective holder may call (holds the circuit NFT, container opened, not listed on the market); `months` 1–120, at most ten years ahead; non-refundable; the name must be lowercase and contain a dot. As described in the tape:// specification v0.2, Appendix B.6 |
 | `syncContainer(string name, address container)` | — | Anyone; can only raise `containerPaidUntil` |
 | `unbind(string name, address container)` | — | Stops this name; no refund; does not lower the container-level expiry |
 
