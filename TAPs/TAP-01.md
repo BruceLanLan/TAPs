@@ -7,6 +7,7 @@ discussions-to: https://github.com/TapeOutProtocol/TAPs/pull/1
 status: Draft
 type: Process
 created: 2026-09-27
+updated: 2026-09-28
 license: CC0-1.0
 ---
 
@@ -24,7 +25,7 @@ A TAP is a design document for the TapeOut ecosystem: the circuit protocol, circ
 
 Every TAP has one or more authors. They write it, build agreement around it, and record the objections raised against it. TAPs are text files in the TAPs repository, so the history of every standard is its commit history.
 
-The process follows BNB Chain's BEP-1 and Ethereum's EIP-1, scaled down for a smaller community.
+The process follows Ethereum's EIP-1, scaled down for a smaller community. It adds one status, Candidate, for TAPs that depend on contracts that can still be upgraded (§5.1).
 
 ## 2. Why TAPs
 
@@ -42,7 +43,7 @@ The process follows BNB Chain's BEP-1 and Ethereum's EIP-1, scaled down for a sm
 | **Information** | Background, guidelines and best practices | Nobody (no requirements) | An implementer's guide |
 | **Process** | How TAPs, or other community processes, work | The process | TAP-01 (this document) |
 
-All types live in the same `TAPs/` directory; the `type` field tells them apart. (BEP-1 keeps application proposals in a separate `BAPs/` directory; one small repository does not need that.)
+All types live in the same `TAPs/` directory; the `type` field tells them apart.
 
 An Application TAP **MUST NOT** weaken a requirement of a Standards TAP it builds on. If it needs to, it proposes a change to that Standards TAP instead.
 
@@ -88,18 +89,16 @@ TAP-01 is adopted through the process it defines. Editors merge it as a Draft, m
 
 ### 6.1 Numbers and names
 
-**[Open]** Numbering rule, based on BEP-1:
+As in EIP-1, editors assign a TAP's number when they merge it as a Draft:
 
-- A TAP's number is the number of the pull request that first proposes it;
-- Numbers 1–9 are reserved for Process and Information TAPs about the TAP process itself. TAP-10 was assigned before this process existed and keeps its number;
-- If the pull request number is in the reserved range or already belongs to a TAP, editors assign the lowest number above 9 that is neither a TAP nor the number of an open pull request;
+- Numbers 1–9 are reserved for Process and Information TAPs about the TAP process itself;
+- The multiples of ten from 10 to 100 (TAP-10, TAP-20, …, TAP-100) are reserved for core standards of the TapeOut protocol and DeWEB, assigned by editors. TAP-10 is the first of them;
+- Every other TAP gets the lowest number above 10 that is neither reserved nor already used;
 - Numbers are never reused, not even those of Withdrawn TAPs.
 
 A TAP is named `TAP-` followed by its number written with at least two digits: TAP-01 to TAP-09, then TAP-10, TAP-11, TAP-123. The preamble's `tap` field holds the plain number (`1` for TAP-01).
 
 Authors do not pick their own numbers. A draft that gives itself a number elsewhere (for example "TAP-20" in a personal repository) is not a TAP until the editors assign it a number here, and that number may differ.
-
-The reserved range and the reassignment rule are additions; BEP-1 has neither. The alternative is that editors assign the next free number when they merge a Draft. That gives denser numbers, but authors learn their number only at merge time instead of when they open the pull request.
 
 ### 6.2 Files
 
@@ -140,7 +139,7 @@ Every TAP starts with YAML front matter:
 
 ### 7.2 Sections
 
-In this order. Sections marked *optional* may be left out when there is nothing to say. TAP-01 itself is exempt from this section, as BEP-1 is from its own format; it uses key words outside a Specification section.
+In this order. Sections marked *optional* may be left out when there is nothing to say. TAP-01 itself, like EIP-1, is a process document: it does not follow this section and uses key words outside a Specification section.
 
 1. **Summary**: one sentence that a reader without technical background can understand.
 2. **Abstract**: a short paragraph on what the TAP specifies.
@@ -166,7 +165,7 @@ In this order. Sections marked *optional* may be left out when there is nothing 
 - Discussion happens in the TAPs repository: ideas in issues, drafts in their pull requests. Each TAP names its thread in `discussions-to`. Editors also announce new Drafts and review periods in TapeOut's community channels;
 - Editors change statuses by rough consensus: every objection raised during Review is either resolved or answered in the TAP's Rationale before the TAP moves on;
 - A Standards TAP that needs a contract deployed or upgraded also needs the contract owner to do it. The TAP records deployments; it cannot order them;
-- **[Open]** Whether significant Standards TAPs also get a non-binding signal vote (for example by BEM holders). BEP-1 requires a governance vote for major changes.
+- **[Open]** Whether significant Standards TAPs also get a non-binding signal vote (for example by BEM holders). EIP-1 has no vote.
 
 ## 9. Language
 
@@ -174,22 +173,20 @@ English is the normative language of every TAP. Translations are welcome and inf
 
 ## 10. Relationship to other specifications
 
-- **tape:// specification** (TapeKit `SPEC.md`, v0.2): it predates TAPs. TAP-10 incorporates it as the DeWEB access layer, next to the messaging layer, and supersedes it once merged.
-- **BEPs:** proposals that change BNB Chain itself belong in bnb-chain/BEPs; proposals specific to TapeOut belong here. **[Open]** How the HashPort BEP draft on verifiable on-chain front ends relates to TAPs.
+- **tape:// specification** (TapeKit `SPEC.md`, v0.2): it predates TAPs. TAP-10 incorporates it as the DeWEB access layer, next to the messaging layer, and supersedes it.
+- **Chain proposals:** proposals that change a chain itself belong in that chain's own process (for example Ethereum's EIPs); proposals specific to TapeOut belong here. **[Open]** How the HashPort draft on verifiable on-chain front ends relates to TAPs.
 - **ERCs:** where an existing ERC fits, a TAP uses it rather than defining a new interface.
 
 ## 11. Open questions
 
 1. Who are the editors, and how does someone become one? (Until decided, the TapeOutProtocol maintainers act as editors, §4.)
-2. Numbering: the pull request number (BEP-1) or editor assignment (§6.1)?
-3. Is the Candidate status worth having (§5)?
-4. Do editors decide by rough consensus alone, or is there a signal vote for major Standards TAPs (§8)?
-5. Does "TAP" expand to an official name?
-6. How does the HashPort BEP draft relate to TAPs (§10)?
+2. Is the Candidate status worth having (§5)?
+3. Do editors decide by rough consensus alone, or is there a signal vote for major Standards TAPs (§8)?
+4. Does "TAP" expand to an official name?
+5. How does the HashPort draft relate to TAPs (§10)?
 
 ## References
 
-- BEP-1: Purpose and Guidelines. https://github.com/bnb-chain/BEPs/blob/master/BEPs/BEP1.md
 - EIP-1: EIP Purpose and Guidelines. https://eips.ethereum.org/EIPS/eip-1
 - RFC 2119: Key words for use in RFCs to Indicate Requirement Levels. https://www.rfc-editor.org/rfc/rfc2119
 - RFC 8174: Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words. https://www.rfc-editor.org/rfc/rfc8174

@@ -14,7 +14,7 @@ This file explains how a proposal becomes a TAP. The rules themselves are in [TA
 2. Fill in the preamble. Leave `tap: TBD`. Set `discussions-to` to your idea issue.
 3. Write the sections in the template's order. For a Standards TAP, write the Specification so that someone who never talks to you can implement it: byte layouts, labels, function signatures, selectors and addresses written out in full.
 4. Open a pull request that adds only that file (and its `assets/` files, if any).
-5. Editors review the format, not the merit (TAP-01 §4). When it is ready they assign the number (TAP-01 §6.1), ask you to rename the file to `TAPs/TAP-<nn>.md` (at least two digits, e.g. `TAPs/TAP-07.md`), and merge it as **Draft**.
+5. Editors review the format, not the merit (TAP-01 §4). When it is ready they assign the number (TAP-01 §6.1), ask you to rename the file to `TAPs/TAP-<nn>.md` (at least two digits, e.g. `TAPs/TAP-11.md`), and merge it as **Draft**.
 
 ## 3. Bringing a draft you already published elsewhere
 
@@ -65,7 +65,7 @@ By contributing text to this repository you dedicate it to the public domain und
 
 - 规则以 [TAP-01](TAPs/TAP-01.md) 为准，本文件只讲怎么操作。
 - **先讨论**：用 Idea 模板开一个 issue（会自动加 `idea` 标签），说清问题和大致方案。这一步没有文件，也没有编号。
-- **写草稿**：复制 `TAP-template.md` 为 `TAPs/TAP-draft-<短标题>.md`，`tap` 字段写 `TBD`，提一个只包含这个文件的 PR。编辑只审格式和完整性，不评判方案好坏；分配编号后（至少两位数，如 TAP-07）合并为 Draft。
+- **写草稿**：复制 `TAP-template.md` 为 `TAPs/TAP-draft-<短标题>.md`，`tap` 字段写 `TBD`，提一个只包含这个文件的 PR。编辑只审格式和完整性，不评判方案好坏；分配编号后（至少两位数，如 TAP-11）合并为 Draft。
 - **别处已有草稿**（自己的仓库、gist、issue）：开 `idea` issue 并附上链接，改写成模板格式，所有规范性内容都要放进本仓库；不要沿用自己起的编号，正式编号由编辑分配。多数“建立在 TAP-10 之上的应用约定”属于 Application 类型，不能削弱它所依赖的 Standards TAP。
 - **授权**：贡献的文字以 CC0 放入公有领域；`assets/` 下的示例代码默认用 MIT 许可。
 - **英文为准**：译文放在 `TAP-<nn>.<lang>.md`，仅供参考。
