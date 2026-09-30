@@ -1,0 +1,60 @@
+{
+  "description": "Canonical JSON cases that add to the canonical-json.json vectors of TAP-draft-service-manifest, whose §6 defines canonicalJSON; same format. \"input\" is JSON text; \"canonical\" is the exact output (UTF-8); \"reject\" means no canonical form exists. The reason text is informative.",
+  "reproducedBy": "https://github.com/BruceLanLan/tapeapi/tree/fda84db889d2a732915f264a799af24073177a85 (sdk/src/canon.js safeParseJSON, canonicalJSON)",
+  "cases": [
+    {
+      "input": "{\"10\":1,\"2\":1,\"1\":1,\"a\":1,\"A\":1}",
+      "canonical": "{\"1\":1,\"10\":1,\"2\":1,\"A\":1,\"a\":1}",
+      "keccak256": "0x8f40be428ad639cf399fc37b1e11bb8b536cd2442e5172fd1039eadd6b938c89"
+    },
+    {
+      "input": "{\"xs\":[3,1,2],\"ys\":[{\"b\":1,\"a\":2}]}",
+      "canonical": "{\"xs\":[3,1,2],\"ys\":[{\"a\":2,\"b\":1}]}",
+      "keccak256": "0x95ee0ad23d84c7d9abd6275ff3db3b2e57e2654a56fdec38cb5464eab0483e2b"
+    },
+    {
+      "input": "{\"s\":\"a\\\\b\\/c\\b\\f\\r\\u001f\"}",
+      "canonical": "{\"s\":\"a\\\\b/c\\b\\f\\r\\u001f\"}",
+      "keccak256": "0x5f7be639ceb0fc85fc6bfe925272f24ce595de86346fee812168661b372f6ef0"
+    },
+    {
+      "input": "{\"a\":0.1,\"b\":1.5e-7,\"c\":-2.25}",
+      "canonical": "{\"a\":0.1,\"b\":1.5e-7,\"c\":-2.25}",
+      "keccak256": "0x0d032caa9ab5adb16427a1ee422ceed2b8a75fd9df9f0a60434bb054fe285015"
+    },
+    {
+      "input": "{\"m\":-9007199254740991}",
+      "canonical": "{\"m\":-9007199254740991}",
+      "keccak256": "0x10c3818eb9a9560f723280eed2f3290652a2d4cfcb3e153e8b61609f57d39990"
+    },
+    {
+      "input": "{\"o\":{},\"a\":[]}",
+      "canonical": "{\"a\":[],\"o\":{}}",
+      "keccak256": "0x1b15a022cd18f1e7f6bdc81da016fdde1aa2607c7e09ff681c7880dddcdbd519"
+    },
+    {
+      "input": "{\"\\u0061\":1,\"a\":2}",
+      "reject": "duplicate key \"a\" in JSON: RFC 8785 forbids it and two parsers may disagree about which value survives"
+    },
+    {
+      "input": "{\"a\":{\"prototype\":1}}",
+      "reject": "forbidden key \"prototype\" in JSON"
+    },
+    {
+      "input": "{\"n\":1e21}",
+      "reject": "integer 1e+21 at .n is outside the exactly representable range; carry it as a string"
+    },
+    {
+      "input": "{\"n\":-9007199254740992}",
+      "reject": "integer -9007199254740992 at .n is outside the exactly representable range; carry it as a string"
+    },
+    {
+      "input": "{\"n\":-0.0}",
+      "reject": "negative zero at .n: it serialises as 0 and the two forms are not distinguishable"
+    },
+    {
+      "input": "{\"\\udc00\":1}",
+      "reject": "lone UTF-16 surrogate at .<key>: not well-formed Unicode (RFC 7493 §2.1)"
+    }
+  ]
+}
