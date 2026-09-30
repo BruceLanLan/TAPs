@@ -1,0 +1,135 @@
+{
+ "tap": "TAP-draft-ai-usage-receipts, Specification §5.2",
+ "source": "Computed with sdk/src/ai.js scanSse at https://github.com/BruceLanLan/tapeapi/tree/fda84db889d2a732915f264a799af24073177a85; each value was also recomputed with an independent whole-text parser and with the incremental scanner fed one byte at a time.",
+ "note": "streamBase64 is the exact byte sequence (standard base64); streamText is the same text for reading. responseSha256 is SHA-256, lowercase hex, of the concatenation of each dispatched event's data (UTF-8) followed by one LF byte, events whose data is exactly the sentinel left out. hashedDataCount is the number of data values hashed.",
+ "cases": [
+  {
+   "name": "LF line ends, sentinel left out",
+   "sentinel": "[DONE]",
+   "streamBase64": "ZGF0YTogeyJhIjoxfQoKZGF0YTogeyJiIjoyfQoKZGF0YTogW0RPTkVdCgo=",
+   "streamText": "data: {\"a\":1}\n\ndata: {\"b\":2}\n\ndata: [DONE]\n\n",
+   "hashedDataCount": 2,
+   "responseSha256": "3881dc2ee848fe04d776737c86afbc783e482e7c5be6431d3aab36fa8fa2c928"
+  },
+  {
+   "name": "CRLF line ends",
+   "sentinel": "[DONE]",
+   "streamBase64": "ZGF0YTogeyJhIjoxfQ0KDQpkYXRhOiBbRE9ORV0NCg0K",
+   "streamText": "data: {\"a\":1}\r\n\r\ndata: [DONE]\r\n\r\n",
+   "hashedDataCount": 1,
+   "responseSha256": "e346432021b04179518d9614f3560ccd71354a4ee101ddcb893d6959a9d6301c"
+  },
+  {
+   "name": "CR line ends",
+   "sentinel": "[DONE]",
+   "streamBase64": "ZGF0YTogeyJhIjoxfQ0NZGF0YTogW0RPTkVdDQ0=",
+   "streamText": "data: {\"a\":1}\r\rdata: [DONE]\r\r",
+   "hashedDataCount": 1,
+   "responseSha256": "e346432021b04179518d9614f3560ccd71354a4ee101ddcb893d6959a9d6301c"
+  },
+  {
+   "name": "one leading U+FEFF skipped",
+   "sentinel": null,
+   "streamBase64": "77u/ZGF0YTogeAoK",
+   "streamText": "﻿data: x\n\n",
+   "hashedDataCount": 1,
+   "responseSha256": "73cb3858a687a8494ca3323053016282f3dad39d42cf62ca4e79dda2aac7d9ac"
+  },
+  {
+   "name": "a second U+FEFF is data",
+   "sentinel": null,
+   "streamBase64": "77u/ZGF0YTog77u/eAoK",
+   "streamText": "﻿data: ﻿x\n\n",
+   "hashedDataCount": 1,
+   "responseSha256": "dc79faf9efbee8e42b42346da7a977c74a27581ae8f3465f431176f43e521415"
+  },
+  {
+   "name": "no space after the colon",
+   "sentinel": null,
+   "streamBase64": "ZGF0YTp4Cgo=",
+   "streamText": "data:x\n\n",
+   "hashedDataCount": 1,
+   "responseSha256": "73cb3858a687a8494ca3323053016282f3dad39d42cf62ca4e79dda2aac7d9ac"
+  },
+  {
+   "name": "two spaces after the colon: one is kept",
+   "sentinel": null,
+   "streamBase64": "ZGF0YTogIHgKCg==",
+   "streamText": "data:  x\n\n",
+   "hashedDataCount": 1,
+   "responseSha256": "f41a06967e9098400c8010e8aa2eec6b1e8f8bb7c78d120d5de4720871912774"
+  },
+  {
+   "name": "several data lines joined with LF",
+   "sentinel": null,
+   "streamBase64": "ZGF0YTogbGluZTEKZGF0YTogbGluZTIKZGF0YToKCg==",
+   "streamText": "data: line1\ndata: line2\ndata:\n\n",
+   "hashedDataCount": 1,
+   "responseSha256": "12b4fcdcf67963821ea00836afbfae51a226c66f727f95148c00766b26689572"
+  },
+  {
+   "name": "a line \"data\" without a colon is an empty data value",
+   "sentinel": null,
+   "streamBase64": "ZGF0YQoK",
+   "streamText": "data\n\n",
+   "hashedDataCount": 1,
+   "responseSha256": "01ba4719c80b6fe911b091a7c05124b64eeece964e09c058ef8f9805daca546b"
+  },
+  {
+   "name": "comments, event names, id and retry are not hashed",
+   "sentinel": null,
+   "streamBase64": "OiBjb21tZW50CmV2ZW50OiBlCmlkOiA3CnJldHJ5OiAxMDAKZGF0YTogeAoKOiB0YXBlYXBpLXJlY2VpcHQgQUFBQQoK",
+   "streamText": ": comment\nevent: e\nid: 7\nretry: 100\ndata: x\n\n: tapeapi-receipt AAAA\n\n",
+   "hashedDataCount": 1,
+   "responseSha256": "73cb3858a687a8494ca3323053016282f3dad39d42cf62ca4e79dda2aac7d9ac"
+  },
+  {
+   "name": "an event without data is not dispatched",
+   "sentinel": null,
+   "streamBase64": "ZXZlbnQ6IHBpbmcKCmRhdGE6IHgKCg==",
+   "streamText": "event: ping\n\ndata: x\n\n",
+   "hashedDataCount": 1,
+   "responseSha256": "73cb3858a687a8494ca3323053016282f3dad39d42cf62ca4e79dda2aac7d9ac"
+  },
+  {
+   "name": "an unfinished event at the end is discarded",
+   "sentinel": null,
+   "streamBase64": "ZGF0YTogeAoKZGF0YTogeQo=",
+   "streamText": "data: x\n\ndata: y\n",
+   "hashedDataCount": 1,
+   "responseSha256": "73cb3858a687a8494ca3323053016282f3dad39d42cf62ca4e79dda2aac7d9ac"
+  },
+  {
+   "name": "sentinel only when the data is exactly the sentinel",
+   "sentinel": "[DONE]",
+   "streamBase64": "ZGF0YTogW0RPTkVdIAoKZGF0YTpbRE9ORV0KCg==",
+   "streamText": "data: [DONE] \n\ndata:[DONE]\n\n",
+   "hashedDataCount": 1,
+   "responseSha256": "7b835812b92f83fc42cc93d77187f80d60048e4e96c65ef16df7f7b7c1c055a1"
+  },
+  {
+   "name": "no sentinel (anthropic-messages): [DONE] is hashed like any data",
+   "sentinel": null,
+   "streamBase64": "ZGF0YTogW0RPTkVdCgo=",
+   "streamText": "data: [DONE]\n\n",
+   "hashedDataCount": 1,
+   "responseSha256": "11d762e91a0fc9246400df4d2c84fada060f1e403399b362ef347fb97cf491ba"
+  },
+  {
+   "name": "non-ASCII data hashed as UTF-8",
+   "sentinel": null,
+   "streamBase64": "ZGF0YTogeyJ0Ijoiw6nwn5iAIn0KCg==",
+   "streamText": "data: {\"t\":\"é😀\"}\n\n",
+   "hashedDataCount": 1,
+   "responseSha256": "37da41ab467df003cdb6e60e92f6b7f6ab6ef33a98e93fb6196346a31ffae710"
+  },
+  {
+   "name": "empty stream",
+   "sentinel": null,
+   "streamBase64": "",
+   "streamText": "",
+   "hashedDataCount": 0,
+   "responseSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  }
+ ]
+}

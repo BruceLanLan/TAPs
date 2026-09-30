@@ -1,0 +1,2667 @@
+{
+ "tap": "TAP-draft-ai-usage-receipts, Specification §3",
+ "source": "Checked with sdk/src/ai.js validateAIField at https://github.com/BruceLanLan/tapeapi/tree/fda84db889d2a732915f264a799af24073177a85 (without its development option allowHttp).",
+ "note": "valid: whether the field satisfies §3. normalised (valid cases): the field as a client uses it: baseUrl without trailing slashes, price members that are null or absent left out, other members in a fixed order.",
+ "pricesNote": "Every price is an arbitrary test value.",
+ "cases": [
+  {
+   "name": "the field of receipts.json",
+   "field": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": "0.02",
+        "output": "0"
+       }
+      ]
+     }
+    ]
+   },
+   "valid": true,
+   "normalised": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": "0.02",
+        "output": "0"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "trailing slashes of baseUrl removed; null price members read as absent",
+   "field": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://ai.example/v1//"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12",
+        "cacheWrite": null
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": "0.02",
+        "output": "0"
+       }
+      ]
+     }
+    ]
+   },
+   "valid": true,
+   "normalised": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": "0.02",
+        "output": "0"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "unknown format accepted (ignored by clients that do not know it)",
+   "field": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "future-format",
+      "baseUrl": "https://ai.example/future"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": "0.02",
+        "output": "0"
+       }
+      ]
+     }
+    ]
+   },
+   "valid": true,
+   "normalised": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "future-format",
+      "baseUrl": "https://ai.example/future"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": "0.02",
+        "output": "0"
+       }
+      ]
+     }
+    ]
+   }
+  },
+  {
+   "name": "no endpoints",
+   "field": {
+    "endpoints": [],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": "0.02",
+        "output": "0"
+       }
+      ]
+     }
+    ]
+   },
+   "valid": false
+  },
+  {
+   "name": "17 endpoints",
+   "field": {
+    "endpoints": [
+     {
+      "format": "f0",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "f1",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "f2",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "f3",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "f4",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "f5",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "f6",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "f7",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "f8",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "f9",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "f10",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "f11",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "f12",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "f13",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "f14",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "f15",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "f16",
+      "baseUrl": "https://ai.example/v1"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": "0.02",
+        "output": "0"
+       }
+      ]
+     }
+    ]
+   },
+   "valid": false
+  },
+  {
+   "name": "two endpoints of one format",
+   "field": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://ai2.example/v1"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": "0.02",
+        "output": "0"
+       }
+      ]
+     }
+    ]
+   },
+   "valid": false
+  },
+  {
+   "name": "format name with an upper-case letter",
+   "field": {
+    "endpoints": [
+     {
+      "format": "OpenAI-chat",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": "0.02",
+        "output": "0"
+       }
+      ]
+     }
+    ]
+   },
+   "valid": false
+  },
+  {
+   "name": "http baseUrl",
+   "field": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "http://ai.example/v1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": "0.02",
+        "output": "0"
+       }
+      ]
+     }
+    ]
+   },
+   "valid": false
+  },
+  {
+   "name": "baseUrl with a query",
+   "field": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://ai.example/v1?k=1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": "0.02",
+        "output": "0"
+       }
+      ]
+     }
+    ]
+   },
+   "valid": false
+  },
+  {
+   "name": "baseUrl with user information",
+   "field": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://u:p@ai.example/v1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": "0.02",
+        "output": "0"
+       }
+      ]
+     }
+    ]
+   },
+   "valid": false
+  },
+  {
+   "name": "no models",
+   "field": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     }
+    ],
+    "models": []
+   },
+   "valid": false
+  },
+  {
+   "name": "an alias equal to another entry's id",
+   "field": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901",
+       "gpt-x"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": "0.02",
+        "output": "0"
+       }
+      ]
+     }
+    ]
+   },
+   "valid": false
+  },
+  {
+   "name": "an id with a control character",
+   "field": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embedx",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": "0.02",
+        "output": "0"
+       }
+      ]
+     }
+    ]
+   },
+   "valid": false
+  },
+  {
+   "name": "formats names a format with no endpoint",
+   "field": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": "0.02",
+        "output": "0"
+       }
+      ]
+     }
+    ]
+   },
+   "valid": false
+  },
+  {
+   "name": "formats lists a format twice",
+   "field": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-chat"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": "0.02",
+        "output": "0"
+       }
+      ]
+     }
+    ]
+   },
+   "valid": false
+  },
+  {
+   "name": "the singular member price",
+   "field": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": "0.02",
+        "output": "0"
+       }
+      ],
+      "price": {
+       "currency": "USDC",
+       "unit": "1M tokens",
+       "input": "0.02",
+       "output": "0"
+      }
+     }
+    ]
+   },
+   "valid": false
+  },
+  {
+   "name": "an unknown currency",
+   "field": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "EUR",
+        "unit": "1M tokens",
+        "input": "0.02",
+        "output": "0"
+       }
+      ]
+     }
+    ]
+   },
+   "valid": false
+  },
+  {
+   "name": "a currency twice in one entry",
+   "field": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": "0.02",
+        "output": "0"
+       }
+      ]
+     }
+    ]
+   },
+   "valid": false
+  },
+  {
+   "name": "unit other than \"1M tokens\"",
+   "field": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1K tokens",
+        "input": "0.02",
+        "output": "0"
+       }
+      ]
+     }
+    ]
+   },
+   "valid": false
+  },
+  {
+   "name": "a price with 9 decimals",
+   "field": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": "0.000000001",
+        "output": "0"
+       }
+      ]
+     }
+    ]
+   },
+   "valid": false
+  },
+  {
+   "name": "a price with a leading zero",
+   "field": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": "01",
+        "output": "0"
+       }
+      ]
+     }
+    ]
+   },
+   "valid": false
+  },
+  {
+   "name": "a price as a JSON number",
+   "field": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": 0.02,
+        "output": "0"
+       }
+      ]
+     }
+    ]
+   },
+   "valid": false
+  },
+  {
+   "name": "a price with an exponent",
+   "field": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": "2e-2",
+        "output": "0"
+       }
+      ]
+     }
+    ]
+   },
+   "valid": false
+  },
+  {
+   "name": "output missing",
+   "field": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": "0.02"
+       }
+      ]
+     }
+    ]
+   },
+   "valid": false
+  },
+  {
+   "name": "8 price entries",
+   "field": {
+    "endpoints": [
+     {
+      "format": "openai-chat",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "openai-responses",
+      "baseUrl": "https://ai.example/v1"
+     },
+     {
+      "format": "anthropic-messages",
+      "baseUrl": "https://ai.example"
+     },
+     {
+      "format": "openai-embeddings",
+      "baseUrl": "https://ai.example/v1"
+     }
+    ],
+    "models": [
+     {
+      "id": "gpt-x",
+      "aliases": [
+       "gpt-x-2026-09-01"
+      ],
+      "formats": [
+       "openai-chat",
+       "openai-responses"
+      ],
+      "prices": [
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1.25",
+        "output": "10",
+        "cacheRead": "0.125",
+        "reasoning": "12"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "12.5",
+        "output": "100",
+        "cacheRead": "1.25"
+       }
+      ]
+     },
+     {
+      "id": "claude-x",
+      "aliases": [
+       "claude-x-20260901"
+      ],
+      "formats": [
+       "anthropic-messages"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "3",
+        "output": "15",
+        "cacheRead": "0.3",
+        "cacheWrite": "3.75",
+        "cacheWrite1h": "6"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "0.3",
+        "output": "1.5",
+        "cacheRead": "0.03",
+        "cacheWrite": "0.375"
+       }
+      ]
+     },
+     {
+      "id": "embed-x",
+      "formats": [
+       "openai-embeddings"
+      ],
+      "prices": [
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "1",
+        "output": "1"
+       },
+       {
+        "currency": "BNB",
+        "unit": "1M tokens",
+        "input": "1",
+        "output": "1"
+       },
+       {
+        "currency": "USDT",
+        "unit": "1M tokens",
+        "input": "1",
+        "output": "1"
+       },
+       {
+        "currency": "USDC",
+        "unit": "1M tokens",
+        "input": "1",
+        "output": "1"
+       },
+       {
+        "currency": "ETH",
+        "unit": "1M tokens",
+        "input": "1",
+        "output": "1"
+       },
+       {
+        "currency": "USD1",
+        "unit": "1M tokens",
+        "input": "1",
+        "output": "1"
+       },
+       {
+        "currency": "USD",
+        "unit": "1M tokens",
+        "input": "1",
+        "output": "1"
+       },
+       {
+        "currency": "BEM",
+        "unit": "1M tokens",
+        "input": "1",
+        "output": "1"
+       }
+      ]
+     }
+    ]
+   },
+   "valid": false
+  }
+ ]
+}

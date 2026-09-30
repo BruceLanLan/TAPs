@@ -1,0 +1,552 @@
+{
+ "tap": "TAP-draft-ai-usage-receipts, Specification §4–§10",
+ "source": "Generated for this TAP with the reference sidecar (server/src/ai-proxy.js) at https://github.com/BruceLanLan/tapeapi/tree/fda84db889d2a732915f264a799af24073177a85, in the same way and with the same key, container, manifest, clock and random source as receipts.json. Cases marked \"as specified\" pass createAIProxy the reference adapters with data: [DONE] added as a final line of openai-responses (Specification §6.1), through its public formats option; the case marked \"reference default (control)\" uses the default adapters and shows the difference listed under Backwards Compatibility. Every \"as specified\" receipt verifies with sdk/src/ai.js verifyUsageReceipt at that commit.",
+ "encoding": "As in receipts.json.",
+ "signerKey": "0x4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b",
+ "signerKeyNote": "A published test key. Never use it for anything else.",
+ "signer": "0x504e4FbaB7bC2962b361E3730B965E61F289d0cC",
+ "container": "0x1b2A657BcBa9D3229f57aC2f4FcbEE2AA756aAe8",
+ "ts": 1790000000,
+ "manifestNote": "The manifest ai field is the one of receipts.json.",
+ "pricesNote": "Every price is an arbitrary test value, not the price of any model or service.",
+ "cases": [
+  {
+   "name": "openai-chat-stream-usage-injected-empty-delta",
+   "description": "Chat stream; the client did not ask for usage. The upstream sends the usage chunk with choices [{\"index\":0,\"delta\":{}}] (a form some OpenAI-compatible gateways use) instead of []: it carries nothing, so it is removed from the client's copy too",
+   "adapters": "as specified",
+   "method": "openai_chat",
+   "path": "/v1/chat/completions",
+   "status": 200,
+   "stream": true,
+   "requestBase64": "eyJtb2RlbCI6ImdwdC14Iiwic3RyZWFtIjp0cnVlLCJtZXNzYWdlcyI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjoiSGkifV19",
+   "upstreamRequestBase64": "eyJtb2RlbCI6ImdwdC14Iiwic3RyZWFtIjp0cnVlLCJtZXNzYWdlcyI6W3sicm9sZSI6InVzZXIiLCJjb250ZW50IjoiSGkifV0sInN0cmVhbV9vcHRpb25zIjp7ImluY2x1ZGVfdXNhZ2UiOnRydWV9fQ==",
+   "upstreamResponseBase64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLWUxIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc5MDAwMDAwMCwibW9kZWwiOiJncHQteCIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwiY29udGVudCI6IkhlbGxvIn0sImZpbmlzaF9yZWFzb24iOm51bGx9XX0KCmRhdGE6IHsiaWQiOiJjaGF0Y21wbC1lMSIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3OTAwMDAwMDAsIm1vZGVsIjoiZ3B0LXgiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnt9LCJmaW5pc2hfcmVhc29uIjoic3RvcCJ9XX0KCmRhdGE6IHsiaWQiOiJjaGF0Y21wbC1lMSIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3OTAwMDAwMDAsIm1vZGVsIjoiZ3B0LXgiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnt9fV0sInVzYWdlIjp7InByb21wdF90b2tlbnMiOjcsImNvbXBsZXRpb25fdG9rZW5zIjoxLCJ0b3RhbF90b2tlbnMiOjh9fQoKZGF0YTogW0RPTkVdCgo=",
+   "responseBase64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLWUxIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc5MDAwMDAwMCwibW9kZWwiOiJncHQteCIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwiY29udGVudCI6IkhlbGxvIn0sImZpbmlzaF9yZWFzb24iOm51bGx9XX0KCmRhdGE6IHsiaWQiOiJjaGF0Y21wbC1lMSIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3OTAwMDAwMDAsIm1vZGVsIjoiZ3B0LXgiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnt9LCJmaW5pc2hfcmVhc29uIjoic3RvcCJ9XX0KCjogdGFwZWFwaS1yZWNlaXB0IGV5SnBaQ0k2SW1Ob1lYUmpiWEJzTFdVeElpd2liMnNpT25SeWRXVXNJbkpsYzNWc2RDSTZleUp0YjJSbGJDSTZJbWR3ZEMxNElpd2lkWE5oWjJVaU9uc2ljSEp2YlhCMFgzUnZhMlZ1Y3lJNk55d2lZMjl0Y0d4bGRHbHZibDkwYjJ0bGJuTWlPakVzSW5SdmRHRnNYM1J2YTJWdWN5STZPSDBzSW5KbGMzQnZibk5sVTJoaE1qVTJJam9pTldNNE0yTXlZVFl3TVRVNE1UZ3pNMkUxTVRNMVlXRXlZemd3WXpVelptSXlPV1JsTWpBeU5HUmxOVEF4TUdJMk16bGlOamRrTmpka1kyVTFZVFkxWlNJc0luTjBjbVZoYlNJNmRISjFaU3dpWTI5dGNHeGxkR1VpT25SeWRXVXNJbk4wWVhSMWN5STZNakF3TENKd2NtbGpaWE1pT2x0N0ltTjFjbkpsYm1ONUlqb2lWVk5FVkNJc0ltRnRiM1Z1ZENJNklqQXVNREF3TURFNE56VWlmU3g3SW1OMWNuSmxibU41SWpvaVFrVk5JaXdpWVcxdmRXNTBJam9pTUM0d01EQXhPRGMxTUNKOVhTd2liVzlrWld4TllYUmphR1ZrUW5raU9pSnlaWE53YjI1elpTSXNJblZ6WVdkbFNXNXFaV04wWldRaU9uUnlkV1Y5TENKamIyNTBZV2x1WlhJaU9pSXdlREZpTWtFMk5UZENZMEpoT1VRek1qSTVaalUzWVVNeVpqUkdZMkpGUlRKQlFUYzFObUZCWlRnaUxDSjBjeUk2TVRjNU1EQXdNREF3TUN3aWJXVjBhRzlrSWpvaWIzQmxibUZwWDJOb1lYUWlMQ0p3WVhKaGJYTWlPbnNpY0dGMGFDSTZJaTkyTVM5amFHRjBMMk52YlhCc1pYUnBiMjV6SWl3aWNtVnhkV1Z6ZEZOb1lUSTFOaUk2SWpRMll6QTFPRE0xTVRabU1USTJZMk14TUdGaFltVm1NVGMwT1RNME9XVXlaV00yTkdSbU5EQmtaR0ZtT0RSbFlqWTVNek0wWVdRMVpqRmhNVE0yWXpBaWZTd2ljMmxuSWpvaU1IaGtZemczT0RsallqQXdZalJtWWpjME0ySTFZVE0yWVdOa05tSTBNakE0WTJFelpXVmhOalZqT1dKa05EQTVNakppTmpjNE9HVXpNMkkyWldVMU9HVmlNbUl4TjJRM056aGlZVGxtT0RrNE1ETTBPVEEwTTJReFlUUXhOekV3TjJNMk9UbGhabU5oTTJReU16UTJOV0l3TW1GaU0yRXlNekk1WkRneE5UUXdPREZpSW4wCgpkYXRhOiBbRE9ORV0KCg==",
+   "receiptDelivery": "sse-comment",
+   "expected": {
+    "requestSha256": "46c0583516f126cc10aabef1749349e2ec64df40ddaf84eb69334ad5f1a136c0",
+    "responseSha256": "5c83c2a601581833a5135aa2c80c53fb29de2024de5010b639b67d67dce5a65e",
+    "result": {
+     "model": "gpt-x",
+     "usage": {
+      "prompt_tokens": 7,
+      "completion_tokens": 1,
+      "total_tokens": 8
+     },
+     "responseSha256": "5c83c2a601581833a5135aa2c80c53fb29de2024de5010b639b67d67dce5a65e",
+     "stream": true,
+     "complete": true,
+     "status": 200,
+     "prices": [
+      {
+       "currency": "USDT",
+       "amount": "0.00001875"
+      },
+      {
+       "currency": "BEM",
+       "amount": "0.00018750"
+      }
+     ],
+     "modelMatchedBy": "response",
+     "usageInjected": true
+    },
+    "envelope": {
+     "id": "chatcmpl-e1",
+     "ok": true,
+     "result": {
+      "model": "gpt-x",
+      "usage": {
+       "prompt_tokens": 7,
+       "completion_tokens": 1,
+       "total_tokens": 8
+      },
+      "responseSha256": "5c83c2a601581833a5135aa2c80c53fb29de2024de5010b639b67d67dce5a65e",
+      "stream": true,
+      "complete": true,
+      "status": 200,
+      "prices": [
+       {
+        "currency": "USDT",
+        "amount": "0.00001875"
+       },
+       {
+        "currency": "BEM",
+        "amount": "0.00018750"
+       }
+      ],
+      "modelMatchedBy": "response",
+      "usageInjected": true
+     },
+     "container": "0x1b2A657BcBa9D3229f57aC2f4FcbEE2AA756aAe8",
+     "ts": 1790000000,
+     "method": "openai_chat",
+     "params": {
+      "path": "/v1/chat/completions",
+      "requestSha256": "46c0583516f126cc10aabef1749349e2ec64df40ddaf84eb69334ad5f1a136c0"
+     },
+     "sig": "0xdc8789cb00b4fb743b5a36acd6b4208ca3eea65c9bd40922b6788e33b6ee58eb2b17d778ba9f8980349043d1a417107c699afca3d23465b02ab3a2329d8154081b"
+    },
+    "digest": "0x47ec6a3a79e012fe3f0aa411f04204a32881c3c682e13a04fd09ffba1e5f7455",
+    "encoded": "eyJpZCI6ImNoYXRjbXBsLWUxIiwib2siOnRydWUsInJlc3VsdCI6eyJtb2RlbCI6ImdwdC14IiwidXNhZ2UiOnsicHJvbXB0X3Rva2VucyI6NywiY29tcGxldGlvbl90b2tlbnMiOjEsInRvdGFsX3Rva2VucyI6OH0sInJlc3BvbnNlU2hhMjU2IjoiNWM4M2MyYTYwMTU4MTgzM2E1MTM1YWEyYzgwYzUzZmIyOWRlMjAyNGRlNTAxMGI2MzliNjdkNjdkY2U1YTY1ZSIsInN0cmVhbSI6dHJ1ZSwiY29tcGxldGUiOnRydWUsInN0YXR1cyI6MjAwLCJwcmljZXMiOlt7ImN1cnJlbmN5IjoiVVNEVCIsImFtb3VudCI6IjAuMDAwMDE4NzUifSx7ImN1cnJlbmN5IjoiQkVNIiwiYW1vdW50IjoiMC4wMDAxODc1MCJ9XSwibW9kZWxNYXRjaGVkQnkiOiJyZXNwb25zZSIsInVzYWdlSW5qZWN0ZWQiOnRydWV9LCJjb250YWluZXIiOiIweDFiMkE2NTdCY0JhOUQzMjI5ZjU3YUMyZjRGY2JFRTJBQTc1NmFBZTgiLCJ0cyI6MTc5MDAwMDAwMCwibWV0aG9kIjoib3BlbmFpX2NoYXQiLCJwYXJhbXMiOnsicGF0aCI6Ii92MS9jaGF0L2NvbXBsZXRpb25zIiwicmVxdWVzdFNoYTI1NiI6IjQ2YzA1ODM1MTZmMTI2Y2MxMGFhYmVmMTc0OTM0OWUyZWM2NGRmNDBkZGFmODRlYjY5MzM0YWQ1ZjFhMTM2YzAifSwic2lnIjoiMHhkYzg3ODljYjAwYjRmYjc0M2I1YTM2YWNkNmI0MjA4Y2EzZWVhNjVjOWJkNDA5MjJiNjc4OGUzM2I2ZWU1OGViMmIxN2Q3NzhiYTlmODk4MDM0OTA0M2QxYTQxNzEwN2M2OTlhZmNhM2QyMzQ2NWIwMmFiM2EyMzI5ZDgxNTQwODFiIn0"
+   }
+  },
+  {
+   "name": "openai-chat-stream-usage-requested",
+   "description": "Chat stream in which the client itself set stream_options.include_usage: nothing is injected, the usage chunk stays in the client's copy and in the hash, and usageInjected is absent",
+   "adapters": "as specified",
+   "method": "openai_chat",
+   "path": "/v1/chat/completions",
+   "status": 200,
+   "stream": true,
+   "requestBase64": "eyJtb2RlbCI6ImdwdC14Iiwic3RyZWFtIjp0cnVlLCJzdHJlYW1fb3B0aW9ucyI6eyJpbmNsdWRlX3VzYWdlIjp0cnVlfSwibWVzc2FnZXMiOlt7InJvbGUiOiJ1c2VyIiwiY29udGVudCI6IkhpIn1dfQ==",
+   "upstreamResponseBase64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLWUyIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc5MDAwMDAwMCwibW9kZWwiOiJncHQteCIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwiY29udGVudCI6IkhlbGxvIn0sImZpbmlzaF9yZWFzb24iOm51bGx9XX0KCmRhdGE6IHsiaWQiOiJjaGF0Y21wbC1lMiIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3OTAwMDAwMDAsIm1vZGVsIjoiZ3B0LXgiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnt9LCJmaW5pc2hfcmVhc29uIjoic3RvcCJ9XX0KCmRhdGE6IHsiaWQiOiJjaGF0Y21wbC1lMiIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3OTAwMDAwMDAsIm1vZGVsIjoiZ3B0LXgiLCJjaG9pY2VzIjpbXSwidXNhZ2UiOnsicHJvbXB0X3Rva2VucyI6NywiY29tcGxldGlvbl90b2tlbnMiOjEsInRvdGFsX3Rva2VucyI6OH19CgpkYXRhOiBbRE9ORV0KCg==",
+   "responseBase64": "ZGF0YTogeyJpZCI6ImNoYXRjbXBsLWUyIiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uLmNodW5rIiwiY3JlYXRlZCI6MTc5MDAwMDAwMCwibW9kZWwiOiJncHQteCIsImNob2ljZXMiOlt7ImluZGV4IjowLCJkZWx0YSI6eyJyb2xlIjoiYXNzaXN0YW50IiwiY29udGVudCI6IkhlbGxvIn0sImZpbmlzaF9yZWFzb24iOm51bGx9XX0KCmRhdGE6IHsiaWQiOiJjaGF0Y21wbC1lMiIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3OTAwMDAwMDAsIm1vZGVsIjoiZ3B0LXgiLCJjaG9pY2VzIjpbeyJpbmRleCI6MCwiZGVsdGEiOnt9LCJmaW5pc2hfcmVhc29uIjoic3RvcCJ9XX0KCmRhdGE6IHsiaWQiOiJjaGF0Y21wbC1lMiIsIm9iamVjdCI6ImNoYXQuY29tcGxldGlvbi5jaHVuayIsImNyZWF0ZWQiOjE3OTAwMDAwMDAsIm1vZGVsIjoiZ3B0LXgiLCJjaG9pY2VzIjpbXSwidXNhZ2UiOnsicHJvbXB0X3Rva2VucyI6NywiY29tcGxldGlvbl90b2tlbnMiOjEsInRvdGFsX3Rva2VucyI6OH19Cgo6IHRhcGVhcGktcmVjZWlwdCBleUpwWkNJNkltTm9ZWFJqYlhCc0xXVXlJaXdpYjJzaU9uUnlkV1VzSW5KbGMzVnNkQ0k2ZXlKdGIyUmxiQ0k2SW1kd2RDMTRJaXdpZFhOaFoyVWlPbnNpY0hKdmJYQjBYM1J2YTJWdWN5STZOeXdpWTI5dGNHeGxkR2x2Ymw5MGIydGxibk1pT2pFc0luUnZkR0ZzWDNSdmEyVnVjeUk2T0gwc0luSmxjM0J2Ym5ObFUyaGhNalUySWpvaU5tTTBObVV4TnpRNE1EUXdZelV6WTJOak5qVm1NR1V5WkdRd05EVXdOemsyTlRaa01UQmhabUppTXpZMFlUQTJZakptTWpJM056RmhaalU0WlRCbU9DSXNJbk4wY21WaGJTSTZkSEoxWlN3aVkyOXRjR3hsZEdVaU9uUnlkV1VzSW5OMFlYUjFjeUk2TWpBd0xDSndjbWxqWlhNaU9sdDdJbU4xY25KbGJtTjVJam9pVlZORVZDSXNJbUZ0YjNWdWRDSTZJakF1TURBd01ERTROelVpZlN4N0ltTjFjbkpsYm1ONUlqb2lRa1ZOSWl3aVlXMXZkVzUwSWpvaU1DNHdNREF4T0RjMU1DSjlYU3dpYlc5a1pXeE5ZWFJqYUdWa1Fua2lPaUp5WlhOd2IyNXpaU0o5TENKamIyNTBZV2x1WlhJaU9pSXdlREZpTWtFMk5UZENZMEpoT1VRek1qSTVaalUzWVVNeVpqUkdZMkpGUlRKQlFUYzFObUZCWlRnaUxDSjBjeUk2TVRjNU1EQXdNREF3TUN3aWJXVjBhRzlrSWpvaWIzQmxibUZwWDJOb1lYUWlMQ0p3WVhKaGJYTWlPbnNpY0dGMGFDSTZJaTkyTVM5amFHRjBMMk52YlhCc1pYUnBiMjV6SWl3aWNtVnhkV1Z6ZEZOb1lUSTFOaUk2SWpsak9XWXpNRFZqTjJRek5qTTFNemM1Tnpjek5HTXhPREEyT1dJd1pqaGlOR05qWmprMk1tWTJPVGxqTVRNd01qWmxOVFJtT0RabFlXTTRPVFExTVRVaWZTd2ljMmxuSWpvaU1IZzVNell4TlRrMk5tTTVaamhsTVdJME5XSXdZVGd4T1daak5EZGxPVFpqTlRaaVlUTTNaR05pT1RJM05ERXpPR05qTVdFNU1tRXpNakpoWTJJM1kyVmhOamt6T1RsaE56STVZemxsTWpWaU16SmlZbUl4WlRsa09UQTFNakZqTW1VMU1UWTJNbUZoWkRRM1l6VTJaamxrTVdGbE16WTFOamd6WVRSaE5XVTRNakZpSW4wCgpkYXRhOiBbRE9ORV0KCg==",
+   "receiptDelivery": "sse-comment",
+   "expected": {
+    "requestSha256": "9c9f305c7d36353797734c18069b0f8b4ccf962f699c13026e54f86eac894515",
+    "responseSha256": "6c46e1748040c53ccc65f0e2dd045079656d10afbb364a06b2f22771af58e0f8",
+    "result": {
+     "model": "gpt-x",
+     "usage": {
+      "prompt_tokens": 7,
+      "completion_tokens": 1,
+      "total_tokens": 8
+     },
+     "responseSha256": "6c46e1748040c53ccc65f0e2dd045079656d10afbb364a06b2f22771af58e0f8",
+     "stream": true,
+     "complete": true,
+     "status": 200,
+     "prices": [
+      {
+       "currency": "USDT",
+       "amount": "0.00001875"
+      },
+      {
+       "currency": "BEM",
+       "amount": "0.00018750"
+      }
+     ],
+     "modelMatchedBy": "response"
+    },
+    "envelope": {
+     "id": "chatcmpl-e2",
+     "ok": true,
+     "result": {
+      "model": "gpt-x",
+      "usage": {
+       "prompt_tokens": 7,
+       "completion_tokens": 1,
+       "total_tokens": 8
+      },
+      "responseSha256": "6c46e1748040c53ccc65f0e2dd045079656d10afbb364a06b2f22771af58e0f8",
+      "stream": true,
+      "complete": true,
+      "status": 200,
+      "prices": [
+       {
+        "currency": "USDT",
+        "amount": "0.00001875"
+       },
+       {
+        "currency": "BEM",
+        "amount": "0.00018750"
+       }
+      ],
+      "modelMatchedBy": "response"
+     },
+     "container": "0x1b2A657BcBa9D3229f57aC2f4FcbEE2AA756aAe8",
+     "ts": 1790000000,
+     "method": "openai_chat",
+     "params": {
+      "path": "/v1/chat/completions",
+      "requestSha256": "9c9f305c7d36353797734c18069b0f8b4ccf962f699c13026e54f86eac894515"
+     },
+     "sig": "0x93615966c9f8e1b45b0a819fc47e96c56ba37dcb9274138cc1a92a322acb7cea69399a729c9e25b32bbb1e9d90521c2e51662aad47c56f9d1ae365683a4a5e821b"
+    },
+    "digest": "0xca0a068644b578b31138e3b8365e9a8f179babee64587f01dcc35271b1e2f2f9",
+    "encoded": "eyJpZCI6ImNoYXRjbXBsLWUyIiwib2siOnRydWUsInJlc3VsdCI6eyJtb2RlbCI6ImdwdC14IiwidXNhZ2UiOnsicHJvbXB0X3Rva2VucyI6NywiY29tcGxldGlvbl90b2tlbnMiOjEsInRvdGFsX3Rva2VucyI6OH0sInJlc3BvbnNlU2hhMjU2IjoiNmM0NmUxNzQ4MDQwYzUzY2NjNjVmMGUyZGQwNDUwNzk2NTZkMTBhZmJiMzY0YTA2YjJmMjI3NzFhZjU4ZTBmOCIsInN0cmVhbSI6dHJ1ZSwiY29tcGxldGUiOnRydWUsInN0YXR1cyI6MjAwLCJwcmljZXMiOlt7ImN1cnJlbmN5IjoiVVNEVCIsImFtb3VudCI6IjAuMDAwMDE4NzUifSx7ImN1cnJlbmN5IjoiQkVNIiwiYW1vdW50IjoiMC4wMDAxODc1MCJ9XSwibW9kZWxNYXRjaGVkQnkiOiJyZXNwb25zZSJ9LCJjb250YWluZXIiOiIweDFiMkE2NTdCY0JhOUQzMjI5ZjU3YUMyZjRGY2JFRTJBQTc1NmFBZTgiLCJ0cyI6MTc5MDAwMDAwMCwibWV0aG9kIjoib3BlbmFpX2NoYXQiLCJwYXJhbXMiOnsicGF0aCI6Ii92MS9jaGF0L2NvbXBsZXRpb25zIiwicmVxdWVzdFNoYTI1NiI6IjljOWYzMDVjN2QzNjM1Mzc5NzczNGMxODA2OWIwZjhiNGNjZjk2MmY2OTljMTMwMjZlNTRmODZlYWM4OTQ1MTUifSwic2lnIjoiMHg5MzYxNTk2NmM5ZjhlMWI0NWIwYTgxOWZjNDdlOTZjNTZiYTM3ZGNiOTI3NDEzOGNjMWE5MmEzMjJhY2I3Y2VhNjkzOTlhNzI5YzllMjViMzJiYmIxZTlkOTA1MjFjMmU1MTY2MmFhZDQ3YzU2ZjlkMWFlMzY1NjgzYTRhNWU4MjFiIn0"
+   }
+  },
+  {
+   "name": "openai-responses-stream-data-only-done",
+   "description": "Responses stream framed with data lines only (no event lines) and ended by data: [DONE], as some OpenAI-compatible gateways send it. Under this TAP `data: [DONE]` is a final line of openai-responses, so the receipt comes right before it",
+   "adapters": "as specified",
+   "method": "openai_responses",
+   "path": "/v1/responses",
+   "status": 200,
+   "stream": true,
+   "requestBase64": "eyJtb2RlbCI6ImdwdC14Iiwic3RyZWFtIjp0cnVlLCJpbnB1dCI6IkhpIn0=",
+   "upstreamResponseBase64": "ZGF0YTogeyJ0eXBlIjoicmVzcG9uc2UuY3JlYXRlZCIsInNlcXVlbmNlX251bWJlciI6MCwicmVzcG9uc2UiOnsiaWQiOiJyZXNwX2UzIiwib2JqZWN0IjoicmVzcG9uc2UiLCJtb2RlbCI6ImdwdC14Iiwic3RhdHVzIjoiaW5fcHJvZ3Jlc3MiLCJvdXRwdXQiOltdfX0KCmRhdGE6IHsidHlwZSI6InJlc3BvbnNlLm91dHB1dF90ZXh0LmRlbHRhIiwic2VxdWVuY2VfbnVtYmVyIjoxLCJpdGVtX2lkIjoibXNnXzEiLCJvdXRwdXRfaW5kZXgiOjAsImNvbnRlbnRfaW5kZXgiOjAsImRlbHRhIjoiSGVsbG8ifQoKZGF0YTogeyJ0eXBlIjoicmVzcG9uc2UuY29tcGxldGVkIiwic2VxdWVuY2VfbnVtYmVyIjoyLCJyZXNwb25zZSI6eyJpZCI6InJlc3BfZTMiLCJvYmplY3QiOiJyZXNwb25zZSIsIm1vZGVsIjoiZ3B0LXgiLCJzdGF0dXMiOiJjb21wbGV0ZWQiLCJvdXRwdXQiOltdLCJ1c2FnZSI6eyJpbnB1dF90b2tlbnMiOjEwLCJvdXRwdXRfdG9rZW5zIjozLCJ0b3RhbF90b2tlbnMiOjEzfX19CgpkYXRhOiBbRE9ORV0KCg==",
+   "responseBase64": "ZGF0YTogeyJ0eXBlIjoicmVzcG9uc2UuY3JlYXRlZCIsInNlcXVlbmNlX251bWJlciI6MCwicmVzcG9uc2UiOnsiaWQiOiJyZXNwX2UzIiwib2JqZWN0IjoicmVzcG9uc2UiLCJtb2RlbCI6ImdwdC14Iiwic3RhdHVzIjoiaW5fcHJvZ3Jlc3MiLCJvdXRwdXQiOltdfX0KCmRhdGE6IHsidHlwZSI6InJlc3BvbnNlLm91dHB1dF90ZXh0LmRlbHRhIiwic2VxdWVuY2VfbnVtYmVyIjoxLCJpdGVtX2lkIjoibXNnXzEiLCJvdXRwdXRfaW5kZXgiOjAsImNvbnRlbnRfaW5kZXgiOjAsImRlbHRhIjoiSGVsbG8ifQoKZGF0YTogeyJ0eXBlIjoicmVzcG9uc2UuY29tcGxldGVkIiwic2VxdWVuY2VfbnVtYmVyIjoyLCJyZXNwb25zZSI6eyJpZCI6InJlc3BfZTMiLCJvYmplY3QiOiJyZXNwb25zZSIsIm1vZGVsIjoiZ3B0LXgiLCJzdGF0dXMiOiJjb21wbGV0ZWQiLCJvdXRwdXQiOltdLCJ1c2FnZSI6eyJpbnB1dF90b2tlbnMiOjEwLCJvdXRwdXRfdG9rZW5zIjozLCJ0b3RhbF90b2tlbnMiOjEzfX19Cgo6IHRhcGVhcGktcmVjZWlwdCBleUpwWkNJNkluSmxjM0JmWlRNaUxDSnZheUk2ZEhKMVpTd2ljbVZ6ZFd4MElqcDdJbTF2WkdWc0lqb2laM0IwTFhnaUxDSjFjMkZuWlNJNmV5SndjbTl0Y0hSZmRHOXJaVzV6SWpveE1Dd2lZMjl0Y0d4bGRHbHZibDkwYjJ0bGJuTWlPak1zSW5SdmRHRnNYM1J2YTJWdWN5STZNVE45TENKeVpYTndiMjV6WlZOb1lUSTFOaUk2SWpjMk5EZzFOelk0WWpnelpqaGtaRFF3WldJd1kyWTFNRFF4Wkdaak1UUTRZV0ZqTm1NM00yWmxabUUwTUdGbE5XUmpZVGxtWlRFNVpUUmxaVGcxT1RraUxDSnpkSEpsWVcwaU9uUnlkV1VzSW1OdmJYQnNaWFJsSWpwMGNuVmxMQ0p6ZEdGMGRYTWlPakl3TUN3aWNISnBZMlZ6SWpwYmV5SmpkWEp5Wlc1amVTSTZJbFZUUkZRaUxDSmhiVzkxYm5RaU9pSXdMakF3TURBME1qVXdJbjBzZXlKamRYSnlaVzVqZVNJNklrSkZUU0lzSW1GdGIzVnVkQ0k2SWpBdU1EQXdOREkxTURBaWZWMHNJbTF2WkdWc1RXRjBZMmhsWkVKNUlqb2ljbVZ6Y0c5dWMyVWlmU3dpWTI5dWRHRnBibVZ5SWpvaU1IZ3hZakpCTmpVM1FtTkNZVGxFTXpJeU9XWTFOMkZETW1ZMFJtTmlSVVV5UVVFM05UWmhRV1U0SWl3aWRITWlPakUzT1RBd01EQXdNREFzSW0xbGRHaHZaQ0k2SW05d1pXNWhhVjl5WlhOd2IyNXpaWE1pTENKd1lYSmhiWE1pT25zaWNHRjBhQ0k2SWk5Mk1TOXlaWE53YjI1elpYTWlMQ0p5WlhGMVpYTjBVMmhoTWpVMklqb2lObUpqTkdOa09HVXlabVJtTVRkbE9EZzVObVppWXpRek1UYzNNVE0zWmpabE1XRmxZalkwTmpkaFpqY3hPVGhpWlRrd05qUXdNR00zT0dRNFlqUmlaU0o5TENKemFXY2lPaUl3ZURaaE56TmxPR0V4TW1KaVlqZGpOV0k1WlRBM05EUmlZMkkxTVRkbE56WXpOVEF6TmpZeE9URXhaVFF6TWpJeU9EaG1OMkV4WWpZNU5ETTBaRE13Tm1FelptRmlabU14WXprd04yRTNZV1EwWmpBd04yUTBZakZpTVdGaU56TTJOelExWXpVM056Y3lPRE5qWXpSak9UWXlORFl5T1RCbE1HRm1aRGhtWW1NM01XSWlmUQoKZGF0YTogW0RPTkVdCgo=",
+   "receiptDelivery": "sse-comment",
+   "expected": {
+    "requestSha256": "6bc4cd8e2fdf17e8896fbc43177137f6e1aeb6467af7198be906400c78d8b4be",
+    "responseSha256": "76485768b83f8dd40eb0cf5041dfc148aac6c73fefa40ae5dca9fe19e4ee8599",
+    "result": {
+     "model": "gpt-x",
+     "usage": {
+      "prompt_tokens": 10,
+      "completion_tokens": 3,
+      "total_tokens": 13
+     },
+     "responseSha256": "76485768b83f8dd40eb0cf5041dfc148aac6c73fefa40ae5dca9fe19e4ee8599",
+     "stream": true,
+     "complete": true,
+     "status": 200,
+     "prices": [
+      {
+       "currency": "USDT",
+       "amount": "0.00004250"
+      },
+      {
+       "currency": "BEM",
+       "amount": "0.00042500"
+      }
+     ],
+     "modelMatchedBy": "response"
+    },
+    "envelope": {
+     "id": "resp_e3",
+     "ok": true,
+     "result": {
+      "model": "gpt-x",
+      "usage": {
+       "prompt_tokens": 10,
+       "completion_tokens": 3,
+       "total_tokens": 13
+      },
+      "responseSha256": "76485768b83f8dd40eb0cf5041dfc148aac6c73fefa40ae5dca9fe19e4ee8599",
+      "stream": true,
+      "complete": true,
+      "status": 200,
+      "prices": [
+       {
+        "currency": "USDT",
+        "amount": "0.00004250"
+       },
+       {
+        "currency": "BEM",
+        "amount": "0.00042500"
+       }
+      ],
+      "modelMatchedBy": "response"
+     },
+     "container": "0x1b2A657BcBa9D3229f57aC2f4FcbEE2AA756aAe8",
+     "ts": 1790000000,
+     "method": "openai_responses",
+     "params": {
+      "path": "/v1/responses",
+      "requestSha256": "6bc4cd8e2fdf17e8896fbc43177137f6e1aeb6467af7198be906400c78d8b4be"
+     },
+     "sig": "0x6a73e8a12bbb7c5b9e0744bcb517e763503661911e4322288f7a1b69434d306a3fabfc1c907a7ad4f007d4b1b1ab736745c5777283cc4c96246290e0afd8fbc71b"
+    },
+    "digest": "0xb4f83d057d986e80a942c08bc4ddac60ccb2964a07272a1dcc248a68d2c60078",
+    "encoded": "eyJpZCI6InJlc3BfZTMiLCJvayI6dHJ1ZSwicmVzdWx0Ijp7Im1vZGVsIjoiZ3B0LXgiLCJ1c2FnZSI6eyJwcm9tcHRfdG9rZW5zIjoxMCwiY29tcGxldGlvbl90b2tlbnMiOjMsInRvdGFsX3Rva2VucyI6MTN9LCJyZXNwb25zZVNoYTI1NiI6Ijc2NDg1NzY4YjgzZjhkZDQwZWIwY2Y1MDQxZGZjMTQ4YWFjNmM3M2ZlZmE0MGFlNWRjYTlmZTE5ZTRlZTg1OTkiLCJzdHJlYW0iOnRydWUsImNvbXBsZXRlIjp0cnVlLCJzdGF0dXMiOjIwMCwicHJpY2VzIjpbeyJjdXJyZW5jeSI6IlVTRFQiLCJhbW91bnQiOiIwLjAwMDA0MjUwIn0seyJjdXJyZW5jeSI6IkJFTSIsImFtb3VudCI6IjAuMDAwNDI1MDAifV0sIm1vZGVsTWF0Y2hlZEJ5IjoicmVzcG9uc2UifSwiY29udGFpbmVyIjoiMHgxYjJBNjU3QmNCYTlEMzIyOWY1N2FDMmY0RmNiRUUyQUE3NTZhQWU4IiwidHMiOjE3OTAwMDAwMDAsIm1ldGhvZCI6Im9wZW5haV9yZXNwb25zZXMiLCJwYXJhbXMiOnsicGF0aCI6Ii92MS9yZXNwb25zZXMiLCJyZXF1ZXN0U2hhMjU2IjoiNmJjNGNkOGUyZmRmMTdlODg5NmZiYzQzMTc3MTM3ZjZlMWFlYjY0NjdhZjcxOThiZTkwNjQwMGM3OGQ4YjRiZSJ9LCJzaWciOiIweDZhNzNlOGExMmJiYjdjNWI5ZTA3NDRiY2I1MTdlNzYzNTAzNjYxOTExZTQzMjIyODhmN2ExYjY5NDM0ZDMwNmEzZmFiZmMxYzkwN2E3YWQ0ZjAwN2Q0YjFiMWFiNzM2NzQ1YzU3NzcyODNjYzRjOTYyNDYyOTBlMGFmZDhmYmM3MWIifQ"
+   }
+  },
+  {
+   "name": "openai-responses-stream-data-only-done-reference-default",
+   "description": "CONTROL, not conforming: the same stream through the reference sidecar with its default adapters, which do not yet treat data: [DONE] as a final line of openai-responses (Backwards Compatibility). The receipt lands after [DONE], where a client has already ended the stream; a client following Specification §9.2 finds no receipt before the end and rejects the stream. The signed receipt itself is the same as in the previous case",
+   "adapters": "reference default (control)",
+   "method": "openai_responses",
+   "path": "/v1/responses",
+   "status": 200,
+   "stream": true,
+   "requestBase64": "eyJtb2RlbCI6ImdwdC14Iiwic3RyZWFtIjp0cnVlLCJpbnB1dCI6IkhpIn0=",
+   "upstreamResponseBase64": "ZGF0YTogeyJ0eXBlIjoicmVzcG9uc2UuY3JlYXRlZCIsInNlcXVlbmNlX251bWJlciI6MCwicmVzcG9uc2UiOnsiaWQiOiJyZXNwX2UzIiwib2JqZWN0IjoicmVzcG9uc2UiLCJtb2RlbCI6ImdwdC14Iiwic3RhdHVzIjoiaW5fcHJvZ3Jlc3MiLCJvdXRwdXQiOltdfX0KCmRhdGE6IHsidHlwZSI6InJlc3BvbnNlLm91dHB1dF90ZXh0LmRlbHRhIiwic2VxdWVuY2VfbnVtYmVyIjoxLCJpdGVtX2lkIjoibXNnXzEiLCJvdXRwdXRfaW5kZXgiOjAsImNvbnRlbnRfaW5kZXgiOjAsImRlbHRhIjoiSGVsbG8ifQoKZGF0YTogeyJ0eXBlIjoicmVzcG9uc2UuY29tcGxldGVkIiwic2VxdWVuY2VfbnVtYmVyIjoyLCJyZXNwb25zZSI6eyJpZCI6InJlc3BfZTMiLCJvYmplY3QiOiJyZXNwb25zZSIsIm1vZGVsIjoiZ3B0LXgiLCJzdGF0dXMiOiJjb21wbGV0ZWQiLCJvdXRwdXQiOltdLCJ1c2FnZSI6eyJpbnB1dF90b2tlbnMiOjEwLCJvdXRwdXRfdG9rZW5zIjozLCJ0b3RhbF90b2tlbnMiOjEzfX19CgpkYXRhOiBbRE9ORV0KCg==",
+   "responseBase64": "ZGF0YTogeyJ0eXBlIjoicmVzcG9uc2UuY3JlYXRlZCIsInNlcXVlbmNlX251bWJlciI6MCwicmVzcG9uc2UiOnsiaWQiOiJyZXNwX2UzIiwib2JqZWN0IjoicmVzcG9uc2UiLCJtb2RlbCI6ImdwdC14Iiwic3RhdHVzIjoiaW5fcHJvZ3Jlc3MiLCJvdXRwdXQiOltdfX0KCmRhdGE6IHsidHlwZSI6InJlc3BvbnNlLm91dHB1dF90ZXh0LmRlbHRhIiwic2VxdWVuY2VfbnVtYmVyIjoxLCJpdGVtX2lkIjoibXNnXzEiLCJvdXRwdXRfaW5kZXgiOjAsImNvbnRlbnRfaW5kZXgiOjAsImRlbHRhIjoiSGVsbG8ifQoKZGF0YTogeyJ0eXBlIjoicmVzcG9uc2UuY29tcGxldGVkIiwic2VxdWVuY2VfbnVtYmVyIjoyLCJyZXNwb25zZSI6eyJpZCI6InJlc3BfZTMiLCJvYmplY3QiOiJyZXNwb25zZSIsIm1vZGVsIjoiZ3B0LXgiLCJzdGF0dXMiOiJjb21wbGV0ZWQiLCJvdXRwdXQiOltdLCJ1c2FnZSI6eyJpbnB1dF90b2tlbnMiOjEwLCJvdXRwdXRfdG9rZW5zIjozLCJ0b3RhbF90b2tlbnMiOjEzfX19CgpkYXRhOiBbRE9ORV0KCjogdGFwZWFwaS1yZWNlaXB0IGV5SnBaQ0k2SW5KbGMzQmZaVE1pTENKdmF5STZkSEoxWlN3aWNtVnpkV3gwSWpwN0ltMXZaR1ZzSWpvaVozQjBMWGdpTENKMWMyRm5aU0k2ZXlKd2NtOXRjSFJmZEc5clpXNXpJam94TUN3aVkyOXRjR3hsZEdsdmJsOTBiMnRsYm5NaU9qTXNJblJ2ZEdGc1gzUnZhMlZ1Y3lJNk1UTjlMQ0p5WlhOd2IyNXpaVk5vWVRJMU5pSTZJamMyTkRnMU56WTRZamd6Wmpoa1pEUXdaV0l3WTJZMU1EUXhaR1pqTVRRNFlXRmpObU0zTTJabFptRTBNR0ZsTldSallUbG1aVEU1WlRSbFpUZzFPVGtpTENKemRISmxZVzBpT25SeWRXVXNJbU52YlhCc1pYUmxJanAwY25WbExDSnpkR0YwZFhNaU9qSXdNQ3dpY0hKcFkyVnpJanBiZXlKamRYSnlaVzVqZVNJNklsVlRSRlFpTENKaGJXOTFiblFpT2lJd0xqQXdNREEwTWpVd0luMHNleUpqZFhKeVpXNWplU0k2SWtKRlRTSXNJbUZ0YjNWdWRDSTZJakF1TURBd05ESTFNREFpZlYwc0ltMXZaR1ZzVFdGMFkyaGxaRUo1SWpvaWNtVnpjRzl1YzJVaWZTd2lZMjl1ZEdGcGJtVnlJam9pTUhneFlqSkJOalUzUW1OQ1lUbEVNekl5T1dZMU4yRkRNbVkwUm1OaVJVVXlRVUUzTlRaaFFXVTRJaXdpZEhNaU9qRTNPVEF3TURBd01EQXNJbTFsZEdodlpDSTZJbTl3Wlc1aGFWOXlaWE53YjI1elpYTWlMQ0p3WVhKaGJYTWlPbnNpY0dGMGFDSTZJaTkyTVM5eVpYTndiMjV6WlhNaUxDSnlaWEYxWlhOMFUyaGhNalUySWpvaU5tSmpOR05rT0dVeVptUm1NVGRsT0RnNU5tWmlZelF6TVRjM01UTTNaalpsTVdGbFlqWTBOamRoWmpjeE9UaGlaVGt3TmpRd01HTTNPR1E0WWpSaVpTSjlMQ0p6YVdjaU9pSXdlRFpoTnpObE9HRXhNbUppWWpkak5XSTVaVEEzTkRSaVkySTFNVGRsTnpZek5UQXpOall4T1RFeFpUUXpNakl5T0RobU4yRXhZalk1TkRNMFpETXdObUV6Wm1GaVptTXhZemt3TjJFM1lXUTBaakF3TjJRMFlqRmlNV0ZpTnpNMk56UTFZelUzTnpjeU9ETmpZelJqT1RZeU5EWXlPVEJsTUdGbVpEaG1ZbU0zTVdJaWZRCg==",
+   "receiptDelivery": "sse-comment",
+   "expected": {
+    "requestSha256": "6bc4cd8e2fdf17e8896fbc43177137f6e1aeb6467af7198be906400c78d8b4be",
+    "responseSha256": "76485768b83f8dd40eb0cf5041dfc148aac6c73fefa40ae5dca9fe19e4ee8599",
+    "result": {
+     "model": "gpt-x",
+     "usage": {
+      "prompt_tokens": 10,
+      "completion_tokens": 3,
+      "total_tokens": 13
+     },
+     "responseSha256": "76485768b83f8dd40eb0cf5041dfc148aac6c73fefa40ae5dca9fe19e4ee8599",
+     "stream": true,
+     "complete": true,
+     "status": 200,
+     "prices": [
+      {
+       "currency": "USDT",
+       "amount": "0.00004250"
+      },
+      {
+       "currency": "BEM",
+       "amount": "0.00042500"
+      }
+     ],
+     "modelMatchedBy": "response"
+    },
+    "envelope": {
+     "id": "resp_e3",
+     "ok": true,
+     "result": {
+      "model": "gpt-x",
+      "usage": {
+       "prompt_tokens": 10,
+       "completion_tokens": 3,
+       "total_tokens": 13
+      },
+      "responseSha256": "76485768b83f8dd40eb0cf5041dfc148aac6c73fefa40ae5dca9fe19e4ee8599",
+      "stream": true,
+      "complete": true,
+      "status": 200,
+      "prices": [
+       {
+        "currency": "USDT",
+        "amount": "0.00004250"
+       },
+       {
+        "currency": "BEM",
+        "amount": "0.00042500"
+       }
+      ],
+      "modelMatchedBy": "response"
+     },
+     "container": "0x1b2A657BcBa9D3229f57aC2f4FcbEE2AA756aAe8",
+     "ts": 1790000000,
+     "method": "openai_responses",
+     "params": {
+      "path": "/v1/responses",
+      "requestSha256": "6bc4cd8e2fdf17e8896fbc43177137f6e1aeb6467af7198be906400c78d8b4be"
+     },
+     "sig": "0x6a73e8a12bbb7c5b9e0744bcb517e763503661911e4322288f7a1b69434d306a3fabfc1c907a7ad4f007d4b1b1ab736745c5777283cc4c96246290e0afd8fbc71b"
+    },
+    "digest": "0xb4f83d057d986e80a942c08bc4ddac60ccb2964a07272a1dcc248a68d2c60078",
+    "encoded": "eyJpZCI6InJlc3BfZTMiLCJvayI6dHJ1ZSwicmVzdWx0Ijp7Im1vZGVsIjoiZ3B0LXgiLCJ1c2FnZSI6eyJwcm9tcHRfdG9rZW5zIjoxMCwiY29tcGxldGlvbl90b2tlbnMiOjMsInRvdGFsX3Rva2VucyI6MTN9LCJyZXNwb25zZVNoYTI1NiI6Ijc2NDg1NzY4YjgzZjhkZDQwZWIwY2Y1MDQxZGZjMTQ4YWFjNmM3M2ZlZmE0MGFlNWRjYTlmZTE5ZTRlZTg1OTkiLCJzdHJlYW0iOnRydWUsImNvbXBsZXRlIjp0cnVlLCJzdGF0dXMiOjIwMCwicHJpY2VzIjpbeyJjdXJyZW5jeSI6IlVTRFQiLCJhbW91bnQiOiIwLjAwMDA0MjUwIn0seyJjdXJyZW5jeSI6IkJFTSIsImFtb3VudCI6IjAuMDAwNDI1MDAifV0sIm1vZGVsTWF0Y2hlZEJ5IjoicmVzcG9uc2UifSwiY29udGFpbmVyIjoiMHgxYjJBNjU3QmNCYTlEMzIyOWY1N2FDMmY0RmNiRUUyQUE3NTZhQWU4IiwidHMiOjE3OTAwMDAwMDAsIm1ldGhvZCI6Im9wZW5haV9yZXNwb25zZXMiLCJwYXJhbXMiOnsicGF0aCI6Ii92MS9yZXNwb25zZXMiLCJyZXF1ZXN0U2hhMjU2IjoiNmJjNGNkOGUyZmRmMTdlODg5NmZiYzQzMTc3MTM3ZjZlMWFlYjY0NjdhZjcxOThiZTkwNjQwMGM3OGQ4YjRiZSJ9LCJzaWciOiIweDZhNzNlOGExMmJiYjdjNWI5ZTA3NDRiY2I1MTdlNzYzNTAzNjYxOTExZTQzMjIyODhmN2ExYjY5NDM0ZDMwNmEzZmFiZmMxYzkwN2E3YWQ0ZjAwN2Q0YjFiMWFiNzM2NzQ1YzU3NzcyODNjYzRjOTYyNDYyOTBlMGFmZDhmYmM3MWIifQ"
+   }
+  },
+  {
+   "name": "openai-responses-stream-completed-then-done",
+   "description": "Responses stream with event lines that ends with response.completed and then data: [DONE]: the receipt goes once, before response.completed (the first final event); [DONE] follows unchanged and is left out of the hash",
+   "adapters": "as specified",
+   "method": "openai_responses",
+   "path": "/v1/responses",
+   "status": 200,
+   "stream": true,
+   "requestBase64": "eyJtb2RlbCI6ImdwdC14Iiwic3RyZWFtIjp0cnVlLCJpbnB1dCI6IkhpIn0=",
+   "upstreamResponseBase64": "ZXZlbnQ6IHJlc3BvbnNlLmNyZWF0ZWQKZGF0YTogeyJ0eXBlIjoicmVzcG9uc2UuY3JlYXRlZCIsInNlcXVlbmNlX251bWJlciI6MCwicmVzcG9uc2UiOnsiaWQiOiJyZXNwX2U0Iiwib2JqZWN0IjoicmVzcG9uc2UiLCJtb2RlbCI6ImdwdC14Iiwic3RhdHVzIjoiaW5fcHJvZ3Jlc3MiLCJvdXRwdXQiOltdfX0KCmV2ZW50OiByZXNwb25zZS5jb21wbGV0ZWQKZGF0YTogeyJ0eXBlIjoicmVzcG9uc2UuY29tcGxldGVkIiwic2VxdWVuY2VfbnVtYmVyIjoxLCJyZXNwb25zZSI6eyJpZCI6InJlc3BfZTQiLCJvYmplY3QiOiJyZXNwb25zZSIsIm1vZGVsIjoiZ3B0LXgiLCJzdGF0dXMiOiJjb21wbGV0ZWQiLCJvdXRwdXQiOltdLCJ1c2FnZSI6eyJpbnB1dF90b2tlbnMiOjEwLCJvdXRwdXRfdG9rZW5zIjozLCJ0b3RhbF90b2tlbnMiOjEzfX19CgpkYXRhOiBbRE9ORV0KCg==",
+   "responseBase64": "ZXZlbnQ6IHJlc3BvbnNlLmNyZWF0ZWQKZGF0YTogeyJ0eXBlIjoicmVzcG9uc2UuY3JlYXRlZCIsInNlcXVlbmNlX251bWJlciI6MCwicmVzcG9uc2UiOnsiaWQiOiJyZXNwX2U0Iiwib2JqZWN0IjoicmVzcG9uc2UiLCJtb2RlbCI6ImdwdC14Iiwic3RhdHVzIjoiaW5fcHJvZ3Jlc3MiLCJvdXRwdXQiOltdfX0KCjogdGFwZWFwaS1yZWNlaXB0IGV5SnBaQ0k2SW5KbGMzQmZaVFFpTENKdmF5STZkSEoxWlN3aWNtVnpkV3gwSWpwN0ltMXZaR1ZzSWpvaVozQjBMWGdpTENKMWMyRm5aU0k2ZXlKd2NtOXRjSFJmZEc5clpXNXpJam94TUN3aVkyOXRjR3hsZEdsdmJsOTBiMnRsYm5NaU9qTXNJblJ2ZEdGc1gzUnZhMlZ1Y3lJNk1UTjlMQ0p5WlhOd2IyNXpaVk5vWVRJMU5pSTZJamRoWm1ZNFlqTXlNMk01Tm1aak1qZ3pNak5qT0dVM05qZ3hObUZsTldOak5tUXpOMkptTnpjellUYzVOVEkyWW1ZNVlqQmlaRFl3TXpFNVlqZzBNbVVpTENKemRISmxZVzBpT25SeWRXVXNJbU52YlhCc1pYUmxJanAwY25WbExDSnpkR0YwZFhNaU9qSXdNQ3dpY0hKcFkyVnpJanBiZXlKamRYSnlaVzVqZVNJNklsVlRSRlFpTENKaGJXOTFiblFpT2lJd0xqQXdNREEwTWpVd0luMHNleUpqZFhKeVpXNWplU0k2SWtKRlRTSXNJbUZ0YjNWdWRDSTZJakF1TURBd05ESTFNREFpZlYwc0ltMXZaR1ZzVFdGMFkyaGxaRUo1SWpvaWNtVnpjRzl1YzJVaWZTd2lZMjl1ZEdGcGJtVnlJam9pTUhneFlqSkJOalUzUW1OQ1lUbEVNekl5T1dZMU4yRkRNbVkwUm1OaVJVVXlRVUUzTlRaaFFXVTRJaXdpZEhNaU9qRTNPVEF3TURBd01EQXNJbTFsZEdodlpDSTZJbTl3Wlc1aGFWOXlaWE53YjI1elpYTWlMQ0p3WVhKaGJYTWlPbnNpY0dGMGFDSTZJaTkyTVM5eVpYTndiMjV6WlhNaUxDSnlaWEYxWlhOMFUyaGhNalUySWpvaU5tSmpOR05rT0dVeVptUm1NVGRsT0RnNU5tWmlZelF6TVRjM01UTTNaalpsTVdGbFlqWTBOamRoWmpjeE9UaGlaVGt3TmpRd01HTTNPR1E0WWpSaVpTSjlMQ0p6YVdjaU9pSXdlREUyTjJNMk5qQTRZalZpTjJRMU1XSTVPVGsxWkRZMU5HVXlOMkk1TkdFelptTXpPRFF5TkdRd09EYzFZemxrTnpBeFlXRXdabU5sTXpNeE1UTTFZakl6TWpCaE1EQmpaV0U0WldKbE56azNZemszWVRRek1qWTFNRGd5Wm1Zd09UQmpZVGN6TVdZeVpUTTFObUkzTURBNE9UZ3dPVEkzT0RJMU9UTTVaamswTVdJaWZRCgpldmVudDogcmVzcG9uc2UuY29tcGxldGVkCmRhdGE6IHsidHlwZSI6InJlc3BvbnNlLmNvbXBsZXRlZCIsInNlcXVlbmNlX251bWJlciI6MSwicmVzcG9uc2UiOnsiaWQiOiJyZXNwX2U0Iiwib2JqZWN0IjoicmVzcG9uc2UiLCJtb2RlbCI6ImdwdC14Iiwic3RhdHVzIjoiY29tcGxldGVkIiwib3V0cHV0IjpbXSwidXNhZ2UiOnsiaW5wdXRfdG9rZW5zIjoxMCwib3V0cHV0X3Rva2VucyI6MywidG90YWxfdG9rZW5zIjoxM319fQoKZGF0YTogW0RPTkVdCgo=",
+   "receiptDelivery": "sse-comment",
+   "expected": {
+    "requestSha256": "6bc4cd8e2fdf17e8896fbc43177137f6e1aeb6467af7198be906400c78d8b4be",
+    "responseSha256": "7aff8b323c96fc28323c8e76816ae5cc6d37bf773a79526bf9b0bd60319b842e",
+    "result": {
+     "model": "gpt-x",
+     "usage": {
+      "prompt_tokens": 10,
+      "completion_tokens": 3,
+      "total_tokens": 13
+     },
+     "responseSha256": "7aff8b323c96fc28323c8e76816ae5cc6d37bf773a79526bf9b0bd60319b842e",
+     "stream": true,
+     "complete": true,
+     "status": 200,
+     "prices": [
+      {
+       "currency": "USDT",
+       "amount": "0.00004250"
+      },
+      {
+       "currency": "BEM",
+       "amount": "0.00042500"
+      }
+     ],
+     "modelMatchedBy": "response"
+    },
+    "envelope": {
+     "id": "resp_e4",
+     "ok": true,
+     "result": {
+      "model": "gpt-x",
+      "usage": {
+       "prompt_tokens": 10,
+       "completion_tokens": 3,
+       "total_tokens": 13
+      },
+      "responseSha256": "7aff8b323c96fc28323c8e76816ae5cc6d37bf773a79526bf9b0bd60319b842e",
+      "stream": true,
+      "complete": true,
+      "status": 200,
+      "prices": [
+       {
+        "currency": "USDT",
+        "amount": "0.00004250"
+       },
+       {
+        "currency": "BEM",
+        "amount": "0.00042500"
+       }
+      ],
+      "modelMatchedBy": "response"
+     },
+     "container": "0x1b2A657BcBa9D3229f57aC2f4FcbEE2AA756aAe8",
+     "ts": 1790000000,
+     "method": "openai_responses",
+     "params": {
+      "path": "/v1/responses",
+      "requestSha256": "6bc4cd8e2fdf17e8896fbc43177137f6e1aeb6467af7198be906400c78d8b4be"
+     },
+     "sig": "0x167c6608b5b7d51b9995d654e27b94a3fc38424d0875c9d701aa0fce331135b2320a00cea8ebe797c97a43265082ff090ca731f2e356b7008980927825939f941b"
+    },
+    "digest": "0x6a2952895ade2b4612bd8cf12dc61226e4174443acbf30b3a2685f3b68610638",
+    "encoded": "eyJpZCI6InJlc3BfZTQiLCJvayI6dHJ1ZSwicmVzdWx0Ijp7Im1vZGVsIjoiZ3B0LXgiLCJ1c2FnZSI6eyJwcm9tcHRfdG9rZW5zIjoxMCwiY29tcGxldGlvbl90b2tlbnMiOjMsInRvdGFsX3Rva2VucyI6MTN9LCJyZXNwb25zZVNoYTI1NiI6IjdhZmY4YjMyM2M5NmZjMjgzMjNjOGU3NjgxNmFlNWNjNmQzN2JmNzczYTc5NTI2YmY5YjBiZDYwMzE5Yjg0MmUiLCJzdHJlYW0iOnRydWUsImNvbXBsZXRlIjp0cnVlLCJzdGF0dXMiOjIwMCwicHJpY2VzIjpbeyJjdXJyZW5jeSI6IlVTRFQiLCJhbW91bnQiOiIwLjAwMDA0MjUwIn0seyJjdXJyZW5jeSI6IkJFTSIsImFtb3VudCI6IjAuMDAwNDI1MDAifV0sIm1vZGVsTWF0Y2hlZEJ5IjoicmVzcG9uc2UifSwiY29udGFpbmVyIjoiMHgxYjJBNjU3QmNCYTlEMzIyOWY1N2FDMmY0RmNiRUUyQUE3NTZhQWU4IiwidHMiOjE3OTAwMDAwMDAsIm1ldGhvZCI6Im9wZW5haV9yZXNwb25zZXMiLCJwYXJhbXMiOnsicGF0aCI6Ii92MS9yZXNwb25zZXMiLCJyZXF1ZXN0U2hhMjU2IjoiNmJjNGNkOGUyZmRmMTdlODg5NmZiYzQzMTc3MTM3ZjZlMWFlYjY0NjdhZjcxOThiZTkwNjQwMGM3OGQ4YjRiZSJ9LCJzaWciOiIweDE2N2M2NjA4YjViN2Q1MWI5OTk1ZDY1NGUyN2I5NGEzZmMzODQyNGQwODc1YzlkNzAxYWEwZmNlMzMxMTM1YjIzMjBhMDBjZWE4ZWJlNzk3Yzk3YTQzMjY1MDgyZmYwOTBjYTczMWYyZTM1NmI3MDA4OTgwOTI3ODI1OTM5Zjk0MWIifQ"
+   }
+  },
+  {
+   "name": "anthropic-messages-whole-web-search",
+   "description": "Anthropic Messages whole answer with a server tool used twice: usage.other.web_search_requests is 2, priced by no token price and listed in unpriced",
+   "adapters": "as specified",
+   "method": "anthropic_messages",
+   "path": "/v1/messages",
+   "status": 200,
+   "stream": false,
+   "requestBase64": "eyJtb2RlbCI6ImNsYXVkZS14IiwibWF4X3Rva2VucyI6NjQsIm1lc3NhZ2VzIjpbeyJyb2xlIjoidXNlciIsImNvbnRlbnQiOiJIaSJ9XX0=",
+   "upstreamResponseBase64": "eyJpZCI6Im1zZ19lNSIsInR5cGUiOiJtZXNzYWdlIiwicm9sZSI6ImFzc2lzdGFudCIsIm1vZGVsIjoiY2xhdWRlLXgiLCJjb250ZW50IjpbeyJ0eXBlIjoidGV4dCIsInRleHQiOiJIZWxsbyJ9XSwic3RvcF9yZWFzb24iOiJlbmRfdHVybiIsInN0b3Bfc2VxdWVuY2UiOm51bGwsInVzYWdlIjp7ImlucHV0X3Rva2VucyI6MTAwMCwiY2FjaGVfcmVhZF9pbnB1dF90b2tlbnMiOjAsImNhY2hlX2NyZWF0aW9uX2lucHV0X3Rva2VucyI6MCwib3V0cHV0X3Rva2VucyI6MTAwLCJzZXJ2ZXJfdG9vbF91c2UiOnsid2ViX3NlYXJjaF9yZXF1ZXN0cyI6Mn19fQ==",
+   "responseBase64": "eyJpZCI6Im1zZ19lNSIsInR5cGUiOiJtZXNzYWdlIiwicm9sZSI6ImFzc2lzdGFudCIsIm1vZGVsIjoiY2xhdWRlLXgiLCJjb250ZW50IjpbeyJ0eXBlIjoidGV4dCIsInRleHQiOiJIZWxsbyJ9XSwic3RvcF9yZWFzb24iOiJlbmRfdHVybiIsInN0b3Bfc2VxdWVuY2UiOm51bGwsInVzYWdlIjp7ImlucHV0X3Rva2VucyI6MTAwMCwiY2FjaGVfcmVhZF9pbnB1dF90b2tlbnMiOjAsImNhY2hlX2NyZWF0aW9uX2lucHV0X3Rva2VucyI6MCwib3V0cHV0X3Rva2VucyI6MTAwLCJzZXJ2ZXJfdG9vbF91c2UiOnsid2ViX3NlYXJjaF9yZXF1ZXN0cyI6Mn19fQ==",
+   "receiptDelivery": "header",
+   "expected": {
+    "requestSha256": "0f294a3f4ff9122c4dcc0764a344931d5e3c8586a89fc66a81f892339c987e62",
+    "responseSha256": "e9e0ee7829e5cb70bfb3d1f3f75f2f2699cb320f8f2dec72ee260cd1dda9fbba",
+    "result": {
+     "model": "claude-x",
+     "usage": {
+      "prompt_tokens": 1000,
+      "completion_tokens": 100,
+      "total_tokens": 1100,
+      "cache_read_tokens": 0,
+      "cache_write_tokens": 0,
+      "other": {
+       "web_search_requests": 2
+      }
+     },
+     "responseSha256": "e9e0ee7829e5cb70bfb3d1f3f75f2f2699cb320f8f2dec72ee260cd1dda9fbba",
+     "stream": false,
+     "complete": true,
+     "status": 200,
+     "prices": [
+      {
+       "currency": "BEM",
+       "amount": "0.00450000"
+      },
+      {
+       "currency": "USD1",
+       "amount": "0.00045000"
+      }
+     ],
+     "modelMatchedBy": "response",
+     "unpriced": [
+      "web_search_requests"
+     ]
+    },
+    "envelope": {
+     "id": "msg_e5",
+     "ok": true,
+     "result": {
+      "model": "claude-x",
+      "usage": {
+       "prompt_tokens": 1000,
+       "completion_tokens": 100,
+       "total_tokens": 1100,
+       "cache_read_tokens": 0,
+       "cache_write_tokens": 0,
+       "other": {
+        "web_search_requests": 2
+       }
+      },
+      "responseSha256": "e9e0ee7829e5cb70bfb3d1f3f75f2f2699cb320f8f2dec72ee260cd1dda9fbba",
+      "stream": false,
+      "complete": true,
+      "status": 200,
+      "prices": [
+       {
+        "currency": "BEM",
+        "amount": "0.00450000"
+       },
+       {
+        "currency": "USD1",
+        "amount": "0.00045000"
+       }
+      ],
+      "modelMatchedBy": "response",
+      "unpriced": [
+       "web_search_requests"
+      ]
+     },
+     "container": "0x1b2A657BcBa9D3229f57aC2f4FcbEE2AA756aAe8",
+     "ts": 1790000000,
+     "method": "anthropic_messages",
+     "params": {
+      "path": "/v1/messages",
+      "requestSha256": "0f294a3f4ff9122c4dcc0764a344931d5e3c8586a89fc66a81f892339c987e62"
+     },
+     "sig": "0xeecfba3ac4eab56bc5e937c854f962c06083cca3b8899377fd300ac3d9f23ded5623e800d1af92b94a07d19dc0710ef6c62654cfc7e98c93fa0823ed8b142f911c"
+    },
+    "digest": "0x62055d5e1c1e6fd197f304e1f0c708d4a8420a6a22f7de5fcedf609d05af7e74",
+    "encoded": "eyJpZCI6Im1zZ19lNSIsIm9rIjp0cnVlLCJyZXN1bHQiOnsibW9kZWwiOiJjbGF1ZGUteCIsInVzYWdlIjp7InByb21wdF90b2tlbnMiOjEwMDAsImNvbXBsZXRpb25fdG9rZW5zIjoxMDAsInRvdGFsX3Rva2VucyI6MTEwMCwiY2FjaGVfcmVhZF90b2tlbnMiOjAsImNhY2hlX3dyaXRlX3Rva2VucyI6MCwib3RoZXIiOnsid2ViX3NlYXJjaF9yZXF1ZXN0cyI6Mn19LCJyZXNwb25zZVNoYTI1NiI6ImU5ZTBlZTc4MjllNWNiNzBiZmIzZDFmM2Y3NWYyZjI2OTljYjMyMGY4ZjJkZWM3MmVlMjYwY2QxZGRhOWZiYmEiLCJzdHJlYW0iOmZhbHNlLCJjb21wbGV0ZSI6dHJ1ZSwic3RhdHVzIjoyMDAsInByaWNlcyI6W3siY3VycmVuY3kiOiJCRU0iLCJhbW91bnQiOiIwLjAwNDUwMDAwIn0seyJjdXJyZW5jeSI6IlVTRDEiLCJhbW91bnQiOiIwLjAwMDQ1MDAwIn1dLCJtb2RlbE1hdGNoZWRCeSI6InJlc3BvbnNlIiwidW5wcmljZWQiOlsid2ViX3NlYXJjaF9yZXF1ZXN0cyJdfSwiY29udGFpbmVyIjoiMHgxYjJBNjU3QmNCYTlEMzIyOWY1N2FDMmY0RmNiRUUyQUE3NTZhQWU4IiwidHMiOjE3OTAwMDAwMDAsIm1ldGhvZCI6ImFudGhyb3BpY19tZXNzYWdlcyIsInBhcmFtcyI6eyJwYXRoIjoiL3YxL21lc3NhZ2VzIiwicmVxdWVzdFNoYTI1NiI6IjBmMjk0YTNmNGZmOTEyMmM0ZGNjMDc2NGEzNDQ5MzFkNWUzYzg1ODZhODlmYzY2YTgxZjg5MjMzOWM5ODdlNjIifSwic2lnIjoiMHhlZWNmYmEzYWM0ZWFiNTZiYzVlOTM3Yzg1NGY5NjJjMDYwODNjY2EzYjg4OTkzNzdmZDMwMGFjM2Q5ZjIzZGVkNTYyM2U4MDBkMWFmOTJiOTRhMDdkMTlkYzA3MTBlZjZjNjI2NTRjZmM3ZTk4YzkzZmEwODIzZWQ4YjE0MmY5MTFjIn0"
+   }
+  },
+  {
+   "name": "openai-chat-json-unpriced-model",
+   "description": "Chat whole answer whose reported model is in no entry of the price table: model is the reported one, prices is null and modelMatchedBy is absent (the requested model is not tried, since the answer reported one)",
+   "adapters": "as specified",
+   "method": "openai_chat",
+   "path": "/v1/chat/completions",
+   "status": 200,
+   "stream": false,
+   "requestBase64": "eyJtb2RlbCI6ImdwdC14IiwibWVzc2FnZXMiOlt7InJvbGUiOiJ1c2VyIiwiY29udGVudCI6IkhpIn1dfQ==",
+   "upstreamResponseBase64": "eyJpZCI6ImNoYXRjbXBsLWU2Iiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uIiwiY3JlYXRlZCI6MTc5MDAwMDAwMCwibW9kZWwiOiJncHQteSIsImNob2ljZXMiOlt7ImluZGV4IjowLCJtZXNzYWdlIjp7InJvbGUiOiJhc3Npc3RhbnQiLCJjb250ZW50IjoiSGVsbG8ifSwiZmluaXNoX3JlYXNvbiI6InN0b3AifV0sInVzYWdlIjp7InByb21wdF90b2tlbnMiOjUsImNvbXBsZXRpb25fdG9rZW5zIjoxLCJ0b3RhbF90b2tlbnMiOjZ9fQ==",
+   "responseBase64": "eyJpZCI6ImNoYXRjbXBsLWU2Iiwib2JqZWN0IjoiY2hhdC5jb21wbGV0aW9uIiwiY3JlYXRlZCI6MTc5MDAwMDAwMCwibW9kZWwiOiJncHQteSIsImNob2ljZXMiOlt7ImluZGV4IjowLCJtZXNzYWdlIjp7InJvbGUiOiJhc3Npc3RhbnQiLCJjb250ZW50IjoiSGVsbG8ifSwiZmluaXNoX3JlYXNvbiI6InN0b3AifV0sInVzYWdlIjp7InByb21wdF90b2tlbnMiOjUsImNvbXBsZXRpb25fdG9rZW5zIjoxLCJ0b3RhbF90b2tlbnMiOjZ9fQ==",
+   "receiptDelivery": "header",
+   "expected": {
+    "requestSha256": "53c5a1240e3300c41c9e29e3e31cb5564b80f7cefe8dec6aa6b072a2fc89d220",
+    "responseSha256": "8d2650fb1deb011ab9fbd5ff9c1ed6461faa92cd6a7b0d1d47dfb4b631136a32",
+    "result": {
+     "model": "gpt-y",
+     "usage": {
+      "prompt_tokens": 5,
+      "completion_tokens": 1,
+      "total_tokens": 6
+     },
+     "responseSha256": "8d2650fb1deb011ab9fbd5ff9c1ed6461faa92cd6a7b0d1d47dfb4b631136a32",
+     "stream": false,
+     "complete": true,
+     "status": 200,
+     "prices": null
+    },
+    "envelope": {
+     "id": "chatcmpl-e6",
+     "ok": true,
+     "result": {
+      "model": "gpt-y",
+      "usage": {
+       "prompt_tokens": 5,
+       "completion_tokens": 1,
+       "total_tokens": 6
+      },
+      "responseSha256": "8d2650fb1deb011ab9fbd5ff9c1ed6461faa92cd6a7b0d1d47dfb4b631136a32",
+      "stream": false,
+      "complete": true,
+      "status": 200,
+      "prices": null
+     },
+     "container": "0x1b2A657BcBa9D3229f57aC2f4FcbEE2AA756aAe8",
+     "ts": 1790000000,
+     "method": "openai_chat",
+     "params": {
+      "path": "/v1/chat/completions",
+      "requestSha256": "53c5a1240e3300c41c9e29e3e31cb5564b80f7cefe8dec6aa6b072a2fc89d220"
+     },
+     "sig": "0xfcd9b060a8f79669389aa53a7cadb64d0c9732fa16dc201726dba7fc3196cbe04890be42a8ea00557022cb06a48ddcf896957087205881c212f058aa32334fd71c"
+    },
+    "digest": "0x2caac7deaa559204fac29ffb1c941b3e69661a8c5bb507629ba5e7770d92501c",
+    "encoded": "eyJpZCI6ImNoYXRjbXBsLWU2Iiwib2siOnRydWUsInJlc3VsdCI6eyJtb2RlbCI6ImdwdC15IiwidXNhZ2UiOnsicHJvbXB0X3Rva2VucyI6NSwiY29tcGxldGlvbl90b2tlbnMiOjEsInRvdGFsX3Rva2VucyI6Nn0sInJlc3BvbnNlU2hhMjU2IjoiOGQyNjUwZmIxZGViMDExYWI5ZmJkNWZmOWMxZWQ2NDYxZmFhOTJjZDZhN2IwZDFkNDdkZmI0YjYzMTEzNmEzMiIsInN0cmVhbSI6ZmFsc2UsImNvbXBsZXRlIjp0cnVlLCJzdGF0dXMiOjIwMCwicHJpY2VzIjpudWxsfSwiY29udGFpbmVyIjoiMHgxYjJBNjU3QmNCYTlEMzIyOWY1N2FDMmY0RmNiRUUyQUE3NTZhQWU4IiwidHMiOjE3OTAwMDAwMDAsIm1ldGhvZCI6Im9wZW5haV9jaGF0IiwicGFyYW1zIjp7InBhdGgiOiIvdjEvY2hhdC9jb21wbGV0aW9ucyIsInJlcXVlc3RTaGEyNTYiOiI1M2M1YTEyNDBlMzMwMGM0MWM5ZTI5ZTNlMzFjYjU1NjRiODBmN2NlZmU4ZGVjNmFhNmIwNzJhMmZjODlkMjIwIn0sInNpZyI6IjB4ZmNkOWIwNjBhOGY3OTY2OTM4OWFhNTNhN2NhZGI2NGQwYzk3MzJmYTE2ZGMyMDE3MjZkYmE3ZmMzMTk2Y2JlMDQ4OTBiZTQyYThlYTAwNTU3MDIyY2IwNmE0OGRkY2Y4OTY5NTcwODcyMDU4ODFjMjEyZjA1OGFhMzIzMzRmZDcxYyJ9"
+   }
+  }
+ ]
+}
