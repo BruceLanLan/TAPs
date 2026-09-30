@@ -1,0 +1,125 @@
+{
+  "note": "Generated from the reference implementation at BruceLanLan/tapeapi@fda84db889d2a732915f264a799af24073177a85 (sdk/src/channel.js, sdk/src/sig.js, sdk/src/canon.js). Hex is lowercase; values without 0x are raw hex. Every field is an input or an exact expected output unless it is under \"example\".",
+  "covers": "The channel key record, its inbox normalisation and hash, and the EIP-712 ChannelKeys digest and holder signature (Specification §2, §3).",
+  "domainType": "EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)",
+  "domain": {
+    "name": "TapeAPI",
+    "version": "1",
+    "chainId": 56,
+    "verifyingContract": "0xe61A9C7213a6Aa616C246a2B569e555B417b25ee"
+  },
+  "channelKeysType": "ChannelKeys(address container,bytes32 x25519,bytes32 ed25519,bytes32 inbox,uint64 issued,uint64 expires)",
+  "channelKeysTypeHash": "0x4dcd46fdde436adbdcfd3c3541cdb782612b23122af4c1640f9f673211d32542",
+  "holderKey": "0x1111111111111111111111111111111111111111111111111111111111111111",
+  "holderAddress": "0x19E7E376E7C213B7E7e7e46cc70A5dD086DAff2A",
+  "x25519Secret": "a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0",
+  "ed25519Secret": "c3c8cdd2d7dce1e6ebf0f5faff04090e13181d22272c31363b40454a4f54595e",
+  "record": {
+    "tapechannel": "1",
+    "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+    "chainId": 56,
+    "x25519": "0xad438bfae31f6c093d61d4339255ea798092c9fadd07b97827f4b0ae9dee7c1c",
+    "ed25519": "0x66f975e51bd242b7d52b0744c933af11734a4a5888054cc13485b822ca7427ad",
+    "issued": 1789000000,
+    "expires": 1790000000,
+    "sig": "0x6b598cd1937c5e09f0cdc9ffea85f5852273276dc08050f9d1ef8b8b70887463700d83cb9843f762c6e5ced4476ba855f79f330c32cb9be4acd8e8d39b755e091c",
+    "inbox": {
+      "relays": [
+        {
+          "url": "https://relay.example/tapeapi/v1",
+          "container": "0x3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a"
+        }
+      ]
+    }
+  },
+  "recordCanonicalJSON": "{\"chainId\":56,\"container\":\"0x86DDaEF00401E3F10418398D67D7189fc458eA95\",\"ed25519\":\"0x66f975e51bd242b7d52b0744c933af11734a4a5888054cc13485b822ca7427ad\",\"expires\":1790000000,\"inbox\":{\"relays\":[{\"container\":\"0x3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a\",\"url\":\"https://relay.example/tapeapi/v1\"}]},\"issued\":1789000000,\"sig\":\"0x6b598cd1937c5e09f0cdc9ffea85f5852273276dc08050f9d1ef8b8b70887463700d83cb9843f762c6e5ced4476ba855f79f330c32cb9be4acd8e8d39b755e091c\",\"tapechannel\":\"1\",\"x25519\":\"0xad438bfae31f6c093d61d4339255ea798092c9fadd07b97827f4b0ae9dee7c1c\"}",
+  "expected": {
+    "domainSeparator": "0xa73ee348b5672f12dbc174f66a7d162c69e0d64befdba88475d9d7e3c0fd3ac7",
+    "inboxHash": "0xf54cf8fea5e5289180ab0b8fcab54420ccb29fcc08cc56c3d6d2696225622468",
+    "structHash": "0x2f59035de4c3265f1d021170ae5f499b0fbb98f2202de3d3abb172e5fc173813",
+    "digest": "0x6776fe8f164d2239e64bfdea5f126239c3a1ebbaa62ec24a3cca90f4eed82c3a",
+    "sig": "0x6b598cd1937c5e09f0cdc9ffea85f5852273276dc08050f9d1ef8b8b70887463700d83cb9843f762c6e5ced4476ba855f79f330c32cb9be4acd8e8d39b755e091c",
+    "recoversTo": "0x19E7E376E7C213B7E7e7e46cc70A5dD086DAff2A"
+  },
+  "inboxNormalisation": [
+    {
+      "inbox": {
+        "relays": [
+          {
+            "url": "https://relay.example/tapeapi/v1",
+            "container": "0x3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a"
+          }
+        ]
+      },
+      "normalised": "{\"relays\":[{\"container\":\"0x3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a\",\"url\":\"https://relay.example/tapeapi/v1\"}]}",
+      "inboxHash": "0xf54cf8fea5e5289180ab0b8fcab54420ccb29fcc08cc56c3d6d2696225622468"
+    },
+    {
+      "inbox": {
+        "relays": [
+          {
+            "url": "https://relay.example/tapeapi/v1",
+            "container": "0x3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a"
+          }
+        ],
+        "bus": "0x486110c35d9b90a9d6D85c8063A065f9e7b6b707"
+      },
+      "normalised": "{\"bus\":\"0x486110c35d9b90a9d6D85c8063A065f9e7b6b707\",\"relays\":[{\"container\":\"0x3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a\",\"url\":\"https://relay.example/tapeapi/v1\"}]}",
+      "inboxHash": "0x99edf5ec9fc4c541521666276680a99ab009e779458a9b3ef49f4291af5437e2"
+    },
+    {
+      "inbox": {},
+      "normalised": "{\"relays\":[]}",
+      "inboxHash": "0x73a8d91fcc7ee817f2c9faf93426a9a44020029e34e38352c94cfdbbea3cd8fb"
+    },
+    {
+      "inbox": {
+        "relays": [
+          {
+            "url": "https://relay.example/tapeapi/v1",
+            "container": "0x3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a",
+            "note": "dropped before hashing"
+          }
+        ]
+      },
+      "normalised": "{\"relays\":[{\"container\":\"0x3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a\",\"url\":\"https://relay.example/tapeapi/v1\"}]}",
+      "inboxHash": "0xf54cf8fea5e5289180ab0b8fcab54420ccb29fcc08cc56c3d6d2696225622468",
+      "comment": "members other than url and container are not hashed"
+    }
+  ],
+  "negative": [
+    {
+      "case": "A Delegation(address container,address signer,uint64 expires) signature by the same holder, presented as the record sig",
+      "delegation": {
+        "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+        "signer": "0x2222222222222222222222222222222222222222",
+        "expires": 1790000000
+      },
+      "delegationDigest": "0x2987ea8deb0c559c0d803891121a7666263ad1e1c1f268792ab405e34c0b4d51",
+      "sig": "0xce33008c172928b4c0b41bb8dfae7eafa2b0546d79bda8a5ef677197943504165318312a105ddf28a081c8eca0b2ce4134545b63e9498f46790f85c1688557081b",
+      "recoversUnderChannelKeysDigest": "0x477f38c94a716a66448D340B4e157fc149bf8350",
+      "expected": "reject: does not recover to the holder"
+    },
+    {
+      "case": "The valid signature with s replaced by n - s and v flipped (high-s)",
+      "sig": "0x6b598cd1937c5e09f0cdc9ffea85f5852273276dc08050f9d1ef8b8b708874638ff27c3467bc089d391a312bb89457a8c30fa9da7c7d045712f975b934c0e3381b",
+      "expected": "reject: high-s",
+      "sdkError": "high-s signature (malleable); s must be <= n/2"
+    },
+    {
+      "case": "The record with issued lowered by one (1788999999) while the signature is unchanged",
+      "expected": "reject: signature does not recover to the holder (the digest changes)",
+      "recoversTo": "0xcE8841573a096ECB4502f54c7f453C98266F0303"
+    },
+    {
+      "case": "The record with inbox.relays[0].url changed to https://evil.example/tapeapi/v1",
+      "expected": "reject: signature does not recover to the holder",
+      "recoversTo": "0xB73b182300cAde40d5B62499dc95031D8F163dB5"
+    },
+    {
+      "case": "The same signature checked in the domain of chain 8453",
+      "expected": "reject: signature does not recover to the holder",
+      "recoversTo": "0xE1c552091Cb9E9D3196A755f515229f6C542F551"
+    }
+  ]
+}

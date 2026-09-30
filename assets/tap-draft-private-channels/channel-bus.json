@@ -1,0 +1,72 @@
+{
+  "note": "Contract-side cases for ChannelBus (Specification §12.1). Each was reproduced read-only with eth_call against the BNB Smart Chain deployment 0x486110c35d9b90a9d6D85c8063A065f9e7b6b707 on two operators (bsc-dataseed.bnbchain.org, bsc-rpc.publicnode.com) at the latest block on 2026-09-30 09:49 UTC, and are covered by contracts/test/ChannelBus.t.sol at the reference commit. `room` is any bytes32; the value used is the toResponder room of session.json. An eth_call result of 0x means the call succeeds (a transaction would emit the events listed).",
+  "room": "0xcc5ef965536f1d62b925cdda17a0c6bb616ac9b5d7191dea80aff70dcb9750e6",
+  "cases": [
+    {
+      "call": "send(room, wire)",
+      "wire": "empty (0 bytes)",
+      "expected": "revert EmptyWire()",
+      "revertData": "0x959c5c96"
+    },
+    {
+      "call": "send(room, wire)",
+      "wire": "16449 bytes, each 0x02",
+      "expected": "revert WireTooLarge(16449)",
+      "revertData": "0xd4b924000000000000000000000000000000000000000000000000000000000000004041"
+    },
+    {
+      "call": "send(room, wire)",
+      "wire": "16448 bytes, each 0x02",
+      "expected": "success; one Wire(room, wire) event",
+      "ethCallResult": "0x"
+    },
+    {
+      "call": "sendMany(room, packed)",
+      "packed": "0x (empty)",
+      "expected": "revert BadBatch()",
+      "revertData": "0x86bdc25c"
+    },
+    {
+      "call": "sendMany(room, packed)",
+      "packed": "16 × 0x000102 (sixteen one-byte messages 0x02)",
+      "expected": "success; sixteen Wire(room, 0x02) events in order",
+      "ethCallResult": "0x"
+    },
+    {
+      "call": "sendMany(room, packed)",
+      "packed": "17 × 0x000102",
+      "expected": "revert BadBatch()",
+      "revertData": "0x86bdc25c"
+    },
+    {
+      "call": "sendMany(room, packed)",
+      "packed": "0x000502 (declares 5 bytes, 1 follows)",
+      "expected": "revert BadBatch()",
+      "revertData": "0x86bdc25c"
+    },
+    {
+      "call": "sendMany(room, packed)",
+      "packed": "0x00 (a lone length byte)",
+      "expected": "revert BadBatch()",
+      "revertData": "0x86bdc25c"
+    },
+    {
+      "call": "sendMany(room, packed)",
+      "packed": "0x0000 (one message of length 0)",
+      "expected": "revert EmptyWire()",
+      "revertData": "0x959c5c96"
+    },
+    {
+      "call": "MAX_WIRE()",
+      "selector": "0x1d5cb38c",
+      "expected": "16448",
+      "ethCallResult": "0x0000000000000000000000000000000000000000000000000000000000004040"
+    },
+    {
+      "call": "MAX_BATCH()",
+      "selector": "0x950bff9f",
+      "expected": "16",
+      "ethCallResult": "0x0000000000000000000000000000000000000000000000000000000000000010"
+    }
+  ]
+}

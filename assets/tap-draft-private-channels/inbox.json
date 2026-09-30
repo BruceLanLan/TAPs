@@ -1,0 +1,62 @@
+{
+  "note": "Generated from the reference implementation at BruceLanLan/tapeapi@fda84db889d2a732915f264a799af24073177a85 (sdk/src/channel.js, sdk/src/sig.js, sdk/src/canon.js). Hex is lowercase; values without 0x are raw hex. Every field is an input or an exact expected output unless it is under \"example\".",
+  "covers": "Inbox room and sealed invite, wire type 0x03 (Specification §6.1).",
+  "recipient": {
+    "container": "0x0000000000000000000000000000000000000B0B",
+    "chainId": 56,
+    "staticSecret": "b2b5b8bbbec1c4c7cacdd0d3d6d9dcdfe2e5e8ebeef1f4f7fafd000306090c0f",
+    "staticPublic": "f35746b523704a780b88c374769fd09c4c01a3b2873675594d12167d3efda825"
+  },
+  "ephemeralSecret": "697f84a2bcbed4d9f71113292e4c66687e83a1bbbdd3d8f61012282d4b65677d",
+  "nonce": "889ea3c1dbddf3f8163032484d6b85879da2c0dadcf2f715",
+  "invite": {
+    "v": 1,
+    "kind": "tape.channel/invite",
+    "cid": "697f8ba7adb6dae6fa02182440464f73",
+    "e": "d0277d92d0a585b216b307c57871b031b87acb69275b2c0c7f7df10c9e2e355e",
+    "exp": 1789000600,
+    "from": {
+      "container": "0x0000000000000000000000000000000000000A11",
+      "chainId": 56
+    },
+    "keys": "tape-channel/v1",
+    "relays": [
+      {
+        "url": "https://relay.example/tapeapi/v1",
+        "container": "0x3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a"
+      }
+    ]
+  },
+  "expected": {
+    "endpoint": "0000000000000000000000380000000000000000000000000000000000000b0b",
+    "inboxRoom": "cd77458b5e8b154b92f9254799be3e0829e6ddbaaa313ed1f2977e93decc837e",
+    "E": "ad89c99a3846867742b9b54b6edaa9e66140eb00b6149a231057848c6c88b605",
+    "sharedSecret": "e3c98d8c40c606d2925124d11c4a6c04500d46e876d299f1c6928e771f06f678",
+    "K": "d151e68f9e2f04c3aa7b2ce06585f7f067a8e7a328a898ec89ded2403a291db4",
+    "aad": "5441502d32362f696e626f782f7631ad89c99a3846867742b9b54b6edaa9e66140eb00b6149a231057848c6c88b605cd77458b5e8b154b92f9254799be3e0829e6ddbaaa313ed1f2977e93decc837e",
+    "wire": "03ad89c99a3846867742b9b54b6edaa9e66140eb00b6149a231057848c6c88b605889ea3c1dbddf3f8163032484d6b85879da2c0dadcf2f715ebec44c53b75e6d848f1df6ebb593c91c8b4ae6b4c5c77462e6aa3a1bfd2f8651d94253135da13259dd4fae43e25b87d4995a307b1086181363f2b0bf68c7c8aef0b4ea71923576233b7feb3f6411896ddcbd76c4e6e8da22c97cba9119e16567fab88f22fbdaf0d8da19b0a1112535d3fc8db72fe254961c62cc53e028756ae6869c14e17c43889fadf5bec29d09b211cc2ac39a13a3c99e93146c58818cbb4191dc68eaa4856b804d080ee6c2431c3c3bd45a6d36b3847e4a45b300df25577d6154d338a1635ffa108f43cb099d3ab6e86c51ec2da223428152b6af3faee60c5d6bffe510ff73aed60baa4a4c974a0e64aa57611359dbfd18e041b5d7ee62b4009ac6559d7699b7dac0b9f33c29a7fe85e4fa3a891e74e29157a99b3fd93733d08de4d560bc6bbb0b3b8c908aa5345b47a2caae5a0579a554fb54398b61b4d131091522f7d87146c6409dd5181468699fbbb63e4f39a3db4e0c98eda5436f5cdcfc117026f26204a9e47b88a75443c2e22a57ba9dc02d786145885a376a2150d293169786e0350ce08cf48",
+    "wireLength": 453
+  },
+  "negative": [
+    {
+      "case": "The same wire opened by a container with the same static key but a different address (0x0000000000000000000000000000000000000C0C): the room in the AAD differs",
+      "expected": "reject",
+      "sdkError": "sealed invite does not open with this key (not for this container, or tampered)"
+    },
+    {
+      "case": "The same wire opened by the right container on chain 8453",
+      "expected": "reject",
+      "sdkError": "sealed invite does not open with this key (not for this container, or tampered)"
+    },
+    {
+      "case": "The same wire opened with the initiator's static key",
+      "expected": "reject",
+      "sdkError": "sealed invite does not open with this key (not for this container, or tampered)"
+    },
+    {
+      "case": "Last byte of the wire flipped",
+      "expected": "reject",
+      "sdkError": "sealed invite does not open with this key (not for this container, or tampered)"
+    }
+  ]
+}
