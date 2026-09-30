@@ -1,0 +1,223 @@
+{
+  "note": "Generated from the reference implementation at BruceLanLan/tapeapi@fda84db889d2a732915f264a799af24073177a85 (sdk/src/group.js, sdk/src/channel.js, sdk/src/canon.js) and reproduced by it (every value and every outcome). Byte strings are lowercase hex with 0x, except inside roster and invite objects and in prev, which are written as a roster carries them (bare hex for gid and prev). Every field is an input or an exact expected output; sdkCode and sdkError are the reference implementation's error code and message and are informative only.",
+  "covers": "§7 (invite), §8 (membership changes), and §5.5 and §6.3 (the previous epoch): the owner of epoch.json invites member-1, then removes member-2 in epoch 1. Channel records (§5.4 step 6) are taken to hold exactly the keys in epoch.json.",
+  "invite": {
+    "to": {
+      "container": "0x0000000000000000000000000000000000000a12",
+      "chainId": 56
+    },
+    "inboxRoom": "0x392e20e64c4e9886d9ac57244da930b05b4e2d7f905bb1b6f02cea2278913211",
+    "ephemeralSecret": "0xe1861cfe6498f8c726b31ab460b485aca29f06e4d0ea8771e596d69a34b9fb49",
+    "nonce": "0x76d9cfc2843e5583b756710e31e2cd6901d554d2bb1774c7",
+    "content": {
+      "v": 1,
+      "kind": "tape.group/invite",
+      "gid": "678391a8b4bcd8e6fd09112d3b525e66",
+      "owner": {
+        "container": "0x0000000000000000000000000000000000000a11",
+        "chainId": 56
+      },
+      "relays": [
+        {
+          "url": "https://relay.example/tapeapi/v1",
+          "container": "0x3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a"
+        }
+      ]
+    },
+    "contentBytes": "{\"gid\":\"678391a8b4bcd8e6fd09112d3b525e66\",\"kind\":\"tape.group/invite\",\"owner\":{\"chainId\":56,\"container\":\"0x0000000000000000000000000000000000000a11\"},\"relays\":[{\"container\":\"0x3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a\",\"url\":\"https://relay.example/tapeapi/v1\"}],\"v\":1}",
+    "wire": "0x031f8630c37de604c1bb4c8b87d52ac7fb1c1c3853fe3aa44f7c0395c0957c3f2076d9cfc2843e5583b756710e31e2cd6901d554d2bb1774c727c7109148b3b57195e8959544447ed20c8c4cde4c21623bf4260641e8920d06c8f94f284f3b57f90e5111c01c931f848c56868d4a1e0854b1fa095cbcc6e1b0a1ae310e1a5e8d49c98835bbdee2453993a3e4103c18801ef7ee4176901b36f3dcfffef635aca4b6449767c5cc677f3e183e31bc154d759c40afd0e50af17d8cd41ded59baf6d6d180a5bac6b8c10a74c7824ff728d61b6e3b3a8624b64550136615bd28a1f3d1ea623ded178ad03fc3526af894df44f82a07f48d2fdb9d9c963dfd7603313083b16e7d84219412f05b873f5c8e437f9b62d5e6c593cf073476949e479780ce67343ce045d554c5ef5768d5f3af0cdda61ba4b348141898a697a3383977a218b13ffda4fe463e1bf3861e6be8e628299a4942e0"
+  },
+  "epoch1": {
+    "inputs": {
+      "members": [
+        "owner",
+        "member-1"
+      ],
+      "epoch": 1,
+      "issued": 1789000060,
+      "K": "0x0f37ef6bf5b86df03337d80f6791609fe1fd9c86c132f78d1b814d351774545e",
+      "ephemeralSecret": "0x856f6641390edd17fb8cb7f6df1aacc953657a433599bc7aa1c5ffc9153e9a0f",
+      "nonce": "0xc10877a1cda74a0d84dd5022a35d8f7979b1bfd17361c2bf"
+    },
+    "outputs": {
+      "prev": "0e25f316e53827bdaefea189e17d335bdaa2fecbef6355ee2e2b596ba6cf94e7",
+      "E": "0x4af3fcb4eabd34c338535411c194402a0fe186ed4b604d6ef9b4d1ed739e7270",
+      "commit": "0x4d7de6d05268e4cdab27ca6d4cf1aae93aec9c1a5003dfba570e29271da822d0",
+      "header": "0x04678391a8b4bcd8e6fd09112d3b525e6600000000000000014af3fcb4eabd34c338535411c194402a0fe186ed4b604d6ef9b4d1ed739e7270c10877a1cda74a0d84dd5022a35d8f7979b1bfd17361c2bf4d7de6d05268e4cdab27ca6d4cf1aae93aec9c1a5003dfba570e29271da822d002",
+      "roster": {
+        "v": 1,
+        "kind": "tape.group/roster",
+        "gid": "678391a8b4bcd8e6fd09112d3b525e66",
+        "epoch": 1,
+        "issued": 1789000060,
+        "prev": "0e25f316e53827bdaefea189e17d335bdaa2fecbef6355ee2e2b596ba6cf94e7",
+        "owner": {
+          "container": "0x0000000000000000000000000000000000000a11",
+          "chainId": 56
+        },
+        "members": [
+          {
+            "container": "0x0000000000000000000000000000000000000a11",
+            "chainId": 56,
+            "x25519": "0x7d5b6d597333377341271b19a9ea0fc80d24abb597849f1ab560e97e8c038b62",
+            "ed25519": "0xa12dce93376b9eeb0a724e21027ffb4ab985960a47c76ece3f69e68fcb48749b"
+          },
+          {
+            "container": "0x0000000000000000000000000000000000000a12",
+            "chainId": 56,
+            "x25519": "0x804d0f467136fdeaa868de9ca3d748aa16f75d148bc3d44fca58dab9f090ab73",
+            "ed25519": "0x982e2a5d7d8dbd87d2f269af57ea57d4d829d23f5ab6df99a501a2da4a35f058"
+          }
+        ],
+        "relays": [
+          {
+            "url": "https://relay.example/tapeapi/v1",
+            "container": "0x3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a"
+          }
+        ]
+      },
+      "rosterBytes": "{\"epoch\":1,\"gid\":\"678391a8b4bcd8e6fd09112d3b525e66\",\"issued\":1789000060,\"kind\":\"tape.group/roster\",\"members\":[{\"chainId\":56,\"container\":\"0x0000000000000000000000000000000000000a11\",\"ed25519\":\"0xa12dce93376b9eeb0a724e21027ffb4ab985960a47c76ece3f69e68fcb48749b\",\"x25519\":\"0x7d5b6d597333377341271b19a9ea0fc80d24abb597849f1ab560e97e8c038b62\"},{\"chainId\":56,\"container\":\"0x0000000000000000000000000000000000000a12\",\"ed25519\":\"0x982e2a5d7d8dbd87d2f269af57ea57d4d829d23f5ab6df99a501a2da4a35f058\",\"x25519\":\"0x804d0f467136fdeaa868de9ca3d748aa16f75d148bc3d44fca58dab9f090ab73\"}],\"owner\":{\"chainId\":56,\"container\":\"0x0000000000000000000000000000000000000a11\"},\"prev\":\"0e25f316e53827bdaefea189e17d335bdaa2fecbef6355ee2e2b596ba6cf94e7\",\"relays\":[{\"container\":\"0x3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a3e1a\",\"url\":\"https://relay.example/tapeapi/v1\"}],\"v\":1}",
+      "rosterHash": "0x8e9b1f339a3e62c5468cddce0dd40dd82d60f8bb6c576a68e06d5b623fffa3e2",
+      "slots": [
+        {
+          "member": 0,
+          "R": "0x7d5b6d597333377341271b19a9ea0fc80d24abb597849f1ab560e97e8c038b62",
+          "sharedSecret": "0x05d265252acc0193da92b01037c6de5f6f56ab6ad16f9a81c021b7ac08034902",
+          "kek": "0x9262ce3ca8cf558dc3680b7f08c676b2c10bb42fb4cdfa61d6dd8a8aa53ecdc7",
+          "slot": "0x1fa6d3f491949184174a91d55f6c9b19e2d998a986617808da9b73afe18311ec14dbb14a779b496a4bcce7c7bf51895a"
+        },
+        {
+          "member": 1,
+          "R": "0x804d0f467136fdeaa868de9ca3d748aa16f75d148bc3d44fca58dab9f090ab73",
+          "sharedSecret": "0x29e3cb592bb17d7a072e4fabaf6a0463ad9ac58657cb029117a963362688b342",
+          "kek": "0xe2f5008363a2bb9c1b10b24c7fed898e447346512cb9fb1f6e0a3a41b66027a7",
+          "slot": "0x2a4834afd1c165c630cb1105a679c0b2c1407d602183c0366bec074e421837c848bf268d8425a0dcffc804e160936b2d"
+        }
+      ],
+      "signature": "0x25355c062c19492c0fd8c5c5dadb9614b7a096e4895fd63b1af3b3be34f149e03a445ccef6f9c48df15aa1ff1f5a975f74fd2defeb4458734d90cdb663744f09",
+      "epochWire": "0x04678391a8b4bcd8e6fd09112d3b525e6600000000000000014af3fcb4eabd34c338535411c194402a0fe186ed4b604d6ef9b4d1ed739e7270c10877a1cda74a0d84dd5022a35d8f7979b1bfd17361c2bf4d7de6d05268e4cdab27ca6d4cf1aae93aec9c1a5003dfba570e29271da822d0021fa6d3f491949184174a91d55f6c9b19e2d998a986617808da9b73afe18311ec14dbb14a779b496a4bcce7c7bf51895a2a4834afd1c165c630cb1105a679c0b2c1407d602183c0366bec074e421837c848bf268d8425a0dcffc804e160936b2d000003585012f2b3b94d816619765c76076a45c9cf068b8b4a449a4e1285e012a261ac0126d869dc40300180bef39eb5ece578faf172fe3ea846c194bd161c2a714b2dd131d25e9a5e3c12bc7eb962bec41059cea6126862cdf2df0dc2ed41583fc74598d2536d23ef1c9130d10b45b216be743e9ccf3fe10a1f3e9e1fb6af226c981bd26fd8f27d8088aae94192e362e5f42dfc854c861206c7f3c869354d0de94d1f4cc9ef81e555f32589bbc5a54079f435d77712141a042227987feb52d5c9827df04b8a333253f22122145cfbe35281a3c8f9d03298e5fbb9fa84e830a6e209ff4987cd6655c6f3edaaa8ed10a6eec3a4c90b983c5f0a830aed0ab777a3816afefb510c0cf2e68df35072c24ed6ab66c75af15d95dc372eda18be153298d0a8b2f4d56ca354bce6da14f6c2ff95c6e7b2beccd814188c1ae803dfe149be0aaa16683c06d1c051af847fe9be961b2fdd4f15c52975176849cba216c63b3394655fe57cb2b7f70de5e4e75f72f132c69c393f14b98f16769eb4f1c0aa70c9753bc35c1cb748f4c2e98e6f849581d2860610afe3bb8e7dd4efee7cc8d5504431efd3a5814fc000cbd7adc21d914ed978969e4b6aff8e2fa7b5e2ec8d271cc374436b2962624c00eaef64602c826b4f263c3ed41b9262a0ce37d04cb9434123d36c6244e98b388d7115aea6766fa85696847d53c38d1b6e8c5e158a77355046d3637f6e2210988d9b56b9f416aba001439ebfa216f5568861bdb5d0b529bbb9126990639986bda5289ef50662541fcfd8c4245c24109d9c154b8439c1a44c3e098e91c6efc37b5aaedd7d0f4f40e2aef8cb66a3078523c06ce437bf289c6cdafa251000c8bc9396553975956ba56bbc8bc9fb48df8eb9fe86fff60860b4e8027dc2f4ac39de74a1b85d698866eeb2e197ce72a7a4db34c9bb58d70b4f5a71ac1ebe995b6a2ba0acbf4ee36c4dbb135b0e1d991778ed32d82744dde634de2510e135b35a88a9cf0f73efc09fe3f74da60c29edf450ea2ef61f22acf445fcf74cec33dbdcf30984b0fe4d14fe65eb3fd05c2795e88698df145fb0e4f2b7763d95bcc8eebf2dd3a761856a5daafcdc340fe55330b680822e0b8f32e8ab94f568a557a0e81ab62c194d2301fb167ce86d91d1cba543568e1447155c50322a2b1b6cdcdb1516bd522785ae76c0aab8485a9f70564004b76ecfdd8732980225355c062c19492c0fd8c5c5dadb9614b7a096e4895fd63b1af3b3be34f149e03a445ccef6f9c48df15aa1ff1f5a975f74fd2defeb4458734d90cdb663744f09",
+      "senderKeys": [
+        {
+          "sender": 0,
+          "key": "0xc271499ac8b6e763f3f6f4f4f1c3b483acffcdc33938c187a36e36182a586d05"
+        },
+        {
+          "sender": 1,
+          "key": "0xf7be4bb47b95c22093c5977269bd303442f1d39b6ac27b7b6fa7a5101c9ac0ca"
+        }
+      ]
+    }
+  },
+  "messages": {
+    "ownerEpoch1": {
+      "epoch": 1,
+      "sender": 0,
+      "seq": "117243907932160000",
+      "nonce": "0xb0a42f3cf025c3142e6c00ca4b4531340e08d15e8030ebc6",
+      "plaintext": "epoch 1 from owner",
+      "wire": "0x05678391a8b4bcd8e6fd09112d3b525e6600000000000000010000000001a088b68c600000b0a42f3cf025c3142e6c00ca4b4531340e08d15e8030ebc63335efa8882c26f38ef3fc15662d68ab82de1d93fa79288811046b2c51cc164670d781d8da7d6b20912b73928ea37ddb905b1bcec41733a9271069485911cb04f06f2d61be2c0c88190a56ccef02e3314a7092cad32610b5c4e87f3f2ee84c85c405"
+    },
+    "member1Epoch1": {
+      "epoch": 1,
+      "sender": 1,
+      "seq": "117243907932160000",
+      "nonce": "0xde971edceb6a5d945de0f1c80f0d548e9ff2f59ab8a40bb6",
+      "plaintext": "member 1 in epoch 1",
+      "wire": "0x05678391a8b4bcd8e6fd09112d3b525e6600000000000000010000000101a088b68c600000de971edceb6a5d945de0f1c80f0d548e9ff2f59ab8a40bb647641d16a778f3501f117bd92fa5f63b9dce46aa7bbd13dcc71a9d4b413147769c02316977b5346112406a74c0b2f9764726f5b8a158a363daa56d545db5e0c0189aa1e0a8c51812d871d9cd91ff22202dc472f6ed51c58a35be6d4cadcd540882ea02"
+    },
+    "ownerEpoch0b": {
+      "epoch": 0,
+      "sender": 0,
+      "seq": "117243904000000001",
+      "nonce": "0x3b006f68e183bd117d02a54bf39a50d3b7dd0e9a12595873",
+      "plaintext": "still epoch 0",
+      "wire": "0x05678391a8b4bcd8e6fd09112d3b525e6600000000000000000000000001a088b5a20000013b006f68e183bd117d02a54bf39a50d3b7dd0e9a12595873a085e88d49f71e932485b6f62568fa17778ea27b1e01c953f2bae2b116cb7a2f0839da12d7c9436cc761df841219f158515820c3c51717ba3a3f43a6740298cd6fb6eed450073cbc34aacd518fbc4b489ab964a99f4774fb59d2eae70e"
+    },
+    "ownerEpoch0c": {
+      "epoch": 0,
+      "sender": 0,
+      "seq": "117243904000000002",
+      "nonce": "0x943b2a44659093df85ff7874e045b824147a5a994ed77133",
+      "plaintext": "epoch 0 again",
+      "wire": "0x05678391a8b4bcd8e6fd09112d3b525e6600000000000000000000000001a088b5a2000002943b2a44659093df85ff7874e045b824147a5a994ed7713314cc46c88ecb272ba5773fbe3946758be1f6c1312cdf225aceeafefbb51b01a1bb050444c09a8164e4fbaf78f502645ee1fd518fe241aa8af7f24927e0636e42540b6408d385cd397fc1e0701e1166c26bb4ff65e4336124ed11563604"
+    },
+    "member2Epoch0": {
+      "epoch": 0,
+      "sender": 2,
+      "seq": "117243904000000001",
+      "nonce": "0x2d87e1586b5f3772bb851fed1deec240fd4d65a5b89a39b2",
+      "plaintext": "from member 2 after removal",
+      "wire": "0x05678391a8b4bcd8e6fd09112d3b525e6600000000000000000000000201a088b5a20000012d87e1586b5f3772bb851fed1deec240fd4d65a5b89a39b239b315a3aa849266912f19c40ab55076798ef48673125fec3628a574f523281b39fa370093c7aac434dcf1ba1cc2503d63bf29a4eaba210d70e62c20d4f10499ee705c3d34b91d73d3985d6f0c413e936542a55eff8dfc527584b8671ee30cc5f0c357f4a1d77b97fa7f09"
+    }
+  },
+  "steps": [
+    {
+      "step": "member-1 accepts epoch 0 (epoch.json epochWire)",
+      "now": 1789000000,
+      "expected": "accept"
+    },
+    {
+      "step": "member-1 opens message 0 of messages.json (owner, epoch 0)",
+      "now": 1789000000,
+      "expected": "accept",
+      "plaintext": "hello, group",
+      "gap": null
+    },
+    {
+      "step": "member-1 accepts epoch 1 (epoch1.wire), whose prev chains to epoch 0",
+      "now": 1789000060,
+      "expected": "accept"
+    },
+    {
+      "step": "member-1 opens ownerEpoch0b: the owner, epoch 0, seq + 1, still in flight",
+      "now": 1789000060,
+      "expected": "accept",
+      "plaintext": "still epoch 0",
+      "gap": 0
+    },
+    {
+      "step": "member-1 opens member2Epoch0: member-2, epoch 0, after epoch 1 removed it",
+      "now": 1789000060,
+      "expected": "reject",
+      "sdkError": "member 2 was removed after epoch 0: its messages under it are refused"
+    },
+    {
+      "step": "member-1 opens ownerEpoch1: the owner, epoch 1",
+      "now": 1789000060,
+      "expected": "accept",
+      "plaintext": "epoch 1 from owner",
+      "gap": null
+    },
+    {
+      "step": "member-1 opens ownerEpoch0c: the owner, epoch 0, after the owner spoke in epoch 1",
+      "now": 1789000060,
+      "expected": "reject",
+      "sdkError": "member 0 already speaks in epoch 1: its epoch-0 messages are refused"
+    },
+    {
+      "step": "member-1 is offered epoch 0 again (a duplicate)",
+      "now": 1789000060,
+      "expected": "duplicate"
+    },
+    {
+      "step": "member-2 (holding epoch 0) is offered epoch 1",
+      "now": 1789000060,
+      "expected": "reject",
+      "sdkError": "no slot in this epoch opens with our key: we are not a member of it"
+    }
+  ],
+  "previousEpochExpiry": [
+    {
+      "step": "member-1 (holding epochs 0 then 1, epoch 1 accepted at 1789000060) opens ownerEpoch0b",
+      "now": 1789000659,
+      "expected": "accept",
+      "plaintext": "still epoch 0"
+    },
+    {
+      "step": "the same, 600 seconds after epoch 1 was accepted",
+      "now": 1789000660,
+      "expected": "reject",
+      "sdkError": "no key for epoch 0 (the epoch expired, or is from before this member joined)"
+    }
+  ]
+}
