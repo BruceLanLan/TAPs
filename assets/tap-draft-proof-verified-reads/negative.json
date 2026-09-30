@@ -1,0 +1,727 @@
+{
+ "about": "Counterexamples and boundaries for TAP-draft-proof-verified-reads §4 to §6 and §7.1. Every case was checked against the reference implementation (BruceLanLan/tapeapi at fda84db889d2a732915f264a799af24073177a85, sdk/src/proof.js). \"accept\"/\"reject\" and the expected values are normative; the \"name\" of a case is informative.",
+ "rlp": {
+  "about": "Decode `input` as one canonical RLP item (§4). expect: accept or reject.",
+  "cases": [
+   {
+    "name": "a single byte below 0x80 is its own encoding",
+    "input": "0x7f",
+    "expect": "accept"
+   },
+   {
+    "name": "0x80 is the empty string",
+    "input": "0x80",
+    "expect": "accept"
+   },
+   {
+    "name": "a single byte 0x80 wrapped as a one-byte string",
+    "input": "0x8180",
+    "expect": "accept"
+   },
+   {
+    "name": "a single byte below 0x80 wrapped as a string",
+    "input": "0x8100",
+    "expect": "reject"
+   },
+   {
+    "name": "a 55-byte string in the short form",
+    "input": "0xb761616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161",
+    "expect": "accept"
+   },
+   {
+    "name": "a 56-byte string in the long form",
+    "input": "0xb8386161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161",
+    "expect": "accept"
+   },
+   {
+    "name": "a 55-byte string in the long form",
+    "input": "0xb83761616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161",
+    "expect": "reject"
+   },
+   {
+    "name": "a long-form length with a leading zero",
+    "input": "0xb900386161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161616161",
+    "expect": "reject"
+   },
+   {
+    "name": "a long-form length of zero bytes value 0",
+    "input": "0xb800",
+    "expect": "reject"
+   },
+   {
+    "name": "a string that runs past the input",
+    "input": "0x83646f",
+    "expect": "reject"
+   },
+   {
+    "name": "trailing bytes after the item",
+    "input": "0xc0c0",
+    "expect": "reject"
+   },
+   {
+    "name": "an empty input",
+    "input": "0x",
+    "expect": "reject"
+   },
+   {
+    "name": "a list whose long-form length has a leading zero",
+    "input": "0xf900388080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080",
+    "expect": "reject"
+   },
+   {
+    "name": "a 55-byte list in the long form",
+    "input": "0xf83780808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080808080",
+    "expect": "reject"
+   },
+   {
+    "name": "a list whose item runs past the list",
+    "input": "0xc283646f67",
+    "expect": "reject"
+   },
+   {
+    "name": "64 nested lists (the limit)",
+    "input": "0xf846f844f842f840f83ef83cf83af838f7f6f5f4f3f2f1f0efeeedecebeae9e8e7e6e5e4e3e2e1e0dfdedddcdbdad9d8d7d6d5d4d3d2d1d0cfcecdcccbcac9c8c7c6c5c4c3c2c1c0",
+    "expect": "accept"
+   },
+   {
+    "name": "65 nested lists",
+    "input": "0xf848f846f844f842f840f83ef83cf83af838f7f6f5f4f3f2f1f0efeeedecebeae9e8e7e6e5e4e3e2e1e0dfdedddcdbdad9d8d7d6d5d4d3d2d1d0cfcecdcccbcac9c8c7c6c5c4c3c2c1c0",
+    "expect": "reject"
+   }
+  ]
+ },
+ "trie": {
+  "about": "Walk `proof` from `root` for `key` (§5; `secure`: the key is used as given, 32 bytes, with the secure-trie rules). expect: the value (0x-hex), null (the proof shows the key absent) or \"reject\".",
+  "cases": [
+   {
+    "name": "a leaf that holds the key (plain trie)",
+    "root": "0xf30d40a250a57374deb2d57890f0aef76403599de411ef87cd3c71f08dc810fd",
+    "key": "0x12",
+    "secure": false,
+    "proof": [
+     "0xc48220122a"
+    ],
+    "expect": "0x2a"
+   },
+   {
+    "name": "a leaf whose path diverges: the key is absent",
+    "root": "0x4358b41ec2e9f98051bb23c055292e37866e01253262fd4a7133795d70b8def1",
+    "key": "0x12",
+    "secure": false,
+    "proof": [
+     "0xc48220132a"
+    ],
+    "expect": null
+   },
+   {
+    "name": "a secure-trie leaf holding the whole 64-nibble key",
+    "root": "0x161650694846acedaf3031aac0d3ef0de596a65d603761695c607ac62c7be747",
+    "key": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "secure": true,
+    "proof": [
+     "0xe3a12011111111111111111111111111111111111111111111111111111111111111112a"
+    ],
+    "expect": "0x2a"
+   },
+   {
+    "name": "a secure-trie leaf whose remaining path has the wrong length",
+    "root": "0x864b3d4caf30d229f02c344e31da3d7941c1ceaf3875b97a4e73ab56a20900ea",
+    "key": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "secure": true,
+    "proof": [
+     "0xc48220112a"
+    ],
+    "expect": "reject"
+   },
+   {
+    "name": "a leaf without a value",
+    "root": "0xce7369fca4f2b9dafd64429262f1aa7be0ea38bead7ec359509c9fbd230454da",
+    "key": "0x12",
+    "secure": false,
+    "proof": [
+     "0xc482201280"
+    ],
+    "expect": "reject"
+   },
+   {
+    "name": "a hex-prefix flag above 3",
+    "root": "0x38cd8eb50c983055e1719ddf994a8e026d8fd177beffc4f13e485a382177d81d",
+    "key": "0x01",
+    "secure": false,
+    "proof": [
+     "0xc441820102"
+    ],
+    "expect": "reject"
+   },
+   {
+    "name": "an even hex-prefix with a non-zero pad nibble",
+    "root": "0xe392f5b0195587822757d00f1fd38fc3cac8a2c8d695849d665a8169e389c032",
+    "key": "0x01",
+    "secure": false,
+    "proof": [
+     "0xc421820102"
+    ],
+    "expect": "reject"
+   },
+   {
+    "name": "an extension with an empty path",
+    "root": "0x9f280bc9d5f233d59fd847b2b05914138f5130b2002277baa933bf27cd61a191",
+    "key": "0x01",
+    "secure": false,
+    "proof": [
+     "0xe200a05fe7f977e71dba2ea1a68e21057beebb9be2ac30c6410aa38d4f3fbe41dcffd2"
+    ],
+    "expect": "reject"
+   },
+   {
+    "name": "an empty branch slot: the key is absent",
+    "root": "0x25f8548d9314bcddb34e7f41b3f12a480de0924ed3515bfe60ef89e8f4c4427f",
+    "key": "0x12",
+    "secure": false,
+    "proof": [
+     "0xf1a0b2e7b7a21d986ae84d62a7de4a916f006c4e42a596358b93bad65492d174c4ff80808080808080808080808080808080"
+    ],
+    "expect": null
+   },
+   {
+    "name": "a branch child of 31 bytes",
+    "root": "0x8cc8bab380d6636a4d5463c23942e68897eec214bf607262ebd3b73e5c3d2466",
+    "key": "0x12",
+    "secure": false,
+    "proof": [
+     "0xf0809f01010101010101010101010101010101010101010101010101010101010101808080808080808080808080808080"
+    ],
+    "expect": "reject"
+   },
+   {
+    "name": "an embedded node of 32 bytes or more",
+    "root": "0x307e7bdee4c681acff9a75ff076dd5bcab6085ff6aee2d26c19259c381ffc836",
+    "key": "0x1a",
+    "secure": false,
+    "proof": [
+     "0xf83b80ea3aa807070707070707070707070707070707070707070707070707070707070707070707070707070707808080808080808080808080808080"
+    ],
+    "expect": "reject"
+   },
+   {
+    "name": "an embedded leaf under 32 bytes",
+    "root": "0xd832bdd023ade14b19ebb6671a617306324067ec3ada0ce956fa21cc77bfaca3",
+    "key": "0x1a",
+    "secure": false,
+    "proof": [
+     "0xd380c23a2a808080808080808080808080808080"
+    ],
+    "expect": "0x2a"
+   },
+   {
+    "name": "an embedded child of 32 bytes or more that is not followed is not checked",
+    "root": "0x76a7923f097d5e49e6c4f0a4a40b8a76189a98874dd2d3dfdb7f2aa57058cacc",
+    "key": "0x1a",
+    "secure": false,
+    "proof": [
+     "0xf480c23a2ae13b9f070707070707070707070707070707070707070707070707070707070707078080808080808080808080808080"
+    ],
+    "expect": "0x2a"
+   },
+   {
+    "name": "a branch value in a secure trie",
+    "root": "0x7443b7d2784e05c08940c8bb112215d7a1efba9c4756fdd0456c46e9ba62d296",
+    "key": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "secure": true,
+    "proof": [
+     "0xf180a0b2e7b7a21d986ae84d62a7de4a916f006c4e42a596358b93bad65492d174c4ff808080808080808080808080808005"
+    ],
+    "expect": "reject"
+   },
+   {
+    "name": "a branch whose value is a list",
+    "root": "0xb9282acbe0e01ed99058e04a4910b2bcde7afacaad6e18b1889f08b5bb5815e9",
+    "key": "0x12",
+    "secure": false,
+    "proof": [
+     "0xd280808080808080808080808080808080c105"
+    ],
+    "expect": "reject"
+   },
+   {
+    "name": "a node of 3 items",
+    "root": "0xf5b7723509a4092f11ef9e8d0805389107da7a7536c714b09867de365ebb7167",
+    "key": "0x12",
+    "secure": false,
+    "proof": [
+     "0xc3200102"
+    ],
+    "expect": "reject"
+   },
+   {
+    "name": "a node that is a string, not a list",
+    "root": "0x0a84eec7fd0dd3e34ad0a673ab6b58d9eb77082630eb3999125e23c329511bd0",
+    "key": "0x12",
+    "secure": false,
+    "proof": [
+     "0x83616263"
+    ],
+    "expect": "reject"
+   },
+   {
+    "name": "a proof node left unused",
+    "root": "0xf30d40a250a57374deb2d57890f0aef76403599de411ef87cd3c71f08dc810fd",
+    "key": "0x12",
+    "secure": false,
+    "proof": [
+     "0xc48220122a",
+     "0xc48220122b"
+    ],
+    "expect": "reject"
+   },
+   {
+    "name": "a proof that ends before the key does",
+    "root": "0x7751da8d38a4b7efdd416e294c2e4f5d215f760abe95091114d820d21a8ca402",
+    "key": "0x12",
+    "secure": false,
+    "proof": [
+     "0xe211a05fe7f977e71dba2ea1a68e21057beebb9be2ac30c6410aa38d4f3fbe41dcffd2"
+    ],
+    "expect": "reject"
+   },
+   {
+    "name": "the empty trie with no nodes: absent",
+    "root": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+    "key": "0x12",
+    "secure": false,
+    "proof": [],
+    "expect": null
+   },
+   {
+    "name": "the empty trie with its one node rlp(\"\"): absent",
+    "root": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+    "key": "0x12",
+    "secure": false,
+    "proof": [
+     "0x80"
+    ],
+    "expect": null
+   },
+   {
+    "name": "the empty trie with another node",
+    "root": "0x56e81f171bcc55a6ff8345e692c0f86e5b48e01b996cadc001622fb5e363b421",
+    "key": "0x12",
+    "secure": false,
+    "proof": [
+     "0xc48220122a"
+    ],
+    "expect": "reject"
+   },
+   {
+    "name": "a root node that does not hash to the root",
+    "root": "0x0000000000000000000000000000000000000000000000000000000000000001",
+    "key": "0x12",
+    "secure": false,
+    "proof": [
+     "0xc48220122a"
+    ],
+    "expect": "reject"
+   }
+  ]
+ },
+ "account": {
+  "about": "Check `answer` against `stateRoot` for `address` and `slots` (§6). expect: \"reject\", or the account and slot values the proof shows.",
+  "cases": [
+   {
+    "name": "a canonical account and a set slot",
+    "stateRoot": "0x8a2a04dc873d7e6cd09e98ece33fe232970fc1fc341ae7ac3bcf76201776c413",
+    "address": "0xabababababababababababababababababababab",
+    "slots": [
+     "0x1"
+    ],
+    "answer": {
+     "accountProof": [
+      "0xf86aa120fe4dc4d3f3e98b011c60faac2a8f1bb699d0c7674caa0895ad8b66ec1d278fbeb846f8440105a0fcbdb9e7191a6bc6efbe2e1903a50bd3c79312366db1e46acf7e94788c2b4c3ea0c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+     ],
+     "storageHash": "0xfcbdb9e7191a6bc6efbe2e1903a50bd3c79312366db1e46acf7e94788c2b4c3e",
+     "storageProof": [
+      {
+       "key": "0x1",
+       "value": "0x2a",
+       "proof": [
+        "0xe3a120b10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf62a"
+       ]
+      }
+     ]
+    },
+    "expect": {
+     "exists": true,
+     "nonce": "0x1",
+     "balance": "0x5",
+     "storageRoot": "0xfcbdb9e7191a6bc6efbe2e1903a50bd3c79312366db1e46acf7e94788c2b4c3e",
+     "codeHash": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+     "values": {
+      "0x1": "0x2a"
+     }
+    }
+   },
+   {
+    "name": "an absent slot is 0",
+    "stateRoot": "0x8a2a04dc873d7e6cd09e98ece33fe232970fc1fc341ae7ac3bcf76201776c413",
+    "address": "0xabababababababababababababababababababab",
+    "slots": [
+     "0x2"
+    ],
+    "answer": {
+     "accountProof": [
+      "0xf86aa120fe4dc4d3f3e98b011c60faac2a8f1bb699d0c7674caa0895ad8b66ec1d278fbeb846f8440105a0fcbdb9e7191a6bc6efbe2e1903a50bd3c79312366db1e46acf7e94788c2b4c3ea0c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+     ],
+     "storageHash": "0xfcbdb9e7191a6bc6efbe2e1903a50bd3c79312366db1e46acf7e94788c2b4c3e",
+     "storageProof": [
+      {
+       "key": "0x2",
+       "value": "0x0",
+       "proof": [
+        "0xe3a120b10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf62a"
+       ]
+      }
+     ]
+    },
+    "expect": {
+     "exists": true,
+     "nonce": "0x1",
+     "balance": "0x5",
+     "storageRoot": "0xfcbdb9e7191a6bc6efbe2e1903a50bd3c79312366db1e46acf7e94788c2b4c3e",
+     "codeHash": "0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470",
+     "values": {
+      "0x2": "0x0"
+     }
+    }
+   },
+   {
+    "name": "an account nonce with a leading zero",
+    "stateRoot": "0x8fd9abd6cfd45008fd4353c64878481da4a35745fce9af5b4ef148085ce2c872",
+    "address": "0xabababababababababababababababababababab",
+    "slots": [
+     "0x1"
+    ],
+    "answer": {
+     "accountProof": [
+      "0xf86ca120fe4dc4d3f3e98b011c60faac2a8f1bb699d0c7674caa0895ad8b66ec1d278fbeb848f84682000105a0fcbdb9e7191a6bc6efbe2e1903a50bd3c79312366db1e46acf7e94788c2b4c3ea0c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+     ],
+     "storageHash": "0xfcbdb9e7191a6bc6efbe2e1903a50bd3c79312366db1e46acf7e94788c2b4c3e",
+     "storageProof": [
+      {
+       "key": "0x1",
+       "value": "0x2a",
+       "proof": [
+        "0xe3a120b10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf62a"
+       ]
+      }
+     ]
+    },
+    "expect": "reject"
+   },
+   {
+    "name": "an account balance with a leading zero",
+    "stateRoot": "0xd5b325e3c064a0adce0135534955d7e7a7cce71aeced004b3013e6543abf3bdf",
+    "address": "0xabababababababababababababababababababab",
+    "slots": [
+     "0x1"
+    ],
+    "answer": {
+     "accountProof": [
+      "0xf86ca120fe4dc4d3f3e98b011c60faac2a8f1bb699d0c7674caa0895ad8b66ec1d278fbeb848f84601820005a0fcbdb9e7191a6bc6efbe2e1903a50bd3c79312366db1e46acf7e94788c2b4c3ea0c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+     ],
+     "storageHash": "0xfcbdb9e7191a6bc6efbe2e1903a50bd3c79312366db1e46acf7e94788c2b4c3e",
+     "storageProof": [
+      {
+       "key": "0x1",
+       "value": "0x2a",
+       "proof": [
+        "0xe3a120b10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf62a"
+       ]
+      }
+     ]
+    },
+    "expect": "reject"
+   },
+   {
+    "name": "an account leaf of five items",
+    "stateRoot": "0x3d1d81f3c324cb8d1efc56e1a89c06f9b039b5ef080d5d766be24529b1a2b604",
+    "address": "0xabababababababababababababababababababab",
+    "slots": [
+     "0x1"
+    ],
+    "answer": {
+     "accountProof": [
+      "0xf86ba120fe4dc4d3f3e98b011c60faac2a8f1bb699d0c7674caa0895ad8b66ec1d278fbeb847f8450105a0fcbdb9e7191a6bc6efbe2e1903a50bd3c79312366db1e46acf7e94788c2b4c3ea0c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a47080"
+     ],
+     "storageHash": "0xfcbdb9e7191a6bc6efbe2e1903a50bd3c79312366db1e46acf7e94788c2b4c3e",
+     "storageProof": [
+      {
+       "key": "0x1",
+       "value": "0x2a",
+       "proof": [
+        "0xe3a120b10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf62a"
+       ]
+      }
+     ]
+    },
+    "expect": "reject"
+   },
+   {
+    "name": "an account codeHash of 31 bytes",
+    "stateRoot": "0x388518c9a14259845fc47c2c7dca100e926d8b989be3343101ce54879cc4914f",
+    "address": "0xabababababababababababababababababababab",
+    "slots": [
+     "0x1"
+    ],
+    "answer": {
+     "accountProof": [
+      "0xf869a120fe4dc4d3f3e98b011c60faac2a8f1bb699d0c7674caa0895ad8b66ec1d278fbeb845f8430105a0fcbdb9e7191a6bc6efbe2e1903a50bd3c79312366db1e46acf7e94788c2b4c3e9fd2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+     ],
+     "storageHash": "0xfcbdb9e7191a6bc6efbe2e1903a50bd3c79312366db1e46acf7e94788c2b4c3e",
+     "storageProof": [
+      {
+       "key": "0x1",
+       "value": "0x2a",
+       "proof": [
+        "0xe3a120b10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf62a"
+       ]
+      }
+     ]
+    },
+    "expect": "reject"
+   },
+   {
+    "name": "a storage value with a leading zero",
+    "stateRoot": "0xe908a41fd86df38f578fd23b9c8aac9fc918177e91b5ea1cc2481487b0778670",
+    "address": "0xabababababababababababababababababababab",
+    "slots": [
+     "0x1"
+    ],
+    "answer": {
+     "accountProof": [
+      "0xf86aa120fe4dc4d3f3e98b011c60faac2a8f1bb699d0c7674caa0895ad8b66ec1d278fbeb846f8440105a0d99ab1d3249fc70dc3b5089a903cfdd828ae6275f8341cd423216fca56ca898da0c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+     ],
+     "storageHash": "0xd99ab1d3249fc70dc3b5089a903cfdd828ae6275f8341cd423216fca56ca898d",
+     "storageProof": [
+      {
+       "key": "0x1",
+       "value": "0x2a",
+       "proof": [
+        "0xe6a120b10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf68382002a"
+       ]
+      }
+     ]
+    },
+    "expect": "reject"
+   },
+   {
+    "name": "a storage value of 33 bytes",
+    "stateRoot": "0x06bf347dfe38ab31262585969226345691be93955cd34a5e0ce062f75c2bf541",
+    "address": "0xabababababababababababababababababababab",
+    "slots": [
+     "0x1"
+    ],
+    "answer": {
+     "accountProof": [
+      "0xf86aa120fe4dc4d3f3e98b011c60faac2a8f1bb699d0c7674caa0895ad8b66ec1d278fbeb846f8440105a0b48bd25526fc969affa8acd53f4c9cd66c7dfafb9ea1ba4f366815acd36e47baa0c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+     ],
+     "storageHash": "0xb48bd25526fc969affa8acd53f4c9cd66c7dfafb9ea1ba4f366815acd36e47ba",
+     "storageProof": [
+      {
+       "key": "0x1",
+       "value": "0x1",
+       "proof": [
+        "0xf845a120b10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf6a2a1010101010101010101010101010101010101010101010101010101010101010101"
+       ]
+      }
+     ]
+    },
+    "expect": "reject"
+   },
+   {
+    "name": "a storage value that is a list",
+    "stateRoot": "0x1ef59106c28a52c3b81a9bc986de47e38d884c718de7384ef8fcc2ed939573f9",
+    "address": "0xabababababababababababababababababababab",
+    "slots": [
+     "0x1"
+    ],
+    "answer": {
+     "accountProof": [
+      "0xf86aa120fe4dc4d3f3e98b011c60faac2a8f1bb699d0c7674caa0895ad8b66ec1d278fbeb846f8440105a075ac723f27baf87acec3b69757e98ea6e054b895cd51f4fbb889562e802f1bf0a0c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+     ],
+     "storageHash": "0x75ac723f27baf87acec3b69757e98ea6e054b895cd51f4fbb889562e802f1bf0",
+     "storageProof": [
+      {
+       "key": "0x1",
+       "value": "0x2a",
+       "proof": [
+        "0xe5a120b10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf682c12a"
+       ]
+      }
+     ]
+    },
+    "expect": "reject"
+   },
+   {
+    "name": "a storage value that is zero bytes long",
+    "stateRoot": "0xdbd6fa3c456689b5459409478edb8988018c4b27d35b7ae933611f535d098768",
+    "address": "0xabababababababababababababababababababab",
+    "slots": [
+     "0x1"
+    ],
+    "answer": {
+     "accountProof": [
+      "0xf86aa120fe4dc4d3f3e98b011c60faac2a8f1bb699d0c7674caa0895ad8b66ec1d278fbeb846f8440105a0b831f0192d547189cd866964971e8e82b70b38570c785dc2c1f675f34a29f702a0c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+     ],
+     "storageHash": "0xb831f0192d547189cd866964971e8e82b70b38570c785dc2c1f675f34a29f702",
+     "storageProof": [
+      {
+       "key": "0x1",
+       "value": "0x0",
+       "proof": [
+        "0xe4a120b10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf68180"
+       ]
+      }
+     ]
+    },
+    "expect": "reject"
+   },
+   {
+    "name": "a claimed value the proof does not show",
+    "stateRoot": "0x8a2a04dc873d7e6cd09e98ece33fe232970fc1fc341ae7ac3bcf76201776c413",
+    "address": "0xabababababababababababababababababababab",
+    "slots": [
+     "0x1"
+    ],
+    "answer": {
+     "accountProof": [
+      "0xf86aa120fe4dc4d3f3e98b011c60faac2a8f1bb699d0c7674caa0895ad8b66ec1d278fbeb846f8440105a0fcbdb9e7191a6bc6efbe2e1903a50bd3c79312366db1e46acf7e94788c2b4c3ea0c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+     ],
+     "storageHash": "0xfcbdb9e7191a6bc6efbe2e1903a50bd3c79312366db1e46acf7e94788c2b4c3e",
+     "storageProof": [
+      {
+       "key": "0x1",
+       "value": "0x2b",
+       "proof": [
+        "0xe3a120b10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf62a"
+       ]
+      }
+     ]
+    },
+    "expect": "reject"
+   },
+   {
+    "name": "a storageHash other than the proven storageRoot",
+    "stateRoot": "0x8a2a04dc873d7e6cd09e98ece33fe232970fc1fc341ae7ac3bcf76201776c413",
+    "address": "0xabababababababababababababababababababab",
+    "slots": [
+     "0x1"
+    ],
+    "answer": {
+     "accountProof": [
+      "0xf86aa120fe4dc4d3f3e98b011c60faac2a8f1bb699d0c7674caa0895ad8b66ec1d278fbeb846f8440105a0fcbdb9e7191a6bc6efbe2e1903a50bd3c79312366db1e46acf7e94788c2b4c3ea0c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+     ],
+     "storageHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+     "storageProof": [
+      {
+       "key": "0x1",
+       "value": "0x2a",
+       "proof": [
+        "0xe3a120b10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf62a"
+       ]
+      }
+     ]
+    },
+    "expect": "reject"
+   },
+   {
+    "name": "a requested slot left unanswered",
+    "stateRoot": "0x8a2a04dc873d7e6cd09e98ece33fe232970fc1fc341ae7ac3bcf76201776c413",
+    "address": "0xabababababababababababababababababababab",
+    "slots": [
+     "0x1"
+    ],
+    "answer": {
+     "accountProof": [
+      "0xf86aa120fe4dc4d3f3e98b011c60faac2a8f1bb699d0c7674caa0895ad8b66ec1d278fbeb846f8440105a0fcbdb9e7191a6bc6efbe2e1903a50bd3c79312366db1e46acf7e94788c2b4c3ea0c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+     ],
+     "storageHash": "0xfcbdb9e7191a6bc6efbe2e1903a50bd3c79312366db1e46acf7e94788c2b4c3e",
+     "storageProof": []
+    },
+    "expect": "reject"
+   },
+   {
+    "name": "a requested slot answered twice",
+    "stateRoot": "0x8a2a04dc873d7e6cd09e98ece33fe232970fc1fc341ae7ac3bcf76201776c413",
+    "address": "0xabababababababababababababababababababab",
+    "slots": [
+     "0x1"
+    ],
+    "answer": {
+     "accountProof": [
+      "0xf86aa120fe4dc4d3f3e98b011c60faac2a8f1bb699d0c7674caa0895ad8b66ec1d278fbeb846f8440105a0fcbdb9e7191a6bc6efbe2e1903a50bd3c79312366db1e46acf7e94788c2b4c3ea0c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+     ],
+     "storageHash": "0xfcbdb9e7191a6bc6efbe2e1903a50bd3c79312366db1e46acf7e94788c2b4c3e",
+     "storageProof": [
+      {
+       "key": "0x1",
+       "value": "0x2a",
+       "proof": [
+        "0xe3a120b10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf62a"
+       ]
+      },
+      {
+       "key": "0x1",
+       "value": "0x2a",
+       "proof": [
+        "0xe3a120b10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf62a"
+       ]
+      }
+     ]
+    },
+    "expect": "reject"
+   },
+   {
+    "name": "an answer for another address",
+    "stateRoot": "0x8a2a04dc873d7e6cd09e98ece33fe232970fc1fc341ae7ac3bcf76201776c413",
+    "address": "0xabababababababababababababababababababab",
+    "slots": [
+     "0x1"
+    ],
+    "answer": {
+     "accountProof": [
+      "0xf86aa120fe4dc4d3f3e98b011c60faac2a8f1bb699d0c7674caa0895ad8b66ec1d278fbeb846f8440105a0fcbdb9e7191a6bc6efbe2e1903a50bd3c79312366db1e46acf7e94788c2b4c3ea0c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470"
+     ],
+     "storageHash": "0xfcbdb9e7191a6bc6efbe2e1903a50bd3c79312366db1e46acf7e94788c2b4c3e",
+     "storageProof": [
+      {
+       "key": "0x1",
+       "value": "0x2a",
+       "proof": [
+        "0xe3a120b10e2d527612073b26eecdfd717e6a320cf44b4afac2b0732d9fcbe2b7fa0cf62a"
+       ]
+      }
+     ],
+     "address": "0x1111111111111111111111111111111111111111"
+    },
+    "expect": "reject"
+   }
+  ]
+ },
+ "addressWord": {
+  "about": "A 32-byte word read as an address (§7.1): null when its high 96 bits are not zero.",
+  "cases": [
+   {
+    "word": "0x0000000000000000000000001d279d138a4d803378a7d4557c056f1bed53c261",
+    "expect": "0x1d279d138a4d803378a7d4557c056f1bed53c261"
+   },
+   {
+    "word": "0x0000000000000000000000010000000000000000000000000000000000000001",
+    "expect": null
+   },
+   {
+    "word": "0x0",
+    "expect": "0x0000000000000000000000000000000000000000"
+   }
+  ]
+ }
+}
