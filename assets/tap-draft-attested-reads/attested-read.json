@@ -1,0 +1,869 @@
+{
+  "title": "Attested reads: one read answered by several services (TAP-draft-attested-reads, Specification §2–§7)",
+  "note": "Every field is an input or an expected output. Keys, containers, holders and endpoints are test values. The Ethereum values are real: totalSupply() of 0xdAC17F958D2ee523a2206206994597C13D831ec7 at block 20000000, read 2026-09-28 from four node operators with identical answers. Outcomes are the words of §7.6 (refused-before-request: the selection or the request breaks §7.1 or §7.2, so no request is sent); referenceImplementation shows what the TapeAPI SDK at commit fda84db889d2a732915f264a799af24073177a85 reports (callQuorum, with the envelopes given as HTTP answers) and how many requests it sends. In each case: services are the provider tags taking part, quorum is q, changes overrides the holder or live endpoints of a provider for that case only, and answers holds the signed envelope of each provider with its digest, eip191Digest and recoversTo (the binding-failure answer has no digest of its own: its recoversTo is the address recovered when it is checked against B, with a note).",
+  "testKeys": "signerKey values are TEST KEYS: public, deterministic, and never to be used for anything real.",
+  "envelope": "TAP-draft-signed-responses §5: digest over the prefix TAPI-1/resp/v2, the container, keccak256(id), keccak256(canonicalJSON({method, params})), ok, keccak256(canonicalJSON(body)) and uint64(ts); eip191Digest is its EIP-191 personal_sign digest; sig is r ‖ s ‖ v over eip191Digest.",
+  "compared": "Two answers agree iff chainId, blockNumber, blockHash and result are identical; stateRoot is compared only when both carry it; blockRef is not compared. A signed revert is compared like an answer, its revert bytes standing for its result.",
+  "providers": [
+    {
+      "tag": "A",
+      "container": "0x00000000000000000000000000000000000a77e1",
+      "holder": "0x00000000000000000000000000000000000b01d1",
+      "signerKey": "0x4444444444444444444444444444444444444444444444444444444444444444",
+      "signerAddress": "0x7564105E977516C53bE337314c7E53838967bDaC",
+      "endpoint": "https://attest-a.example/tapeapi/v1"
+    },
+    {
+      "tag": "B",
+      "container": "0x00000000000000000000000000000000000a77e2",
+      "holder": "0x00000000000000000000000000000000000b01d2",
+      "signerKey": "0x5555555555555555555555555555555555555555555555555555555555555555",
+      "signerAddress": "0xe1fAE9b4fAB2F5726677ECfA912d96b0B683e6a9",
+      "endpoint": "https://attest-b.example/tapeapi/v1"
+    },
+    {
+      "tag": "C",
+      "container": "0x00000000000000000000000000000000000a77e3",
+      "holder": "0x00000000000000000000000000000000000b01d3",
+      "signerKey": "0x6666666666666666666666666666666666666666666666666666666666666666",
+      "signerAddress": "0xdb2430B4e9AC14be6554d3942822BE74811A1AF9",
+      "endpoint": "https://attest-c.example/tapeapi/v1"
+    }
+  ],
+  "descriptor": {
+    "name": "read",
+    "priceBEM": "0",
+    "params": {
+      "chainId": "number",
+      "call": "object",
+      "block": "string|number"
+    },
+    "returns": {
+      "chainId": "number",
+      "blockNumber": "number",
+      "blockHash": "bytes32",
+      "result": "bytes"
+    },
+    "attestedRead": {
+      "kind": "eth_call",
+      "chains": [
+        1
+      ]
+    }
+  },
+  "request": {
+    "id": "tap23-vector-1",
+    "method": "read",
+    "params": {
+      "chainId": 1,
+      "call": {
+        "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+        "data": "0x18160ddd"
+      },
+      "block": 20000000
+    }
+  },
+  "ethereum": {
+    "chainId": 1,
+    "blockNumber": 20000000,
+    "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+    "stateRoot": "0x68421c2c599dc31396a09772a073fb421c4bd25ef1462914ef13e5dfa2d31c23",
+    "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50",
+    "readOn": "2026-09-28",
+    "nodeOperators": 4
+  },
+  "revertBytesNote": "The revert bytes 0x4e487b71… (Panic(uint256) with code 1) are made up for the vectors; the call in the request does not revert.",
+  "cases": [
+    {
+      "name": "agree: both services return the same block and bytes",
+      "services": [
+        "A",
+        "B"
+      ],
+      "quorum": 2,
+      "params": {
+        "chainId": 1,
+        "call": {
+          "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+          "data": "0x18160ddd"
+        },
+        "block": 20000000
+      },
+      "expect": "accepted",
+      "answers": [
+        {
+          "provider": "A",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50"
+            },
+            "container": "0x00000000000000000000000000000000000a77e1",
+            "ts": 1789000000,
+            "sig": "0xb11f6f58a45a88c83f7d758d9c56e6ec925ca15ad8a538021fa2a1b3595bf1213bcf4d359ae87bf0683839423eded86a9437b6ce689964e7a3c219da1838fb101c"
+          },
+          "digest": "0xd636628ca7f2c4c644be3d7b9c1373cc3084700207baf03801490d421db56426",
+          "eip191Digest": "0x952067a5df6dff12055ac7ecc43612a4e31e8a7150122675d68f5ff49d6fcb13",
+          "recoversTo": "0x7564105E977516C53bE337314c7E53838967bDaC"
+        },
+        {
+          "provider": "B",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50"
+            },
+            "container": "0x00000000000000000000000000000000000a77e2",
+            "ts": 1789000001,
+            "sig": "0x0019cd2ae0eb68b43b39d86f83d1069d3fc0159f54a248f3253c1b134d741dc433986805da62dd00fea0c6198424884a67c2a61f381189c10d4ade35e018b1491c"
+          },
+          "digest": "0x836846f04aa0ebf74b20b55c411d07944fef2d64d0697f852106bbc1528c128b",
+          "eip191Digest": "0xa52c2c4a0adc334985fa0c55ed41defec11b9644dc6209dd07818bcd103caca1",
+          "recoversTo": "0xe1fAE9b4fAB2F5726677ECfA912d96b0B683e6a9"
+        }
+      ],
+      "referenceImplementation": {
+        "reports": "accepted",
+        "requestsSent": 2
+      }
+    },
+    {
+      "name": "agree: stateRoot is compared only when both carry it",
+      "services": [
+        "A",
+        "B"
+      ],
+      "quorum": 2,
+      "params": {
+        "chainId": 1,
+        "call": {
+          "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+          "data": "0x18160ddd"
+        },
+        "block": 20000000
+      },
+      "expect": "accepted",
+      "answers": [
+        {
+          "provider": "A",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50",
+              "stateRoot": "0x68421c2c599dc31396a09772a073fb421c4bd25ef1462914ef13e5dfa2d31c23"
+            },
+            "container": "0x00000000000000000000000000000000000a77e1",
+            "ts": 1789000000,
+            "sig": "0x0f318263d77cc1ecd59d19e11d9493c6b26cd3d9f0641f36cf2bc05185c93cba010c6af9c8a02cb78b260dc554c28233b7599c2908054b99697773a6519821e61b"
+          },
+          "digest": "0x5d23f6a992ac6924bff80cc7455fab14e302841c04269e4ea49f55c09097bf0e",
+          "eip191Digest": "0x74a24a54e32283e5178f3200f414d35b96a5a95745cbc7a48e7de64474617cfc",
+          "recoversTo": "0x7564105E977516C53bE337314c7E53838967bDaC"
+        },
+        {
+          "provider": "B",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50"
+            },
+            "container": "0x00000000000000000000000000000000000a77e2",
+            "ts": 1789000001,
+            "sig": "0x0019cd2ae0eb68b43b39d86f83d1069d3fc0159f54a248f3253c1b134d741dc433986805da62dd00fea0c6198424884a67c2a61f381189c10d4ade35e018b1491c"
+          },
+          "digest": "0x836846f04aa0ebf74b20b55c411d07944fef2d64d0697f852106bbc1528c128b",
+          "eip191Digest": "0xa52c2c4a0adc334985fa0c55ed41defec11b9644dc6209dd07818bcd103caca1",
+          "recoversTo": "0xe1fAE9b4fAB2F5726677ECfA912d96b0B683e6a9"
+        }
+      ],
+      "referenceImplementation": {
+        "reports": "accepted",
+        "requestsSent": 2
+      }
+    },
+    {
+      "name": "disagree: B signs a result one unit higher",
+      "services": [
+        "A",
+        "B"
+      ],
+      "quorum": 2,
+      "params": {
+        "chainId": 1,
+        "call": {
+          "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+          "data": "0x18160ddd"
+        },
+        "block": 20000000
+      },
+      "expect": "disagreement",
+      "answers": [
+        {
+          "provider": "A",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50"
+            },
+            "container": "0x00000000000000000000000000000000000a77e1",
+            "ts": 1789000000,
+            "sig": "0xb11f6f58a45a88c83f7d758d9c56e6ec925ca15ad8a538021fa2a1b3595bf1213bcf4d359ae87bf0683839423eded86a9437b6ce689964e7a3c219da1838fb101c"
+          },
+          "digest": "0xd636628ca7f2c4c644be3d7b9c1373cc3084700207baf03801490d421db56426",
+          "eip191Digest": "0x952067a5df6dff12055ac7ecc43612a4e31e8a7150122675d68f5ff49d6fcb13",
+          "recoversTo": "0x7564105E977516C53bE337314c7E53838967bDaC"
+        },
+        {
+          "provider": "B",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd51"
+            },
+            "container": "0x00000000000000000000000000000000000a77e2",
+            "ts": 1789000001,
+            "sig": "0x1153d2ede2d1b5f664b925f3d00f3f458b5f889968beabbee2ecd57e6151cc3e7a12e47585650894037363432ac6a9bb5c7436a8e758e5c0687f86cb80341ab01c"
+          },
+          "digest": "0x95d39f509dd3a7ee91a41818f7865040aa9c4db7f1b50d304948b07b5d247f1d",
+          "eip191Digest": "0xad09649224f8f9f5d482f0ffa4880431ec3457df561a8e6023520183f6f8365e",
+          "recoversTo": "0xe1fAE9b4fAB2F5726677ECfA912d96b0B683e6a9"
+        }
+      ],
+      "referenceImplementation": {
+        "reports": "ATTEST_DISAGREE",
+        "requestsSent": 2
+      }
+    },
+    {
+      "name": "disagree: B names another hash for block 20000000 (made up, not a real block)",
+      "services": [
+        "A",
+        "B"
+      ],
+      "quorum": 2,
+      "params": {
+        "chainId": 1,
+        "call": {
+          "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+          "data": "0x18160ddd"
+        },
+        "block": 20000000
+      },
+      "expect": "disagreement",
+      "answers": [
+        {
+          "provider": "A",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50"
+            },
+            "container": "0x00000000000000000000000000000000000a77e1",
+            "ts": 1789000000,
+            "sig": "0xb11f6f58a45a88c83f7d758d9c56e6ec925ca15ad8a538021fa2a1b3595bf1213bcf4d359ae87bf0683839423eded86a9437b6ce689964e7a3c219da1838fb101c"
+          },
+          "digest": "0xd636628ca7f2c4c644be3d7b9c1373cc3084700207baf03801490d421db56426",
+          "eip191Digest": "0x952067a5df6dff12055ac7ecc43612a4e31e8a7150122675d68f5ff49d6fcb13",
+          "recoversTo": "0x7564105E977516C53bE337314c7E53838967bDaC"
+        },
+        {
+          "provider": "B",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50"
+            },
+            "container": "0x00000000000000000000000000000000000a77e2",
+            "ts": 1789000001,
+            "sig": "0x28336ec95b330c0648cf57a3e5ba41d8cbd845599b87cb61b10e9b49b3bcc0552c639e0f7b44289c445032a4479423b394f40253c9984c92b78f5ab93d68f83e1b"
+          },
+          "digest": "0x398da0e114df43f45cf5c95d72753c486341dec8a49dc8c797ed169b54f2c259",
+          "eip191Digest": "0xe8a87d49b8a55a651301fdc9591c0ddef36d67aa47832f0c6453b23ac6873e01",
+          "recoversTo": "0xe1fAE9b4fAB2F5726677ECfA912d96b0B683e6a9"
+        }
+      ],
+      "referenceImplementation": {
+        "reports": "ATTEST_DISAGREE",
+        "requestsSent": 2
+      }
+    },
+    {
+      "name": "disagree: both carry a stateRoot and they differ (made up for B)",
+      "services": [
+        "A",
+        "B"
+      ],
+      "quorum": 2,
+      "params": {
+        "chainId": 1,
+        "call": {
+          "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+          "data": "0x18160ddd"
+        },
+        "block": 20000000
+      },
+      "expect": "disagreement",
+      "answers": [
+        {
+          "provider": "A",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50",
+              "stateRoot": "0x68421c2c599dc31396a09772a073fb421c4bd25ef1462914ef13e5dfa2d31c23"
+            },
+            "container": "0x00000000000000000000000000000000000a77e1",
+            "ts": 1789000000,
+            "sig": "0x0f318263d77cc1ecd59d19e11d9493c6b26cd3d9f0641f36cf2bc05185c93cba010c6af9c8a02cb78b260dc554c28233b7599c2908054b99697773a6519821e61b"
+          },
+          "digest": "0x5d23f6a992ac6924bff80cc7455fab14e302841c04269e4ea49f55c09097bf0e",
+          "eip191Digest": "0x74a24a54e32283e5178f3200f414d35b96a5a95745cbc7a48e7de64474617cfc",
+          "recoversTo": "0x7564105E977516C53bE337314c7E53838967bDaC"
+        },
+        {
+          "provider": "B",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50",
+              "stateRoot": "0xdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+            },
+            "container": "0x00000000000000000000000000000000000a77e2",
+            "ts": 1789000001,
+            "sig": "0x8242fcc563cc5f39d30d4fad4682747577d851133b41d0ff9ef6fadd0ff43cee392f8cbcd9842614c11bb2b7097b1b59767c4cf415d90f66608b7d844c25a0ca1c"
+          },
+          "digest": "0x11d6ec2d903fbba350aa7dfe44f1b9d2985ee6205291981f988df482329132ca",
+          "eip191Digest": "0xab1f9808d49501ef4fb0d5e9256528df622f70eeb1ad150e9a840cc50ef9e306",
+          "recoversTo": "0xe1fAE9b4fAB2F5726677ECfA912d96b0B683e6a9"
+        }
+      ],
+      "referenceImplementation": {
+        "reports": "ATTEST_DISAGREE",
+        "requestsSent": 2
+      }
+    },
+    {
+      "name": "disagree: B answers a signed revert where A answers a result",
+      "services": [
+        "A",
+        "B"
+      ],
+      "quorum": 2,
+      "params": {
+        "chainId": 1,
+        "call": {
+          "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+          "data": "0x18160ddd"
+        },
+        "block": 20000000
+      },
+      "expect": "disagreement",
+      "answers": [
+        {
+          "provider": "A",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50"
+            },
+            "container": "0x00000000000000000000000000000000000a77e1",
+            "ts": 1789000000,
+            "sig": "0xb11f6f58a45a88c83f7d758d9c56e6ec925ca15ad8a538021fa2a1b3595bf1213bcf4d359ae87bf0683839423eded86a9437b6ce689964e7a3c219da1838fb101c"
+          },
+          "digest": "0xd636628ca7f2c4c644be3d7b9c1373cc3084700207baf03801490d421db56426",
+          "eip191Digest": "0x952067a5df6dff12055ac7ecc43612a4e31e8a7150122675d68f5ff49d6fcb13",
+          "recoversTo": "0x7564105E977516C53bE337314c7E53838967bDaC"
+        },
+        {
+          "provider": "B",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": false,
+            "error": {
+              "code": "INTERNAL",
+              "message": "execution reverted",
+              "data": {
+                "revert": "0x4e487b710000000000000000000000000000000000000000000000000000000000000001"
+              }
+            },
+            "container": "0x00000000000000000000000000000000000a77e2",
+            "ts": 1789000001,
+            "sig": "0xb01dd73c6774f06c74ca94368b3372db8afba338a76dddb245978b6ea8c7ad385d539719ac8757ea197d52c6f2b509f42a0807fd6151a8f181a6d67269b1adbb1c"
+          },
+          "digest": "0x8b17010f79224f25fa51fac76d712db5b9239367e5c11243bddbab41a1c4ac80",
+          "eip191Digest": "0x039bba53658856a138810e02fd004e616df4ea1f668f10067782e82827a99f9f",
+          "recoversTo": "0xe1fAE9b4fAB2F5726677ECfA912d96b0B683e6a9"
+        }
+      ],
+      "referenceImplementation": {
+        "reports": "ATTEST_DISAGREE",
+        "requestsSent": 2
+      }
+    },
+    {
+      "name": "reverted: both services answer the same signed revert; a revert is never an accepted result",
+      "services": [
+        "A",
+        "B"
+      ],
+      "quorum": 2,
+      "params": {
+        "chainId": 1,
+        "call": {
+          "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+          "data": "0x18160ddd"
+        },
+        "block": 20000000
+      },
+      "expect": "reverted",
+      "answers": [
+        {
+          "provider": "A",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": false,
+            "error": {
+              "code": "INTERNAL",
+              "message": "execution reverted",
+              "data": {
+                "revert": "0x4e487b710000000000000000000000000000000000000000000000000000000000000001"
+              }
+            },
+            "container": "0x00000000000000000000000000000000000a77e1",
+            "ts": 1789000000,
+            "sig": "0x1fd9afc76d17b0a15a159438d6abdd23ec18f5007f89b2a01a39055788e18cfb5476edc85963aa09c9a2c4efba99989981704c2dc8c27d1c056ca5dc22eb83741c"
+          },
+          "digest": "0x5b69582a9c44215a20901f4e6b273cc65c42a3080a3f1ee1ca4978011876f9b5",
+          "eip191Digest": "0x4d3e43d41797ef160767ed10eda0b585bdd83c987d6d7d25da249cdaac9610d6",
+          "recoversTo": "0x7564105E977516C53bE337314c7E53838967bDaC"
+        },
+        {
+          "provider": "B",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": false,
+            "error": {
+              "code": "INTERNAL",
+              "message": "execution reverted",
+              "data": {
+                "revert": "0x4e487b710000000000000000000000000000000000000000000000000000000000000001"
+              }
+            },
+            "container": "0x00000000000000000000000000000000000a77e2",
+            "ts": 1789000001,
+            "sig": "0xb01dd73c6774f06c74ca94368b3372db8afba338a76dddb245978b6ea8c7ad385d539719ac8757ea197d52c6f2b509f42a0807fd6151a8f181a6d67269b1adbb1c"
+          },
+          "digest": "0x8b17010f79224f25fa51fac76d712db5b9239367e5c11243bddbab41a1c4ac80",
+          "eip191Digest": "0x039bba53658856a138810e02fd004e616df4ea1f668f10067782e82827a99f9f",
+          "recoversTo": "0xe1fAE9b4fAB2F5726677ECfA912d96b0B683e6a9"
+        }
+      ],
+      "referenceImplementation": {
+        "reports": "QUORUM_FAILED",
+        "requestsSent": 2
+      }
+    },
+    {
+      "name": "too few answers: B refuses (a signed error without revert data); a refusal is not a disagreement",
+      "services": [
+        "A",
+        "B"
+      ],
+      "quorum": 2,
+      "params": {
+        "chainId": 1,
+        "call": {
+          "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+          "data": "0x18160ddd"
+        },
+        "block": 20000000
+      },
+      "expect": "too-few-answers",
+      "answers": [
+        {
+          "provider": "A",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50"
+            },
+            "container": "0x00000000000000000000000000000000000a77e1",
+            "ts": 1789000000,
+            "sig": "0xb11f6f58a45a88c83f7d758d9c56e6ec925ca15ad8a538021fa2a1b3595bf1213bcf4d359ae87bf0683839423eded86a9437b6ce689964e7a3c219da1838fb101c"
+          },
+          "digest": "0xd636628ca7f2c4c644be3d7b9c1373cc3084700207baf03801490d421db56426",
+          "eip191Digest": "0x952067a5df6dff12055ac7ecc43612a4e31e8a7150122675d68f5ff49d6fcb13",
+          "recoversTo": "0x7564105E977516C53bE337314c7E53838967bDaC"
+        },
+        {
+          "provider": "B",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": false,
+            "error": {
+              "code": "INTERNAL",
+              "message": "block 20000000 is not available"
+            },
+            "container": "0x00000000000000000000000000000000000a77e2",
+            "ts": 1789000001,
+            "sig": "0x92a741debfb8b76b6a5e272825b14941a7d31811882e43cee6bb9dd3d6bb56960049cc12a216aa37054d278470a7dc9ddc22e4222add33ceea5a4a1d093a2eb61c"
+          },
+          "digest": "0x59afd610b6fb05268f9e2fd43d2607c1fd4a1412eb753f52b16fbb0485f01672",
+          "eip191Digest": "0xf0f05cd0dafb9d68c49309159dd9d73f7532c4a228336758aed755401a14d99c",
+          "recoversTo": "0xe1fAE9b4fAB2F5726677ECfA912d96b0B683e6a9"
+        }
+      ],
+      "referenceImplementation": {
+        "reports": "QUORUM_FAILED",
+        "requestsSent": 2
+      }
+    },
+    {
+      "name": "accepted: A and C agree, B refuses; the refusal does not veto",
+      "services": [
+        "A",
+        "B",
+        "C"
+      ],
+      "quorum": 2,
+      "params": {
+        "chainId": 1,
+        "call": {
+          "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+          "data": "0x18160ddd"
+        },
+        "block": 20000000
+      },
+      "expect": "accepted",
+      "answers": [
+        {
+          "provider": "A",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50"
+            },
+            "container": "0x00000000000000000000000000000000000a77e1",
+            "ts": 1789000000,
+            "sig": "0xb11f6f58a45a88c83f7d758d9c56e6ec925ca15ad8a538021fa2a1b3595bf1213bcf4d359ae87bf0683839423eded86a9437b6ce689964e7a3c219da1838fb101c"
+          },
+          "digest": "0xd636628ca7f2c4c644be3d7b9c1373cc3084700207baf03801490d421db56426",
+          "eip191Digest": "0x952067a5df6dff12055ac7ecc43612a4e31e8a7150122675d68f5ff49d6fcb13",
+          "recoversTo": "0x7564105E977516C53bE337314c7E53838967bDaC"
+        },
+        {
+          "provider": "B",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": false,
+            "error": {
+              "code": "INTERNAL",
+              "message": "block 20000000 is not available"
+            },
+            "container": "0x00000000000000000000000000000000000a77e2",
+            "ts": 1789000001,
+            "sig": "0x92a741debfb8b76b6a5e272825b14941a7d31811882e43cee6bb9dd3d6bb56960049cc12a216aa37054d278470a7dc9ddc22e4222add33ceea5a4a1d093a2eb61c"
+          },
+          "digest": "0x59afd610b6fb05268f9e2fd43d2607c1fd4a1412eb753f52b16fbb0485f01672",
+          "eip191Digest": "0xf0f05cd0dafb9d68c49309159dd9d73f7532c4a228336758aed755401a14d99c",
+          "recoversTo": "0xe1fAE9b4fAB2F5726677ECfA912d96b0B683e6a9"
+        },
+        {
+          "provider": "C",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50"
+            },
+            "container": "0x00000000000000000000000000000000000a77e3",
+            "ts": 1789000002,
+            "sig": "0x35da89a7d224d8dc51b7ac041aeb14e7995c96313b9101f1f454537f1cde6bc960cf1300618de4740a7caad7787da8017777bccceced06f84125bced0d27b7ba1c"
+          },
+          "digest": "0x5cfebdc3ef444c52947d8ac13f6586cdfa740d586585d507fc70553a486b07c7",
+          "eip191Digest": "0x260be3cfa0ad9aa5ec691de70e14a1fa7781cdd90ec90d37c99924e4b346eb96",
+          "recoversTo": "0xdb2430B4e9AC14be6554d3942822BE74811A1AF9"
+        }
+      ],
+      "referenceImplementation": {
+        "reports": "accepted",
+        "requestsSent": 3
+      }
+    },
+    {
+      "name": "disagree: A and C agree, B signs a different result; two against one is still a disagreement",
+      "services": [
+        "A",
+        "B",
+        "C"
+      ],
+      "quorum": 2,
+      "params": {
+        "chainId": 1,
+        "call": {
+          "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+          "data": "0x18160ddd"
+        },
+        "block": 20000000
+      },
+      "expect": "disagreement",
+      "answers": [
+        {
+          "provider": "A",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50"
+            },
+            "container": "0x00000000000000000000000000000000000a77e1",
+            "ts": 1789000000,
+            "sig": "0xb11f6f58a45a88c83f7d758d9c56e6ec925ca15ad8a538021fa2a1b3595bf1213bcf4d359ae87bf0683839423eded86a9437b6ce689964e7a3c219da1838fb101c"
+          },
+          "digest": "0xd636628ca7f2c4c644be3d7b9c1373cc3084700207baf03801490d421db56426",
+          "eip191Digest": "0x952067a5df6dff12055ac7ecc43612a4e31e8a7150122675d68f5ff49d6fcb13",
+          "recoversTo": "0x7564105E977516C53bE337314c7E53838967bDaC"
+        },
+        {
+          "provider": "B",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd51"
+            },
+            "container": "0x00000000000000000000000000000000000a77e2",
+            "ts": 1789000001,
+            "sig": "0x1153d2ede2d1b5f664b925f3d00f3f458b5f889968beabbee2ecd57e6151cc3e7a12e47585650894037363432ac6a9bb5c7436a8e758e5c0687f86cb80341ab01c"
+          },
+          "digest": "0x95d39f509dd3a7ee91a41818f7865040aa9c4db7f1b50d304948b07b5d247f1d",
+          "eip191Digest": "0xad09649224f8f9f5d482f0ffa4880431ec3457df561a8e6023520183f6f8365e",
+          "recoversTo": "0xe1fAE9b4fAB2F5726677ECfA912d96b0B683e6a9"
+        },
+        {
+          "provider": "C",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50"
+            },
+            "container": "0x00000000000000000000000000000000000a77e3",
+            "ts": 1789000002,
+            "sig": "0x35da89a7d224d8dc51b7ac041aeb14e7995c96313b9101f1f454537f1cde6bc960cf1300618de4740a7caad7787da8017777bccceced06f84125bced0d27b7ba1c"
+          },
+          "digest": "0x5cfebdc3ef444c52947d8ac13f6586cdfa740d586585d507fc70553a486b07c7",
+          "eip191Digest": "0x260be3cfa0ad9aa5ec691de70e14a1fa7781cdd90ec90d37c99924e4b346eb96",
+          "recoversTo": "0xdb2430B4e9AC14be6554d3942822BE74811A1AF9"
+        }
+      ],
+      "referenceImplementation": {
+        "reports": "ATTEST_DISAGREE",
+        "requestsSent": 3
+      }
+    },
+    {
+      "name": "binding failure: A's envelope presented as B's (the container is in the digest)",
+      "services": [
+        "A",
+        "B"
+      ],
+      "quorum": 2,
+      "params": {
+        "chainId": 1,
+        "call": {
+          "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+          "data": "0x18160ddd"
+        },
+        "block": 20000000
+      },
+      "expect": "too-few-answers",
+      "answers": [
+        {
+          "provider": "A",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50"
+            },
+            "container": "0x00000000000000000000000000000000000a77e1",
+            "ts": 1789000000,
+            "sig": "0xb11f6f58a45a88c83f7d758d9c56e6ec925ca15ad8a538021fa2a1b3595bf1213bcf4d359ae87bf0683839423eded86a9437b6ce689964e7a3c219da1838fb101c"
+          },
+          "digest": "0xd636628ca7f2c4c644be3d7b9c1373cc3084700207baf03801490d421db56426",
+          "eip191Digest": "0x952067a5df6dff12055ac7ecc43612a4e31e8a7150122675d68f5ff49d6fcb13",
+          "recoversTo": "0x7564105E977516C53bE337314c7E53838967bDaC"
+        },
+        {
+          "provider": "B",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50"
+            },
+            "container": "0x00000000000000000000000000000000000a77e2",
+            "ts": 1789000000,
+            "sig": "0xb11f6f58a45a88c83f7d758d9c56e6ec925ca15ad8a538021fa2a1b3595bf1213bcf4d359ae87bf0683839423eded86a9437b6ce689964e7a3c219da1838fb101c"
+          },
+          "recoversTo": "0x029fe9945cf754b13e6Fd939F4Bb8c87C77FF2b6",
+          "note": "recovers to an address other than B's signer: a binding failure, not an answer"
+        }
+      ],
+      "referenceImplementation": {
+        "reports": "QUORUM_FAILED",
+        "requestsSent": 2
+      }
+    },
+    {
+      "name": "not independent: A and B have the same holder",
+      "services": [
+        "A",
+        "B"
+      ],
+      "quorum": 2,
+      "params": {
+        "chainId": 1,
+        "call": {
+          "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+          "data": "0x18160ddd"
+        },
+        "block": 20000000
+      },
+      "expect": "refused-before-request",
+      "answers": [],
+      "referenceImplementation": {
+        "reports": "QUORUM_FAILED",
+        "requestsSent": 0
+      },
+      "changes": {
+        "B": {
+          "holder": "0x00000000000000000000000000000000000b01d1"
+        }
+      }
+    },
+    {
+      "name": "not independent: B lists an endpoint on A's origin",
+      "services": [
+        "A",
+        "B"
+      ],
+      "quorum": 2,
+      "params": {
+        "chainId": 1,
+        "call": {
+          "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+          "data": "0x18160ddd"
+        },
+        "block": 20000000
+      },
+      "expect": "refused-before-request",
+      "answers": [],
+      "referenceImplementation": {
+        "reports": "QUORUM_FAILED",
+        "requestsSent": 0
+      },
+      "changes": {
+        "B": {
+          "endpoints": [
+            "https://attest-b.example/tapeapi/v1",
+            "https://attest-a.example/mirror"
+          ]
+        }
+      }
+    },
+    {
+      "name": "refused: the quorum round names the block by tag",
+      "services": [
+        "A",
+        "B"
+      ],
+      "quorum": 2,
+      "params": {
+        "chainId": 1,
+        "call": {
+          "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+          "data": "0x18160ddd"
+        },
+        "block": "finalized"
+      },
+      "expect": "refused-before-request",
+      "answers": [],
+      "referenceImplementation": {
+        "reports": "QUORUM_FAILED",
+        "requestsSent": 0
+      }
+    }
+  ]
+}

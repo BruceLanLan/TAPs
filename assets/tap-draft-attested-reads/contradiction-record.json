@@ -1,0 +1,458 @@
+{
+  "title": "Contradiction records (TAP-draft-attested-reads, Specification §8)",
+  "note": "Built from the envelopes of attested-read.json. The record is what the reference implementation (security.contradictionRecord, security.contradictionsOf at commit fda84db889d2a732915f264a799af24073177a85) builds; 'expect' is what §8.3 concludes (valid: true is confirmed; valid: false with signaturesConsistent: true is unconfirmed; valid: false alone is invalid), reproduced by security.verifyContradiction. 'signerOf' says which signer the resolution of §8.3 step 8 gives for each container: 'resolved' means each provider's signerAddress in attested-read.json. Reason strings are not part of the vectors. In checks, record is the string record for the top-level record and otherwise the altered or new record itself; newEnvelope is an envelope signed for that check.",
+  "request": {
+    "method": "read",
+    "params": {
+      "chainId": 1,
+      "call": {
+        "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+        "data": "0x18160ddd"
+      },
+      "block": 20000000
+    }
+  },
+  "requestHash": "0x0d39710a73ea5142cd10f23a4a8a36fc74daeedb07716cc59728d881463e4938",
+  "source": {
+    "a": "attested-read.json, case \"disagree: B signs a result one unit higher\", provider A",
+    "b": "the same case, provider B"
+  },
+  "record": {
+    "tapeapiContradiction": 1,
+    "request": {
+      "method": "read",
+      "params": {
+        "chainId": 1,
+        "call": {
+          "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+          "data": "0x18160ddd"
+        },
+        "block": 20000000
+      }
+    },
+    "requestHash": "0x0d39710a73ea5142cd10f23a4a8a36fc74daeedb07716cc59728d881463e4938",
+    "block": {
+      "chainId": 1,
+      "blockNumber": 20000000,
+      "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183"
+    },
+    "envelopes": [
+      {
+        "container": "0x00000000000000000000000000000000000a77e1",
+        "signer": "0x7564105E977516C53bE337314c7E53838967bDaC",
+        "id": "tap23-vector-1",
+        "ts": 1789000000,
+        "ok": true,
+        "result": {
+          "chainId": 1,
+          "blockNumber": 20000000,
+          "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+          "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50"
+        },
+        "sig": "0xb11f6f58a45a88c83f7d758d9c56e6ec925ca15ad8a538021fa2a1b3595bf1213bcf4d359ae87bf0683839423eded86a9437b6ce689964e7a3c219da1838fb101c",
+        "resultHash": "0xc8de91d1d34d36aee2ff49579c03994b3162f10e9bee460982c940a5419e4922"
+      },
+      {
+        "container": "0x00000000000000000000000000000000000A77E2",
+        "signer": "0xe1fAE9b4fAB2F5726677ECfA912d96b0B683e6a9",
+        "id": "tap23-vector-1",
+        "ts": 1789000001,
+        "ok": true,
+        "result": {
+          "chainId": 1,
+          "blockNumber": 20000000,
+          "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+          "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd51"
+        },
+        "sig": "0x1153d2ede2d1b5f664b925f3d00f3f458b5f889968beabbee2ecd57e6151cc3e7a12e47585650894037363432ac6a9bb5c7436a8e758e5c0687f86cb80341ab01c",
+        "resultHash": "0x153e12c20b1adaf138c33075f489a6de294d20814b4e0c29971f7fd1f7d522c5"
+      }
+    ]
+  },
+  "checks": [
+    {
+      "name": "cross: signatures consistent, signers not checked",
+      "record": "record",
+      "signerOf": "none",
+      "expect": {
+        "valid": false,
+        "kind": "cross",
+        "weak": false,
+        "signaturesConsistent": true,
+        "signersChecked": false
+      }
+    },
+    {
+      "name": "cross: each signer is the resolved signer of its container",
+      "record": "record",
+      "signerOf": "resolved",
+      "expect": {
+        "valid": true,
+        "kind": "cross",
+        "weak": false,
+        "signaturesConsistent": true,
+        "signersChecked": true
+      }
+    },
+    {
+      "name": "cross: A's container resolves to another signer",
+      "record": "record",
+      "signerOf": "A resolves to 0x000000000000000000000000000000000000dEaD",
+      "expect": {
+        "valid": false
+      }
+    },
+    {
+      "name": "altered: B's result replaced (and its resultHash removed); B's signature no longer recovers to B's signer",
+      "record": {
+        "tapeapiContradiction": 1,
+        "request": {
+          "method": "read",
+          "params": {
+            "chainId": 1,
+            "call": {
+              "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+              "data": "0x18160ddd"
+            },
+            "block": 20000000
+          }
+        },
+        "requestHash": "0x0d39710a73ea5142cd10f23a4a8a36fc74daeedb07716cc59728d881463e4938",
+        "block": {
+          "chainId": 1,
+          "blockNumber": 20000000,
+          "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183"
+        },
+        "envelopes": [
+          {
+            "container": "0x00000000000000000000000000000000000a77e1",
+            "signer": "0x7564105E977516C53bE337314c7E53838967bDaC",
+            "id": "tap23-vector-1",
+            "ts": 1789000000,
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50"
+            },
+            "sig": "0xb11f6f58a45a88c83f7d758d9c56e6ec925ca15ad8a538021fa2a1b3595bf1213bcf4d359ae87bf0683839423eded86a9437b6ce689964e7a3c219da1838fb101c",
+            "resultHash": "0xc8de91d1d34d36aee2ff49579c03994b3162f10e9bee460982c940a5419e4922"
+          },
+          {
+            "container": "0x00000000000000000000000000000000000A77E2",
+            "signer": "0xe1fAE9b4fAB2F5726677ECfA912d96b0B683e6a9",
+            "id": "tap23-vector-1",
+            "ts": 1789000001,
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50"
+            },
+            "sig": "0x1153d2ede2d1b5f664b925f3d00f3f458b5f889968beabbee2ecd57e6151cc3e7a12e47585650894037363432ac6a9bb5c7436a8e758e5c0687f86cb80341ab01c"
+          }
+        ]
+      },
+      "signerOf": "resolved",
+      "expect": {
+        "valid": false
+      }
+    },
+    {
+      "name": "altered: another request (block 20000001) with the original requestHash",
+      "record": {
+        "tapeapiContradiction": 1,
+        "request": {
+          "method": "read",
+          "params": {
+            "chainId": 1,
+            "call": {
+              "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+              "data": "0x18160ddd"
+            },
+            "block": 20000001
+          }
+        },
+        "requestHash": "0x0d39710a73ea5142cd10f23a4a8a36fc74daeedb07716cc59728d881463e4938",
+        "block": {
+          "chainId": 1,
+          "blockNumber": 20000000,
+          "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183"
+        },
+        "envelopes": [
+          {
+            "container": "0x00000000000000000000000000000000000a77e1",
+            "signer": "0x7564105E977516C53bE337314c7E53838967bDaC",
+            "id": "tap23-vector-1",
+            "ts": 1789000000,
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50"
+            },
+            "sig": "0xb11f6f58a45a88c83f7d758d9c56e6ec925ca15ad8a538021fa2a1b3595bf1213bcf4d359ae87bf0683839423eded86a9437b6ce689964e7a3c219da1838fb101c",
+            "resultHash": "0xc8de91d1d34d36aee2ff49579c03994b3162f10e9bee460982c940a5419e4922"
+          },
+          {
+            "container": "0x00000000000000000000000000000000000A77E2",
+            "signer": "0xe1fAE9b4fAB2F5726677ECfA912d96b0B683e6a9",
+            "id": "tap23-vector-1",
+            "ts": 1789000001,
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd51"
+            },
+            "sig": "0x1153d2ede2d1b5f664b925f3d00f3f458b5f889968beabbee2ecd57e6151cc3e7a12e47585650894037363432ac6a9bb5c7436a8e758e5c0687f86cb80341ab01c",
+            "resultHash": "0x153e12c20b1adaf138c33075f489a6de294d20814b4e0c29971f7fd1f7d522c5"
+          }
+        ]
+      },
+      "signerOf": "resolved",
+      "expect": {
+        "valid": false
+      }
+    },
+    {
+      "name": "altered: B's envelope names A's signer",
+      "record": {
+        "tapeapiContradiction": 1,
+        "request": {
+          "method": "read",
+          "params": {
+            "chainId": 1,
+            "call": {
+              "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+              "data": "0x18160ddd"
+            },
+            "block": 20000000
+          }
+        },
+        "requestHash": "0x0d39710a73ea5142cd10f23a4a8a36fc74daeedb07716cc59728d881463e4938",
+        "block": {
+          "chainId": 1,
+          "blockNumber": 20000000,
+          "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183"
+        },
+        "envelopes": [
+          {
+            "container": "0x00000000000000000000000000000000000a77e1",
+            "signer": "0x7564105E977516C53bE337314c7E53838967bDaC",
+            "id": "tap23-vector-1",
+            "ts": 1789000000,
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50"
+            },
+            "sig": "0xb11f6f58a45a88c83f7d758d9c56e6ec925ca15ad8a538021fa2a1b3595bf1213bcf4d359ae87bf0683839423eded86a9437b6ce689964e7a3c219da1838fb101c",
+            "resultHash": "0xc8de91d1d34d36aee2ff49579c03994b3162f10e9bee460982c940a5419e4922"
+          },
+          {
+            "container": "0x00000000000000000000000000000000000A77E2",
+            "signer": "0x7564105E977516C53bE337314c7E53838967bDaC",
+            "id": "tap23-vector-1",
+            "ts": 1789000001,
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd51"
+            },
+            "sig": "0x1153d2ede2d1b5f664b925f3d00f3f458b5f889968beabbee2ecd57e6151cc3e7a12e47585650894037363432ac6a9bb5c7436a8e758e5c0687f86cb80341ab01c",
+            "resultHash": "0x153e12c20b1adaf138c33075f489a6de294d20814b4e0c29971f7fd1f7d522c5"
+          }
+        ]
+      },
+      "signerOf": "resolved",
+      "expect": {
+        "valid": false
+      }
+    },
+    {
+      "name": "self: A signs two different results for the same request and block",
+      "record": {
+        "tapeapiContradiction": 1,
+        "request": {
+          "method": "read",
+          "params": {
+            "chainId": 1,
+            "call": {
+              "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+              "data": "0x18160ddd"
+            },
+            "block": 20000000
+          }
+        },
+        "requestHash": "0x0d39710a73ea5142cd10f23a4a8a36fc74daeedb07716cc59728d881463e4938",
+        "block": {
+          "chainId": 1,
+          "blockNumber": 20000000,
+          "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183"
+        },
+        "envelopes": [
+          {
+            "container": "0x00000000000000000000000000000000000a77e1",
+            "signer": "0x7564105E977516C53bE337314c7E53838967bDaC",
+            "id": "tap23-vector-1",
+            "ts": 1789000000,
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50"
+            },
+            "sig": "0xb11f6f58a45a88c83f7d758d9c56e6ec925ca15ad8a538021fa2a1b3595bf1213bcf4d359ae87bf0683839423eded86a9437b6ce689964e7a3c219da1838fb101c",
+            "resultHash": "0xc8de91d1d34d36aee2ff49579c03994b3162f10e9bee460982c940a5419e4922"
+          },
+          {
+            "container": "0x00000000000000000000000000000000000a77e1",
+            "signer": "0x7564105E977516C53bE337314c7E53838967bDaC",
+            "id": "tap-attested-self-2",
+            "ts": 1789000005,
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd51"
+            },
+            "sig": "0xfd2f7c73d2753696b6b15d23fad32a4ea3fd17c39de7c7f8691ba8c2958c185b0a69f1b40378eb75d6665bf19804ca963845e78b3dc63411a38cba8c7ac06e851b",
+            "resultHash": "0x153e12c20b1adaf138c33075f489a6de294d20814b4e0c29971f7fd1f7d522c5"
+          }
+        ]
+      },
+      "newEnvelope": {
+        "provider": "A",
+        "envelope": {
+          "id": "tap-attested-self-2",
+          "ok": true,
+          "result": {
+            "chainId": 1,
+            "blockNumber": 20000000,
+            "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+            "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd51"
+          },
+          "container": "0x00000000000000000000000000000000000a77e1",
+          "ts": 1789000005,
+          "sig": "0xfd2f7c73d2753696b6b15d23fad32a4ea3fd17c39de7c7f8691ba8c2958c185b0a69f1b40378eb75d6665bf19804ca963845e78b3dc63411a38cba8c7ac06e851b"
+        },
+        "digest": "0xda473b9569fb5e8dc5872132de7486019d3f987ee69668c2bc7e4107b6083833",
+        "eip191Digest": "0x10eac04190c550a2fa7f33370ebbf5c809fd96ad07b37ea204a673cea0073006",
+        "recoversTo": "0x7564105E977516C53bE337314c7E53838967bDaC"
+      },
+      "signerOf": "resolved",
+      "expect": {
+        "valid": true,
+        "kind": "self",
+        "weak": false,
+        "signaturesConsistent": true,
+        "signersChecked": true
+      }
+    },
+    {
+      "name": "weak: one result was evaluated by block number (blockRef \"number\")",
+      "record": {
+        "tapeapiContradiction": 1,
+        "request": {
+          "method": "read",
+          "params": {
+            "chainId": 1,
+            "call": {
+              "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+              "data": "0x18160ddd"
+            },
+            "block": 20000000
+          }
+        },
+        "requestHash": "0x0d39710a73ea5142cd10f23a4a8a36fc74daeedb07716cc59728d881463e4938",
+        "block": {
+          "chainId": 1,
+          "blockNumber": 20000000,
+          "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183"
+        },
+        "envelopes": [
+          {
+            "container": "0x00000000000000000000000000000000000a77e1",
+            "signer": "0x7564105E977516C53bE337314c7E53838967bDaC",
+            "id": "tap23-vector-1",
+            "ts": 1789000000,
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50"
+            },
+            "sig": "0xb11f6f58a45a88c83f7d758d9c56e6ec925ca15ad8a538021fa2a1b3595bf1213bcf4d359ae87bf0683839423eded86a9437b6ce689964e7a3c219da1838fb101c",
+            "resultHash": "0xc8de91d1d34d36aee2ff49579c03994b3162f10e9bee460982c940a5419e4922"
+          },
+          {
+            "container": "0x00000000000000000000000000000000000A77E2",
+            "signer": "0xe1fAE9b4fAB2F5726677ECfA912d96b0B683e6a9",
+            "id": "tap23-vector-1",
+            "ts": 1789000001,
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd51",
+              "blockRef": "number"
+            },
+            "sig": "0xb0a92bd0ee80fcaf9e76746ffdb7245d6310ade6f9708dc25cd38b9e24d052996dcfb2bb831e8faf4cd1b54913ae5e9d070d82bc3675800924b9661dacda19cd1b",
+            "resultHash": "0x153e12c20b1adaf138c33075f489a6de294d20814b4e0c29971f7fd1f7d522c5"
+          }
+        ]
+      },
+      "newEnvelope": {
+        "provider": "B",
+        "envelope": {
+          "id": "tap23-vector-1",
+          "ok": true,
+          "result": {
+            "chainId": 1,
+            "blockNumber": 20000000,
+            "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+            "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd51",
+            "blockRef": "number"
+          },
+          "container": "0x00000000000000000000000000000000000a77e2",
+          "ts": 1789000001,
+          "sig": "0xb0a92bd0ee80fcaf9e76746ffdb7245d6310ade6f9708dc25cd38b9e24d052996dcfb2bb831e8faf4cd1b54913ae5e9d070d82bc3675800924b9661dacda19cd1b"
+        },
+        "digest": "0x78c2d43e731f0fcd72d7071d6183c4e7664c2395c92055691682b123c64bfaba",
+        "eip191Digest": "0xb67569c68631db7db620906cb69af0b696e303c7462a1a9d7d0c65405b521736",
+        "recoversTo": "0xe1fAE9b4fAB2F5726677ECfA912d96b0B683e6a9"
+      },
+      "signerOf": "resolved",
+      "expect": {
+        "valid": true,
+        "kind": "cross",
+        "weak": true,
+        "signaturesConsistent": true,
+        "signersChecked": true
+      }
+    }
+  ],
+  "noRecord": [
+    {
+      "name": "different blockHash (case \"disagree: B names another hash for block 20000000 (made up, not a real block)\")",
+      "expect": "no record"
+    },
+    {
+      "name": "same statement (case \"agree: both services return the same block and bytes\")",
+      "expect": "no record"
+    }
+  ]
+}
