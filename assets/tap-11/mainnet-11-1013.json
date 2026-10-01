@@ -1,0 +1,169 @@
+{
+  "description": "The live manifest of 11.1013.tape on BNB Smart Chain, read-only. Section \"reads\" was read at one block from two operators, whose answers were identical; \"manifest\" is the exact file. At this block the name is not activated, so under Specification §2 the service resolves as \"unpaid\"; \"ifActivated\" gives what the remaining steps produce with the same bytes.",
+  "reproducedBy": "https://github.com/BruceLanLan/tapeapi/tree/fda84db889d2a732915f264a799af24073177a85 reproduces the file verification and the delegation recovery (sdk/src/index.js resolve, sdk/src/sig.js; sdk/test/fixtures/mainnet-11-1013-manifest.json replays an earlier recording of the same file offline; spec/vectors/verify.py checks that recording). The opener, isOpened and activation reads and the DomainBinding implementation slot were recorded with plain eth_call and eth_getStorageAt; the reference implementation does not make them yet.",
+  "chainId": 56,
+  "input": "11.1013.tape",
+  "pinnedBlock": {
+    "number": 124886559,
+    "hash": "0x2c4a5d41009682a9a450cb9b9df5e4b03fef6e74b85e03c19f899f1eaff9ef69",
+    "timestamp": 1790761393,
+    "operators": [
+      "bsc-dataseed.bnbchain.org",
+      "bsc-rpc.publicnode.com"
+    ]
+  },
+  "reads": [
+    {
+      "call": "factory.cpuAt(1013)",
+      "to": "0x68224F668083c29e9800Be2a646d42d18cedF7e2",
+      "result": "0xe02c26c7432A7121168AA9B610DE24eCf9a1a414"
+    },
+    {
+      "call": "factory.isCPU(0xe02c26c7432A7121168AA9B610DE24eCf9a1a414)",
+      "to": "0x68224F668083c29e9800Be2a646d42d18cedF7e2",
+      "result": true
+    },
+    {
+      "call": "opener.accountOf(0xe02c26c7432A7121168AA9B610DE24eCf9a1a414, 11)",
+      "to": "0x021745DE2f42A7839d96f2d3634d0294487D81F1",
+      "result": "0x1b2A657BcBa9D3229f57aC2f4FcbEE2AA756aAe8"
+    },
+    {
+      "call": "processor.ownerOf(11)",
+      "to": "0xe02c26c7432A7121168AA9B610DE24eCf9a1a414",
+      "result": "0x086bFB1908B1DF8C0c4412f28E4DD22Bdd52d715"
+    },
+    {
+      "call": "opener.isOpened(0xe02c26c7432A7121168AA9B610DE24eCf9a1a414, 11)",
+      "to": "0x021745DE2f42A7839d96f2d3634d0294487D81F1",
+      "result": true
+    },
+    {
+      "call": "ERC-1967 implementation slot of SiteRegistry",
+      "to": "0xd006ffdd5Ae313B17729621A00999cD3C71CE5e6",
+      "result": "0x1d279D138A4D803378a7d4557c056f1beD53c261",
+      "accepted": true
+    },
+    {
+      "call": "ERC-1967 implementation slot of DomainBinding",
+      "to": "0x861EE183de2BBE4a6ecf9D15812C123b566a3DB7",
+      "result": "0xaa226181a6588d3f9AC0035e5f3dBaF311039bCE",
+      "accepted": true
+    },
+    {
+      "call": "DomainBinding.isLive(\"11.1013.tape\", 0x1b2A657BcBa9D3229f57aC2f4FcbEE2AA756aAe8)",
+      "to": "0x861EE183de2BBE4a6ecf9D15812C123b566a3DB7",
+      "result": false
+    },
+    {
+      "call": "DomainBinding.isContainerLive(0x1b2A657BcBa9D3229f57aC2f4FcbEE2AA756aAe8)",
+      "to": "0x861EE183de2BBE4a6ecf9D15812C123b566a3DB7",
+      "result": false
+    },
+    {
+      "call": "SiteRegistry.fileInfo(0x1b2A657BcBa9D3229f57aC2f4FcbEE2AA756aAe8, \".well-known/tapeapi.json\")",
+      "to": "0xd006ffdd5Ae313B17729621A00999cD3C71CE5e6",
+      "result": {
+        "size": 3414,
+        "contentType": "application/json",
+        "sha256Hash": "0xee57f304f8316802978695e8e9f14e89ce1f9e5c79123b5a583fdcfd3b52c37a",
+        "updatedAt": 1790442494,
+        "chunkCount": 1
+      }
+    }
+  ],
+  "laterRecheck": {
+    "note": "Most public nodes no longer serve state at pinnedBlock. Every read in \"reads\", and read() of the manifest, was repeated at this later block from two operators; the answers were identical to each other and to \"reads\", and the bytes read had the declared SHA-256.",
+    "block": {
+      "number": 124890135,
+      "hash": "0xae8aa2fc2ab1b59eaca4912929f13d09ea9426701e706336f65b27f34af10d66",
+      "timestamp": 1790763002
+    },
+    "operators": [
+      "bsc-dataseed.bnbchain.org",
+      "bsc-rpc.publicnode.com"
+    ]
+  },
+  "expectedOutcome": "unpaid (TAP-10 §6.2 step 5)",
+  "manifest": {
+    "registryKey": ".well-known/tapeapi.json",
+    "size": 3414,
+    "sha256": "0xee57f304f8316802978695e8e9f14e89ce1f9e5c79123b5a583fdcfd3b52c37a",
+    "bytesHex": "0x7b2274617065617069223a22302e31222c226e616d65223a2254617065415049205075626c6963222c226369726375697473223a22307865303263323663373433326137313231313638616139623631306465323465636639613161343134222c22746f6b656e4964223a223131222c22636f6e7461696e6572223a22307831623261363537626362613964333232396635376163326634666362656532616137353661616538222c227369676e6572223a22307861423730644565386531434561626231443130654446654263626530633331336335336366313534222c2264656c65676174696f6e223a7b2265787069726573223a313739383139303831332c22736967223a22307862626539363837303137616664616232313232356235623232376331363663386461316165356130643965366439336439623930386435363761303165353761333730653136373865393136333935656166623234626337353336623831313432343363396636313338383131303339356164383366363536656665653334613163227d2c22656e64706f696e7473223a7b226c697665223a5b2268747470733a2f2f6170692e746170656170692e66756e2f746170656170692f7631225d2c226173796e63223a66616c73657d2c226d6574686f6473223a5b7b226e616d65223a22626c6f636b4e756d626572222c22707269636542454d223a2230222c22706172616d73223a7b7d2c2272657475726e73223a7b22626c6f636b4e756d626572223a226e756d626572227d2c226465736372697074696f6e223a22546865206c617465737420424e4220536d61727420436861696e20626c6f636b20746865207365727669636520616772656573206f6e20287365766572616c206e6f646573206d757374206167726565292e227d2c7b226e616d65223a2262616c616e6365222c22707269636542454d223a2230222c22706172616d73223a7b2261646472657373223a2261646472657373222c22626c6f636b223a226e756d6265727c2766696e616c697a6564277c2773616665277c276c6174657374273f202864656661756c742066696e616c697a656429227d2c2272657475726e73223a7b2261646472657373223a2261646472657373222c22776569223a22737472696e67222c22626e62223a22737472696e67222c22626c6f636b50696e6e6564223a226f626a656374227d2c226465736372697074696f6e223a225b71756f72756d5d204e617469766520424e422062616c616e6365206f6620616e20616464726573732c2070696e6e656420746f206f6e6520626c6f636b2e227d2c7b226e616d65223a22746f6b656e496e666f222c22707269636542454d223a2230222c22706172616d73223a7b22746f6b656e223a2261646472657373222c22626c6f636b223a226e756d6265727c2766696e616c697a6564277c2773616665277c276c6174657374273f202864656661756c742066696e616c697a656429227d2c2272657475726e73223a7b22746f6b656e223a2261646472657373222c226e616d65223a22737472696e677c6e756c6c222c2273796d626f6c223a22737472696e677c6e756c6c222c22646563696d616c73223a226e756d626572222c22746f74616c537570706c79223a22737472696e67222c22626c6f636b50696e6e6564223a226f626a656374227d2c226465736372697074696f6e223a225b71756f72756d5d204245502d323020746f6b656e206d6574616461746120616e6420746f74616c20737570706c792c2070696e6e656420746f206f6e6520626c6f636b2e227d2c7b226e616d65223a22746f6b656e42616c616e6365222c22707269636542454d223a2230222c22706172616d73223a7b22746f6b656e223a2261646472657373222c2261646472657373223a2261646472657373222c22626c6f636b223a226e756d6265727c2766696e616c697a6564277c2773616665277c276c6174657374273f202864656661756c742066696e616c697a656429227d2c2272657475726e73223a7b22746f6b656e223a2261646472657373222c2261646472657373223a2261646472657373222c22726177223a22737472696e67222c22616d6f756e74223a22737472696e67222c2273796d626f6c223a22737472696e677c6e756c6c222c22646563696d616c73223a226e756d626572222c22626c6f636b50696e6e6564223a226f626a656374227d2c226465736372697074696f6e223a225b71756f72756d5d204245502d32302062616c616e6365206f6620616e2061646472657373202872617720616e6420696e20746f6b656e20756e697473292c2070696e6e656420746f206f6e6520626c6f636b2e227d2c7b226e616d65223a226e66744f776e6572222c22707269636542454d223a2230222c22706172616d73223a7b22636f6e7472616374223a2261646472657373222c22746f6b656e4964223a22737472696e67222c22626c6f636b223a226e756d6265727c2766696e616c697a6564277c2773616665277c276c6174657374273f202864656661756c742066696e616c697a656429227d2c2272657475726e73223a7b22636f6e7472616374223a2261646472657373222c22746f6b656e4964223a22737472696e67222c226f776e6572223a2261646472657373222c22626c6f636b50696e6e6564223a226f626a656374227d2c226465736372697074696f6e223a225b71756f72756d5d204f776e6572206f6620616e204552432d37323120746f6b656e2c2070696e6e656420746f206f6e6520626c6f636b2e227d2c7b226e616d65223a22706169725072696365222c22707269636542454d223a2230222c22706172616d73223a7b2270616972223a2261646472657373222c22626c6f636b223a226e756d6265727c2766696e616c697a6564277c2773616665277c276c6174657374273f202864656661756c742066696e616c697a656429227d2c2272657475726e73223a7b2270616972223a2261646472657373222c22746f6b656e30223a226f626a656374222c22746f6b656e31223a226f626a656374222c227265736572766573223a226f626a656374222c227072696365223a226f626a656374222c22626c6f636b50696e6e6564223a226f626a656374227d2c226465736372697074696f6e223a225b71756f72756d5d2053706f742070726963652066726f6d20612050616e63616b6553776170205632207061697227732072657365727665732c2070696e6e656420746f206f6e6520626c6f636b2e20412073706f742070726963652063616e206265206d6f7665642077697468696e206120626c6f636b3a20646f206e6f742075736520697420616c6f6e6520666f72206c69717569646174696f6e732e227d2c7b226e616d65223a22626e62557364222c22707269636542454d223a2230222c22706172616d73223a7b22626c6f636b223a226e756d6265727c2766696e616c697a6564277c2773616665277c276c6174657374273f202864656661756c742066696e616c697a656429227d2c2272657475726e73223a7b22626e62557364223a22737472696e67222c2270616972223a2261646472657373222c22626c6f636b50696e6e6564223a226f626a656374227d2c226465736372697074696f6e223a225b71756f72756d5d20424e4220696e20555344542066726f6d207468652050616e63616b65537761702056322057424e422f5553445420706169722c2070696e6e656420746f206f6e6520626c6f636b2e2053706f742070726963653a20736565207061697250726963652e227d2c7b226e616d65223a22746170654e616d65222c22707269636542454d223a2230222c22706172616d73223a7b226e616d65223a22737472696e673f2028273c2349443e2e3c70726f636573736f723e2e746170652729222c2270726f636573736f72223a226e756d6265723f222c22746f6b656e4964223a22737472696e673f222c22626c6f636b223a226e756d6265727c2766696e616c697a6564277c2773616665277c276c6174657374273f202864656661756c742066696e616c697a656429227d2c2272657475726e73223a7b226e616d65223a22737472696e67222c2270726f636573736f72223a226e756d626572222c22746f6b656e4964223a22737472696e67222c226369726375697473223a2261646472657373222c22636f6e7461696e6572223a2261646472657373222c22686f6c646572223a2261646472657373222c226f70656e6564223a22626f6f6c65616e222c2274617065617069223a226f626a6563747c6e756c6c222c226368616e6e656c4b657973223a226f626a6563747c6e756c6c222c22626c6f636b50696e6e6564223a226f626a656374227d2c226465736372697074696f6e223a225b71756f72756d5d205265736f6c7665206120546170654f7574206e616d6520737563682061732031312e313031332e746170653a2070726f636573736f7220636f6e74726163742c20636f6e7461696e65722c2063757272656e7420686f6c6465722c20776865746865722074686520636f6e7461696e6572206973206f70656e65642c20616e642077686574686572206974207075626c697368657320612054617065415049206d616e6966657374206f72206368616e6e656c206b6579732e227d5d7d",
+    "text": "{\"tapeapi\":\"0.1\",\"name\":\"TapeAPI Public\",\"circuits\":\"0xe02c26c7432a7121168aa9b610de24ecf9a1a414\",\"tokenId\":\"11\",\"container\":\"0x1b2a657bcba9d3229f57ac2f4fcbee2aa756aae8\",\"signer\":\"0xaB70dEe8e1CEabb1D10eDFeBcbe0c313c53cf154\",\"delegation\":{\"expires\":1798190813,\"sig\":\"0xbbe9687017afdab21225b5b227c166c8da1ae5a0d9e6d93d9b908d567a01e57a370e1678e916395eafb24bc7536b8114243c9f61388110395ad83f656efee34a1c\"},\"endpoints\":{\"live\":[\"https://api.tapeapi.fun/tapeapi/v1\"],\"async\":false},\"methods\":[{\"name\":\"blockNumber\",\"priceBEM\":\"0\",\"params\":{},\"returns\":{\"blockNumber\":\"number\"},\"description\":\"The latest BNB Smart Chain block the service agrees on (several nodes must agree).\"},{\"name\":\"balance\",\"priceBEM\":\"0\",\"params\":{\"address\":\"address\",\"block\":\"number|'finalized'|'safe'|'latest'? (default finalized)\"},\"returns\":{\"address\":\"address\",\"wei\":\"string\",\"bnb\":\"string\",\"blockPinned\":\"object\"},\"description\":\"[quorum] Native BNB balance of an address, pinned to one block.\"},{\"name\":\"tokenInfo\",\"priceBEM\":\"0\",\"params\":{\"token\":\"address\",\"block\":\"number|'finalized'|'safe'|'latest'? (default finalized)\"},\"returns\":{\"token\":\"address\",\"name\":\"string|null\",\"symbol\":\"string|null\",\"decimals\":\"number\",\"totalSupply\":\"string\",\"blockPinned\":\"object\"},\"description\":\"[quorum] BEP-20 token metadata and total supply, pinned to one block.\"},{\"name\":\"tokenBalance\",\"priceBEM\":\"0\",\"params\":{\"token\":\"address\",\"address\":\"address\",\"block\":\"number|'finalized'|'safe'|'latest'? (default finalized)\"},\"returns\":{\"token\":\"address\",\"address\":\"address\",\"raw\":\"string\",\"amount\":\"string\",\"symbol\":\"string|null\",\"decimals\":\"number\",\"blockPinned\":\"object\"},\"description\":\"[quorum] BEP-20 balance of an address (raw and in token units), pinned to one block.\"},{\"name\":\"nftOwner\",\"priceBEM\":\"0\",\"params\":{\"contract\":\"address\",\"tokenId\":\"string\",\"block\":\"number|'finalized'|'safe'|'latest'? (default finalized)\"},\"returns\":{\"contract\":\"address\",\"tokenId\":\"string\",\"owner\":\"address\",\"blockPinned\":\"object\"},\"description\":\"[quorum] Owner of an ERC-721 token, pinned to one block.\"},{\"name\":\"pairPrice\",\"priceBEM\":\"0\",\"params\":{\"pair\":\"address\",\"block\":\"number|'finalized'|'safe'|'latest'? (default finalized)\"},\"returns\":{\"pair\":\"address\",\"token0\":\"object\",\"token1\":\"object\",\"reserves\":\"object\",\"price\":\"object\",\"blockPinned\":\"object\"},\"description\":\"[quorum] Spot price from a PancakeSwap V2 pair's reserves, pinned to one block. A spot price can be moved within a block: do not use it alone for liquidations.\"},{\"name\":\"bnbUsd\",\"priceBEM\":\"0\",\"params\":{\"block\":\"number|'finalized'|'safe'|'latest'? (default finalized)\"},\"returns\":{\"bnbUsd\":\"string\",\"pair\":\"address\",\"blockPinned\":\"object\"},\"description\":\"[quorum] BNB in USDT from the PancakeSwap V2 WBNB/USDT pair, pinned to one block. Spot price: see pairPrice.\"},{\"name\":\"tapeName\",\"priceBEM\":\"0\",\"params\":{\"name\":\"string? ('<#ID>.<processor>.tape')\",\"processor\":\"number?\",\"tokenId\":\"string?\",\"block\":\"number|'finalized'|'safe'|'latest'? (default finalized)\"},\"returns\":{\"name\":\"string\",\"processor\":\"number\",\"tokenId\":\"string\",\"circuits\":\"address\",\"container\":\"address\",\"holder\":\"address\",\"opened\":\"boolean\",\"tapeapi\":\"object|null\",\"channelKeys\":\"object|null\",\"blockPinned\":\"object\"},\"description\":\"[quorum] Resolve a TapeOut name such as 11.1013.tape: processor contract, container, current holder, whether the container is opened, and whether it publishes a TapeAPI manifest or channel keys.\"}]}"
+  },
+  "ifActivated": {
+    "binding": {
+      "circuits": "0xe02c26c7432a7121168aa9b610de24ecf9a1a414",
+      "tokenId": "11",
+      "container": "0x1b2a657bcba9d3229f57ac2f4fcbee2aa756aae8",
+      "equalsResolved": true
+    },
+    "signer": "0xaB70dEe8e1CEabb1D10eDFeBcbe0c313c53cf154",
+    "delegation": {
+      "expires": 1798190813,
+      "sig": "0xbbe9687017afdab21225b5b227c166c8da1ae5a0d9e6d93d9b908d567a01e57a370e1678e916395eafb24bc7536b8114243c9f61388110395ad83f656efee34a1c",
+      "digest": "0x2477541749b1b28de5dba42ee4d9f252e904dfb9042eb15068527e3213fb4a7b",
+      "recoversTo": "0x086bFB1908B1DF8C0c4412f28E4DD22Bdd52d715",
+      "holder": "0x086bFB1908B1DF8C0c4412f28E4DD22Bdd52d715"
+    },
+    "contentSig": "absent",
+    "outcome": "resolved, for any now with 1790761393 <= now < 1798190813 (the 366-day bound holds for every such now)"
+  },
+  "earlierRecording": {
+    "note": "The same file and holder were recorded at an earlier block by three operators; opener.accountOf, isOpened, isLive and the implementation slots were not recorded then.",
+    "block": {
+      "number": 124552456,
+      "hash": "0xb1699395b13b3f031a277928b862b96c976ec47cddebfe7ccda4fe54bc488a8b",
+      "parentHash": "0x3b6251e0c595bf40d788534736ca3ed56722473964e7cf50df0cc33a1f2516c1",
+      "timestamp": 1790610971,
+      "stateRoot": "0xb5a34f3901b7d16b99e11ef05a295257dd511dced1ab8b904ae17a2431ab78db"
+    },
+    "fileSha256": "0xee57f304f8316802978695e8e9f14e89ce1f9e5c79123b5a583fdcfd3b52c37a",
+    "holder": "0x086bFB1908B1DF8C0c4412f28E4DD22Bdd52d715",
+    "container": "0x1b2A657BcBa9D3229f57aC2f4FcbEE2AA756aAe8"
+  },
+  "negative": [
+    {
+      "name": "a valid manifest of another service served from this container",
+      "manifest": {
+        "tapeapi": "0.1",
+        "name": "Content-signed service",
+        "circuits": "0x50a994e71615474b55559ff4f500928fbc339dd9",
+        "tokenId": "4246",
+        "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+        "signer": "0x1563915e194D8CfBA1943570603F7606A3115508",
+        "delegation": {
+          "expires": 1791592000,
+          "sig": "0x994dcf9eb17d5a15516f6950754a02396ea980d5cda5d234218421432af87f4b3046e4061758dc5d04a31224c2bd152e45429d9c119a21a20659a3e84092567c1c"
+        },
+        "endpoints": {
+          "live": [
+            "https://api.example.com/tapeapi/v1"
+          ],
+          "async": false
+        },
+        "methods": [
+          {
+            "name": "ping",
+            "priceBEM": "0",
+            "params": {},
+            "returns": {
+              "pong": "boolean"
+            }
+          }
+        ],
+        "contentSig": "0x6a95daf7b818940375a4328ac44675a2b176b16192035085746a90fe4d881f2b42cd0226220914be166cde53ffd70dbe69547e9af4ef5353977f3a80fd6a985f1c"
+      },
+      "servedFrom": "0x1b2A657BcBa9D3229f57aC2f4FcbEE2AA756aAe8",
+      "outcome": "manifest-invalid (circuits, tokenId and container differ from the resolved circuit and container)"
+    },
+    {
+      "name": "this manifest with its container member replaced by another container",
+      "change": {
+        "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95"
+      },
+      "outcome": "manifest-invalid (container differs from the resolved container)"
+    }
+  ]
+}

@@ -1,0 +1,62 @@
+{
+  "description": "Canonical JSON (Specification §6). \"input\" is JSON text; \"canonical\" is the exact output (UTF-8); \"reject\" means no canonical form exists. The reason text is informative.",
+  "reproducedBy": "https://github.com/BruceLanLan/tapeapi/tree/fda84db889d2a732915f264a799af24073177a85 (sdk/src/canon.js safeParseJSON, canonicalJSON)",
+  "cases": [
+    {
+      "input": "{\"b\":2,\"a\":{\"d\":[1,\"x\",true,null],\"c\":1.5e3}}",
+      "canonical": "{\"a\":{\"c\":1500,\"d\":[1,\"x\",true,null]},\"b\":2}",
+      "keccak256": "0xdbdc34a92b36452c8c2192957ae34c101fc26e4e4e2c6ffeac1d97e42702ddb2"
+    },
+    {
+      "input": "{\"é\":1,\"e\":2,\"\\ud83d\\ude00\":3,\"z\":0.000001}",
+      "canonical": "{\"e\":2,\"z\":0.000001,\"é\":1,\"😀\":3}",
+      "keccak256": "0xd081d8d25aada22dd2a210c18806b51efa5882eceb8fbb349806a533a5f98de8"
+    },
+    {
+      "input": "{\"s\":\"line\\nquote\\\"tab\\t\\u0001\"}",
+      "canonical": "{\"s\":\"line\\nquote\\\"tab\\t\\u0001\"}",
+      "keccak256": "0xd48294ef605e5112a53b58a386b8af593632bb61e4e6e29155bd0160fd90ce11"
+    },
+    {
+      "input": "{\"a\":9007199254740991}",
+      "canonical": "{\"a\":9007199254740991}",
+      "keccak256": "0x0b51fae25ba9a427f243db0f3b05cbeab10e4bb137c8945c70018be0c58992f6"
+    },
+    {
+      "input": "{\"a\":1,\"a\":2}",
+      "reject": "duplicate key \"a\" in JSON: RFC 8785 forbids it and two parsers may disagree about which value survives"
+    },
+    {
+      "input": "{\"a\":{\"b\":1,\"b\":1}}",
+      "reject": "duplicate key \"b\" in JSON: RFC 8785 forbids it and two parsers may disagree about which value survives"
+    },
+    {
+      "input": "{\"a\":1,\"\\u0061\":2}",
+      "reject": "duplicate key \"a\" in JSON: RFC 8785 forbids it and two parsers may disagree about which value survives"
+    },
+    {
+      "input": "{\"a\":-0}",
+      "reject": "negative zero at .a: it serialises as 0 and the two forms are not distinguishable"
+    },
+    {
+      "input": "{\"a\":9007199254740992}",
+      "reject": "integer 9007199254740992 at .a is outside the exactly representable range; carry it as a string"
+    },
+    {
+      "input": "{\"a\":1e400}",
+      "reject": "non-finite number at .a"
+    },
+    {
+      "input": "{\"__proto__\":1}",
+      "reject": "forbidden key \"__proto__\" in JSON"
+    },
+    {
+      "input": "{\"a\":{\"constructor\":{}}}",
+      "reject": "forbidden key \"constructor\" in JSON"
+    },
+    {
+      "input": "{\"a\":\"\\ud800\"}",
+      "reject": "lone UTF-16 surrogate at .a: not well-formed Unicode (RFC 7493 §2.1)"
+    }
+  ]
+}
