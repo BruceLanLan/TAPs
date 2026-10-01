@@ -19,7 +19,7 @@ A way for a person or an agent to seal a claim on chain, reveal it on a chosen d
 
 ## Abstract
 
-This TAP defines three record types carried as ordinary TAP-10 messages: a **commitment** (a sealed message from an author to a judge whose `ref` publicly states its kind and open time), a **reveal** (a public message that discloses the commitment's content key so anyone can decrypt and verify the original payload), and a **verdict** (a public message from a judge that references the commitment and states an outcome with its sources). It defines the 32-byte `ref` layout that marks these records, the content members they carry, how a client locates and verifies them, and the status a commitment has at any time (sealed, revealed, unrevealed, malformed, judged). Nothing in the hub, payload or content formats of TAP-10 is changed; a TAP-10 client that does not know this TAP still shows these messages as ordinary messages.
+This TAP defines three record types carried as ordinary TAP-10 messages: a **commitment** (a sealed message from an author to a judge whose `ref` publicly states its kind and open time), a **reveal** (a public message that discloses the commitment's content key so anyone can decrypt and verify the original payload), and a **verdict** (a public message from a judge that references the commitment and states an outcome with its sources). It defines the 32-byte `ref` layout that marks these records, the content members they carry, how a client locates and verifies them, and the status a commitment has at any time (sealed, due, revealed, unrevealed, malformed, judged). Nothing in the hub, payload or content formats of TAP-10 is changed; a TAP-10 client that does not know this TAP still shows these messages as ordinary messages.
 
 ## Motivation
 
@@ -86,15 +86,17 @@ The judge's container need not be opened, but it MUST have a usable key (TAP-10 
 
 #### 3.3 Commitment ID
 
+The commitment ID is the TAP-10 message ID of the commitment (TAP-10 §17):
+
 ```
-commitmentId = keccak256("SCV1/commitment" ‖ uint64(chainId) ‖ bytes32(to) ‖ uint32(inboxIndex))
+commitmentId = keccak256("TAP-10/msg/v2" ‖ uint256(chainId) ‖ hub ‖ endpointID(to) ‖ uint256(inboxIndex))
 ```
 
-where `chainId` is the chain of the hub that holds the entry, `to` the judge's endpoint ID and `inboxIndex` the index returned by `send` and carried in the `Sent` event. A commitment is identified by this triple, never by digest alone (TAP-10 §13.6).
+where `chainId` is the chain whose hub holds the entry, `hub` its 20-byte address, `to` the judge's endpoint ID and `inboxIndex` the index carried in the `Sent` event. A commitment is identified by this value, never by digest alone (TAP-10 §13.6). Because a reorganization can move a message to another inbox index, the commitment ID is only defined once the commitment is final (§6).
 
 #### 3.4 Content
 
-The sealed content is a TAP-10 content object (§16) with `v` = `1` and `kind` = `"message"`. `body` MUST hold the human-readable text of the claim. The object MUST carry an additional member `scv`:
+The sealed content is a TAP-10 content object (TAP-10 §16) with `v` = `1` and `kind` = `"message"`. `body` MUST hold the human-readable text of the claim. The object MUST carry an additional member `scv`:
 
 | Member | Type | Required | Meaning |
 |---|---|---|---|
@@ -167,7 +169,7 @@ As §4.1.
 
 #### 5.2 Sending
 
-A verdict is a **public** payload sent by a container acting as judge to the **author's** endpoint. Any container MAY send a verdict on any commitment; a verdict from the container named as `to` in the commitment is the **designated judge's** verdict, others are **third-party** verdicts. Clients MUST show which is which and MUST NOT merge them.
+A verdict is a **public** payload sent by a container acting as judge to the **author's** endpoint. Any container MAY send a verdict on any commitment; a verdict from the container named as `to` in the commitment is the **designated judge's** verdict, others are **third-party** verdicts (see §8).
 
 A verdict SHOULD NOT be sent before the open time. A verdict sent before the open time is recorded but MUST be marked `early`.
 
@@ -191,12 +193,14 @@ A verdict on a commitment that has not been revealed (by this verdict's `scv.key
 
 A client rebuilds records per chain in the TAP-10 chain table, from the hub at the TAP-10 hub address on that chain, under the node-agreement and pinned-block rules of TAP-10 §5:
 
-1. Read `Sent` events whose `ref` begins with the tag (topic3 bytes 0–3). Records need log-capable nodes; a client without them MAY instead walk the outbox of known containers with `outboxPage` and then fetch the events for those entries;
+1. Read the hub's `Sent` events and keep those whose `ref` (topic3) begins with the tag. `eth_getLogs` matches whole topic values, not prefixes, so a node cannot filter by the tag: a client fetches every `Sent` log of the hub over the range it scans, or walks the outboxes of known containers with `outboxPage` and fetches the events for those entries, and filters locally. Records need log-capable nodes;
 2. For every event, read `inboxAt(to, inboxIndex)`. The entry's `from` MUST equal the event's `from` and its `digest` MUST equal `keccak256(ref ‖ keccak256(payload))`; otherwise discard the event;
 3. Group records by commitment ID; attach reveals and verdicts to their commitment; discard reveals and verdicts whose 27-byte reference matches no known commitment;
 4. Apply §4.4 and §5 to each reveal and verdict.
 
 The time of every record is its block timestamp, never a sender-claimed `ts`.
+
+**Finality.** A commitment, reveal or verdict counts as a record only once its message is final under TAP-10 §17. While a message is `pending` in the TAP-10 sense, a client MUST NOT derive a commitment ID from it, attach reveals or verdicts to it, or record anything persistent about it; it MAY show the message as not yet final.
 
 ### 7. Commitment status
 
@@ -206,14 +210,21 @@ Given a commitment with open time `T`, the grace period `G = 604800` seconds (7 
 |---|---|
 | `malformed` | The `ref` fails §3.1, the payload is not a sealed payload, the open time is not after the sending block, or a verified reveal yields content that fails §3.4 |
 | `sealed` | Not malformed, no verified reveal, `now < T` |
-| `pending` | Not malformed, no verified reveal, `T ≤ now < T + G` |
+| `due` | Not malformed, no verified reveal, `T ≤ now < T + G` |
 | `unrevealed` | Not malformed, no verified reveal, `now ≥ T + G` |
 | `revealed` | A verified reveal exists and no verdict from the designated judge |
 | `judged` | A verified reveal exists and at least one verdict from the designated judge |
 
-Clients MUST display `unrevealed` and `malformed` commitments with the same prominence as `judged` ones. An application MUST NOT hide a commitment because of its status or outcome.
+### 8. Display
 
-### 8. Privacy
+A client that displays records:
+
+1. MUST display `unrevealed` and `malformed` commitments with the same prominence as `judged` ones, and MUST NOT hide a commitment because of its status or outcome;
+2. MUST show which verdicts come from the designated judge and which are third-party verdicts, MUST NOT merge them, and SHOULD let the reader filter third-party verdicts;
+3. MUST show, next to a record, the sending wallet of each of its messages as determined by TAP-10 §18.5, and MUST mark any sending wallet that differs from the others in the record or from the circuit's current holder, so that a reader can see when the current holder was not the author;
+4. MAY display `due` differently from `unrevealed`.
+
+### 9. Privacy
 
 A message that is not meant to be a public record MUST NOT carry the tag. A sealed message without the tag is an ordinary TAP-10 message and is never `unrevealed`.
 
@@ -227,7 +238,8 @@ Every record's metadata — author, judge, time, kind, open time — is public f
 - **Why `kind` stays `"message"`.** TAP-10 treats any other `kind` as `unsupported`. Keeping `"message"` and adding an `scv` member means every existing client shows these records as readable mail, and this TAP does not weaken TAP-10 (TAP-01 §3).
 - **Why verdicts are public.** A record that only the author can read cannot be rebuilt by third parties. Judges that need confidentiality can send an ordinary sealed message in addition to the public verdict.
 - **Why anyone may judge.** Restricting verdicts to the designated judge would make every record depend on one container staying online and honest. Third-party verdicts are recorded separately so later TAPs can score judges against each other.
-- **Why a 7-day grace period.** Judges and authors need time after the open time to read prices, decide and send. Seven days is long enough for a weekly process and short enough that a stale commitment is flagged within the same reporting period. Applications MAY show `pending` differently from `unrevealed`.
+- **Why a 7-day grace period.** Judges and authors need time after the open time to read prices, decide and send. Seven days is long enough for a weekly process and short enough that a stale commitment is flagged within the same reporting period. During the grace period a commitment is `due`, a name chosen so it cannot be confused with TAP-10's `pending` (not yet final).
+- **Why the TAP-10 message ID.** It binds the chain, the hub, the judge and the inbox index, so a commitment stays unambiguous even if a new hub is ever deployed, and implementations already compute it.
 
 Alternatives considered: storing commitments as site files in the author's container (rejected: no per-record timestamp from the hub, and no way to seal to a judge); a dedicated contract (rejected: TAP-10 already provides timestamped, digest-bound, sealed delivery on every supported chain).
 
@@ -246,17 +258,17 @@ ref = 0x53435631 01 02 000000006ac47240 000000000000000000000000000000000000
       ^tag      ^type ^kind ^open time (8 bytes) ^reserved (18 zero bytes)
 ```
 
-**Example 2 — commitment ID.** Chain 196, judge endpoint `0x0000000000000000000000c40b4a0ba288b4d2a87fc07db5f4c929f87dfda282` (illustrative), inbox index 7:
+**Example 2 — commitment ID.** Chain 196, hub `0xe61A9C7213a6Aa616C246a2B569e555B417b25ee`, judge endpoint `0x0000000000000000000000c40b4a0ba288b4d2a87fc07db5f4c929f87dfda282` (illustrative), inbox index 7:
 
 ```
-commitmentId = keccak256("SCV1/commitment" ‖ 0x00000000000000c4 ‖ to ‖ 0x00000007)
-             = 0x7351b20d22fe22d97c4b3ad4dae6aea379a08e4529f146af1080227a1ffaac5c
+commitmentId = keccak256("TAP-10/msg/v2" ‖ uint256(196) ‖ hub ‖ to ‖ uint256(7))
+             = 0xa7df3a8c829184ef7aa7d58ca798ede329157250076430fb979e5128e5ea2e0b
 ```
 
 **Example 3 — verdict `ref` for that commitment:**
 
 ```
-ref = 0x53435631 03 7351b20d22fe22d97c4b3ad4dae6aea379a08e4529f146af108022
+ref = 0x53435631 03 a7df3a8c829184ef7aa7d58ca798ede329157250076430fb979e51
       ^tag      ^type ^first 27 bytes of commitmentId
 ```
 
@@ -312,12 +324,14 @@ None. This TAP uses the DeWEB hub listed in TAP-10 Deployments on every supporte
 
 ## Security Considerations
 
-- **Cherry-picking.** Handled by §7: every tagged commitment is visible in the author's public outbox and becomes `unrevealed` if not disclosed. Applications that hide such records do not conform.
-- **Malformed commitments.** An author can seal bytes that do not decrypt or do not parse, then blame the judge. §7 makes such a commitment `malformed`, which is the author's record, not the judge's. Verifiers MUST run §4.4 in full before accepting a reveal.
-- **Judge absence or dishonesty.** The author holds `K` and can reveal alone (§4.2); any container can issue a third-party verdict (§5.2). Which judges to trust is left to clients and to later TAPs; this TAP only records who said what.
-- **Verdict spam.** Anyone can send a verdict on anyone's commitment. Clients MUST separate the designated judge's verdict from third-party verdicts and SHOULD let the reader filter the latter.
-- **Container transfer.** Records belong to the container. Transferring the circuit transfers the track record. Clients SHOULD show holder changes (TAP-10 §18.5) alongside a record so readers can see when the current holder was not the author.
-- **Trust before seals.** Until the factory and hub seals are in effect (TAP-10 §13.8), whoever controls them can impersonate endpoints and replace keys; records inherit that assumption and clients MUST indicate it as TAP-10 requires.
+- **Cherry-picking.** Every tagged commitment is visible in the author's public outbox and becomes `unrevealed` if it is not disclosed (§7); a client that hides such records does not conform to §8.
+- **Malformed commitments.** An author can seal bytes that do not decrypt or do not parse, then blame the judge. Such a commitment is `malformed` (§7), which is part of the author's record, not the judge's. The checks of §4.4 are what make this distinction possible.
+- **The judge can read before the open time.** Sealing hides a claim from the public, not from the judge. The judge holds a key slot and can publish `K` at any time, including before the open time (§4.2). An author who does not want the judge to learn the claim early has to choose a judge they trust with it.
+- **Judge absence or dishonesty.** The author holds `K` and can reveal alone (§4.2); any container can issue a third-party verdict (§5.2). Which judges to trust is left to readers and to later TAPs; this TAP only records who said what.
+- **Verdict spam.** Anyone can send a verdict on anyone's commitment. §8 keeps the designated judge's verdict apart from third-party verdicts, so spam cannot change what the designated judge said.
+- **Container transfer.** Records belong to the container, as TAP-10 identity does (TAP-10 §17). Transferring the circuit transfers the track record; §8 makes the sending wallet of every message visible, so a reader can tell when the current holder was not the author.
+- **Reorganizations.** Until a message is final, a reorganization can change its inbox index and therefore its commitment ID. §6 counts only final messages.
+- **Trust before seals.** Until the factory and hub seals are in effect, records inherit the trust assumptions described in TAP-10 §13.8.
 - **Timing.** The open time is chosen by the author; a far-future open time keeps a claim sealed for years but is visible as such. Block timestamps, not sender claims, are the time of record.
 - **Replay.** A commitment payload cannot be replayed to another judge, from another author or on another chain, because TAP-10 binds `to`, `from`, `ref` and hub into `X`.
 - **Key exposure.** Revealing `K` exposes one message only. Long-term keys are never disclosed.
