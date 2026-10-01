@@ -68,7 +68,7 @@ Content-Type: application/json
 | `id` | yes | A string of 1 to 128 UTF-16 code units, chosen by the client, unique among that client's requests. It MUST be well-formed Unicode: no unpaired surrogate (TAP-11 §6 item 5) |
 | `method` | no | When present, MUST equal the path segment. A provider MUST refuse a mismatch with `BAD_REQUEST` rather than prefer either value |
 | `params` | no | A JSON object. When absent it is `{}` for every purpose of this TAP |
-| `voucher` | no | A payment voucher. Its format, and when it is required, are defined by a separate payment TAP; this TAP treats it as opaque. A provider ignores it for a method whose `priceBEM` (TAP-11 §3.3) is zero |
+| `voucher` | no | Reserved for a payment voucher (§6, reserved names): its format, and when it is required, are left to a later payment TAP. It is not part of the request object below and is not covered by any signature. A provider ignores it for a method whose `priceBEM` (TAP-11 §3.3) is zero |
 
 - A provider MUST parse the body with the parser of §2 and MUST refuse a body that the parser rejects with `BAD_REQUEST`.
 - The **request object** of a call is `{ "method": <path segment>, "params": <params, or {} when absent> }`, an object with exactly these two members.
@@ -140,14 +140,16 @@ sig          = r ‖ s ‖ v                                                    
 
 | Code | HTTP status | Meaning | `error.data` |
 |---|---|---|---|
-| `PAYMENT_REQUIRED` | 402 | The method's `priceBEM` in the manifest is not zero and the request carries no voucher | Defined by the payment TAP |
-| `BAD_VOUCHER` | 402 | The request carries a voucher the provider does not accept | Defined by the payment TAP |
-| `METHOD_NOT_FOUND` | 404 | The path segment is well-formed but names no method the provider serves | None |
+| `PAYMENT_REQUIRED` | 402 | Reserved for a later payment TAP (below); intended for a request that carries no voucher to a method whose `priceBEM` in the manifest is not zero | Defined by that TAP |
+| `BAD_VOUCHER` | 402 | Reserved for a later payment TAP (below); intended for a request that carries a voucher the provider does not accept | Defined by that TAP |
+| `METHOD_NOT_FOUND` | 404 | The path segment is well-formed but names no method the provider serves, or the request asks a method for something outside what the method's descriptor offers (below) | None |
 | `BAD_REQUEST` | 400, or 413 for size | The request is malformed (§3, §4 binding rules) | None |
 | `INTERNAL` | 500 | A failure inside the provider, including a result over 1 MiB or over the time bound | Only `revert` (below) |
-| `TOOLS_CHANGED` | 409 | Reserved for a later TAP that binds a service to a tool server; that TAP defines when the code is used and its `error.data` | Defined by that TAP |
+| `TOOLS_CHANGED` | 409 | Reserved for a later TAP that binds a service to a tool server (below) | Defined by that TAP |
 
 - `error.data`, when present, MUST be a JSON object; it is covered by the signature through the body hash.
+- **What a descriptor offers.** A method's descriptor offers what one of its members lists, as the TAP that defines that member states; for example, a TAP may define a member that lists the chains a method serves. The members defined in TAP-11 §3.3 offer nothing in this sense: `params` and `returns` there are informative. A request that is well-formed under §3, and under any TAP that defines the method's `params`, but asks for something that the method's descriptor does not offer is refused with `METHOD_NOT_FOUND`, not `BAD_REQUEST`. The code tells a client that the service, under its current manifest, does not offer what was asked (the client's copy of the manifest may be out of date, or it chose the wrong service), not that its request is malformed.
+- **Reserved names.** The codes `PAYMENT_REQUIRED`, `BAD_VOUCHER` and `TOOLS_CHANGED` and the request member `voucher` (§3) are reserved. Each is left to a later TAP that defines when it is used, its format and its `error.data`: a payment TAP for `voucher` and the two payment codes, and a TAP that binds a service to a tool server for `TOOLS_CHANGED`. Neither TAP has been proposed. Until the TAP that defines a reserved name exists, an implementation of this TAP need not send, read or act on it: a client treats a reserved code it receives as it treats any other error (§8), and a provider that implements no such TAP ignores `voucher`. An implementation MUST NOT use a reserved name with any meaning other than the intended one given above, and no TAP other than the one that defines it may give it another.
 - An `INTERNAL` message MUST NOT reveal upstream details such as node URLs, keys or internal host names. The single exception: an `INTERNAL` MAY carry `error.data.revert`, the `0x`-prefixed hex revert data of a chain call the provider made, with `message` equal to `"execution reverted"`. An `INTERNAL` MUST NOT carry anything else.
 - A provider signs its errors: a signed refusal is a statement the provider cannot later deny.
 
@@ -187,6 +189,8 @@ Another TAP MAY define a signed statement that uses the preimage, digest and sig
 - **Canonical JSON instead of the raw bytes.** Proxies, CDNs and frameworks re-encode JSON; the meaning survives, the bytes do not. RFC 8785 already exists in several languages, and the restrictions of TAP-11 §6 remove the values on which implementations have been observed to disagree (the vectors include numeric-looking keys, on which a JavaScript and a Python implementation once did). Using the same canonical form as that TAP means one implementation serves both.
 - **Low-`s` only**, as EIP-2 requires for transaction signatures and as widely used on-chain recovery routines also require, so that a signature accepted off chain is never refused by a contract that checks the same key.
 - **Errors are signed** so that a provider cannot deny having refused a request, and so that a client can tell a real refusal from one inserted on the path. **Rate-limit refusals are not signed** because they assert nothing about any result, and signing them would make a flood cost the provider one signature per request.
+- **One code for what a service does not offer.** An unknown method and a well-formed request for something a method's descriptor does not list (a chain, say) tell the client the same thing: its view of the service's offer is wrong, not its request. One code for both lets later TAPs use it without adding a code per case, and keeps `BAD_REQUEST` for requests that are malformed.
+- **Reserved names instead of a payment format.** The payment and tool-server rules that the reference implementation uses are not proposed as TAPs. Reserving their names tells an implementer what it need not handle yet and keeps the names free for those TAPs, without fixing a format here that they would then have to follow.
 - **`block` is not signed.** It is a debugging aid; a height that matters belongs in the result.
 - **Unparseable requests are bound to `id` `""`.** The provider cannot trust any `id` in a body it cannot parse; binding to a fixed value still lets the sender verify the refusal. Such a refusal says only that some unparseable request for that method was refused (Security Considerations).
 - **Alternatives considered.** HTTP Message Signatures (RFC 9421) sign bytes and headers that intermediaries rewrite, and do not bind the request's JSON meaning. JWS has the same canonicalisation problem and adds algorithm negotiation this format does not need.
@@ -204,9 +208,10 @@ Two public services have signed every answer, errors included, with this envelop
 - requires a client's `id` to be well-formed Unicode, which neither the reference client nor the reference provider checks yet;
 - leaves out the client-side error codes of the TapeAPI SDK and describes client outcomes in words instead (§1, §8);
 - takes canonical JSON from TAP-11 §6 instead of defining it here;
-- keeps `TOOLS_CHANGED` only as a reserved code, because the tool-server binding that used it is not part of TAP-11; the reference implementation's tool-server proxy still sends it;
+- keeps `TOOLS_CHANGED` only as a reserved code (§6, reserved names), because the tool-server binding that used it is not part of TAP-11; the reference implementation's tool-server proxy still sends it;
 - moves AI usage receipts and their lookup method to a separate proposal (Rationale);
-- leaves the voucher format and the `error.data` of the two payment codes to a separate payment TAP, which has not been proposed yet.
+- keeps the request member `voucher` and the codes `PAYMENT_REQUIRED` and `BAD_VOUCHER` only as reserved names (§6), because the payment TAP that would define them has not been proposed; the reference provider and SDK still send and act on them, with the voucher format and `error.data` of the TapeAPI document "TAP-22" (not a TAP number);
+- widens `METHOD_NOT_FOUND` to a request that asks a method for something its descriptor does not offer (§6), so that another TAP can use the code for, say, a chain that a method does not list, rather than adding a code for that one case. The reference provider sends `METHOD_NOT_FOUND` for an unknown method, and its attested-read example already sends it for an unlisted chain.
 
 Where the reference implementation's resolution of a service differs from TAP-10, the difference is listed in TAP-11; this TAP adds none.
 
@@ -216,7 +221,7 @@ The vector files are in `assets/tap-draft-signed-responses/`. They were generate
 
 The canonical JSON vectors of TAP-11 (its Test Cases, `canonical-json.json`) apply to this TAP unchanged. This TAP adds:
 
-- `canonical-json-extra.json` (§2, TAP-11 §6), in the same format as those vectors and covering cases they do not: 6 JSON texts with their exact canonical form and its `keccak256` (numeric-looking member names, which sort as strings; objects inside arrays; escapes of `\\`, `\/`, U+0008, U+000C, U+000D and U+001F; fractions and exponent form; the negative safe-integer boundary; empty containers), and 6 texts that have no canonical form (a repeated member name whose escaped spelling comes first, the reverse of the order in the service-manifest vectors, a nested `prototype`, `1e21`, −2^53, `-0.0`, an unpaired low surrogate in a member name).
+- `canonical-json-extra.json` (§2, TAP-11 §6), in the same format as those vectors and covering cases they do not: 6 JSON texts with their exact canonical form and its `keccak256` (numeric-looking member names, which sort as strings; objects inside arrays; escapes of `\\`, `\/`, U+0008, U+000C, U+000D and U+001F; fractions and exponent form; the negative safe-integer boundary; empty containers), and 6 texts that have no canonical form (a repeated member name whose escaped spelling comes first, the reverse of the order in the TAP-11 vectors, a nested `prototype`, `1e21`, −2^53, `-0.0`, an unpaired low surrogate in a member name).
 - `envelope.json` (§4, §5): container `0x86DDaEF00401E3F10418398D67D7189fc458eA95`, published test signer key `0x2222…2222` (address `0x1563915e194D8CfBA1943570603F7606A3115508`), and:
   - 5 envelopes, each with canonical request and body, the 139-byte preimage, digest, EIP-191 digest, signature and recovered address: empty `params`, `params`, a signed error, `params` in another key order, and the refusal of an unparseable request (binding rule 1);
   - 4 encodings of the first signature: `v` as 0/1 (accepted), its high-`s` twin (rejected although it recovers the signer), `v` = 29 and 64 bytes (rejected);
