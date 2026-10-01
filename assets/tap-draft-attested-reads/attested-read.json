@@ -1,6 +1,6 @@
 {
   "title": "Attested reads: one read answered by several services (TAP-draft-attested-reads, Specification §2–§7)",
-  "note": "Every field is an input or an expected output. Keys, containers, holders and endpoints are test values. The Ethereum values are real: totalSupply() of 0xdAC17F958D2ee523a2206206994597C13D831ec7 at block 20000000, read 2026-09-28 from four node operators with identical answers. Outcomes are the words of §7.6 (refused-before-request: the selection or the request breaks §7.1 or §7.2, so no request is sent); referenceImplementation shows what the TapeAPI SDK at commit fda84db889d2a732915f264a799af24073177a85 reports (callQuorum, with the envelopes given as HTTP answers) and how many requests it sends. In each case: services are the provider tags taking part, quorum is q, changes overrides the holder or live endpoints of a provider for that case only, and answers holds the signed envelope of each provider with its digest, eip191Digest and recoversTo (the binding-failure answer has no digest of its own: its recoversTo is the address recovered when it is checked against B, with a note).",
+  "note": "Every field is an input or an expected output. Keys, containers, holders and endpoints are test values. The Ethereum values are real: totalSupply() of 0xdAC17F958D2ee523a2206206994597C13D831ec7 at block 20000000, read 2026-09-28 from four node operators with identical answers. Outcomes are the words of §7.6 (refused-before-request: the selection or the request breaks §7.1 or §7.2, so no request is sent); referenceImplementation shows what the TapeAPI SDK at commit fda84db889d2a732915f264a799af24073177a85 reports (callQuorum, with the envelopes given as HTTP answers) and how many requests it sends. In each case: services are the provider tags taking part, quorum is q, changes overrides the holder, signer or live endpoints of a provider for that case only, and answers holds the signed envelope of each provider with its digest, eip191Digest and recoversTo (the binding-failure answer has no digest of its own: its recoversTo is the address recovered when it is checked against B, with a note). A case refused before any request has no answers, except where referenceImplementation.implementsRule is false: there the expected outcome follows from the rule, the reference implementation does not implement that rule yet, and the answers (and the case note) show what an implementation without it is given and accepts.",
   "testKeys": "signerKey values are TEST KEYS: public, deterministic, and never to be used for anything real.",
   "envelope": "TAP-draft-signed-responses §5: digest over the prefix TAPI-1/resp/v2, the container, keccak256(id), keccak256(canonicalJSON({method, params})), ok, keccak256(canonicalJSON(body)) and uint64(ts); eip191Digest is its EIP-191 personal_sign digest; sig is r ‖ s ‖ v over eip191Digest.",
   "compared": "Two answers agree iff chainId, blockNumber, blockHash and result are identical; stateRoot is compared only when both carry it; blockRef is not compared. A signed revert is compared like an answer, its revert bytes standing for its result.",
@@ -840,6 +840,74 @@
             "https://attest-b.example/tapeapi/v1",
             "https://attest-a.example/mirror"
           ]
+        }
+      }
+    },
+    {
+      "name": "not independent: A and B name the same signer",
+      "services": [
+        "A",
+        "B"
+      ],
+      "quorum": 2,
+      "params": {
+        "chainId": 1,
+        "call": {
+          "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+          "data": "0x18160ddd"
+        },
+        "block": 20000000
+      },
+      "expect": "refused-before-request",
+      "answers": [
+        {
+          "provider": "A",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50"
+            },
+            "container": "0x00000000000000000000000000000000000a77e1",
+            "ts": 1789000000,
+            "sig": "0xb11f6f58a45a88c83f7d758d9c56e6ec925ca15ad8a538021fa2a1b3595bf1213bcf4d359ae87bf0683839423eded86a9437b6ce689964e7a3c219da1838fb101c"
+          },
+          "digest": "0xd636628ca7f2c4c644be3d7b9c1373cc3084700207baf03801490d421db56426",
+          "eip191Digest": "0x952067a5df6dff12055ac7ecc43612a4e31e8a7150122675d68f5ff49d6fcb13",
+          "recoversTo": "0x7564105E977516C53bE337314c7E53838967bDaC"
+        },
+        {
+          "provider": "B",
+          "envelope": {
+            "id": "tap23-vector-1",
+            "ok": true,
+            "result": {
+              "chainId": 1,
+              "blockNumber": 20000000,
+              "blockHash": "0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183",
+              "result": "0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50"
+            },
+            "container": "0x00000000000000000000000000000000000a77e2",
+            "ts": 1789000001,
+            "sig": "0x2e5a879679195b3bf2fc57955fe6d6d7685cac73bb5a79c3bb38af74c29cfb3266386d3671f1cc0b6c24c2438cc10fb726d60ba282e797738bb43f96dfc56f7f1c"
+          },
+          "digest": "0x836846f04aa0ebf74b20b55c411d07944fef2d64d0697f852106bbc1528c128b",
+          "eip191Digest": "0xa52c2c4a0adc334985fa0c55ed41defec11b9644dc6209dd07818bcd103caca1",
+          "recoversTo": "0x7564105E977516C53bE337314c7E53838967bDaC"
+        }
+      ],
+      "note": "Expected outcome follows from §6 item 4; the reference implementation does not check signers yet (see referenceImplementation). The answers are given only so that an implementation without that check can be replayed: B's envelope names B's container and is signed with A's key, which B's manifest names as its signer. An implementation that follows §6 sends no request.",
+      "referenceImplementation": {
+        "reports": "accepted",
+        "requestsSent": 2,
+        "implementsRule": false
+      },
+      "changes": {
+        "B": {
+          "signer": "0x7564105E977516C53bE337314c7E53838967bDaC"
         }
       }
     },

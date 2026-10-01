@@ -19,7 +19,7 @@ A way to ask several online services, each run by a different TapeOut circuit ow
 
 ## Abstract
 
-An **attested read** is a method, offered by a service under TAP-11 and answered in signed envelopes under TAP-draft-signed-responses, that returns the raw result of a read-only `eth_call` on a named chain together with the block number and block hash it was evaluated at. This TAP defines the method descriptor member that marks such a method, its request and result, how a provider chooses the block and evaluates the call, when two services count as independent (different container, different holder, no shared origin), and the client rule: send the same request with an explicit block number to at least two independent services, and accept only if every signed answer is identical; any disagreement rejects the read, whatever the count. It also defines an optional **contradiction record**: two signed answers to the same request at the same block that differ, which anyone can check against the signers that the services' manifests resolve. Node agreement and pinned blocks for reading TapeOut chains remain those of TAP-10 §5; this TAP applies the same rule one level up, to services instead of nodes.
+An **attested read** is a method, offered by a service under TAP-11 and answered in signed envelopes under TAP-draft-signed-responses, that returns the raw result of a read-only `eth_call` on a named chain together with the block number and block hash it was evaluated at. This TAP defines the method descriptor member that marks such a method, its request and result, how a provider chooses the block and evaluates the call, when two services count as independent (different container, different holder, no shared origin, different signer), and the client rule: send the same request with an explicit block number to at least two independent services, and accept only if every signed answer is identical; any disagreement rejects the read, whatever the count. It also defines an optional **contradiction record**: two signed answers to the same request at the same block that differ, which anyone can check against the signers that the services' manifests resolve. Node agreement and pinned blocks for reading TapeOut chains remain those of TAP-10 §5; this TAP applies the same rule one level up, to services instead of nodes.
 
 ## Motivation
 
@@ -53,7 +53,7 @@ A service offers an attested read by listing, in its manifest's `methods` (TAP-1
 
 - `attestedRead` MUST be an object with the members `kind` and `chains`.
 - `kind` MUST be the string `"eth_call"`. A client MUST NOT treat a descriptor whose `kind` has another value as an attested-read method under this TAP. Other kinds (logs, receipts, non-EVM chains) are left to later TAPs, which MUST use a different `kind` string.
-- `chains` MUST be a non-empty array of distinct positive integers: the chain IDs the provider serves.
+- `chains` MUST be a non-empty array of distinct positive integers: the chain IDs the provider serves. It is what the descriptor offers in the sense of TAP-draft-signed-responses §6: a chain it does not list is not offered (§3).
 - The method name is not fixed; `read` is RECOMMENDED. Clients find attested-read methods by the member `attestedRead`, not by name.
 - `params` and `returns` are informative, as in TAP-11 §3.3. The price and its payment are those of the manifest and are outside this TAP.
 
@@ -63,13 +63,13 @@ A client calls an attested-read method as TAP-draft-signed-responses §3 defines
 
 | Member | Required | Content |
 |---|---|---|
-| `chainId` | yes | An integer listed in the descriptor's `chains` |
+| `chainId` | yes | An integer: the chain ID of the target chain. A chain that the descriptor's `chains` does not list is not offered (below) |
 | `call` | yes | An object with exactly the members `to` (an address: `0x` and 40 hex digits) and `data` (`0x` followed by an even number of hex digits, possibly none) |
 | `block` | no | An integer block number, or one of the strings `"latest"`, `"safe"`, `"finalized"`. When absent, it is read as `"finalized"` |
 
 A provider:
 
-- MUST answer an integer `chainId` that its descriptor does not list with a signed `METHOD_NOT_FOUND` (TAP-draft-signed-responses §6). This TAP uses that code for an unlisted chain as well as for an unknown method;
+- MUST answer an integer `chainId` that its descriptor does not list with a signed `METHOD_NOT_FOUND`: the request asks the method for something outside what its descriptor offers (TAP-draft-signed-responses §6);
 - MUST answer any other `params` that break this section with a signed `BAD_REQUEST`, with the addresses and hex digits of `call` accepted in either case;
 - MUST evaluate the call on the target chain only.
 
@@ -102,10 +102,13 @@ All members are covered by the envelope's signature. The envelope's own optional
 Two resolved services are **independent** when all of the following hold:
 
 1. their container addresses differ;
-2. their holders, as resolved under TAP-11 §2.2 step 1 (never a value from a manifest), differ. In items 1 and 2, addresses are compared case-insensitively and regardless of the chain each service lives on;
-3. no origin appears in the `endpoints.live` of both. The origin of a URL is its scheme, host and port (RFC 6454), with the host compared case-insensitively and a missing port read as 443 for `https`. Every listed URL counts, not only the one a client happens to call.
+2. their holders, as resolved under TAP-11 §2.2 step 1 (never a value from a manifest), differ;
+3. no origin appears in the `endpoints.live` of both. The origin of a URL is its scheme, host and port (RFC 6454), with the host compared case-insensitively and a missing port read as 443 for `https`. Every listed URL counts, not only the one a client happens to call;
+4. their signers, as resolution returns them (TAP-11 §2.2 step 8), differ.
 
-A client MUST NOT count two services that are not independent as two answers. These conditions can be checked with data that resolution already provides; they do not show that two services use different upstream operators, which a client cannot verify. A client SHOULD prefer services it believes to read the target chain through different operators.
+In items 1, 2 and 4, addresses are compared case-insensitively and regardless of the chain each service lives on.
+
+A client MUST NOT count two services that are not independent as two answers. These conditions can be checked with data that resolution already provides; they do not show that two services are run by different parties or use different upstream operators, which a client cannot verify. A client SHOULD prefer services it believes to read the target chain through different operators.
 
 ### 7. Client rule
 
@@ -159,6 +162,10 @@ The client assigns the first outcome that applies:
 
 A client MAY also reject an accepted read in which any answer has `blockRef` `"number"`.
 
+#### 7.7 Use of an accepted read
+
+An application that claims to follow this TAP SHOULD NOT release funds, or otherwise transfer value, on the strength of an attested read alone, and SHOULD NOT use attested reads as the primary price source of a lending protocol. Such an application combines the read with something that does not rest on the client's choice of services, such as its own nodes of the target chain or a proof against `blockHash`, or limits the value that a wrong read can move.
+
 ### 8. Contradiction records (optional)
 
 A disagreement leaves signed statements that anyone can check again. This section is OPTIONAL; a client that implements it MUST follow it.
@@ -207,15 +214,16 @@ A verifier MUST NOT present an unconfirmed record as evidence against a service,
 - **Services, not nodes.** TAP-10 §5 combines nodes of one chain that the client reads itself. A client often has no node for the target chain, and a node's answer is unsigned. A service here has an identity that resolution checks on chain, and its answers are signed statements bound to the question, so a wrong answer is attributable and can be kept. The rule for combining them is TAP-10 §5.2's, unchanged: at least two, all identical, never a majority.
 - **Reject on any disagreement.** A majority rule would turn three services into a committee whose threshold is the new target. Requiring every verified answer to agree keeps the failure mode a denial of service, never a wrong answer, as long as one honest independent service is in the selection.
 - **Block-anchored answers, an explicit number in the round.** `blockNumber` and `blockHash` make an answer a statement about one state, so two answers are comparable, and evaluating at the hash (EIP-1898) ties the result to the hash reported. The service asked first for the number cannot bias the result: every other provider adopts the hash of that number from its own upstream nodes, so a wrong or orphaned block yields disagreement or a refusal, not a wrong agreed answer.
-- **Independence by container, holder and origin.** All three can be checked from resolution alone. Weaker notions, such as different labels or different signers, can be met by one party at no cost. Stronger notions, such as different upstream operators or different legal owners, cannot be verified by a client.
+- **Independence by container, holder, origin and signer.** All four can be checked from resolution alone. A different signer is necessary, not sufficient: one party can give each of its services its own key at no cost, but two services that share a signer are certainly controlled by whoever holds that key, and the check costs nothing. Weaker notions, such as different labels, can be met by one party at no cost. Stronger notions, such as different upstream operators or different legal owners, cannot be verified by a client.
 - **Refusals are neutral; reverts are statements.** A provider that lacks a block must not be able to veto the others, so a refusal only lowers the count. A revert is chain state, so it is compared like a result, and a group of reverts is never taken as a result.
-- **`METHOD_NOT_FOUND` for an unlisted chain.** The request is well-formed; what is missing is the service's offer, as with an unknown method. A client that receives it learns that its copy of the manifest is out of date or that it selected the service wrongly (§7.1), not that its request is malformed. Under §7.4 it is a refusal either way.
+- **`METHOD_NOT_FOUND` for an unlisted chain.** `chains` is what the descriptor offers (§2), and TAP-draft-signed-responses §6 gives this code to a well-formed request for something a descriptor does not offer, so this TAP needs no code of its own. What is missing is the service's offer, as with an unknown method: a client that receives it learns that its copy of the manifest is out of date or that it selected the service wrongly (§7.1), not that its request is malformed. Under §7.4 it is a refusal either way.
+- **High-value use (§7.7).** The guarantee of an accepted read is only as strong as the client's selection, and nothing is staked, so an application that claims this TAP is held to not releasing value on it alone. It is a recommendation rather than a prohibition because the application knows the value at stake and what else it checks, and this TAP does not.
 - **Contradiction records are optional and prove little on their own.** Anyone can sign envelopes that name someone else's container; a record binds a service only once its signer is confirmed by resolution (§8.3 step 8). Nothing is staked or slashed; a record is evidence for reputation, and for a later proof against `blockHash`.
 - **Left out.** A tolerance for derived values such as prices, a mode that accepts a dominant group despite dissent, a single-provider mode, random second opinions and provider staking. Each weakens or extends the rule above and can be proposed separately.
 
 ## Backwards Compatibility
 
-This TAP adds a method descriptor member, a request and result profile, a client rule and a record format. It changes nothing in TAP-10, TAP-11 or TAP-draft-signed-responses; it uses the error code `METHOD_NOT_FOUND` of TAP-draft-signed-responses §6 also for a chain that a method does not list (§3). A client that does not implement it ignores `attestedRead` as an unknown member (TAP-11 §3.1).
+This TAP adds a method descriptor member, a request and result profile, a client rule and a record format. It changes nothing in TAP-10, TAP-11 or TAP-draft-signed-responses; it uses the error code `METHOD_NOT_FOUND` of TAP-draft-signed-responses §6, in the meaning that section gives it, for a chain that a method does not list (§2, §3). A client that does not implement it ignores `attestedRead` as an unknown member (TAP-11 §3.1).
 
 **History and frozen names.** This specification was first published in the TapeAPI repository as "TAP-23" (renamed "TAPI-23" on 2026-09-30; neither is a TAP number). The editors assign this TAP's number. The names `attestedRead`, `"eth_call"` and `tapeapiContradiction` are historical and never change; none of them encodes a TAP number. The earlier text described the client rule as that of the tape:// specification; the rule referred to is TAP-10 §5.2.
 
@@ -228,6 +236,7 @@ This TAP adds a method descriptor member, a request and result profile, a client
 | Answer checks | Compares `chainId`, `blockNumber`, `blockHash`, `result` and `stateRoot` as described, but does not check that `chainId` and `blockNumber` echo the request, that no other member is present, or that hex is lowercase; takes any signed error carrying hex `data.revert` as a revert answer, without checking `code` and `message` | §7.4: a nonconforming answer is never accepted and causes rejection; a revert answer is an `INTERNAL` with `message` `"execution reverted"` | Add the checks |
 | `block` form | The client accepts, and the example provider serves, a block number given as a decimal or `0x` hex string | An integer (§3, §7.2) | Keep accepting strings; send integers |
 | Request `id` | `callQuorum` sends the caller's `id`, when one is given, to every service; otherwise each request gets a fresh one | Each request has its own `id` (§7.3) | Derive a distinct `id` per service |
+| Signer check | `callQuorum` does not compare the signers of the selected services: two services whose manifests name the same signer, and that pass the other three checks, are counted as two | §6 item 4: not independent, so the read is refused before any request (§7.1) | Add the check in a 1.x release as an option, off by default so that existing callers are unaffected; a client that follows this TAP turns it on |
 | Upstream chain check | The example provider does not call `eth_chainId` | Recommended (§4 step 1) | Add the check |
 | Options outside this TAP | `callQuorum` offers `onDissent: 'quorum'` (accept a dominant group), `allowSingleProvider` and a numeric tolerance (`compare`), each off by default (the tolerance is refused for attested reads) | Not part of this TAP; a read that uses them does not follow it | Document them as outside this TAP |
 | Outcome names | `ATTEST_DISAGREE` for a disagreement; `QUORUM_FAILED` for too few answers, reverted, and a selection or `block` that breaks §7.1–§7.2 | §7.6 names | Add the §7.6 name to each error, keeping the codes |
@@ -239,19 +248,21 @@ The differences in how the reference implementation resolves a service are liste
 
 The vector files are in `assets/tap-draft-attested-reads/` (the directory name follows the question in #7). Keys, containers, holders and endpoints in them are test values; the private keys are published test keys. The services are given as already resolved: container, holder, signer and live endpoint are inputs, not read from a chain. The Ethereum values are real: `totalSupply()` of `0xdAC17F958D2ee523a2206206994597C13D831ec7` at block 20000000 (hash `0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183`) returns `0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50`, read on 2026-09-28 with identical answers from four node operators. The `id` `tap23-vector-1` is an opaque test value kept from the earlier vectors; to keep their signatures unchanged, the vectors use it in the request to every service, whereas a client following §7.3 gives each request its own `id`. No outcome depends on it.
 
-**`attested-read.json`** (§2–§7). Three services A, B and C (containers `0x…0a77e1`, `0x…0a77e2`, `0x…0a77e3`; test keys `0x44…44`, `0x55…55`, `0x66…66`; different holders and origins), the descriptor, the request `{ "chainId": 1, "call": { "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7", "data": "0x18160ddd" }, "block": 20000000 }`, and 14 cases. Each case lists the signed envelopes with their digest, EIP-191 digest and recovered address, the expected §7.6 outcome, and what the reference implementation reports:
+**`attested-read.json`** (§2–§7). Three services A, B and C (containers `0x…0a77e1`, `0x…0a77e2`, `0x…0a77e3`; test keys `0x44…44`, `0x55…55`, `0x66…66`; different holders and origins), the descriptor, the request `{ "chainId": 1, "call": { "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7", "data": "0x18160ddd" }, "block": 20000000 }`, and 15 cases. Each case lists the signed envelopes with their digest, EIP-191 digest and recovered address, the expected §7.6 outcome, and what the reference implementation reports:
 
 - **accepted**: A and B return the same block and bytes; only A carries `stateRoot`; A and C agree while B refuses;
 - **disagreement**: B's `result` is one unit higher; B names another hash for block 20000000; both carry `stateRoot` and they differ; B answers a signed revert and A a result; A and C agree while B signs a different result;
 - **reverted**: A and B answer the same signed revert;
 - **too few answers**: B refuses (a signed `INTERNAL` without revert data); A's envelope is presented as B's (a binding failure);
-- **refused before any request**: A and B have the same holder, or B lists an endpoint on A's origin (§7.1); the round names the block by `"finalized"` (§7.2).
+- **refused before any request**: A and B have the same holder, B lists an endpoint on A's origin, or B's manifest names A's signer (§6, §7.1); the round names the block by `"finalized"` (§7.2).
 
 The first five cases, with their signatures, are the earlier TapeAPI vectors unchanged.
 
 **`contradiction-record.json`** (§8). The record built from the third case (`requestHash` `0x0d39710a73ea5142cd10f23a4a8a36fc74daeedb07716cc59728d881463e4938`, statement hash of A's result `0xc8de91d1d34d36aee2ff49579c03994b3162f10e9bee460982c940a5419e4922`) and 8 verifications: confirmed cross; unconfirmed when the signers are not checked; invalid when A's container resolves to another signer; invalid after B's result, the request or B's `signer` is altered; confirmed self when A signs two different results; weak when one result has `blockRef` `"number"`. Two pairs that make no record: different block hashes (the fourth case) and identical statements (the first case).
 
-The reference implementation at the commit below reproduces every case when the envelopes are given to its `callQuorum` as HTTP answers, as its `sdk/test/attested-vectors.test.mjs` does for the first five; the records are built and checked with its `security.contradictionRecord`, `security.contradictionsOf` and `security.verifyContradiction`.
+The reference implementation at the commit below reproduces every case but one when the envelopes are given to its `callQuorum` as HTTP answers, as its `sdk/test/attested-vectors.test.mjs` does for the first five; the records are built and checked with its `security.contradictionRecord`, `security.contradictionsOf` and `security.verifyContradiction`.
+
+The exception is the case in which B's manifest names A's signer. Its expected outcome follows from §6 item 4, which the reference implementation does not implement yet (Backwards Compatibility): it sends both requests and accepts. The case says so (`referenceImplementation.implementsRule` is `false`) and, unlike the other cases refused before any request, carries the two signed answers that an implementation without the check receives; B's envelope names B's container and is signed with A's key. That envelope was generated with the reference implementation at the commit below, and its digest, EIP-191 digest and recovered address were checked by an independent Python implementation of the envelope signature, which also derives every expected outcome, this one included, from §6 and §7.
 
 ## Reference Implementation
 
@@ -282,10 +293,10 @@ The attacker considered can run services of its own under any number of circuits
 **What it does not protect.**
 
 - **All selected providers colluding**, or all of them reading through the same lying upstream operator, produce an accepted wrong result. The guarantee is exactly "every service the client chose said the same thing", and it is as strong as that choice.
-- **One party behind several services.** §6 excludes shared containers, holders and origins, but one party can hold many circuits under different addresses and serve them from different domains. Holding a circuit costs little, and nothing in this TAP is staked or slashed. Two services whose manifests name the same signer are controlled by whoever holds that key; §6 does not exclude them. Clients choose services by their own knowledge of who runs them.
+- **One party behind several services.** §6 excludes shared containers, holders, origins and signers, but one party can hold many circuits under different addresses, give each its own signer key and serve them from different domains. Holding a circuit costs little, and nothing in this TAP is staked or slashed. Two services whose manifests name the same signer are controlled by whoever holds that key, which is why §6 item 4 excludes them; different signers show no more than that the keys differ. Clients choose services by their own knowledge of who runs them.
 - **The target chain itself.** A reorganization deeper than the chosen block's finality, a consensus failure, a chain whose `finalized` tag is wrong, or a contract that returns misleading data (for example an upgradeable contract changed by its owner) is reported faithfully by honest providers. An attested read says what the chain said, not that it is true.
 - **Denial of service.** One provider in the selection can block every read by disagreeing. The remedy is a new read with a different selection (§7.6), not a vote.
-- **High-value decisions.** Because the guarantee depends on the client's selection and nothing is staked, an attested read alone is not a sufficient basis for releasing funds or for a lending protocol's primary price.
+- **High-value decisions.** Because the guarantee depends on the client's selection and nothing is staked, an attested read alone is not a sufficient basis for releasing funds or for a lending protocol's primary price; §7.7 holds applications that claim this TAP to that.
 - **Trust inherited from resolution.** Which signer speaks for a service, and who its holder is, come from TAP-11 and the TapeOut contracts it reads. Until those contracts are sealed, whoever controls them can change what resolution returns (TAP-10, Deployments and Security Considerations), and this TAP inherits that assumption.
 - **Contradiction records.** A record's signer check uses resolution at the time of verification. After a holder replaces the signer, or after the circuit changes hands, an older record can no longer be confirmed: §8.3 step 8 then finds it invalid (another signer) or unconfirmed (no resolution), although it held when it was made. Records are best checked soon after they are made. A cross record shows only that at least one of two services is wrong; a self record shows that one signer signed two different results for one request at one block hash (weakened when `blockRef` is `"number"`). Nothing is enforced by either.
 - **Privacy.** Every selected provider learns the target chain, contract and calldata of the read, and the client's network address.
