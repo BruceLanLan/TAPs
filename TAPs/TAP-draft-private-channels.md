@@ -378,7 +378,7 @@ Parties **MAY** carry wire messages over a WebRTC data channel. The initiator's 
 
 This TAP changes nothing in TAP-10: no contract, hub function, payload version or content kind. A TAP-10 client that receives an invite by TapeSend shows it as `unsupported`.
 
-**Historical name.** This specification was previously published in the TapeAPI repository under the self-assigned name "TAP-26" (with related documents numbered TAP-20 to TAP-27). That is not a TAP number; the number of this TAP is assigned by the editors. The following constants contain the old name or were fixed under it. They are frozen, do not denote any TAP number, and will never change:
+**Historical name.** This specification was previously published in the TapeAPI repository under the self-assigned name "TAP-26" (renamed "TAPI-26" on 2026-09-30, with the related documents TAP-20 to TAP-27 renamed TAPI-20 to TAPI-27). Neither name is a TAP number; the number of this TAP is assigned by the editors. The following constants contain the old name or were fixed under it. They are frozen, do not denote any TAP number, and will never change:
 
 - Labels: `TAP-26/inbox/v1`, `TAP-26/transcript/v1`, `TAP-26/keys/v1`, `TAP-26/confirm/initiator`, `TAP-26/confirm/responder`, `TAP-26/frame/v1`, `TAP-26/room/v1`;
 - Strings: `tape.channel/invite`, `tape-channel/v1`, `tapesend/v1`, the record tag `"tapechannel": "1"`, the path `.well-known/tape-channel.json`;
