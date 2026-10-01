@@ -198,7 +198,7 @@ Another TAP MAY define a signed statement that uses the preimage, digest and sig
 
 ## Backwards Compatibility
 
-This specification was published in the TapeAPI repository under the self-assigned name "TAP-21". That name is not a TAP number; editors assign the number of this TAP. The constant `TAPI-1/resp/v2` is a historical wire constant, not a TAP number, and never changes. Every envelope already issued depends on the canonical JSON of TAP-11 §6, which is the one the TapeAPI documents used.
+This specification was published in the TapeAPI repository under the self-assigned name "TAP-21" (renamed "TAPI-21" on 2026-09-30). Neither name is a TAP number; editors assign the number of this TAP. The constant `TAPI-1/resp/v2` is a historical wire constant, not a TAP number, and never changes. Every envelope already issued depends on the canonical JSON of TAP-11 §6, which is the one the TapeAPI documents used.
 
 An earlier envelope version used the prefix `TAPI-1/resp/v1` and covered neither the request nor `ok`. It is superseded; such envelopes do not verify under §5 and are rejected.
 
@@ -210,7 +210,7 @@ Two public services have signed every answer, errors included, with this envelop
 - takes canonical JSON from TAP-11 §6 instead of defining it here;
 - keeps `TOOLS_CHANGED` only as a reserved code (§6, reserved names), because the tool-server binding that used it is not part of TAP-11; the reference implementation's tool-server proxy still sends it;
 - moves AI usage receipts and their lookup method to a separate proposal (Rationale);
-- keeps the request member `voucher` and the codes `PAYMENT_REQUIRED` and `BAD_VOUCHER` only as reserved names (§6), because the payment TAP that would define them has not been proposed; the reference provider and SDK still send and act on them, with the voucher format and `error.data` of the TapeAPI document "TAP-22" (not a TAP number);
+- keeps the request member `voucher` and the codes `PAYMENT_REQUIRED` and `BAD_VOUCHER` only as reserved names (§6), because the payment TAP that would define them has not been proposed; the reference provider and SDK still send and act on them, with the voucher format and `error.data` of the TapeAPI document "TAPI-22" (called "TAP-22" until 2026-09-30; not a TAP number);
 - widens `METHOD_NOT_FOUND` to a request that asks a method for something its descriptor does not offer (§6), so that another TAP can use the code for, say, a chain that a method does not list, rather than adding a code for that one case. The reference provider sends `METHOD_NOT_FOUND` for an unknown method, and its attested-read example already sends it for an unlisted chain.
 
 Where the reference implementation's resolution of a service differs from TAP-10, the difference is listed in TAP-11; this TAP adds none.
