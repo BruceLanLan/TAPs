@@ -1,5 +1,5 @@
 ---
-tap: TBD
+tap: 11
 title: TapeAPI Service Manifest and Holder Delegation
 description: How the holder of a TapeOut circuit describes a callable service in the circuit container's DeWEB site and authorises an off-chain signing key for it, and how a client verifies both against the chain.
 author: Bruce (@BruceLanLan)
@@ -11,7 +11,7 @@ requires: TAP-10
 license: CC0-1.0
 ---
 
-# TAP-TBD: TapeAPI Service Manifest and Holder Delegation
+# TAP-11: TapeAPI Service Manifest and Holder Delegation
 
 ## Summary
 
@@ -268,7 +268,7 @@ Apart from the rows above, a client built to the earlier text and a client of th
 
 ## Test Cases
 
-Vector files are in `assets/tap-draft-service-manifest/` (the directory name will follow the number the editors assign). Each gives inputs and exact expected outputs. The reference implementation at the fixed commit below reproduces `delegation.json`, `content-signature.json` and `canonical-json.json` (the last from `sdk/src/canon.js`), and the file verification and delegation recovery of `mainnet-11-1013.json`. The reads that this TAP adds from TAP-10 (opener, `isOpened`, activation, the payment contract's implementation slot) were recorded with plain `eth_call` and `eth_getStorageAt`; the reference implementation does not make them yet (Backwards Compatibility).
+Vector files are in `assets/tap-11/`. Each gives inputs and exact expected outputs. The reference implementation at the fixed commit below reproduces `delegation.json`, `content-signature.json` and `canonical-json.json` (the last from `sdk/src/canon.js`), and the file verification and delegation recovery of `mainnet-11-1013.json`. The reads that this TAP adds from TAP-10 (opener, `isOpened`, activation, the payment contract's implementation slot) were recorded with plain `eth_call` and `eth_getStorageAt`; the reference implementation does not make them yet (Backwards Compatibility).
 
 **`delegation.json`** (§4). The domain separators, a worked example on all three chains, two signatures by a published test key, and rejections. For `container = 0x0000000000000000000000000000000000000002`, `signer = 0x0000000000000000000000000000000000000003`, `expires = 1790000000`:
 
