@@ -7,7 +7,7 @@ discussions-to: https://github.com/TapeOutProtocol/TAPs/issues/11
 status: Draft
 type: Standards
 created: 2026-09-30
-requires: TAP-10, TAP-draft-service-manifest, TAP-draft-signed-responses
+requires: TAP-10, TAP-11, TAP-draft-signed-responses
 license: CC0-1.0
 ---
 
@@ -36,16 +36,16 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 - **Container**, **holder**, **processor contract**, **pinned block**, **strict agreement**, **hub**, **site store**: as defined in TAP-10 §1. The hub address is the one listed under TAP-10 Deployments (`0xe61A9C7213a6Aa616C246a2B569e555B417b25ee`, the same on every chain).
 - **Endpoint ID**: `endpoint(container, chainId) = uint32(0) ‖ uint64(chainId) ‖ container`, exactly as TAP-10 §12.1 defines it, including its rejection of a `chainId` above 2^53 − 1.
 - **Initiator** (A) and **responder** (B): the party that sends the invite and the party that receives it. `sA`, `SA` and `sB`, `SB` are their static X25519 private and public keys; `eA`, `EA` and `eB`, `EB` their ephemeral ones.
-- **Service**: a container that publishes a service manifest as TAP-draft-service-manifest §3 specifies and answers calls as TAP-draft-signed-responses §3 and §4 specify. The relay transport (§11) and the relay references of §3.1 and §5 depend on these two drafts; the rest of this TAP depends only on TAP-10 and on the canonical JSON of TAP-draft-service-manifest §6 (§2).
+- **Service**: a container that publishes a service manifest as TAP-11 §3 specifies and answers calls as TAP-draft-signed-responses §3 and §4 specify. The relay transport (§11) and the relay references of §3.1 and §5 depend on these two drafts; the rest of this TAP depends only on TAP-10 and on the canonical JSON of TAP-11 §6 (§2).
 - **Wire message**: the unit every transport carries (§10).
 - Notation follows TAP-10 §1: `‖` is concatenation, `uint64(x)` and `uint32(x)` are big-endian, ASCII labels such as `"TAP-26/frame/v1"` are their raw bytes without a terminator. `DH(x, Y)` is X25519 (RFC 7748) of private key `x` and public key `Y`. HKDF-SHA256 is RFC 5869, written `HKDF-SHA256(IKM, salt, info, L)`; HMAC-SHA256 is RFC 2104; ChaCha20-Poly1305 is RFC 8439 (12-byte nonce); XChaCha20-Poly1305 is draft-irtf-cfrg-xchacha-03 (24-byte nonce). "Hex" means lowercase hexadecimal; a field described as "`0x` hex" carries the prefix, one described as "bare hex" does not.
 - The labels in this TAP begin with `TAP-26/`. They are fixed constants and do not refer to any TAP number (see Rationale).
 
 ### 2. Canonical JSON and strict parsing
 
-`canonicalJSON(v)` is the canonical JSON of TAP-draft-service-manifest §6: RFC 8785 (JCS) together with that section's items 1 to 5 (repeated member names; numbers that are not finite or are negative zero; integers whose absolute value exceeds 2^53 − 1; the member names `__proto__`, `constructor` and `prototype`; unpaired UTF-16 surrogates). An implementation **MUST** refuse to produce a canonical form for a value that has none under that section, and **MUST** reject input that needs one.
+`canonicalJSON(v)` is the canonical JSON of TAP-11 §6: RFC 8785 (JCS) together with that section's items 1 to 5 (repeated member names; numbers that are not finite or are negative zero; integers whose absolute value exceeds 2^53 − 1; the member names `__proto__`, `constructor` and `prototype`; unpaired UTF-16 surrogates). An implementation **MUST** refuse to produce a canonical form for a value that has none under that section, and **MUST** reject input that needs one.
 
-A **strict JSON** text is UTF-8 without a byte order mark, parses as JSON (RFC 8259) and has neither a repeated member name nor a member named `__proto__`, `constructor` or `prototype` (TAP-draft-service-manifest §6 items 1 and 4). Every JSON text this TAP receives (records, invites, handshake messages) **MUST** be parsed strictly; a text that is not strict JSON is rejected.
+A **strict JSON** text is UTF-8 without a byte order mark, parses as JSON (RFC 8259) and has neither a repeated member name nor a member named `__proto__`, `constructor` or `prototype` (TAP-11 §6 items 1 and 4). Every JSON text this TAP receives (records, invites, handshake messages) **MUST** be parsed strictly; a text that is not strict JSON is rejected.
 
 ### 3. Channel key record
 
@@ -104,7 +104,7 @@ Each relay is reduced to exactly `url` and `container`; strings are hashed as th
 - it is 65 bytes `r ‖ s ‖ v`, with `v` in {27, 28} after mapping 0 and 1 to 27 and 28, 0 < `r` < n, 0 < `s` ≤ n/2 (n the secp256k1 order), and ECDSA recovery over the digest (the digest itself, without an EIP-191 prefix) yields the holder; or
 - the holder has code and `holder.isValidSignature(digest, sig)` (EIP-1271, selector `0x1626ba7e`) returns data whose first 32 bytes are exactly `0x1626ba7e` followed by 28 zero bytes. A revert or any other result means not accepted.
 
-The service delegation of TAP-draft-service-manifest §4.1 uses the same domain with the primary type `Delegation(address container,address signer,uint64 expires)`; because the primary types differ, a signature made for one can never be taken for the other (`channel-keys.json` has the case).
+The service delegation of TAP-11 §4.1 uses the same domain with the primary type `Delegation(address container,address signer,uint64 expires)`; because the primary types differ, a signature made for one can never be taken for the other (`channel-keys.json` has the case).
 
 #### 3.3 Reading and verifying a record
 
@@ -167,7 +167,7 @@ The initiator draws a random 16-byte channel ID `cid` and a fresh ephemeral key 
 | `bus` | string | Optional; the address of a ChannelBus, on the chain §12.1 names, on which A listens |
 | `webrtc` | object | Optional (§13) |
 
-- A relay reference's `url` **MUST** be an `https` URL of at most 512 characters (`http` is allowed only for a loopback host, for development) and its `container` **MUST** be the relay's service container, `0x` and 40 hex digits. The client reaches a relay by resolving that container as TAP-draft-service-manifest §2 specifies; the `url` is only a hint. A reference without `container` cannot be used and makes the invite or record that contains it invalid.
+- A relay reference's `url` **MUST** be an `https` URL of at most 512 characters (`http` is allowed only for a loopback host, for development) and its `container` **MUST** be the relay's service container, `0x` and 40 hex digits. The client reaches a relay by resolving that container as TAP-11 §2 specifies; the `url` is only a hint. A reference without `container` cannot be used and makes the invite or record that contains it invalid.
 - An invite **SHOULD** name at least one relay or a bus; one that names neither can only be answered out of band.
 - The whole invite is hashed into the handshake (§8), so every member, including `webrtc`, **MUST** have a canonical form (§2).
 - Channel IDs are compared as bytes.
@@ -294,7 +294,7 @@ Every wire message is 1 to 16,448 bytes. A receiver decodes each wire message in
 
 #### 11.1 Methods
 
-A relay is a service (§1) whose manifest lists these methods. Every implementation **MUST** support this transport. A client resolves the relay from the relay reference's `container` under TAP-draft-service-manifest §2 and calls the methods through the manifest's live endpoints with the requests of TAP-draft-signed-responses §3, verifying each answer under its §8:
+A relay is a service (§1) whose manifest lists these methods. Every implementation **MUST** support this transport. A client resolves the relay from the relay reference's `container` under TAP-11 §2 and calls the methods through the manifest's live endpoints with the requests of TAP-draft-signed-responses §3, verifying each answer under its §8:
 
 | Method | Params | Result | Price |
 |---|---|---|---|
@@ -370,7 +370,7 @@ Parties **MAY** carry wire messages over a WebRTC data channel. The initiator's 
 - **Epochs and protected inbox storage.** When a relay restarts or a room expires, indices restart at 0; without an epoch a client that remembered index N would silently skip the first N + 1 messages of the new room. Without protected storage and per-source limits, a flood of free frames could push an invite out of a room before its recipient reads it.
 - **A contract as the transport of last resort.** A relay needs an operator and can be switched off. ChannelBus has no operator, state or owner; the price is gas and permanent public metadata, which a party accepts by choosing it. Events suffice; storage would cost more and add nothing.
 - **Union of node answers for bus logs, not agreement.** TAP-10 §5.2 requires agreement for reads a client must trust. A bus log is not trusted: every frame authenticates itself, a forged log fails to decode, and an omitted one is supplied by another node or reported as a gap. Requiring agreement would stop the channel whenever one node lags, prunes history or refuses `eth_getLogs`. ChannelBus is not a TapeOut contract, so TAP-10 §2.2's rule against learning addresses from messages does not cover it; a bus address in an invite or record is covered by the transcript or the holder's signature.
-- **How a record is read.** A channel record decides whom a party encrypts to and authenticates, which is what TAP-10 §12.2 and §14.4 protect with strict agreement at a fresh pinned block, so §3.3 does the same (TAP-draft-service-manifest adopts most of its reads under default agreement). Two site rules of TAP-10 are treated differently, for different reasons. *Activation* (TAP-10 §6.3) decides whether a shell displays a site and is how the site fee is enforced; TAP-10 §12.2 exempts messaging from it, and a channel is messaging, so §3.3 does not check it. TAP-draft-service-manifest does gate a service on activation; the idea issue asks editors about this difference. *Implementation pinning* (TAP-10 §6.1) guards the bytes of every site file a client reads, and TAP-10 forbids reading a site under a store implementation it does not accept, so §3.3 checks it, although TAP-10 §12.2 lets TapeSend proceed without it: TapeSend reads no site file.
+- **How a record is read.** A channel record decides whom a party encrypts to and authenticates, which is what TAP-10 §12.2 and §14.4 protect with strict agreement at a fresh pinned block, so §3.3 does the same (TAP-11 adopts most of its reads under default agreement). Two site rules of TAP-10 are treated differently, for different reasons. *Activation* (TAP-10 §6.3) decides whether a shell displays a site and is how the site fee is enforced; TAP-10 §12.2 exempts messaging from it, and a channel is messaging, so §3.3 does not check it. TAP-11 does gate a service on activation; the idea issue asks editors about this difference. *Implementation pinning* (TAP-10 §6.1) guards the bytes of every site file a client reads, and TAP-10 forbids reading a site under a store implementation it does not accept, so §3.3 checks it, although TAP-10 §12.2 lets TapeSend proceed without it: TapeSend reads no site file.
 - **Fixed labels.** Labels, `kind` values and the record tag are inside deployed key derivations, digests and signatures. They begin with `TAP-26/` because this design was first published under that self-assigned name; they are constants, not references to a TAP number, and never change (Backwards Compatibility). They are disjoint from TAP-10's `TAP-10/…` labels, so no key or digest of one protocol can be taken for the other's.
 - **Not chosen:** signing handshakes with the `ed25519` key (a second signature scheme where DH already authenticates, adding non-repudiation the parties may not want); carrying frames as TapeSend messages (a transaction per frame, public metadata, no forward secrecy).
 
@@ -429,7 +429,7 @@ The reference implementation at the commit below reproduces every value. The han
 | Tests | `sdk/test/channel.test.mjs`, `sdk/test/channel-keys.test.mjs`, `sdk/test/bus-transport.test.mjs`, `examples/relay-service/relay.test.mjs` |
 | Vectors and independent check | `spec/vectors/tap-26-channel.json`, `spec/vectors/tap-26-identity.json`, `spec/vectors/verify.py` |
 
-A reference deployment of the relay core runs at `https://relay.tapeapi.fun`; its on-chain name was not activated at the time of writing, so TAP-draft-service-manifest resolves it as `unpaid`. No part has had an independent audit.
+A reference deployment of the relay core runs at `https://relay.tapeapi.fun`; its on-chain name was not activated at the time of writing, so TAP-11 resolves it as `unpaid`. No part has had an independent audit.
 
 ## Deployments
 
