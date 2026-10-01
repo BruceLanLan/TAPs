@@ -7,8 +7,10 @@ TAPs are the public, numbered documents in which the TapeOut community proposes,
 | TAP | Title | Type | Status |
 |---|---|---|---|
 | [TAP-01](TAPs/TAP-01.md) | TAP Purpose and Process | Process | Draft |
+| [TAP-10](TAPs/TAP-10.md) | DeWEB Access and Messaging Layers | Standards | Draft |
+| [TAP-11](TAPs/TAP-11.md) | TapeAPI Service Manifest and Holder Delegation | Application | Draft |
 
-Proposed and not yet merged: **TAP-10**, DeWEB Access and Messaging Layers (Standards). See the open pull requests.
+Drafts that are proposed but not yet merged are the open pull requests.
 
 ## Proposing a TAP
 
@@ -32,4 +34,4 @@ TAP（TapeOut 协议提案）是 TapeOut 社区提出、评审和记录协议与
 
 - 想提新标准：先用 Idea 模板开 issue 讨论，再复制模板写草稿提 PR，编辑审核格式、分配编号后合并为 Draft。详见 [CONTRIBUTING.md](CONTRIBUTING.md) 的中文摘要。
 - 以英文文本为准，译文仅供参考；文本以 CC0 放入公有领域，`assets/` 下的示例代码用 MIT 许可。
-- TAP-10（DeWEB 访问层与消息层）已提交，尚未合并。
+- 已合并的 TAP 见上方索引；提交了但尚未合并的草稿见 open pull requests。
