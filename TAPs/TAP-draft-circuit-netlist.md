@@ -3,7 +3,7 @@ tap: TBD
 title: Circuit Netlist Format and Evaluation Semantics
 description: The byte format of a TapeOut circuit netlist, when a netlist is well-formed, and exactly what one beat of evaluation computes.
 author: Yintong Wang (@ronesync)
-discussions-to: https://github.com/TapeOutProtocol/TAPs/issues/#22
+discussions-to: https://github.com/TapeOutProtocol/TAPs/issues/22
 status: Draft
 type: Standards
 created: 2026-09-28
@@ -66,7 +66,7 @@ A netlist is a concatenation of records with no header, no padding and no termin
 |---|---|---|---|---|
 | `0x00` | NAND | `a:u24 b:u24` | 7 bytes | 1: `NOT (a AND b)` |
 | `0x01` | LATCH | `d:u24` | 4 bytes | 1: the stored state bit (§4) |
-| `0x02` | REF | `cpu:20 bytes, id:u64, nIns:u8, nOuts:u8, ins:u24 × nIns` | 32 + 3·nIns bytes | nOuts: the outputs of circuit (`cpu`, `id`) |
+| `0x02` | REF | `cpu:20 bytes, id:u64, nIns:u8, nOuts:u8, ins:u24 × nIns` | 31 + 3·nIns bytes | nOuts: the outputs of circuit (`cpu`, `id`) |
 
 ### 3. Well-formedness
 
@@ -207,7 +207,7 @@ The comparison, with every circuit listed and the raw results, is `assets/tap-<n
 
 ## Security Considerations
 
-- **Evaluation cost is not bounded by the netlist size.** A REF costs 32 bytes but may expand to a circuit of any size, recursively (§7, requirement 1). Measured on mainnet (2026-09-29, `bsc-dataseed1.defibit.io`, block 124,676,926), `eval` on a 1,204-gate circuit used 2,789,919 execution gas, about 2,317 gas per gate. At that rate a BNB Smart Chain transaction (16,777,216 gas) evaluates about 7,000 gates. The measured `eth_call` caps are 550,000,000 gas on the bsc-dataseed nodes and 50,000,000 on publicnode, about 239,000 and 21,700 gates (*estimated*).
+- **Evaluation cost is not bounded by the netlist size.** A REF costs 31 bytes but may expand to a circuit of any size, recursively (§7, requirement 1). Measured on mainnet (2026-09-29, `bsc-dataseed1.defibit.io`, block 124,676,926), `eval` on a 1,204-gate circuit used 2,789,919 execution gas, about 2,317 gas per gate. At that rate a BNB Smart Chain transaction (16,777,216 gas) evaluates about 7,000 gates. The measured `eth_call` caps are 550,000,000 gas on the bsc-dataseed nodes and 50,000,000 on publicnode, about 239,000 and 21,700 gates (*estimated*).
 - **Decoders parse untrusted bytes** (§7, requirement 2).
 - **REF targets are trusted code paths.** The meaning of a circuit that uses REF depends on the referenced circuits. Processor contracts are beacon proxies and the factory is not sealed, so stored netlists and their evaluation could change after tape-out (§7, requirement 3). Public nodes keep recent state only (about 128 blocks on bsc-dataseed, measured), so a verifier reading at a pinned block has to finish within that window or re-pin.
 - **Equivalence is only as good as the semantics.** Proofs that two circuits are equivalent are only meaningful relative to §4 (§7, requirement 4).
