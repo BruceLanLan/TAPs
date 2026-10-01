@@ -1,5 +1,5 @@
 {
-  "description": "Canonical JSON cases that add to the canonical-json.json vectors of TAP-draft-service-manifest, whose §6 defines canonicalJSON; same format. \"input\" is JSON text; \"canonical\" is the exact output (UTF-8); \"reject\" means no canonical form exists. The reason text is informative.",
+  "description": "Canonical JSON cases that add to the canonical-json.json vectors of TAP-11, whose §6 defines canonicalJSON; same format. \"input\" is JSON text; \"canonical\" is the exact output (UTF-8); \"reject\" means no canonical form exists. The reason text is informative.",
   "reproducedBy": "https://github.com/BruceLanLan/tapeapi/tree/fda84db889d2a732915f264a799af24073177a85 (sdk/src/canon.js safeParseJSON, canonicalJSON)",
   "cases": [
     {

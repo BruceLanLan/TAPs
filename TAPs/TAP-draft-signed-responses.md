@@ -7,7 +7,7 @@ discussions-to: https://github.com/TapeOutProtocol/TAPs/issues/9
 status: Draft
 type: Application
 created: 2026-09-30
-requires: TAP-10, TAP-draft-service-manifest
+requires: TAP-10, TAP-11
 license: CC0-1.0
 ---
 
@@ -19,13 +19,13 @@ A way for an online service that belongs to a TapeOut circuit to sign every answ
 
 ## Abstract
 
-This TAP defines the HTTPS request that a client sends to a service's live endpoint, the JSON envelope in which the service answers, and the signature that binds each answer to the service container, the request's id, the request itself, the success flag, the answer body and the time. The signing key is the signer resolved for the service under TAP-draft-service-manifest; this TAP does not define how it is found. The signature covers JSON values in the canonical form defined by that TAP. This TAP also defines how requests and envelopes are parsed, the error codes a signed envelope may carry, the answers that are deliberately left unsigned, and the checks a client makes before it trusts an answer.
+This TAP defines the HTTPS request that a client sends to a service's live endpoint, the JSON envelope in which the service answers, and the signature that binds each answer to the service container, the request's id, the request itself, the success flag, the answer body and the time. The signing key is the signer resolved for the service under TAP-11; this TAP does not define how it is found. The signature covers JSON values in the canonical form defined by that TAP. This TAP also defines how requests and envelopes are parsed, the error codes a signed envelope may carry, the answers that are deliberately left unsigned, and the checks a client makes before it trusts an answer.
 
 ## Motivation
 
 TAP-10 gives a circuit container a website and a mailbox. A service that a container's holder runs off chain (an API that reads the chain, a relay, a tool server) answers over HTTPS, and TLS authenticates a host name, not a container. Without a signature bound to the container, a client cannot show where a result came from, cannot dispute it, cannot cache it safely, and cannot tell a genuine refusal from one invented by a proxy or CDN on the path.
 
-TAP-draft-service-manifest names the key that speaks for a container's service. This TAP says what that key signs, byte for byte, so that clients and providers written independently agree on every answer. A signature over "some payload" is not enough: it has to say "this is the answer to that question, from that container, at that time", or a valid signature can be moved to another question, another service or another moment.
+TAP-11 names the key that speaks for a container's service. This TAP says what that key signs, byte for byte, so that clients and providers written independently agree on every answer. A signature over "some payload" is not enough: it has to say "this is the answer to that question, from that container, at that time", or a valid signature can be moved to another question, another service or another moment.
 
 ## Specification
 
@@ -34,8 +34,8 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 ### 1. Terms and notation
 
 - **Container**, **holder**: as defined in TAP-10 §1. A container is the ERC-6551 account of a circuit.
-- **Service**, **manifest**: as defined in TAP-draft-service-manifest §1. A **live endpoint** is a URL listed in the manifest's `endpoints.live` (TAP-draft-service-manifest §3.2); a **method** is the `name` of one of its method descriptors (TAP-draft-service-manifest §3.3).
-- **Signer**: the address named by a manifest that TAP-draft-service-manifest §2 resolves with the outcome "resolved"; TAP-draft-service-manifest §4.5 lists the sources from which a signer is never taken. Wherever this TAP says "the signer", it means that address and nothing else.
+- **Service**, **manifest**: as defined in TAP-11 §1. A **live endpoint** is a URL listed in the manifest's `endpoints.live` (TAP-11 §3.2); a **method** is the `name` of one of its method descriptors (TAP-11 §3.3).
+- **Signer**: the address named by a manifest that TAP-11 §2 resolves with the outcome "resolved"; TAP-11 §4.5 lists the sources from which a signer is never taken. Wherever this TAP says "the signer", it means that address and nothing else.
 - **Provider**: whoever answers at a live endpoint on behalf of a service and holds the signer's key.
 - **Client**: whoever sends a request and verifies the answer.
 - **Envelope**: a response body defined in §4.
@@ -45,9 +45,9 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 
 ### 2. Canonical JSON and parsing
 
-`canonicalJSON(v)` is the canonical JSON of TAP-draft-service-manifest §6: RFC 8785 (JCS) together with that section's items 1 to 5 (repeated member names; numbers that are not finite or are negative zero; integers whose absolute value exceeds 2^53 − 1; the member names `__proto__`, `constructor` and `prototype`; unpaired UTF-16 surrogates). A value that has no canonical form under that section can be neither signed nor verified under this TAP. Every envelope already issued depends on these rules.
+`canonicalJSON(v)` is the canonical JSON of TAP-11 §6: RFC 8785 (JCS) together with that section's items 1 to 5 (repeated member names; numbers that are not finite or are negative zero; integers whose absolute value exceeds 2^53 − 1; the member names `__proto__`, `constructor` and `prototype`; unpaired UTF-16 surrogates). A value that has no canonical form under that section can be neither signed nor verified under this TAP. Every envelope already issued depends on these rules.
 
-The **parser** used for requests (§3) and envelopes (§8) MUST accept only JSON text as defined by RFC 8259, and MUST reject, while parsing and without choosing a surviving value, any text in which one object repeats a member name or any member is named `__proto__`, `constructor` or `prototype` (TAP-draft-service-manifest §6 items 1 and 4). Items 2, 3 and 5 are applied when a canonical form is computed: a parsed value can, for example, contain a negative zero, and it then has no canonical form.
+The **parser** used for requests (§3) and envelopes (§8) MUST accept only JSON text as defined by RFC 8259, and MUST reject, while parsing and without choosing a surviving value, any text in which one object repeats a member name or any member is named `__proto__`, `constructor` or `prototype` (TAP-11 §6 items 1 and 4). Items 2, 3 and 5 are applied when a canonical form is computed: a parsed value can, for example, contain a negative zero, and it then has no canonical form.
 
 ### 3. Request
 
@@ -65,10 +65,10 @@ Content-Type: application/json
 
 | Member | Required | Content |
 |---|---|---|
-| `id` | yes | A string of 1 to 128 UTF-16 code units, chosen by the client, unique among that client's requests. It MUST be well-formed Unicode: no unpaired surrogate (TAP-draft-service-manifest §6 item 5) |
+| `id` | yes | A string of 1 to 128 UTF-16 code units, chosen by the client, unique among that client's requests. It MUST be well-formed Unicode: no unpaired surrogate (TAP-11 §6 item 5) |
 | `method` | no | When present, MUST equal the path segment. A provider MUST refuse a mismatch with `BAD_REQUEST` rather than prefer either value |
 | `params` | no | A JSON object. When absent it is `{}` for every purpose of this TAP |
-| `voucher` | no | A payment voucher. Its format, and when it is required, are defined by a separate payment TAP; this TAP treats it as opaque. A provider ignores it for a method whose `priceBEM` (TAP-draft-service-manifest §3.3) is zero |
+| `voucher` | no | A payment voucher. Its format, and when it is required, are defined by a separate payment TAP; this TAP treats it as opaque. A provider ignores it for a method whose `priceBEM` (TAP-11 §3.3) is zero |
 
 - A provider MUST parse the body with the parser of §2 and MUST refuse a body that the parser rejects with `BAD_REQUEST`.
 - The **request object** of a call is `{ "method": <path segment>, "params": <params, or {} when absent> }`, an object with exactly these two members.
@@ -107,7 +107,7 @@ The **body** of an envelope is `result` when `ok` is `true` and `error` when `ok
 
 - A provider MAY send an envelope with HTTP status 200 or with the status of its error code (§6).
 - A provider MUST cap the response body at 1 MiB (1 048 576 bytes of UTF-8). A provider whose result would exceed the cap answers a signed `INTERNAL` instead, and so does a provider whose handler exceeds its own time bound; neither is charged for. Providers SHOULD answer within 30 seconds.
-- A live endpoint is an `https://` URL (TAP-draft-service-manifest §3.2). The signature does not replace TLS; it makes an answer verifiable after TLS has ended.
+- A live endpoint is an `https://` URL (TAP-11 §3.2). The signature does not replace TLS; it makes an answer verifiable after TLS has ended.
 
 ### 5. Digest and signature
 
@@ -161,7 +161,7 @@ These answers are deliberately not signed, and a client MUST NOT treat any of th
 
 ### 8. Client verification
 
-Input: the service's container `C` and signer `S`, from a resolution under TAP-draft-service-manifest §2 with the outcome "resolved"; the `id`, path segment and `params` the client itself sent; and the HTTP answer. A client MUST perform these steps in order and MUST stop at the first outcome:
+Input: the service's container `C` and signer `S`, from a resolution under TAP-11 §2 with the outcome "resolved"; the `id`, path segment and `params` the client itself sent; and the HTTP answer. A client MUST perform these steps in order and MUST stop at the first outcome:
 
 1. If the HTTP status is 429: *rate limited*.
 2. Read at most 1 MiB of the body. If it is larger, is rejected by the parser of §2, or is not an object with a string member `sig`: *transport failure*. The HTTP status is otherwise ignored.
@@ -171,7 +171,7 @@ Input: the service's container `C` and signer `S`, from a resolution under TAP-d
 6. Compute the digest of §5 from `C` (never the envelope's `container`), the client's own `id`, the request object built from what the client sent (never from values the provider echoes), the envelope's `ok`, the canonical form of the parsed body (never the raw bytes), and the envelope's `ts`. If the body has no canonical form under §2, or the signature is malformed or recovers to an address other than `S`: *binding failure*.
 7. Otherwise: *accepted result* when `ok` is `true`, *accepted error* when `ok` is `false`.
 
-On a *binding failure* the client MUST reread the service, as defined in TAP-draft-service-manifest §7.1, before it sends the request again. That section requires a reread when a signature fails against the kept signer; this TAP requires one after every binding failure. If the reread manifest names exactly the address that the envelope's signature recovers to, the client MAY accept that same envelope, after verifying it in full against the new signer, rather than sending the request again, so that a result the provider has already charged for is not paid twice. Rereads triggered by binding failures SHOULD be rate limited per service.
+On a *binding failure* the client MUST reread the service, as defined in TAP-11 §7.1, before it sends the request again. That section requires a reread when a signature fails against the kept signer; this TAP requires one after every binding failure. If the reread manifest names exactly the address that the envelope's signature recovers to, the client MAY accept that same envelope, after verifying it in full against the new signer, rather than sending the request again, so that a result the provider has already charged for is not paid twice. Rereads triggered by binding failures SHOULD be rate limited per service.
 
 ### 9. Reuse of the digest by other TAPs
 
@@ -184,17 +184,17 @@ Another TAP MAY define a signed statement that uses the preimage, digest and sig
 - **Covering the request object and `ok`** turns an envelope into "this is the answer to that question" instead of "this is a payload I signed". A proxy or CDN cannot relabel a signed error as a result, a result shaped like `{code, message}` cannot become an error, and an answer cannot be moved to another question even under a reused `id`.
 - **The client recomputes from what it sent and from the container it resolved.** Echoed values are exactly what an attacker on the path controls.
 - **EIP-191 over a 32-byte digest** is supported by every wallet and hardware signer. EIP-712 was rejected because `result` has no fixed type.
-- **Canonical JSON instead of the raw bytes.** Proxies, CDNs and frameworks re-encode JSON; the meaning survives, the bytes do not. RFC 8785 already exists in several languages, and the restrictions of TAP-draft-service-manifest §6 remove the values on which implementations have been observed to disagree (the vectors include numeric-looking keys, on which a JavaScript and a Python implementation once did). Using the same canonical form as that TAP means one implementation serves both.
+- **Canonical JSON instead of the raw bytes.** Proxies, CDNs and frameworks re-encode JSON; the meaning survives, the bytes do not. RFC 8785 already exists in several languages, and the restrictions of TAP-11 §6 remove the values on which implementations have been observed to disagree (the vectors include numeric-looking keys, on which a JavaScript and a Python implementation once did). Using the same canonical form as that TAP means one implementation serves both.
 - **Low-`s` only**, as EIP-2 requires for transaction signatures and as widely used on-chain recovery routines also require, so that a signature accepted off chain is never refused by a contract that checks the same key.
 - **Errors are signed** so that a provider cannot deny having refused a request, and so that a client can tell a real refusal from one inserted on the path. **Rate-limit refusals are not signed** because they assert nothing about any result, and signing them would make a flood cost the provider one signature per request.
 - **`block` is not signed.** It is a debugging aid; a height that matters belongs in the result.
 - **Unparseable requests are bound to `id` `""`.** The provider cannot trust any `id` in a body it cannot parse; binding to a fixed value still lets the sender verify the refusal. Such a refusal says only that some unparseable request for that method was refused (Security Considerations).
 - **Alternatives considered.** HTTP Message Signatures (RFC 9421) sign bytes and headers that intermediaries rewrite, and do not bind the request's JSON meaning. JWS has the same canonicalisation problem and adds algorithm negotiation this format does not need.
-- **AI usage receipts are proposed separately.** In the TapeAPI documents the same envelope also signs usage receipts for AI API answers. They depend on a price table and usage schema that TAP-draft-service-manifest does not define, and their rules (stream parsing, response hashes, delivery, a lookup method) would double this TAP. §9 is all they need from here.
+- **AI usage receipts are proposed separately.** In the TapeAPI documents the same envelope also signs usage receipts for AI API answers. They depend on a price table and usage schema that TAP-11 does not define, and their rules (stream parsing, response hashes, delivery, a lookup method) would double this TAP. §9 is all they need from here.
 
 ## Backwards Compatibility
 
-This specification was published in the TapeAPI repository under the self-assigned name "TAP-21". That name is not a TAP number; editors assign the number of this TAP. The constant `TAPI-1/resp/v2` is a historical wire constant, not a TAP number, and never changes. Every envelope already issued depends on the canonical JSON of TAP-draft-service-manifest §6, which is the one the TapeAPI documents used.
+This specification was published in the TapeAPI repository under the self-assigned name "TAP-21". That name is not a TAP number; editors assign the number of this TAP. The constant `TAPI-1/resp/v2` is a historical wire constant, not a TAP number, and never changes. Every envelope already issued depends on the canonical JSON of TAP-11 §6, which is the one the TapeAPI documents used.
 
 An earlier envelope version used the prefix `TAPI-1/resp/v1` and covered neither the request nor `ok`. It is superseded; such envelopes do not verify under §5 and are rejected.
 
@@ -203,20 +203,20 @@ Two public services have signed every answer, errors included, with this envelop
 - states that a `params` that is present but not an object is refused bound to `params` `{}` (binding rule 2), which the reference provider already does, and that an unparseable request is bound to the path segment as its method;
 - requires a client's `id` to be well-formed Unicode, which neither the reference client nor the reference provider checks yet;
 - leaves out the client-side error codes of the TapeAPI SDK and describes client outcomes in words instead (§1, §8);
-- takes canonical JSON from TAP-draft-service-manifest §6 instead of defining it here;
-- keeps `TOOLS_CHANGED` only as a reserved code, because the tool-server binding that used it is not part of TAP-draft-service-manifest; the reference implementation's tool-server proxy still sends it;
+- takes canonical JSON from TAP-11 §6 instead of defining it here;
+- keeps `TOOLS_CHANGED` only as a reserved code, because the tool-server binding that used it is not part of TAP-11; the reference implementation's tool-server proxy still sends it;
 - moves AI usage receipts and their lookup method to a separate proposal (Rationale);
 - leaves the voucher format and the `error.data` of the two payment codes to a separate payment TAP, which has not been proposed yet.
 
-Where the reference implementation's resolution of a service differs from TAP-10, the difference is listed in TAP-draft-service-manifest; this TAP adds none.
+Where the reference implementation's resolution of a service differs from TAP-10, the difference is listed in TAP-11; this TAP adds none.
 
 ## Test Cases
 
 The vector files are in `assets/tap-draft-signed-responses/`. They were generated with the reference implementation at the commit given below and checked with the canonicalisation and recovery routines of the independent Python implementation at the same commit. Keys and addresses in them are test values.
 
-The canonical JSON vectors of TAP-draft-service-manifest (its Test Cases, `canonical-json.json`) apply to this TAP unchanged. This TAP adds:
+The canonical JSON vectors of TAP-11 (its Test Cases, `canonical-json.json`) apply to this TAP unchanged. This TAP adds:
 
-- `canonical-json-extra.json` (§2, TAP-draft-service-manifest §6), in the same format as those vectors and covering cases they do not: 6 JSON texts with their exact canonical form and its `keccak256` (numeric-looking member names, which sort as strings; objects inside arrays; escapes of `\\`, `\/`, U+0008, U+000C, U+000D and U+001F; fractions and exponent form; the negative safe-integer boundary; empty containers), and 6 texts that have no canonical form (a repeated member name whose escaped spelling comes first, the reverse of the order in the service-manifest vectors, a nested `prototype`, `1e21`, −2^53, `-0.0`, an unpaired low surrogate in a member name).
+- `canonical-json-extra.json` (§2, TAP-11 §6), in the same format as those vectors and covering cases they do not: 6 JSON texts with their exact canonical form and its `keccak256` (numeric-looking member names, which sort as strings; objects inside arrays; escapes of `\\`, `\/`, U+0008, U+000C, U+000D and U+001F; fractions and exponent form; the negative safe-integer boundary; empty containers), and 6 texts that have no canonical form (a repeated member name whose escaped spelling comes first, the reverse of the order in the service-manifest vectors, a nested `prototype`, `1e21`, −2^53, `-0.0`, an unpaired low surrogate in a member name).
 - `envelope.json` (§4, §5): container `0x86DDaEF00401E3F10418398D67D7189fc458eA95`, published test signer key `0x2222…2222` (address `0x1563915e194D8CfBA1943570603F7606A3115508`), and:
   - 5 envelopes, each with canonical request and body, the 139-byte preimage, digest, EIP-191 digest, signature and recovered address: empty `params`, `params`, a signed error, `params` in another key order, and the refusal of an unparseable request (binding rule 1);
   - 4 encodings of the first signature: `v` as 0/1 (accepted), its high-`s` twin (rejected although it recovers the signer), `v` = 29 and 64 bytes (rejected);
@@ -239,17 +239,17 @@ recovers        0x1563915e194D8CfBA1943570603F7606A3115508
 
 TapeAPI 1.3.0, at commit [`fda84db889d2a732915f264a799af24073177a85`](https://github.com/BruceLanLan/tapeapi/tree/fda84db889d2a732915f264a799af24073177a85):
 
-- [`sdk/src/canon.js`](https://github.com/BruceLanLan/tapeapi/blob/fda84db889d2a732915f264a799af24073177a85/sdk/src/canon.js): canonical JSON (TAP-draft-service-manifest §6) and the strict parser (§2);
+- [`sdk/src/canon.js`](https://github.com/BruceLanLan/tapeapi/blob/fda84db889d2a732915f264a799af24073177a85/sdk/src/canon.js): canonical JSON (TAP-11 §6) and the strict parser (§2);
 - [`sdk/src/sig.js`](https://github.com/BruceLanLan/tapeapi/blob/fda84db889d2a732915f264a799af24073177a85/sdk/src/sig.js): the digest, signing and low-`s` recovery (§5);
 - [`server/src/index.js`](https://github.com/BruceLanLan/tapeapi/blob/fda84db889d2a732915f264a799af24073177a85/server/src/index.js): a provider (§3, §4, §6, §7);
 - [`sdk/src/index.js`](https://github.com/BruceLanLan/tapeapi/blob/fda84db889d2a732915f264a799af24073177a85/sdk/src/index.js): client verification (§8);
 - [`spec/vectors/verify.py`](https://github.com/BruceLanLan/tapeapi/blob/fda84db889d2a732915f264a799af24073177a85/spec/vectors/verify.py): an independent Python implementation of the canonical JSON and of §5, with Keccak-256 and secp256k1 recovery written from their specifications.
 
-Two services answer with this envelope: `https://api.tapeapi.fun` (container `0x1b2A657BcBa9D3229f57aC2f4FcbEE2AA756aAe8`, #11 of processor `0xe02c26c7432A7121168AA9B610DE24eCf9a1a414` on BNB Smart Chain) and `https://relay.tapeapi.fun` (container `0x9cD838625251576c199B2DeF7A17e50266843185`, #12 of the same processor). They are not audited. Under TAP-draft-service-manifest they do not resolve at the time of writing, because their names are not activated (see Backwards Compatibility there); the envelopes they send are unaffected.
+Two services answer with this envelope: `https://api.tapeapi.fun` (container `0x1b2A657BcBa9D3229f57aC2f4FcbEE2AA756aAe8`, #11 of processor `0xe02c26c7432A7121168AA9B610DE24eCf9a1a414` on BNB Smart Chain) and `https://relay.tapeapi.fun` (container `0x9cD838625251576c199B2DeF7A17e50266843185`, #12 of the same processor). They are not audited. Under TAP-11 they do not resolve at the time of writing, because their names are not activated (see Backwards Compatibility there); the envelopes they send are unaffected.
 
 ## Deployments
 
-None. This TAP deploys no contract and depends on none directly. Finding and verifying a service's signer uses the contracts listed under Deployments in TAP-draft-service-manifest, which in turn refers to TAP-10.
+None. This TAP deploys no contract and depends on none directly. Finding and verifying a service's signer uses the contracts listed under Deployments in TAP-11, which in turn refers to TAP-10.
 
 ## Security Considerations
 
@@ -260,13 +260,13 @@ The attacker considered can read, delay, drop, replay and modify all traffic bet
 - **Relabelling.** `ok` is covered, so a signed error cannot be shown as a result or the reverse.
 - **Substitution.** The container is covered and the client uses the container it resolved, so a signature from service A cannot be presented as service B, even if both use the same signer key.
 - **Malleability.** High-`s` signatures and unusual `v` values are rejected, so each digest has one valid encoding per key and no verifier accepts what another refuses.
-- **Canonicalisation.** A disagreement between two canonical-JSON implementations is the main interoperability risk and, where one side accepts, a bypass. TAP-draft-service-manifest §6 and the parser rule of §2 remove the known sources; implementations are expected to pass the vectors of both TAPs.
+- **Canonicalisation.** A disagreement between two canonical-JSON implementations is the main interoperability risk and, where one side accepts, a bypass. TAP-11 §6 and the parser rule of §2 remove the known sources; implementations are expected to pass the vectors of both TAPs.
 - **Prototype pollution.** The forbidden keys are refused while parsing on both sides, so these keys cannot reach JavaScript application state through a verified `result`.
 - **Forged refusals.** A proxy can drop an answer or put an unsigned page in its place, but unsigned answers are transport failures (§7). An attacker cannot make a provider appear to have refused or failed a request bound to that request's own `id`. A refusal under binding rule 1 is bound to `id` `""` and to no particular request: anyone can obtain one for a method by sending an unparseable body, and §8 step 3 does not check its `ts`. An attacker on the path can therefore put such a refusal in place of any answer for that method, and the client reports its own request as malformed. This is a denial of service, like dropping the answer; it proves nothing about the client's request.
 - **Clock.** The `ts` window assumes that the client's clock is roughly right. A client with a wrong clock rejects genuine envelopes or accepts older ones within the error of its clock.
-- **Signer key.** The signer key is kept online to sign answers. Whoever steals it can sign answers for the service until the holder replaces it or the delegation expires (TAP-draft-service-manifest §7.2). A client that cached the old signer keeps trusting it until its next reread (TAP-draft-service-manifest §7.1); the reread after a binding failure (§8) covers the other direction, a provider that already signs with a key the client does not yet know.
+- **Signer key.** The signer key is kept online to sign answers. Whoever steals it can sign answers for the service until the holder replaces it or the delegation expires (TAP-11 §7.2). A client that cached the old signer keeps trusting it until its next reread (TAP-11 §7.1); the reread after a binding failure (§8) covers the other direction, a provider that already signs with a key the client does not yet know.
 - **Reuse of the digest.** Statements defined under §9 share this signature domain; the condition of §9 keeps them from being accepted as answers, and the reverse.
-- **Trust inherited from resolution.** Every guarantee above rests on the signer being the one the holder authorised. Until the contracts that resolution reads are sealed, whoever controls them can change what resolution returns (TAP-draft-service-manifest, Deployments and Security Considerations); this TAP inherits that assumption.
+- **Trust inherited from resolution.** Every guarantee above rests on the signer being the one the holder authorised. Until the contracts that resolution reads are sealed, whoever controls them can change what resolution returns (TAP-11, Deployments and Security Considerations); this TAP inherits that assumption.
 
 ## Copyright
 
