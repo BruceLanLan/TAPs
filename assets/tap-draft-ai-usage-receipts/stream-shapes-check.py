@@ -26,6 +26,9 @@ def shapes(body, fmt):
         ends = [x for x in (cr, lf) if x >= 0]
         if not ends:
             partial = pos < len(body)                 # bytes after the last line end: a line not finished
+            if body[pos:].startswith(BOM):            # §5.2: it counts as a line for the ambiguous-line rule
+                if end is None: amb_before += 1
+                else: amb_after += 1
             break
         j = min(ends)
         line = body[pos:j]
