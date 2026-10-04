@@ -1,6 +1,6 @@
 {
   "title": "Container agents, phase 0: Mandate, TaskOffer, TaskVerdict, MandateRevocation (TAP-draft-container-agent)",
-  "source": "Copied from spec/vectors/container-agent.json of the TapeAPI SDK 1.7.0; inputs and expected outputs are unchanged. Keys and addresses are test values.",
+  "source": "Copied from spec/vectors/container-agent.json of the TapeAPI SDK 1.7.0 (these members are unchanged in 1.7.1); inputs and expected outputs are unchanged. Keys and addresses are test values.",
   "domain": {
     "name": "TapeAPI",
     "version": "1",

@@ -74,4 +74,25 @@ ok   ManifestContent typehash differs from every type of this draft
 ok   ChannelKeys typehash as stated in Test Cases
 ok   ChannelKeys typehash differs from every type of this draft
 
+--- check_thread.py ---
+ok   thread case 0: a revocation message placed before the accept, issued before it: the accept is refused, the thread is cancelled
+ok   thread case 1: the same revocation from the site list: the same result
+ok   thread case 2: a revocation message placed before the accept but issued after the delivery: where it appears does not matter
+ok   thread case 3: a dated revocation and a refused mandate: the dated one applies, the site list found for the refused mandate does not count
+ok   thread case 4: two revocations, an early and a late one: R is the early one, a delivery between them is refused
+ok   thread case 5: a site revocation issued after the delivery and before the verdict: the thread stays Settled
+ok   thread case 6: the same revocation as a message after the verdict: the same result
+ok   thread case 7: a revocation issued after `at`: not cancelled yet
+ok   thread case 8: a revocation that covers neither the mandate nor any date: revocation-mismatch, no R
+ok   thread case 9: cancelled and expired at once: Cancelled comes first
+ok   thread case 10: no revocation, past the mandate's expiry: Expired
+ok   thread case 11: an accept signed exactly at R is allowed (only after R is refused)
+ok   thread case 12: a delivery signed exactly at R is allowed, and accepted
+ok   thread case 13: R equal to at cancels
+ok   thread case 14: R one second after at does not cancel yet
+ok   cases 0 and 1 give the same R, state and problems
+ok   cases 5 and 6 give the same R, state and problems
+
+thread checks passed: 0 failure(s)
+
 all checks passed: 0 failure(s)

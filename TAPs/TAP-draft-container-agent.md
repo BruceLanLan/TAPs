@@ -288,7 +288,7 @@ After a rejection the agent may deliver again within the mandate's window. The m
 
 A revocation **applies** to a thread when it is valid (§6.1) and covers the thread's applied mandate or, when no mandate is applied, has `revokedBefore` > 0. The revocations considered are the `revocation` messages of the thread, wherever they appear, and those found while checking the applied mandate (§5.1 step 9). A `revocation` message that does not apply is `revocation-mismatch`; one in a thread without an offer is `out-of-order`. The thread's **revocation time** `R` is the smallest `issued` of the revocations that apply.
 
-A revocation affects only what is signed after it: it does not change the state when met, an agent message whose `ts` is after `R` is refused (§7.4), and a verdict is allowed whatever its `issued`, so a delivery made before the revocation can still be accepted or rejected. Since `R` depends on the applied mandate, which depends on the `accept`, a verifier finds `R` in a first pass without the `message-after-revocation` checks ("applied mandate" above means the one applied in that pass) and applies them in a second pass with that `R`; the problems reported are those of the second pass.
+A revocation affects only what is signed after it: it does not change the state when met, an agent message whose `ts` is after `R` is refused (§7.4), and a verdict is allowed whatever its `issued`, so a delivery made before the revocation can still be accepted or rejected. Since `R` depends on the applied mandate, which depends on the `accept`, a verifier finds `R` in a first pass without the `message-after-revocation` checks ("applied mandate" above means the one applied in that pass) and applies them in a second pass with that `R`; the problems reported are those of the second pass. If the second pass applies a different mandate, or none, `R` may come from a revocation that does not cover the mandate finally applied; since the two passes differ only by `message-after-revocation` refusals, such a thread has at least one, so it does not pass.
 
 #### 7.6 Final checks
 
@@ -372,18 +372,17 @@ This TAP adds no contract, hub function, payload format or name syntax, and chan
 
 **Relation to the Ideas.** This draft is phase 0 of #40 and #41. Differences: #40 describes no phase 0; the principal must be a container; the principal's messages are signed by the holder only; verdicts and revocations carry `issued` instead of an expiry; five of #41's message names are reserved; messages travel as TAP-13 calls, not private channels or TapeSend; #41's two mandatory checks become recommendations (the agent verifies the mandate before starting, §5.1, which in phase 0 concerns the mandate, revocation and holder since there are no channels; the principal verifies the delivery before its verdict, §8); listings and reviews are left out.
 
-**TapeAPI 1.x.** The reference implementation is the experimental subpath `@tapeapi/sdk/agent` of TapeAPI 1.7.0, outside that SDK's 1.x compatibility promise. No existing TapeAPI interface changes.
+**TapeAPI 1.x.** The reference implementation is the experimental subpath `@tapeapi/sdk/agent` of TapeAPI, present since 1.7.0 and following this text's revocation rules since 1.7.1; it is outside that SDK's 1.x compatibility promise. No existing TapeAPI interface changes.
 
 **Reading of TAP-10 §19 step 14.** Step 14 makes the result `unavailable` for "an earlier entry whose wallet cannot be determined". TAP-10 §19 uses that wording for step 8 ("the sending wallet of m could not be determined") and lists `indirect` separately as step 9, so the reference implementation reads the parenthesis as the step 8 case (§18.5 step 1 failing) and, for an earlier entry whose message is `indirect`, compares only its sending container. The other reading would make a payment `unavailable` whenever a message sent through a contract by anyone lies among the at most 60 entries between the transfer's block and the payment message. This is the authors' reading, not a requirement of this TAP; if the TAP-10 editors read step 14 otherwise, the reference implementation will follow them.
 
-**Differences between this text and the reference implementation.**
+**Differences between this text and the reference implementation.** Revocation in a thread (§7.5, §7.6) and the reading of the revocation file (§6.2: `chunkCount`, the first site store with a path, the implementations of TAP-10 §6.1, a byte order mark refused) are aligned in 1.7.1. Remaining:
 
-| Area | Reference implementation (1.7.0) | This TAP | Plan |
+| Area | Reference implementation (1.7.1) | This TAP | Plan |
 |---|---|---|---|
-| Revocation in a thread | Applied when met: a covering revocation found while checking the mandate, even from a file with `issued` after a delivery, makes the thread `Cancelled` at once with `mandate-revoked`, and later messages are `out-of-order`; a `revocation` message cancels `Offered`, `Accepted` or `Active` at once; a revocation found while checking a refused mandate still counts; a `revocation` in `Cancelled` is accepted silently | §7.5, §7.6 | Change (1.7.1) |
-| Principal identity | `token()`, `hub.accountOf`, `factory.isCPU`, `ownerOf`, strict at `latest`; `not-a-container` and `wrong-chain` where TAP-10 says `not-tapeout` | §4 | As TAP-11's plan for the same difference |
-| Agent and provider resolution | The SDK's `resolve`, default agreement, with the differences TAP-11 lists | TAP-11 §2 | As TAP-11 |
-| Revocation file | Missing file by `fileInfo.size` 0; site store implementation not checked; a byte order mark dropped | §6.2 | Change (1.7.1) |
+| Pinned block | Every read, including the revocation file and the implementation slots, is strict at `latest`, not at one pinned block | §4, §6.2 | 1.8 |
+| Principal identity | `token()`, `hub.accountOf`, `factory.isCPU`, `ownerOf`; `not-a-container` and `wrong-chain` where TAP-10 says `not-tapeout` | §4 | 1.8, as TAP-11's plan for the same difference |
+| Agent and provider resolution | The SDK's `resolve`, default agreement, with the differences TAP-11 lists | TAP-11 §2 | 1.8, as TAP-11 |
 | Input leniency | Holder messages accept upper-case `bytes32`, `uint256` as JSON numbers and a missing `reasonHash` (as zero); agent `ts`/`exp` may be negative; a receipt `ok` that is not a boolean reads as `false` | §3.7, §8 | Refuse (1.8; no hash changes) |
 
 ## Test Cases
@@ -392,7 +391,8 @@ The files are in `assets/tap-draft-container-agent/`. Keys and addresses are tes
 
 - **`vectors.json`**: copied unchanged from the reference implementation's `spec/vectors/container-agent.json`: domain, type strings and hashes, a task, three mandates (one naming a token and caps, signed only to show that it still hashes), the first mandate on chain 196, an offer, two verdicts and two revocations, each with `structHash`, digest and signature.
 - **`worked-examples.json`**: the first mandate and the offer as `eth_signTypedData_v4` payloads with every intermediate value.
-- **`check.py`** (output in `check.out`): recomputes all of these from the field lists of §3 with only a Keccak-256 library and secp256k1 arithmetic written in the file (and `eth_account`'s EIP-712 encoder when installed), plus the type hashes and file sizes stated below and in the Rationale.
+- **`thread-revocation-vectors.json`**: copied unchanged from the `threadRevocation` member of the same file in 1.7.1: 15 abstract threads (no signatures or chain reads; every message valid unless stated): the times of the offer, `accept`, mandate, deliveries and verdict, the problem refusing the mandate if any, the revocations (as messages or from the site file), the message order and `at`, with the expected `R` and its source, final state and problems (a multiset; this TAP fixes no order). They include signatures exactly at `R`, `R` equal to `at`, and a revocation giving the same result as a message and as a file.
+- **`check.py`** (output in `check.out`): recomputes all of these from the field lists of §3 with only a Keccak-256 library and secp256k1 arithmetic written in the file (and `eth_account`'s EIP-712 encoder when installed), plus the type hashes and file sizes stated below and in the Rationale; it runs `check_thread.py`, which recomputes the 15 threads from §7.4–§7.6 alone.
 
 The type hashes of §3 differ from those of `Delegation` (`0xc5081f9dc7e79dfbe7f3b3220ed9e7a29d0bc53239ee74dc184e4ac1f810948c`), `ManifestContent` (`0x809c1147faa2cda8716cdc72c000b05406f238cb127fea6f0abed585c02aea1c`) and, from the unmerged draft #12, `ChannelKeys` (`0x4dcd46fdde436adbdcfd3c3541cdb782612b23122af4c1640f9f673211d32542`).
 
@@ -421,11 +421,11 @@ Rejections: on chain 196 the same mandate has digest `0x8949a6cb8c03096a1b4f9932
 
 The offer and the mandate agree in `principal`, `taskHash`, `mode` and `nonce` (§7.4). The first verdict in `vectors.json` names this `mandateHash`; the first revocation lists it and the empty-scope mandate.
 
-**Not covered by vectors yet**: the thread state machine (§7.4–§7.6), agent receipts (§7.2), evidence (§8) and the revocation file (§6.2) are covered by the reference implementation's tests, not by vector files; TAP-13's `envelope.json` covers the receipt signature. Vectors are planned before Review.
+**Not covered by vectors yet**: the thread rules other than revocation (§7.4, §7.6), agent receipts (§7.2), evidence (§8) and the revocation file (§6.2) are covered by the reference implementation's tests, not by vector files; TAP-13's `envelope.json` covers the receipt signature. Vectors are planned before Review.
 
 ## Reference Implementation
 
-TapeAPI 1.7.0 at commit [`a9e09da2662b08ad2f16565fccac68f4f3ad2589`](https://github.com/BruceLanLan/tapeapi/tree/a9e09da2662b08ad2f16565fccac68f4f3ad2589) (MIT licensed, experimental, not audited); paths are relative to that commit:
+TapeAPI 1.7.1 at commit [`2fbface78beabe91cba634ca0510f109f8846ff6`](https://github.com/BruceLanLan/tapeapi/tree/2fbface78beabe91cba634ca0510f109f8846ff6) (MIT licensed, experimental, not audited); paths are relative to that commit:
 
 - `sdk/src/agent-sig.js`: §3;
 - `sdk/src/agent-verify.js`: §4–§8 and §10 (`createAgentKit`);

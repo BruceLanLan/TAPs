@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # SPDX-License-Identifier: MIT
-# Recomputes every value in vectors.json from the field lists of TAP-draft-container-agent, Specification section 3,
+# Recomputes every value in vectors.json (and, through check_thread.py, thread-revocation-vectors.json) from the field lists of TAP-draft-container-agent, Specification section 3,
 # without the reference implementation. Dependencies: pycryptodome (Keccak-256 only). secp256k1 point arithmetic and
 # public-key recovery are written out below from SEC 1 section 4.1.6. Run: python3 check.py
 # Optional second opinion: if eth_account is installed, the typed digests are also computed with its EIP-712 encoder
@@ -188,6 +188,13 @@ for name, s_, want in [('Delegation', 'Delegation(address container,address sign
                        ('ChannelKeys', 'ChannelKeys(address container,bytes32 x25519,bytes32 ed25519,bytes32 inbox,uint64 issued,uint64 expires)', '0x4dcd46fdde436adbdcfd3c3541cdb782612b23122af4c1640f9f673211d32542')]:
     check(f'{name} typehash as stated in Test Cases', hx(keccak(s_.encode())), want)
     check(f'{name} typehash differs from every type of this draft', want in V['typeHashes'].values(), False)
+
+# ---------- the thread revocation cases (sections 7.4 to 7.6), in check_thread.py ----------
+import subprocess
+print('\n--- check_thread.py ---')
+r = subprocess.run([sys.executable, os.path.join(HERE, 'check_thread.py')], capture_output=True, text=True)
+print(r.stdout.rstrip())
+if r.returncode != 0: fails += 1
 
 print('\n%s: %d failure(s)' % ('FAILED' if fails else 'all checks passed', fails))
 sys.exit(1 if fails else 0)
