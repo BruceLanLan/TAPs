@@ -1,0 +1,280 @@
+{
+  "tap": "TAP-draft-signed-responses, Specification §5",
+  "source": "Cases 1-4 from spec/vectors/tap-21-envelope.json at https://github.com/BruceLanLan/tapeapi/tree/fda84db889d2a732915f264a799af24073177a85; case 5 and the negatives written for this TAP. Generated with sdk/src/sig.js at that commit and checked with the canonicalisation and secp256k1 recovery routines of spec/vectors/verify.py at the same commit.",
+  "prefix": "TAPI-1/resp/v2",
+  "prefixHex": "0x544150492d312f726573702f7632",
+  "layout": "preimage (139 bytes) = \"TAPI-1/resp/v2\" (14) || container (20) || keccak256(utf8(id)) (32) || keccak256(utf8(canonicalJSON({method, params}))) (32) || ok (1: 0x01 or 0x00) || keccak256(utf8(canonicalJSON(body))) (32) || uint64 big-endian ts (8); digest = keccak256(preimage); eip191Digest = keccak256(\"\\x19Ethereum Signed Message:\\n32\" || digest); sig = r || s || v over eip191Digest",
+  "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+  "signerKey": "0x2222222222222222222222222222222222222222222222222222222222222222",
+  "signerKeyNote": "A published test key. Never use it for anything else.",
+  "signerAddress": "0x1563915e194D8CfBA1943570603F7606A3115508",
+  "cases": [
+    {
+      "name": "free method, empty params, ok",
+      "id": "req-1",
+      "method": "blockNumber",
+      "params": {},
+      "ok": true,
+      "body": {
+        "blockNumber": 123456789
+      },
+      "ts": 1789000000,
+      "canonicalRequest": "{\"method\":\"blockNumber\",\"params\":{}}",
+      "canonicalBody": "{\"blockNumber\":123456789}",
+      "preimage": "0x544150492d312f726573702f763286ddaef00401e3f10418398d67d7189fc458ea955521a70e306e4cf143fc3b54739d4053a40cc9765dbc2f1d2c86a2ea55e5dfe0f32dfd0ab0129197e572f29d67e931647170eb93c336b35e50cfced20f0820c001d01da061692154ce58e7f2b46d12f39afad459e60ee213143129ffd9ee4afa71000000006aa1f940",
+      "digest": "0x71c2489e6d3e3682739380996d0981f2a283b5957011d3d7b279329567111b05",
+      "eip191Digest": "0xd8a321457c5bf13db75f989253b344be59a502ee29edef0888d398c250143c2d",
+      "sig": "0xd7d544bcab20533ab3d82f790195e0e5bd775a705fc67e32c6dcb41134f22bed59669c08c32ab3e16386a85e90603cedb020a267928488f9d1a349da3149b1451b",
+      "recovers": "0x1563915e194D8CfBA1943570603F7606A3115508",
+      "expect": "accepted"
+    },
+    {
+      "name": "paid method with params, ok",
+      "id": "req-2",
+      "method": "circuitHolder",
+      "params": {
+        "circuits": "0x50A994e71615474B55559FF4f500928fbc339DD9",
+        "tokenId": "4246"
+      },
+      "ok": true,
+      "body": {
+        "holder": "0x571d447f4f24688eC35Ccf07f1D6993655F6aF15"
+      },
+      "ts": 1789000001,
+      "canonicalRequest": "{\"method\":\"circuitHolder\",\"params\":{\"circuits\":\"0x50A994e71615474B55559FF4f500928fbc339DD9\",\"tokenId\":\"4246\"}}",
+      "canonicalBody": "{\"holder\":\"0x571d447f4f24688eC35Ccf07f1D6993655F6aF15\"}",
+      "preimage": "0x544150492d312f726573702f763286ddaef00401e3f10418398d67d7189fc458ea9535258e700dd4b075d79ca8d57993c2c3b049216202a8a1fcd8aa652fb4135b6db5472a8c76d783c13f11ceda4d315e46531b220c76561d00dd607bd1955fa8b90166e1b20bc74ed8aa9936c5272953476ac12a08f2d349f2561721a38668498875000000006aa1f941",
+      "digest": "0x957d81fd7cf9121608e1f7a233902d18c48c3a69eee8ac849e0bd91538c10530",
+      "eip191Digest": "0xb8f3a894e6d4d2ece4229a78cf4b0095ad07e1284e0559afcee9dcd7c0118cab",
+      "sig": "0xbd3e72dbe2230c0efa27a829bc2607d8d70e5ab72beff208589e9b1d7d4a8ed37f9fecf53d6160da33d0fe0d890cf3deea6225d904b823c386170469cf22657f1b",
+      "recovers": "0x1563915e194D8CfBA1943570603F7606A3115508",
+      "expect": "accepted"
+    },
+    {
+      "name": "signed error: ok=false is inside the digest, so an error cannot be relabelled as success",
+      "id": "req-3",
+      "method": "circuitHolder",
+      "params": {
+        "tokenId": "1"
+      },
+      "ok": false,
+      "body": {
+        "code": "BAD_REQUEST",
+        "message": "circuits must be address"
+      },
+      "ts": 1789000002,
+      "canonicalRequest": "{\"method\":\"circuitHolder\",\"params\":{\"tokenId\":\"1\"}}",
+      "canonicalBody": "{\"code\":\"BAD_REQUEST\",\"message\":\"circuits must be address\"}",
+      "preimage": "0x544150492d312f726573702f763286ddaef00401e3f10418398d67d7189fc458ea954d5e9b302d90241a4f2e45d6a342e619920267d6cfd5c5745e5a2b7478458f8df4cd20270d1d7ca0b2f2569fe28ded3adf4980c12dc704d0536ce69e32ebceeb00643e7fdd57e2ca36230c9ca38fca2e0e48a0168354d99f7bd426a9b772a774e9000000006aa1f942",
+      "digest": "0x3b3c6490963658db057f45eec6753ef84c246b6db7e8d114b419e2214dd450f5",
+      "eip191Digest": "0xa5cd9ffda25933b94232f7ad739d5e19fab4a5962ba87edf1adfe7c801217432",
+      "sig": "0x5871513f1c79a1bc9e65215b409fff1be887936809e5473d4e480d00f6f0e88b7efad69108bdbbfca29b9770b7440558f6254d6582f02bb860e94333459eb3aa1b",
+      "recovers": "0x1563915e194D8CfBA1943570603F7606A3115508",
+      "expect": "accepted"
+    },
+    {
+      "name": "params key order does not matter: the canonical form is the same",
+      "id": "req-4",
+      "method": "echo",
+      "params": {
+        "b": 2,
+        "a": 1
+      },
+      "ok": true,
+      "body": {
+        "echo": {
+          "b": 2,
+          "a": 1
+        }
+      },
+      "ts": 1789000003,
+      "canonicalRequest": "{\"method\":\"echo\",\"params\":{\"a\":1,\"b\":2}}",
+      "canonicalBody": "{\"echo\":{\"a\":1,\"b\":2}}",
+      "preimage": "0x544150492d312f726573702f763286ddaef00401e3f10418398d67d7189fc458ea95559d5bf0ce82670238207f4ca0535bd5b7526950f28d3557812da30cfdae8e18bbfe4dcb373ca38fa1bd97613d45dbd42583d52dd4ced0f6be9cc6d85874e91f01c56084121b40a4c9f2d7676377ec2c656ef577e874198c5e2f838944a2dabc63000000006aa1f943",
+      "digest": "0x7d588c81a7c5efa88ae032d9b0e8c2128db6b4642f60f4f52553c3df409fb383",
+      "eip191Digest": "0x61965552c4d6968a16ad96d21c2b4955f7b8826f054ffaf90ed0aea5656e8009",
+      "sig": "0xada8fac5e1a1a03671b8d3902d7590070091a1fda458bcc5febe52bc8ec4f0a91c1364c2ccbb71af6f466a55adf9a8276582ba0ab309eea5082d28e08e7a04281b",
+      "recovers": "0x1563915e194D8CfBA1943570603F7606A3115508",
+      "expect": "accepted"
+    },
+    {
+      "name": "refusal of an unparsable request: id \"\" and params {} with the path segment as method",
+      "id": "",
+      "method": "circuitHolder",
+      "params": {},
+      "ok": false,
+      "body": {
+        "code": "BAD_REQUEST",
+        "message": "invalid JSON"
+      },
+      "ts": 1789000004,
+      "canonicalRequest": "{\"method\":\"circuitHolder\",\"params\":{}}",
+      "canonicalBody": "{\"code\":\"BAD_REQUEST\",\"message\":\"invalid JSON\"}",
+      "preimage": "0x544150492d312f726573702f763286ddaef00401e3f10418398d67d7189fc458ea95c5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a4709553cfea870f8fe4b3c1ab323f68bdca9d42cfc78828d771f18e601f2894279500a201e7a784bd4adda181f873239ca444594170ad191ea5bb8d8f23957722b338000000006aa1f944",
+      "digest": "0x01788cb7d993378e9a2abbda621a2ef5e0fc9f904e07c07fa4bf54393a0a1aa2",
+      "eip191Digest": "0xe8931eeae8c7f7cddd072f1521712780b4c074645cf528df98c8161a58775016",
+      "sig": "0x50d84e59f97080488df04d6782876d4a0ea9fa2712d683148421f1cff682784c4becea9fb5bd5f564475160d06345662c882184c9cde2bb5aa791f45d338aa491b",
+      "recovers": "0x1563915e194D8CfBA1943570603F7606A3115508",
+      "expect": "accepted"
+    }
+  ],
+  "signatureEncoding": {
+    "baseCase": "free method, empty params, ok",
+    "cases": [
+      {
+        "name": "v written as 0/1 instead of 27/28: normalised, then accepted",
+        "sig": "0xd7d544bcab20533ab3d82f790195e0e5bd775a705fc67e32c6dcb41134f22bed59669c08c32ab3e16386a85e90603cedb020a267928488f9d1a349da3149b14500",
+        "recovers": "0x1563915e194D8CfBA1943570603F7606A3115508",
+        "expect": "accepted"
+      },
+      {
+        "name": "high-s form of case 1 signature (s replaced by n - s, v swapped): mathematically recovers the signer, MUST be rejected",
+        "sig": "0xd7d544bcab20533ab3d82f790195e0e5bd775a705fc67e32c6dcb41134f22beda69963f73cd54c1e9c7957a16f9fc3110a8e3a7f1cc41741ee2f14b29eec8ffc1c",
+        "expect": "rejected: s > n/2"
+      },
+      {
+        "name": "v = 29",
+        "sig": "0xd7d544bcab20533ab3d82f790195e0e5bd775a705fc67e32c6dcb41134f22bed59669c08c32ab3e16386a85e90603cedb020a267928488f9d1a349da3149b1451d",
+        "expect": "rejected: v not in {27, 28} after normalising 0/1"
+      },
+      {
+        "name": "signature of 64 bytes (v missing)",
+        "sig": "0xd7d544bcab20533ab3d82f790195e0e5bd775a705fc67e32c6dcb41134f22bed59669c08c32ab3e16386a85e90603cedb020a267928488f9d1a349da3149b145",
+        "expect": "rejected: signature is not 65 bytes"
+      }
+    ]
+  },
+  "bindingNegatives": {
+    "signatureOfCase": "free method, empty params, ok",
+    "cases": [
+      {
+        "name": "ok flipped: a signed result presented as an error",
+        "verifierValues": {
+          "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+          "id": "req-1",
+          "method": "blockNumber",
+          "params": {},
+          "ok": false,
+          "body": {
+            "blockNumber": 123456789
+          },
+          "ts": 1789000000
+        },
+        "sig": "0xd7d544bcab20533ab3d82f790195e0e5bd775a705fc67e32c6dcb41134f22bed59669c08c32ab3e16386a85e90603cedb020a267928488f9d1a349da3149b1451b",
+        "digest": "0xc1d3aa6a01a0216174ad1de39c7730e6f599187a757752073ee2fac22e6e45b1",
+        "recovers": "0xAf17BcF36235A5FDABc7077d6A55aD3da243D04F",
+        "expect": "rejected: recovered address is not the signer"
+      },
+      {
+        "name": "another id: the answer presented for a different request id",
+        "verifierValues": {
+          "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+          "id": "req-9",
+          "method": "blockNumber",
+          "params": {},
+          "ok": true,
+          "body": {
+            "blockNumber": 123456789
+          },
+          "ts": 1789000000
+        },
+        "sig": "0xd7d544bcab20533ab3d82f790195e0e5bd775a705fc67e32c6dcb41134f22bed59669c08c32ab3e16386a85e90603cedb020a267928488f9d1a349da3149b1451b",
+        "digest": "0x52453a9fa4046aee062ca1112e2662b1120be107007d98c966aa5c6a810570c7",
+        "recovers": "0x46E8d0E2e128fe599a0b2CC9833F8628322f2086",
+        "expect": "rejected: recovered address is not the signer"
+      },
+      {
+        "name": "another request: the verifier hashes the params it sent",
+        "verifierValues": {
+          "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+          "id": "req-1",
+          "method": "blockNumber",
+          "params": {
+            "x": 1
+          },
+          "ok": true,
+          "body": {
+            "blockNumber": 123456789
+          },
+          "ts": 1789000000
+        },
+        "sig": "0xd7d544bcab20533ab3d82f790195e0e5bd775a705fc67e32c6dcb41134f22bed59669c08c32ab3e16386a85e90603cedb020a267928488f9d1a349da3149b1451b",
+        "digest": "0x685256d430e374139fb2119e0a897fa5a1c4b6e06acbdf4825ee78f891e872b7",
+        "recovers": "0x0F584Ff7f101Dc378689CBbD09929df62B82527E",
+        "expect": "rejected: recovered address is not the signer"
+      },
+      {
+        "name": "another method: the verifier hashes the method it called",
+        "verifierValues": {
+          "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+          "id": "req-1",
+          "method": "blockNumber2",
+          "params": {},
+          "ok": true,
+          "body": {
+            "blockNumber": 123456789
+          },
+          "ts": 1789000000
+        },
+        "sig": "0xd7d544bcab20533ab3d82f790195e0e5bd775a705fc67e32c6dcb41134f22bed59669c08c32ab3e16386a85e90603cedb020a267928488f9d1a349da3149b1451b",
+        "digest": "0x4aa4bd596d3abe703c94c6bf658ccc09248957fb1042c061a28955ec798b7cab",
+        "recovers": "0x928F3696cB57a839B35E97CD3053014d591860Ea",
+        "expect": "rejected: recovered address is not the signer"
+      },
+      {
+        "name": "another body",
+        "verifierValues": {
+          "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+          "id": "req-1",
+          "method": "blockNumber",
+          "params": {},
+          "ok": true,
+          "body": {
+            "blockNumber": 123456790
+          },
+          "ts": 1789000000
+        },
+        "sig": "0xd7d544bcab20533ab3d82f790195e0e5bd775a705fc67e32c6dcb41134f22bed59669c08c32ab3e16386a85e90603cedb020a267928488f9d1a349da3149b1451b",
+        "digest": "0xa2f0a307e2b22cfd53f52905e579d763f39bf7d6fb7655f9b2e2703f694689ab",
+        "recovers": "0xD5CA01F471109563ABcaa375bA337722830658AA",
+        "expect": "rejected: recovered address is not the signer"
+      },
+      {
+        "name": "another ts",
+        "verifierValues": {
+          "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+          "id": "req-1",
+          "method": "blockNumber",
+          "params": {},
+          "ok": true,
+          "body": {
+            "blockNumber": 123456789
+          },
+          "ts": 1789000001
+        },
+        "sig": "0xd7d544bcab20533ab3d82f790195e0e5bd775a705fc67e32c6dcb41134f22bed59669c08c32ab3e16386a85e90603cedb020a267928488f9d1a349da3149b1451b",
+        "digest": "0xa6559ecc79f89ef59707a6e299b4e83e0ef2603b496e33a9d2f253ba47814fae",
+        "recovers": "0x6283B0Ac50F48574F61c6E4fEE9FB5b633ba51fc",
+        "expect": "rejected: recovered address is not the signer"
+      },
+      {
+        "name": "another container: signature of service A presented as service B",
+        "verifierValues": {
+          "container": "0x1563915e194D8CfBA1943570603F7606A3115508",
+          "id": "req-1",
+          "method": "blockNumber",
+          "params": {},
+          "ok": true,
+          "body": {
+            "blockNumber": 123456789
+          },
+          "ts": 1789000000
+        },
+        "sig": "0xd7d544bcab20533ab3d82f790195e0e5bd775a705fc67e32c6dcb41134f22bed59669c08c32ab3e16386a85e90603cedb020a267928488f9d1a349da3149b1451b",
+        "digest": "0x509fadefc941bad1b28a2e839a177a0b6ddecccae1d0a70fe051ffb555b7575c",
+        "recovers": "0xb571F277605F74350aFf55f98198FB73e7A7dFfC",
+        "expect": "rejected: recovered address is not the signer"
+      }
+    ]
+  }
+}
