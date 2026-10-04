@@ -1,5 +1,5 @@
 ---
-tap: TBD
+tap: 13
 title: Signed Responses for Container Services
 description: A request and response format in which a service run under a circuit container signs every answer, errors included, so that a client can attribute each answer to that container.
 author: Bruce (@BruceLanLan)
@@ -11,7 +11,7 @@ requires: TAP-10, TAP-11
 license: CC0-1.0
 ---
 
-# TAP-TBD: Signed Responses for Container Services
+# TAP-13: Signed Responses for Container Services
 
 ## Summary
 
@@ -217,7 +217,7 @@ Where the reference implementation's resolution of a service differs from TAP-10
 
 ## Test Cases
 
-The vector files are in `assets/tap-draft-signed-responses/`. They were generated with the reference implementation at the commit given below and checked with the canonicalisation and recovery routines of the independent Python implementation at the same commit. Keys and addresses in them are test values.
+The vector files are in `assets/tap-13/`. They were generated with the reference implementation at the commit given below and checked with the canonicalisation and recovery routines of the independent Python implementation at the same commit. Keys and addresses in them are test values.
 
 The canonical JSON vectors of TAP-11 (its Test Cases, `canonical-json.json`) apply to this TAP unchanged. This TAP adds:
 
