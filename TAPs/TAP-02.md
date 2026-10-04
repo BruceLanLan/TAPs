@@ -1,18 +1,18 @@
 ---
-tap: 20
+tap: 2
 title: Circuit Netlist Format and Evaluation Semantics
 description: The byte format of a TapeOut circuit netlist, when a netlist is well-formed, and exactly what one beat of evaluation computes.
-author: Yintong Wang (@ronesync)
+author: Alda (@ronesync)
 discussions-to: https://github.com/TapeOutProtocol/TAPs/issues/22
 status: Draft
 type: Standards
 created: 2026-09-28
-updated: 2026-09-30
+updated: 2026-10-04
 requires: TAP-01
 license: CC0-1.0
 ---
 
-# TAP-20: Circuit Netlist Format and Evaluation Semantics
+# TAP-02: Circuit Netlist Format and Evaluation Semantics
 
 ## Summary
 
@@ -163,7 +163,7 @@ None: this TAP records existing behaviour. If a confirmed difference between thi
 
 ### Vectors
 
-`assets/tap-20/vectors.json` (format `tap-netlist-vectors/1`) contains:
+`assets/tap-02/vectors.json` (format `tap-netlist-vectors/1`) contains:
 
 - **Valid netlists** with either a full truth table (combinational) or a sequence of beats from all-zero state (sequential), all bit vectors packed as in §5:
   - `nand`, `constants`: one gate; use of signals 0 and 1;
@@ -184,16 +184,16 @@ None: this TAP records existing behaviour. If a confirmed difference between thi
 - 16 random (state, input) pairs per circuit through `step` and through a §4 simulator: **384/384 identical** (new state and outputs, bit for bit).
 - `eval` on the 18 circuits with `nState = 0`: **288/288 identical**. On the 6 circuits with state it reverts with `has latch: use step`.
 
-The comparison, with every circuit listed and the raw results, is `assets/tap-20/chain-verification.{json,md}`. This meets the condition this draft set for Review: at least 20 mainnet circuits, including at least 3 with LATCH and 3 with REF.
+The comparison, with every circuit listed and the raw results, is `assets/tap-02/chain-verification.{json,md}`. This meets the condition this draft set for Review: at least 20 mainnet circuits, including at least 3 with LATCH and 3 with REF.
 
 ## Reference Implementation
 
-- `assets/tap-20/reference.py` (MIT): decoder, encoder, well-formedness check, one-beat evaluator and bit packing in about 140 lines of dependency-free Python. This is the reference implementation of this TAP.
+- `assets/tap-02/reference.py` (MIT): decoder, encoder, well-formedness check, one-beat evaluator and bit packing in about 140 lines of dependency-free Python. This is the reference implementation of this TAP.
 - The deployed contracts themselves: `Circuits.sol` and `lib/NetlistVM.sol` of the circuit implementation `0x8E1D125Def6d3826C278299273a0760D47626068` (MIT, [source verified on BscScan](https://bscscan.com/address/0x8E1D125Def6d3826C278299273a0760D47626068#code); the deployed bytecode fixes the version). Their comments state that the evaluator matches the tapeout.net JavaScript simulator bit for bit.
 
 ## Deployments
 
-**BNB Smart Chain (56).** **Measured** read-only on 2026-09-29 at block 124,767,866, identical on `bsc-dataseed.bnbchain.org`, `bsc-dataseed1.defibit.io` and `bsc-dataseed1.ninicoin.io` (raw reads: `assets/tap-20/deployments-check.json`).
+**BNB Smart Chain (56).** **Measured** read-only on 2026-09-29 at block 124,767,866, identical on `bsc-dataseed.bnbchain.org`, `bsc-dataseed1.defibit.io` and `bsc-dataseed1.ninicoin.io` (raw reads: `assets/tap-02/deployments-check.json`).
 
 | Contract | Address | How to verify read-only | Value read | Sealed? |
 |---|---|---|---|---|
