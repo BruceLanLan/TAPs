@@ -7,7 +7,7 @@ discussions-to: https://github.com/TapeOutProtocol/TAPs/issues/11
 status: Draft
 type: Standards
 created: 2026-09-30
-requires: TAP-10, TAP-11, TAP-draft-signed-responses
+requires: TAP-10, TAP-11, TAP-13
 license: CC0-1.0
 ---
 
@@ -36,7 +36,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 - **Container**, **holder**, **processor contract**, **pinned block**, **strict agreement**, **hub**, **site store**: as defined in TAP-10 §1. The hub address is the one listed under TAP-10 Deployments (`0xe61A9C7213a6Aa616C246a2B569e555B417b25ee`, the same on every chain).
 - **Endpoint ID**: `endpoint(container, chainId) = uint32(0) ‖ uint64(chainId) ‖ container`, exactly as TAP-10 §12.1 defines it, including its rejection of a `chainId` above 2^53 − 1.
 - **Initiator** (A) and **responder** (B): the party that sends the invite and the party that receives it. `sA`, `SA` and `sB`, `SB` are their static X25519 private and public keys; `eA`, `EA` and `eB`, `EB` their ephemeral ones.
-- **Service**: a container that publishes a service manifest as TAP-11 §3 specifies and answers calls as TAP-draft-signed-responses §3 and §4 specify. The relay transport (§11) and the relay references of §3.1 and §5 depend on these two drafts; the rest of this TAP depends only on TAP-10 and on the canonical JSON of TAP-11 §6 (§2).
+- **Service**: a container that publishes a service manifest as TAP-11 §3 specifies and answers calls as TAP-13 §3 and §4 specify. The relay transport (§11) and the relay references of §3.1 and §5 depend on these two drafts; the rest of this TAP depends only on TAP-10 and on the canonical JSON of TAP-11 §6 (§2).
 - **Wire message**: the unit every transport carries (§10).
 - Notation follows TAP-10 §1: `‖` is concatenation, `uint64(x)` and `uint32(x)` are big-endian, ASCII labels such as `"TAP-26/frame/v1"` are their raw bytes without a terminator. `DH(x, Y)` is X25519 (RFC 7748) of private key `x` and public key `Y`. HKDF-SHA256 is RFC 5869, written `HKDF-SHA256(IKM, salt, info, L)`; HMAC-SHA256 is RFC 2104; ChaCha20-Poly1305 is RFC 8439 (12-byte nonce); XChaCha20-Poly1305 is draft-irtf-cfrg-xchacha-03 (24-byte nonce). "Hex" means lowercase hexadecimal; a field described as "`0x` hex" carries the prefix, one described as "bare hex" does not.
 - The labels in this TAP begin with `TAP-26/`. They are fixed constants and do not refer to any TAP number (see Rationale).
@@ -294,7 +294,7 @@ Every wire message is 1 to 16,448 bytes. A receiver decodes each wire message in
 
 #### 11.1 Methods
 
-A relay is a service (§1) whose manifest lists these methods. Every implementation **MUST** support this transport. A client resolves the relay from the relay reference's `container` under TAP-11 §2 and calls the methods through the manifest's live endpoints with the requests of TAP-draft-signed-responses §3, verifying each answer under its §8:
+A relay is a service (§1) whose manifest lists these methods. Every implementation **MUST** support this transport. A client resolves the relay from the relay reference's `container` under TAP-11 §2 and calls the methods through the manifest's live endpoints with the requests of TAP-13 §3, verifying each answer under its §8:
 
 | Method | Params | Result | Price |
 |---|---|---|---|
@@ -309,9 +309,9 @@ A relay is a service (§1) whose manifest lists these methods. Every implementat
 - **Rooms.** Only `relaySend` and `relayHandshake` create a room. `relayRecv` on a room that does not exist returns `{ "frames": [], "next": after, "epoch": null }` (after waiting, if asked) and creates nothing.
 - **Epoch.** A relay **MUST** give each room a random `epoch` when it creates the room (RECOMMENDED: 8 random bytes); every `epoch` **MUST** match `^[0-9a-f]{1,32}$`. Every method returns the room's current `epoch`.
 - **Indices.** Within one epoch, `i` starts at 0 and increases by exactly one for every accepted post, whatever the wire type.
-- **Receiving.** `relayRecv` returns stored wire messages with `i > after`, in increasing `i`. If the request's `epoch` is present and differs from the room's (including `null`), the relay **MUST** answer as if `after` were −1. A relay **SHOULD** accept a request without `epoch` and answer it from `after` as given. If nothing is available, the relay **MAY** hold the request up to `waitMs`, capped below its own response deadline, and answer as soon as a message arrives. An answer **MUST** fit the response size cap of TAP-draft-signed-responses §4 (1 MiB): the relay returns as many messages as fit a byte budget, always at least one when any is available. `next` is the last returned `i`; `after` when nothing was returned; −1 when the epoch changed and nothing was returned.
+- **Receiving.** `relayRecv` returns stored wire messages with `i > after`, in increasing `i`. If the request's `epoch` is present and differs from the room's (including `null`), the relay **MUST** answer as if `after` were −1. A relay **SHOULD** accept a request without `epoch` and answer it from `after` as given. If nothing is available, the relay **MAY** hold the request up to `waitMs`, capped below its own response deadline, and answer as soon as a message arrives. An answer **MUST** fit the response size cap of TAP-13 §4 (1 MiB): the relay returns as many messages as fit a byte budget, always at least one when any is available. `next` is the last returned `i`; `after` when nothing was returned; −1 when the epoch changed and nothing was returned.
 - **Free handshake path.** `relayHandshake` accepts only a wire that decodes to `0x01` followed by a JSON object whose `t` is `"accept"` or `"ready"`, and **MAY** cap its size and the number of such messages per room. Rooms created by this path **SHOULD** have their own count limit and a shorter lifetime until a `relaySend` to the room adopts them.
-- **Protected inbox messages.** A relay **MUST** store wire types `0x03` and `0x04` under a bound of their own that other types cannot evict. It **SHOULD** limit such posts per room per source within a window and refuse the excess as a caller error (`BAD_REQUEST`, TAP-draft-signed-responses §6). The **source** is the payer a paid call proves; otherwise the caller's network address; a caller the relay cannot identify counts as one source for the whole room.
+- **Protected inbox messages.** A relay **MUST** store wire types `0x03` and `0x04` under a bound of their own that other types cannot evict. It **SHOULD** limit such posts per room per source within a window and refuse the excess as a caller error (`BAD_REQUEST`, TAP-13 §6). The **source** is the payer a paid call proves; otherwise the caller's network address; a caller the relay cannot identify counts as one source for the whole room.
 - **Bounds.** A relay **SHOULD** bound messages per room, room lifetime, the number of rooms and the number of held requests, and **SHOULD** keep an idle room for at least 600 seconds. It **MAY** drop a room's oldest `0x01`/`0x02` messages. It **MUST NOT** remove a room that has not expired in order to create another; when full, it refuses the new room.
 
 Values used by the reference relay (informative): 22,000 base64 characters per `frame`; 2,048 per handshake frame and 8 handshake messages per room; 256 other messages and 64 protected messages per room; 8 protected posts per source per room per 600 seconds; 1,000 handshake-only rooms living 10 minutes; room lifetime 900 seconds after last use; `waitMs` capped at 20,000 ms; answers budgeted at 512 KiB.
