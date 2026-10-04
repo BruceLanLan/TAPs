@@ -9,6 +9,8 @@ TAPs are the public, numbered documents in which the TapeOut community proposes,
 | [TAP-01](TAPs/TAP-01.md) | TAP Purpose and Process | Process | Draft |
 | [TAP-10](TAPs/TAP-10.md) | DeWEB Access and Messaging Layers | Standards | Draft |
 | [TAP-11](TAPs/TAP-11.md) | TapeAPI Service Manifest and Holder Delegation | Application | Draft |
+| [TAP-12](TAPs/TAP-12.md) | Sealed Commitments and Verdicts over TapeSend | Application | Draft |
+| [TAP-13](TAPs/TAP-13.md) | Signed Responses for Container Services | Application | Draft |
 | [TAP-20](TAPs/TAP-20.md) | Circuit Netlist Format and Evaluation Semantics | Standards | Draft |
 
 Drafts that are proposed but not yet merged are the open pull requests.
