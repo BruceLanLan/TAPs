@@ -1,5 +1,5 @@
 {
-  "tap": "TAP-draft-mcp-tools, Specification §4 and §5; envelope format of TAP-draft-signed-responses §4 and §5",
+  "tap": "TAP-draft-mcp-tools, Specification §4 and §5; envelope format of TAP-13 §4 and §5",
   "source": "Produced by the reference provider server/src/mcp-proxy.js (createMcpProxy, in front of an in-process MCP server built with sdk/src/mcp.js createMcpServer) at https://github.com/BruceLanLan/tapeapi/tree/fda84db889d2a732915f264a799af24073177a85, with the clock fixed; digests from sdk/src/sig.js at that commit.",
   "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
   "signerKey": "0x2222222222222222222222222222222222222222222222222222222222222222",
