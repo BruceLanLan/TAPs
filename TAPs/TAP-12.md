@@ -1,5 +1,5 @@
 ---
-tap: TBD
+tap: 12
 title: Sealed Commitments and Verdicts over TapeSend
 description: A record format for claims that are fixed in time, hidden until an open time, revealed, and judged, built entirely on TAP-10 messages.
 author: spongemochi (@spongemochi)
@@ -11,7 +11,7 @@ requires: TAP-10
 license: CC0-1.0
 ---
 
-# TAP-TBD: Sealed Commitments and Verdicts over TapeSend
+# TAP-12: Sealed Commitments and Verdicts over TapeSend
 
 ## Summary
 
