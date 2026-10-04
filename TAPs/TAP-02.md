@@ -1,5 +1,5 @@
 ---
-tap: 02
+tap: 2
 title: Circuit Netlist Format and Evaluation Semantics
 description: The byte format of a TapeOut circuit netlist, when a netlist is well-formed, and exactly what one beat of evaluation computes.
 author: Alda (@ronesync)

@@ -1,20 +1,20 @@
 ---
-tap: 20
+tap: 2
 title: Circuit Netlist Format and Evaluation Semantics
 description: The byte format of a TapeOut circuit netlist, when a netlist is well-formed, and exactly what one beat of evaluation computes.
-author: Yintong Wang (@ronesync)
+author: Alda (@ronesync)
 discussions-to: https://github.com/TapeOutProtocol/TAPs/issues/22
 status: Draft
 type: Standards
 created: 2026-09-28
-updated: 2026-09-30
+updated: 2026-10-04
 requires: TAP-01
 license: CC0-1.0
 ---
 
-> 本文是 `TAP-20.md` 的中文译本，仅供参考。按 TAP-01 §9，以英文版为准。
+> 本文是 `TAP-02.md` 的中文译本，仅供参考。按 TAP-01 §9，以英文版为准。
 
-# TAP-20：电路网表格式与求值语义
+# TAP-02：电路网表格式与求值语义
 
 ## 概要
 
@@ -165,7 +165,7 @@ TapeOut 上每个流片的电路都是一份网表：由处理器合约保存的
 
 ### 测试向量
 
-`assets/tap-20/vectors.json`（格式 `tap-netlist-vectors/1`）包含：
+`assets/tap-02/vectors.json`（格式 `tap-netlist-vectors/1`）包含：
 
 - **合法网表**：组合电路附完整真值表，时序电路附从全零状态开始的多拍序列，所有位向量按 §5 打包：
   - `nand`、`constants`：单个门；使用信号 0 和 1；
@@ -186,16 +186,16 @@ TapeOut 上每个流片的电路都是一份网表：由处理器合约保存的
 - 每个电路随机取 16 组（状态，输入），分别送入 `step` 和按 §4 实现的模拟器：**384/384 完全一致**（新状态和输出逐位相同）。
 - 对 18 个 `nState = 0` 的电路调用 `eval`：**288/288 完全一致**。对 6 个带状态的电路，`eval` 回滚并返回 `has latch: use step`。
 
-完整对比（逐个列出电路，附原始结果）见 `assets/tap-20/chain-verification.{json,md}`。这满足了本草案为进入评审设定的条件：至少 20 个主网电路，其中至少 3 个含 LATCH、3 个含 REF。
+完整对比（逐个列出电路，附原始结果）见 `assets/tap-02/chain-verification.{json,md}`。这满足了本草案为进入评审设定的条件：至少 20 个主网电路，其中至少 3 个含 LATCH、3 个含 REF。
 
 ## 参考实现
 
-- `assets/tap-20/reference.py`（MIT）：解码、编码、合法性检查、一拍求值和位打包，约 140 行，无依赖的 Python。这是本 TAP 的参考实现。
+- `assets/tap-02/reference.py`（MIT）：解码、编码、合法性检查、一拍求值和位打包，约 140 行，无依赖的 Python。这是本 TAP 的参考实现。
 - 已部署合约本身：电路实现 `0x8E1D125Def6d3826C278299273a0760D47626068` 的 `Circuits.sol` 和 `lib/NetlistVM.sol`（MIT，[源码已在 BscScan 验证](https://bscscan.com/address/0x8E1D125Def6d3826C278299273a0760D47626068#code)；版本由链上字节码固定）。其注释说明求值器与 tapeout.net 的 JavaScript 模拟器逐位一致。
 
 ## 部署
 
-**BNB Smart Chain (56)。** 2026-09-29 在区块 124,767,866 只读**实测**，`bsc-dataseed.bnbchain.org`、`bsc-dataseed1.defibit.io`、`bsc-dataseed1.ninicoin.io` 三个节点结果一致（原始读数：`assets/tap-20/deployments-check.json`）。
+**BNB Smart Chain (56)。** 2026-09-29 在区块 124,767,866 只读**实测**，`bsc-dataseed.bnbchain.org`、`bsc-dataseed1.defibit.io`、`bsc-dataseed1.ninicoin.io` 三个节点结果一致（原始读数：`assets/tap-02/deployments-check.json`）。
 
 | 合约 | 地址 | 只读核验方式 | 读到的值 | 是否封存 |
 |---|---|---|---|---|
