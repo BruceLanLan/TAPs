@@ -7,7 +7,7 @@ discussions-to: https://github.com/TapeOutProtocol/TAPs/issues/25
 status: Draft
 type: Application
 created: 2026-09-30
-requires: TAP-10, TAP-11, TAP-draft-signed-responses
+requires: TAP-10, TAP-11, TAP-13
 license: CC0-1.0
 ---
 
@@ -19,13 +19,13 @@ A way for an AI service that belongs to a TapeOut circuit to publish its price l
 
 ## Abstract
 
-This TAP defines the optional manifest member `ai`, in which a service of TAP-11 lists base URLs for four existing AI API formats (OpenAI Chat Completions, OpenAI Responses, Anthropic Messages, OpenAI Embeddings) and a price table per model. Clients keep each format's official SDK and change only its base URL. A **sidecar** in front of the upstream API passes requests and answers through and signs, for every metered request, a **usage receipt**: an envelope of TAP-draft-signed-responses, reusing its digest under that TAP's §9, that binds the SHA-256 of the exact request bytes and of the response (for an event stream, of its event data), the reported model and usage, and the amounts the price table gives for them. The TAP fixes the price and usage formats, the integer arithmetic of amounts, how each format is read, where each format's stream ends and the receipt goes, how receipts are retrieved, and the checks a client makes.
+This TAP defines the optional manifest member `ai`, in which a service of TAP-11 lists base URLs for four existing AI API formats (OpenAI Chat Completions, OpenAI Responses, Anthropic Messages, OpenAI Embeddings) and a price table per model. Clients keep each format's official SDK and change only its base URL. A **sidecar** in front of the upstream API passes requests and answers through and signs, for every metered request, a **usage receipt**: an envelope of TAP-13, reusing its digest under that TAP's §9, that binds the SHA-256 of the exact request bytes and of the response (for an event stream, of its event data), the reported model and usage, and the amounts the price table gives for them. The TAP fixes the price and usage formats, the integer arithmetic of amounts, how each format is read, where each format's stream ends and the receipt goes, how receipts are retrieved, and the checks a client makes.
 
 ## Motivation
 
 Teams that serve AI models to others bill by tokens, and their users cannot check the bill: the answer, the token counts and the price all come from the provider's server, a disputed charge is one party's word against the other's, and nothing ties an answer to an identity that outlives a domain name or a platform account.
 
-TAP-11 binds a service to a circuit container and names the key that speaks for it, and TAP-draft-signed-responses defines how that key signs an answer. Neither fits AI APIs as they are used: callers keep the official SDKs of a few established formats; answers are often event streams that proxies re-chunk; each format reports usage differently, sometimes only on request; and a price is checkable only if the table and the arithmetic are fixed in advance. This TAP fills that gap without changing any format: the price table lives in the on-chain manifest, a sidecar signs a receipt in a place the official SDKs ignore, and a client that kept the bytes it sent and received can recompute every hash and amount.
+TAP-11 binds a service to a circuit container and names the key that speaks for it, and TAP-13 defines how that key signs an answer. Neither fits AI APIs as they are used: callers keep the official SDKs of a few established formats; answers are often event streams that proxies re-chunk; each format reports usage differently, sometimes only on request; and a price is checkable only if the table and the arithmetic are fixed in advance. This TAP fills that gap without changing any format: the price table lives in the on-chain manifest, a sidecar signs a receipt in a place the official SDKs ignore, and a client that kept the bytes it sent and received can recompute every hash and amount.
 
 ## Specification
 
@@ -34,12 +34,12 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 ### 1. Terms and notation
 
 - **Container**: as defined in TAP-10 §1. **Service**, **manifest**, **signer**, **provider**, **client**: as defined in TAP-11 §1; a service is **resolved** when its resolution under that TAP's §2 has the outcome "resolved".
-- **Strict parser**: the parser of TAP-draft-signed-responses §2. **Envelope digest**: the digest and signature of TAP-draft-signed-responses §5 (prefix `TAPI-1/resp/v2`, 139-byte preimage, EIP-191, low-`s`).
+- **Strict parser**: the parser of TAP-13 §2. **Envelope digest**: the digest and signature of TAP-13 §5 (prefix `TAPI-1/resp/v2`, 139-byte preimage, EIP-191, low-`s`).
 - **Upstream**: the AI API the provider forwards requests to. **Sidecar**: the part of the provider that receives clients' AI requests, forwards them to the upstream, and returns the upstream's answers with receipts. A sidecar is operated by the provider and uses the service's signer key.
 - **Format**, **metered path**, **receipt method**: §2. **Service root**, **root path**, **API path**: §3.2.
 - **Receipt**: the envelope of §7. **Whole answer**: an answer that is not a stream (§5.2).
 - `sha256hex(b)` is SHA-256 (FIPS 180-4) of the bytes `b`, written as 64 lowercase hexadecimal digits. **base64url** is RFC 4648 §5 without padding. `LF` is the byte `0x0a`, `CR` the byte `0x0d`.
-- A **count** is a JSON number that is an integer from 0 to 2^53 − 1. In price entries (§3.4) and in the members read from an answer (§6.3, §7.3), a member whose value is `null` is treated as **absent**; elsewhere `null` is a value like any other. Lengths of strings are in UTF-16 code units, as in TAP-draft-signed-responses §1.
+- A **count** is a JSON number that is an integer from 0 to 2^53 − 1. In price entries (§3.4) and in the members read from an answer (§6.3, §7.3), a member whose value is `null` is treated as **absent**; elsewhere `null` is a value like any other. Lengths of strings are in UTF-16 code units, as in TAP-13 §1.
 - **Parsed as JSON**: decoded as UTF-8, with one leading U+FEFF removed and each invalid sequence replaced by U+FFFD, and then parsed as JSON text (RFC 8259); where an object repeats a member name, its last value counts. Bytes that do not parse have no value. This applies to request bodies and answers, never to receipts (§9.3).
 - **2xx** means an HTTP status from 200 to 299.
 - Event-stream terms (**line**, **comment**, **field line**, **event**, **dispatched**, **data**, **event name**, **ambiguous line**, **close while an event is unfinished**) are those of §5.2; the **end** of a stream and **after the end** are those of §6.1.
@@ -124,7 +124,7 @@ This TAP defines four formats. Every other request under a service root carries 
 #### 3.5 Validation, reserved names and the lookup method
 
 - A client that uses `ai` MUST validate the whole member against §3.2–§3.4 and MUST NOT use any part of it when any rule is violated. Members that this TAP does not define, at any level of `ai`, are ignored. The rest of the manifest, and its resolution, are unaffected. A client that does not use `ai` ignores it.
-- The receipt methods of §2 are **reserved**. A manifest that carries `ai` MUST NOT list a method (TAP-11 §3.3) whose `name` is a receipt method, and a client MUST treat the `ai` member of such a manifest as invalid. The provider of a service whose manifest carries `ai` MUST answer a request of TAP-draft-signed-responses §3 whose path segment is a receipt method only with an error (`ok` `false`).
+- The receipt methods of §2 are **reserved**. A manifest that carries `ai` MUST NOT list a method (TAP-11 §3.3) whose `name` is a receipt method, and a client MUST treat the `ai` member of such a manifest as invalid. The provider of a service whose manifest carries `ai` MUST answer a request of TAP-13 §3 whose path segment is a receipt method only with an error (`ok` `false`).
 - A manifest that carries `ai` MUST list the method `receipt` of §7.5, with `priceBEM` `"0"` and `params` `{ "id": "string" }`.
 
 ### 4. Usage, model matching and amounts
@@ -318,11 +318,11 @@ The sidecar reads the answer's id, model, counts and completion as below; a clie
 
 #### 7.5 Retrieval
 
-The method `receipt` is a method of TAP-draft-signed-responses §3 with `params` `{ "id": string, "requestSha256"?: string }`, where `requestSha256`, when given, is 64 lowercase hexadecimal digits.
+The method `receipt` is a method of TAP-13 §3 with `params` `{ "id": string, "requestSha256"?: string }`, where `requestSha256`, when given, is 64 lowercase hexadecimal digits.
 
 - The answer is an envelope of that TAP with `ok` `true` whose `result` is a stored receipt: the most recent receipt with that `id`, or, when `requestSha256` is given, the one whose `id` and `params.requestSha256` both equal the parameters.
 - When no stored receipt matches, the provider answers a signed `BAD_REQUEST`. A provider MAY refuse, with a signed `BAD_REQUEST`, a lookup that does not give `requestSha256`.
-- A provider SHOULD keep every receipt retrievable for at least one hour after the answer, and MAY limit lookups with the unsigned rate-limit answer of TAP-draft-signed-responses §7.
+- A provider SHOULD keep every receipt retrievable for at least one hour after the answer, and MAY limit lookups with the unsigned rate-limit answer of TAP-13 §7.
 
 ### 8. Sidecar
 
@@ -351,7 +351,7 @@ A client that relies on a receipt MUST make these checks:
 
 1. **Decoding.** The base64url text decodes to UTF-8 JSON text that the strict parser accepts and whose value is an object.
 2. **Shape.** The receipt satisfies §7.1 and §7.2: its members and types; `ok` is `true`; `requestSha256` and `responseSha256` are 64 lowercase hexadecimal digits; `usage` is `null` or satisfies §4.1 with its members in order; `status` is an integer from 100 to 599; each element of `prices` has exactly the members `currency` and `amount`, in this order, and its amount matches `^[0-9]+\.[0-9]{8}$`; currencies are unique; and the presence rules of `prices`, `modelMatchedBy`, `unpriced` and `usageInjected`, including `usage` and `prices` `null` when `status` is not 2xx. Members of the receipt, `params` and `result` that this TAP does not define do not fail this check; the digest of item 3 covers `params` and `result` as they appear in the receipt.
-3. **Signature.** `container` equals `C` (compared case-insensitively), and the envelope digest over the values of §10, with `C` as the container, recovers to `S` under the signature rules of TAP-draft-signed-responses §5. When it recovers to another address, this check fails; the client then rereads the service as TAP-draft-signed-responses §8 requires after a binding failure, and MAY accept the same receipt if the reread signer is exactly that address and the receipt passes every check against the reread service.
+3. **Signature.** `container` equals `C` (compared case-insensitively), and the envelope digest over the values of §10, with `C` as the container, recovers to `S` under the signature rules of TAP-13 §5. When it recovers to another address, this check fails; the client then rereads the service as TAP-13 §8 requires after a binding failure, and MAY accept the same receipt if the reread signer is exactly that address and the receipt passes every check against the reread service.
 4. **Method and path.** `method` is the receipt method of the format of the request it sent; `params.path` is that request's API path; `result.status` is the status it received; `result.stream` is whether the answer it received is a stream (§5.2). A client that does not hold the answer's `Content-Type` cannot decide this from the headers; it then fails this check when `result.stream` is `true` and the body, parsed as JSON, is an object or an array.
 5. **Bytes**, when it holds them: `requestSha256` is the hash of the bytes it sent; `responseSha256` is the hash of what it received (for a stream, of the events dispatched up to and including the end, §6.1); when the answer's id (§7.3) is a string of 1 to 128 characters in U+0021–U+007E, `id` equals it; `model` is the reported model, or, when the answer reports none, `null` unless `modelMatchedBy` is `"request"`; `usage` equals the usage it computes (§4.1, §7.3); `complete` is what its own reading gives; and when `modelMatchedBy` is `"request"`, `model` equals the requested model of its request. The usage is not compared, and that comparison is reported as not made, only when `usageInjected` is present, the answer is a stream, the format is `openai-chat`, and the request body the client sent is one that §6.3 lets a sidecar change (or the client does not hold it). A whole answer is compared whether or not `usageInjected` is present. A stream receipt that carries `usageInjected` fails this check when its format is not `openai-chat` or the request body the client sent is not one that §6.3 lets a sidecar change.
 6. **Amounts.** Matching `model` against the `ai` member under §4.2 for the request's format gives an entry exactly when `modelMatchedBy` is present; `prices` equals the list §4.3 gives for that entry and `usage` (currencies, order and amounts), or is `null` when there is none; and `unpriced` equals the member names of `usage.other` when `prices` is not `null`.
@@ -362,7 +362,7 @@ A check that the client could not make (for example, because it no longer holds 
 
 ### 10. Reuse of the envelope digest
 
-This section gives what TAP-draft-signed-responses §9 requires of a TAP that reuses its digest.
+This section gives what TAP-13 §9 requires of a TAP that reuses its digest.
 
 | Place in the digest | Value in a receipt | How a verifier obtains it |
 |---|---|---|
@@ -375,7 +375,7 @@ This section gives what TAP-draft-signed-responses §9 requires of a TAP that re
 
 Why no receipt is accepted as an answer, and no answer as a receipt:
 
-- A request of TAP-draft-signed-responses §3 names a method its manifest lists, and a manifest that carries `ai` lists no receipt method (§3.5). The request object that a client builds under that TAP's §8 therefore never names a receipt method, and its digest never equals a receipt's.
+- A request of TAP-13 §3 names a method its manifest lists, and a manifest that carries `ai` lists no receipt method (§3.5). The request object that a client builds under that TAP's §8 therefore never names a receipt method, and its digest never equals a receipt's.
 - A receipt is accepted only when its `method` is the receipt method of the format of the client's own request (§9.3 item 4) and its `ok` is `true` (§9.3 item 2). An answer of the service whose request object names a receipt method is an error, with `ok` `false` (§3.5), so its digest differs from a receipt's in the `ok` byte. This includes the answers of the lookup method `receipt` (§7.5), whose request object names `receipt`, which is not a receipt method (§2).
 
 ## Rationale
@@ -391,7 +391,7 @@ Why no receipt is accepted as an answer, and no answer as a receipt:
 - **Exact matching, reported model first.** Any fuzzy rule lets two parties price one receipt differently. The reported model names what answered; the requested model is a fallback for formats that report none.
 - **Integer arithmetic, rounding up once.** Floating point differs between platforms, and rounding per bucket would make the sum depend on how tokens are split; rounding up means a receipt never states less than the exact amount. Prices are published, not settled: settlement needs payment rules that belong in a separate TAP.
 - **`ok` is always true.** A receipt states what the upstream answered, failures included: an HTTP 429 becomes attributable, with `usage` and `prices` `null`, and an answer that broke off is priced from the usage it reported, with `complete` `false`, because the upstream bills it. The sidecar's own errors have nothing to bind and are unsigned.
-- **A separate TAP.** Receipts need a price table, a usage schema, stream parsing and a lookup method that no client of TAP-draft-signed-responses needs; that TAP's §9 is the only link.
+- **A separate TAP.** Receipts need a price table, a usage schema, stream parsing and a lookup method that no client of TAP-13 needs; that TAP's §9 is the only link.
 
 ## Backwards Compatibility
 
@@ -467,7 +467,7 @@ The attacker considered can read, delay, drop, replay and modify traffic between
 - **Request privacy.** A receipt carries hashes, never content, so it can be shown to a third party; but a short or predictable prompt can be confirmed from its hash by guessing. A client can prevent that by appending random JSON whitespace (space, tab, `LF`, `CR`) after the JSON text of its request body: the parsed request, its tokens and any prompt cache keyed on them are unchanged, and the hash cannot be guessed. The model, usage and time stay visible.
 - **Retrieval by id.** The lookup method answers whoever presents an id. Some OpenAI-compatible servers draw answer ids from a small set, and the sidecar keeps the upstream's id, so a stranger can read other callers' receipts (model, usage, time, hashes). Providers behind such upstreams can require `requestSha256` in lookups (§7.5), keep receipts for less time and rate-limit lookups.
 - **Credentials and routing.** The sidecar sees each caller's API key and forwards it upstream, as the provider's own server would, so it is operated by the provider, never by a third party. The headers of §8 keep client addresses and cookies from the upstream; forwarded session headers of the official clients let the upstream link a caller's requests. Redirects are not followed and the upstream address is fixed by configuration, so a request cannot steer the sidecar to another host.
-- **Signer key and parsing.** The sidecar holds the signer key online; whoever steals it can sign receipts for the service until the holder replaces the key or the delegation expires (TAP-11 §7.2). Receipts share the signature domain of TAP-draft-signed-responses; §3.5 and §10 keep a receipt and an answer apart, and the strict parser and canonical forms of that TAP (§2, §5) remove the values on which implementations have been seen to disagree.
+- **Signer key and parsing.** The sidecar holds the signer key online; whoever steals it can sign receipts for the service until the holder replaces the key or the delegation expires (TAP-11 §7.2). Receipts share the signature domain of TAP-13; §3.5 and §10 keep a receipt and an answer apart, and the strict parser and canonical forms of that TAP (§2, §5) remove the values on which implementations have been seen to disagree.
 - **Compliance.** This TAP gives a provider an identity and a published price list; it is not designed to help anyone evade an upstream provider's terms.
 - **Trust inherited from resolution.** Every guarantee above rests on the signer being the one the holder authorised and on the price table being the one in the manifest resolved under TAP-11. Until the contracts that resolution reads are sealed, whoever controls them can change what resolution returns; this TAP inherits that assumption.
 
