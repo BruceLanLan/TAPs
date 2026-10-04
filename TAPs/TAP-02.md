@@ -2,7 +2,7 @@
 tap: 2
 title: Circuit Netlist Format and Evaluation Semantics
 description: The byte format of a TapeOut circuit netlist, when a netlist is well-formed, and exactly what one beat of evaluation computes.
-author: Yintong Wang (@ronesync)
+author: Alda (@ronesync)
 discussions-to: https://github.com/TapeOutProtocol/TAPs/issues/22
 status: Draft
 type: Standards
