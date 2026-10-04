@@ -7,7 +7,7 @@ discussions-to: https://github.com/TapeOutProtocol/TAPs/pull/1
 status: Draft
 type: Process
 created: 2026-09-27
-updated: 2026-09-28
+updated: 2026-10-04
 license: CC0-1.0
 ---
 
@@ -91,10 +91,12 @@ TAP-01 is adopted through the process it defines. Editors merge it as a Draft, m
 
 As in EIP-1, editors assign a TAP's number when they merge it as a Draft:
 
-- Numbers 1–9 are reserved for Process and Information TAPs about the TAP process itself;
+- Number 1 is this TAP;
+- Numbers 2–9 are reserved for the foundational standards of the TapeOut protocol, the formats that every other standard builds on (for example the circuit netlist format), assigned by editors;
 - The multiples of ten from 10 to 100 (TAP-10, TAP-20, …, TAP-100) are reserved for core standards of the TapeOut protocol and DeWEB, assigned by editors. TAP-10 is the first of them;
 - Every other TAP gets the lowest number above 10 that is neither reserved nor already used;
-- Numbers are never reused, not even those of Withdrawn TAPs.
+- While a TAP is a Draft, editors may give it another number, for example to move it into a reserved range; the number it gives up becomes free again. Once a TAP has left Draft, its number never changes;
+- The numbers of TAPs that have left Draft, and of Withdrawn TAPs, are never reused.
 
 A TAP is named `TAP-` followed by its number written with at least two digits: TAP-01 to TAP-09, then TAP-10, TAP-11, TAP-123. The preamble's `tap` field holds the plain number (`1` for TAP-01).
 
