@@ -1,0 +1,415 @@
+{
+  "title": "The agent manifest member: valid members with the reference implementation's normalised form, and invalid members",
+  "source": "Expected verdicts follow section 1 of the draft. `valid` is the verdict an implementation reproduces; for a valid case, `result` is the value returned by validateAgentMember of TapeAPI 1.7.1 at commit 2fbface78beabe91cba634ca0510f109f8846ff6 (sdk/src/manifest.js) and is informative. These are examples, not generated vectors of that repository.",
+  "cases": [
+    {
+      "name": "valid: the agent member of the example manifest of the reference implementation (examples/agent-service/manifest.json), copied verbatim: quote pricing, mandates accepted with enforcement none",
+      "agent": {
+        "capabilities": [
+          "chain.block-height"
+        ],
+        "tasks": [
+          {
+            "kind": "chain.block-height",
+            "pricing": {
+              "mode": "quote"
+            },
+            "maxDurationS": 60,
+            "description": "Reads the BNB Smart Chain block height from the providers a mandate lists, and answers with every answer it got."
+          }
+        ],
+        "mandates": {
+          "accepts": true,
+          "enforcement": [
+            "none"
+          ]
+        }
+      },
+      "valid": true,
+      "result": {
+        "capabilities": [
+          "chain.block-height"
+        ],
+        "tasks": [
+          {
+            "kind": "chain.block-height",
+            "pricing": {
+              "mode": "quote"
+            },
+            "maxDurationS": 60,
+            "description": "Reads the BNB Smart Chain block height from the providers a mandate lists, and answers with every answer it got."
+          }
+        ],
+        "mandates": {
+          "accepts": true,
+          "enforcement": [
+            "none"
+          ]
+        }
+      }
+    },
+    {
+      "name": "valid: fixed price in the native coin, terms hash; an unknown enforcement word and an unknown member are dropped",
+      "agent": {
+        "tasks": [
+          {
+            "kind": "report.attested-read",
+            "pricing": {
+              "mode": "fixed",
+              "token": "0x0000000000000000000000000000000000000000",
+              "amount": "1000000000000000",
+              "unit": "task"
+            }
+          }
+        ],
+        "mandates": {
+          "accepts": false,
+          "enforcement": [
+            "none",
+            "escrow"
+          ]
+        },
+        "terms": "sha256:abababababababababababababababababababababababababababababababab",
+        "extra": 1
+      },
+      "valid": true,
+      "result": {
+        "capabilities": [],
+        "tasks": [
+          {
+            "kind": "report.attested-read",
+            "pricing": {
+              "mode": "fixed",
+              "token": "0x0000000000000000000000000000000000000000",
+              "amount": "1000000000000000",
+              "unit": "task"
+            }
+          }
+        ],
+        "mandates": {
+          "accepts": false,
+          "enforcement": [
+            "none"
+          ]
+        },
+        "terms": "sha256:abababababababababababababababababababababababababababababababab"
+      }
+    },
+    {
+      "name": "valid: free task, no capabilities",
+      "agent": {
+        "tasks": [
+          {
+            "kind": "echo",
+            "pricing": {
+              "mode": "free"
+            }
+          }
+        ],
+        "mandates": {
+          "accepts": true
+        }
+      },
+      "valid": true,
+      "result": {
+        "capabilities": [],
+        "tasks": [
+          {
+            "kind": "echo",
+            "pricing": {
+              "mode": "free"
+            }
+          }
+        ],
+        "mandates": {
+          "accepts": true
+        }
+      }
+    },
+    {
+      "name": "valid: a fixed amount of 78 digits (the largest form allowed; the value exceeds 2^256 - 1, which the form rule does not check)",
+      "agent": {
+        "tasks": [
+          {
+            "kind": "x",
+            "pricing": {
+              "mode": "fixed",
+              "token": "0x0000000000000000000000000000000000000000",
+              "amount": "999999999999999999999999999999999999999999999999999999999999999999999999999999",
+              "unit": "task"
+            }
+          }
+        ],
+        "mandates": {
+          "accepts": true
+        }
+      },
+      "valid": true,
+      "result": {
+        "capabilities": [],
+        "tasks": [
+          {
+            "kind": "x",
+            "pricing": {
+              "mode": "fixed",
+              "token": "0x0000000000000000000000000000000000000000",
+              "amount": "999999999999999999999999999999999999999999999999999999999999999999999999999999",
+              "unit": "task"
+            }
+          }
+        ],
+        "mandates": {
+          "accepts": true
+        }
+      }
+    },
+    {
+      "name": "valid: maxDurationS of 2^53 - 1",
+      "agent": {
+        "tasks": [
+          {
+            "kind": "x",
+            "pricing": {
+              "mode": "free"
+            },
+            "maxDurationS": 9007199254740991
+          }
+        ],
+        "mandates": {
+          "accepts": true
+        }
+      },
+      "valid": true,
+      "result": {
+        "capabilities": [],
+        "tasks": [
+          {
+            "kind": "x",
+            "pricing": {
+              "mode": "free"
+            },
+            "maxDurationS": 9007199254740991
+          }
+        ],
+        "mandates": {
+          "accepts": true
+        }
+      }
+    },
+    {
+      "name": "valid: quote pricing with a token, an amount and a unit; amount and unit are ignored under quote",
+      "agent": {
+        "tasks": [
+          {
+            "kind": "x",
+            "pricing": {
+              "mode": "quote",
+              "token": "0x5ce033B2bFCa3Af30b3e8C8457DeaF776A8b695a",
+              "amount": "5",
+              "unit": "task"
+            }
+          }
+        ],
+        "mandates": {
+          "accepts": true
+        }
+      },
+      "valid": true,
+      "result": {
+        "capabilities": [],
+        "tasks": [
+          {
+            "kind": "x",
+            "pricing": {
+              "mode": "quote",
+              "token": "0x5ce033B2bFCa3Af30b3e8C8457DeaF776A8b695a"
+            }
+          }
+        ],
+        "mandates": {
+          "accepts": true
+        }
+      }
+    },
+    {
+      "name": "invalid: a free task names an amount",
+      "agent": {
+        "tasks": [
+          {
+            "kind": "echo",
+            "pricing": {
+              "mode": "free",
+              "amount": "1"
+            }
+          }
+        ],
+        "mandates": {
+          "accepts": true
+        }
+      },
+      "valid": false
+    },
+    {
+      "name": "invalid: task kinds repeat",
+      "agent": {
+        "tasks": [
+          {
+            "kind": "echo",
+            "pricing": {
+              "mode": "free"
+            }
+          },
+          {
+            "kind": "echo",
+            "pricing": {
+              "mode": "quote"
+            }
+          }
+        ],
+        "mandates": {
+          "accepts": true
+        }
+      },
+      "valid": false
+    },
+    {
+      "name": "invalid: an upper-case capability word",
+      "agent": {
+        "capabilities": [
+          "Chain"
+        ],
+        "tasks": [
+          {
+            "kind": "echo",
+            "pricing": {
+              "mode": "free"
+            }
+          }
+        ],
+        "mandates": {
+          "accepts": true
+        }
+      },
+      "valid": false
+    },
+    {
+      "name": "invalid: a fixed amount with a leading zero",
+      "agent": {
+        "tasks": [
+          {
+            "kind": "x",
+            "pricing": {
+              "mode": "fixed",
+              "token": "0x0000000000000000000000000000000000000000",
+              "amount": "01",
+              "unit": "task"
+            }
+          }
+        ],
+        "mandates": {
+          "accepts": true
+        }
+      },
+      "valid": false
+    },
+    {
+      "name": "invalid: no tasks",
+      "agent": {
+        "tasks": [],
+        "mandates": {
+          "accepts": true
+        }
+      },
+      "valid": false
+    },
+    {
+      "name": "invalid: mandates.accepts missing",
+      "agent": {
+        "tasks": [
+          {
+            "kind": "x",
+            "pricing": {
+              "mode": "free"
+            }
+          }
+        ],
+        "mandates": {}
+      },
+      "valid": false
+    },
+    {
+      "name": "invalid: terms in upper-case hex",
+      "agent": {
+        "tasks": [
+          {
+            "kind": "x",
+            "pricing": {
+              "mode": "free"
+            }
+          }
+        ],
+        "mandates": {
+          "accepts": true
+        },
+        "terms": "sha256:ABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABABAB"
+      },
+      "valid": false
+    },
+    {
+      "name": "invalid: a fixed amount of 79 digits",
+      "agent": {
+        "tasks": [
+          {
+            "kind": "x",
+            "pricing": {
+              "mode": "fixed",
+              "token": "0x0000000000000000000000000000000000000000",
+              "amount": "1000000000000000000000000000000000000000000000000000000000000000000000000000000",
+              "unit": "task"
+            }
+          }
+        ],
+        "mandates": {
+          "accepts": true
+        }
+      },
+      "valid": false
+    },
+    {
+      "name": "invalid: maxDurationS of 2^53 (an integer above 2^53 - 1 also leaves a manifest without a canonical form, TAP-11 section 6)",
+      "agent": {
+        "tasks": [
+          {
+            "kind": "x",
+            "pricing": {
+              "mode": "free"
+            },
+            "maxDurationS": 9007199254740992
+          }
+        ],
+        "mandates": {
+          "accepts": true
+        }
+      },
+      "valid": false
+    },
+    {
+      "name": "invalid: an optional member present as null (description: null); only a missing member is absent",
+      "agent": {
+        "tasks": [
+          {
+            "kind": "x",
+            "pricing": {
+              "mode": "free"
+            },
+            "description": null
+          }
+        ],
+        "mandates": {
+          "accepts": true
+        }
+      },
+      "valid": false
+    }
+  ]
+}
