@@ -5,7 +5,7 @@ description: Holder-authorised channel keys, a triple Diffie-Hellman handshake a
 author: Bruce (@BruceLanLan)
 discussions-to: https://github.com/TapeOutProtocol/TAPs/issues/11
 status: Draft
-type: Standards
+type: Application
 created: 2026-09-30
 requires: TAP-10, TAP-11, TAP-13
 license: CC0-1.0
@@ -39,7 +39,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 - **Service**: a container that publishes a service manifest as TAP-11 §3 specifies and answers calls as TAP-13 §3 and §4 specify. The relay transport (§11) and the relay references of §3.1 and §5 depend on these two drafts; the rest of this TAP depends only on TAP-10 and on the canonical JSON of TAP-11 §6 (§2).
 - **Wire message**: the unit every transport carries (§10).
 - Notation follows TAP-10 §1: `‖` is concatenation, `uint64(x)` and `uint32(x)` are big-endian, ASCII labels such as `"TAP-26/frame/v1"` are their raw bytes without a terminator. `DH(x, Y)` is X25519 (RFC 7748) of private key `x` and public key `Y`. HKDF-SHA256 is RFC 5869, written `HKDF-SHA256(IKM, salt, info, L)`; HMAC-SHA256 is RFC 2104; ChaCha20-Poly1305 is RFC 8439 (12-byte nonce); XChaCha20-Poly1305 is draft-irtf-cfrg-xchacha-03 (24-byte nonce). "Hex" means lowercase hexadecimal; a field described as "`0x` hex" carries the prefix, one described as "bare hex" does not.
-- The labels in this TAP begin with `TAP-26/`. They are fixed constants and do not refer to any TAP number (see Rationale).
+- The labels in this TAP begin with `TAP-26/`, which does not refer to any TAP number (see Rationale and Backwards Compatibility).
 
 ### 2. Canonical JSON and strict parsing
 
@@ -138,7 +138,7 @@ Both parties of a channel authenticate with static X25519 keys of one kind, whic
 | `"tape-channel/v1"` | `x25519` of the party's channel key record (§3) | REQUIRED |
 | `"tapesend/v1"` | The party's TAP-10 messaging key, obtained by resolving its endpoint as TAP-10 §12.2 specifies and applying TAP-10 §14.4 steps 1 to 3 (`keyFor` at a fresh pinned block under strict agreement; `suite` 1; `usable` true; the key checks). Step 4 does not apply | OPTIONAL |
 
-An implementation that does not support a kind **MUST** reject an invite that names it. An implementation **MUST NOT** derive a TAP-10 private key other than as TAP-10 §14.2 permits.
+An initiator that can use either kind with a peer **SHOULD** name `"tape-channel/v1"` (see Security Considerations). An implementation that does not support a kind **MUST** reject an invite that names it. An implementation **MUST NOT** derive a TAP-10 private key other than as TAP-10 §14.2 permits.
 
 A client **MUST** obtain a peer's static key only as this table specifies, and **MUST NOT** take it from any message of this TAP.
 
@@ -294,7 +294,7 @@ Every wire message is 1 to 16,448 bytes. A receiver decodes each wire message in
 
 #### 11.1 Methods
 
-A relay is a service (§1) whose manifest lists these methods. Every implementation **MUST** support this transport. A client resolves the relay from the relay reference's `container` under TAP-11 §2 and calls the methods through the manifest's live endpoints with the requests of TAP-13 §3, verifying each answer under its §8:
+A relay is a service (§1) whose manifest lists these methods. Every implementation that claims to follow this TAP **MUST** support this transport. A client resolves the relay from the relay reference's `container` under TAP-11 §2 and calls the methods through the manifest's live endpoints with the requests of TAP-13 §3, verifying each answer under its §8:
 
 | Method | Params | Result | Price |
 |---|---|---|---|
@@ -324,7 +324,7 @@ A client **MUST** start a room with `after` = −1 and `epoch` = `null`, send th
 
 #### 12.1 Interface
 
-A ChannelBus is a contract with this interface. A ChannelBus named in a record (§3.1) or an invite (§5) is on BNB Smart Chain (chainId 56), where the deployment listed under Deployments serves; any contract with this interface and behaviour serves equally.
+A ChannelBus is a contract with this interface. A ChannelBus named in a record (§3.1) or an invite (§5) is on BNB Smart Chain (chainId 56), where the deployment listed under Deployments serves; any contract with this interface and behaviour serves equally. This holds whatever the parties' home chains: containers on Base (8453) and X Layer (196) use relays (§11), or a ChannelBus on BNB Smart Chain, posting from an account funded there.
 
 ```solidity
 uint256 public constant MAX_WIRE = 16448;                  // MAX_WIRE()  0x1d5cb38c
@@ -370,21 +370,20 @@ Parties **MAY** carry wire messages over a WebRTC data channel. The initiator's 
 - **Epochs and protected inbox storage.** When a relay restarts or a room expires, indices restart at 0; without an epoch a client that remembered index N would silently skip the first N + 1 messages of the new room. Without protected storage and per-source limits, a flood of free frames could push an invite out of a room before its recipient reads it.
 - **A contract as the transport of last resort.** A relay needs an operator and can be switched off. ChannelBus has no operator, state or owner; the price is gas and permanent public metadata, which a party accepts by choosing it. Events suffice; storage would cost more and add nothing.
 - **Union of node answers for bus logs, not agreement.** TAP-10 §5.2 requires agreement for reads a client must trust. A bus log is not trusted: every frame authenticates itself, a forged log fails to decode, and an omitted one is supplied by another node or reported as a gap. Requiring agreement would stop the channel whenever one node lags, prunes history or refuses `eth_getLogs`. ChannelBus is not a TapeOut contract, so TAP-10 §2.2's rule against learning addresses from messages does not cover it; a bus address in an invite or record is covered by the transcript or the holder's signature.
-- **How a record is read.** A channel record decides whom a party encrypts to and authenticates, which is what TAP-10 §12.2 and §14.4 protect with strict agreement at a fresh pinned block, so §3.3 does the same (TAP-11 adopts most of its reads under default agreement). Two site rules of TAP-10 are treated differently, for different reasons. *Activation* (TAP-10 §6.3) decides whether a shell displays a site and is how the site fee is enforced; TAP-10 §12.2 exempts messaging from it, and a channel is messaging, so §3.3 does not check it. TAP-11 does gate a service on activation; the idea issue asks editors about this difference. *Implementation pinning* (TAP-10 §6.1) guards the bytes of every site file a client reads, and TAP-10 forbids reading a site under a store implementation it does not accept, so §3.3 checks it, although TAP-10 §12.2 lets TapeSend proceed without it: TapeSend reads no site file.
-- **Fixed labels.** Labels, `kind` values and the record tag are inside deployed key derivations, digests and signatures. They begin with `TAP-26/` because this design was first published under that self-assigned name; they are constants, not references to a TAP number, and never change (Backwards Compatibility). They are disjoint from TAP-10's `TAP-10/…` labels, so no key or digest of one protocol can be taken for the other's.
+- **How a record is read.** A channel record decides whom a party encrypts to and authenticates, which is what TAP-10 §12.2 and §14.4 protect with strict agreement at a fresh pinned block, so §3.3 does the same (TAP-11 adopts most of its reads under default agreement). Two site rules of TAP-10 are treated differently, for different reasons. *Activation* (TAP-10 §6.3) decides whether a shell displays a site and is how the site fee is enforced; TAP-10 §12.2 exempts messaging from it, and a channel is messaging, so §3.3 does not check it. TAP-11 does gate a service on activation; the editors confirmed in #11 that this is an application choosing to be stricter, which is allowed, and that a channel, being messaging, is not gated. *Implementation pinning* (TAP-10 §6.1) guards the bytes of every site file a client reads, and TAP-10 forbids reading a site under a store implementation it does not accept, so §3.3 checks it, although TAP-10 §12.2 lets TapeSend proceed without it: TapeSend reads no site file. The editors confirmed this reading in #11 as well.
+- **Labels.** Labels, `kind` values and the record tag are inside deployed key derivations, digests and signatures. The labels begin with `TAP-26/` because this design was first published under that self-assigned name; they are not references to a TAP number. The editors asked in #11 for a prefix that does not look like a TAP number, because a label containing a TAP number reads as a citation of that TAP (TAP-01 §2) and a future TAP with that number should not have to avoid its own labels; the author agrees, and the labels will change to `tape-channel/…` before merge (Backwards Compatibility). They are disjoint from TAP-10's `TAP-10/…` labels, so no key or digest of one protocol can be taken for the other's.
 - **Not chosen:** signing handshakes with the `ed25519` key (a second signature scheme where DH already authenticates, adding non-repudiation the parties may not want); carrying frames as TapeSend messages (a transaction per frame, public metadata, no forward secrecy).
 
 ## Backwards Compatibility
 
 This TAP changes nothing in TAP-10: no contract, hub function, payload version or content kind. A TAP-10 client that receives an invite by TapeSend shows it as `unsupported`.
 
-**Historical name.** This specification was previously published in the TapeAPI repository under the self-assigned name "TAP-26" (renamed "TAPI-26" on 2026-09-30, with the related documents TAP-20 to TAP-27 renamed TAPI-20 to TAPI-27). Neither name is a TAP number; the number of this TAP is assigned by the editors. The following constants contain the old name or were fixed under it. They are frozen, do not denote any TAP number, and will never change:
+**Historical name.** This specification was previously published in the TapeAPI repository under the self-assigned name "TAP-26" (renamed "TAPI-26" on 2026-09-30, with the related documents TAP-20 to TAP-27 renamed TAPI-20 to TAPI-27). Neither name is a TAP number; the number of this TAP is assigned by the editors. The following constants were fixed under the old name and are frozen:
 
-- Labels: `TAP-26/inbox/v1`, `TAP-26/transcript/v1`, `TAP-26/keys/v1`, `TAP-26/confirm/initiator`, `TAP-26/confirm/responder`, `TAP-26/frame/v1`, `TAP-26/room/v1`;
 - Strings: `tape.channel/invite`, `tape-channel/v1`, `tapesend/v1`, the record tag `"tapechannel": "1"`, the path `.well-known/tape-channel.json`;
 - EIP-712: domain name `TapeAPI`, version `1`, type `ChannelKeys(...)` (§3.2).
 
-**Possible label collision (question for editors).** A future official TAP-26 that chose labels of the form `TAP-26/…` could repeat one of these strings. Distinct suffixes make this unlikely; editors may prefer that such a TAP avoid the prefix or check this list.
+**Labels.** The labels of §6 to §10 still begin with `TAP-26/`: `TAP-26/inbox/v1`, `TAP-26/transcript/v1`, `TAP-26/keys/v1`, `TAP-26/confirm/initiator`, `TAP-26/confirm/responder`, `TAP-26/frame/v1`, `TAP-26/room/v1`. The author agrees with the editors (#11) that they should not look like a TAP number, and they will change to `tape-channel/…`, with the same suffixes, before merge. The new labels will ship with the next major version of the reference implementation, TapeAPI 2.0: it holds these labels as frozen constants of its version 1 and makes breaking changes only in a major version. The test vectors and the Reference Implementation commit will be updated in the same change. Channel key records will not be affected: the `ChannelKeys` typed data contains no label, and relays and ChannelBus carry only room IDs and wire bytes.
 
 **Differences from the reference implementation** at the commit below, and the planned changes (all additive for existing users):
 
@@ -400,7 +399,7 @@ The wire formats, labels, record format and signatures are unchanged, so every c
 
 ## Test Cases
 
-Test vectors are in `assets/tap-draft-private-channels/` (directory name to be confirmed by editors). Every file gives inputs and exact expected outputs:
+Test vectors are in `assets/tap-draft-private-channels/` while this pull request is open, and move to `assets/tap-<nn>/` with this file once a number is assigned (#11). Every file gives inputs and exact expected outputs:
 
 | File | Covers |
 |---|---|
@@ -457,6 +456,7 @@ The EIP-712 domain of §3.2 names the TAP-10 hub proxy address; it is used only 
 
 - **Metadata.** A relay sees room IDs, sizes, timing and the network addresses of whoever posts and polls, and can link the two rooms of a channel. An inbox room identifies its container, so anyone can see that a container received something. On a ChannelBus the room, posting account, time and size of every message are public for ever. A node that serves `eth_getLogs` for named rooms learns which rooms a reader follows, unless the reader fetches all `Wire` logs and filters locally. A direct connection reveals each party's network address to the other.
 - **Denial of service.** A relay can drop, delay or truncate traffic; the parties see gaps or silence and can move to another transport the invite names. Junk posted to an inbox room is bounded by relays (§11.2) and fails to open. There is no authenticated end of a channel, so a transport can cut off its tail undetected.
+- **The `tapesend/v1` key kind.** A party that uses the TAP-10 messaging key as its static key keeps that key in an online, interactive process. Anyone who obtains it, or the TAP-10 §14.2 signature it is derived from, can then not only open every TapeSend message ever sealed to it, but also complete handshakes as that container, since the handshake authenticates with the static key. A stolen channel key, by contrast, opens no TapeSend message. This is why §4.1 prefers `tape-channel/v1`.
 - **Stolen keys and open channels.** A stolen static key lets the thief open new channels as that container until the holder replaces or removes the record or it expires; clients that have seen a replacement refuse the old record, others accept it until `expires` (hence the short validity of §3.4). Removing a record, letting it expire or transferring the circuit stops new handshakes but does not end channels already open; an application that must cut off a removed party re-reads the peer's record and closes the channel itself.
 - **Before the TAP-10 seals.** Record reads rest on TAP-10's contracts. Until the factory and hub are sealed, whoever controls them can impersonate containers and holders (TAP-10 §13.8, Security Considerations); channels inherit that trust.
 - **Clocks.** Record validity and invite expiry use the client's clock; a badly wrong clock can reject valid records or accept an expired one within the bounds of §3.3 and §7.
