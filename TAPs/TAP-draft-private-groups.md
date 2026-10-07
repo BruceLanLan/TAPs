@@ -5,7 +5,7 @@ description: An owner-run, end-to-end encrypted group of up to 32 circuit contai
 author: Bruce (@BruceLanLan)
 discussions-to: https://github.com/TapeOutProtocol/TAPs/issues/19
 status: Draft
-type: Standards
+type: Application
 created: 2026-09-30
 requires: TAP-10, TAP-draft-private-channels
 license: CC0-1.0
@@ -41,7 +41,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 - **Epoch** `n`: an integer from 0 to 2^32 − 1. Each epoch has its own group key `K`, roster and set of members.
 - **Receiver**: a member processing an epoch message or a group message.
 - Notation follows TAP-10 §1: `‖` is concatenation, `uint64(x)` and `uint32(x)` are big-endian, and ASCII labels such as `"TAP-27/room/v1"` are their raw bytes without a terminator. `X25519(k, U)` is RFC 7748; `HKDF-SHA256(IKM, salt, info, L)` is RFC 5869; XChaCha20-Poly1305 is draft-irtf-cfrg-xchacha-03 with a 32-byte key, a 24-byte nonce and a 16-byte tag, written `XChaCha20-Poly1305(key, nonce, aad).encrypt(plaintext)`; Ed25519 is RFC 8032, written `Ed25519(signer, message)`. "Hex" means lowercase hexadecimal; a field described as "`0x` hex" carries the prefix, one described as "bare hex" does not.
-- The labels in this TAP begin with `TAP-27/`. They are fixed constants and do not refer to any TAP number (see Backwards Compatibility).
+- The labels in this TAP begin with `TAP-27/`, which does not refer to any TAP number (see Backwards Compatibility).
 
 ### 2. What this TAP takes from TAP-draft-private-channels
 
@@ -259,7 +259,7 @@ The owner's key is fixed when a member joins. There is no transfer of ownership 
 
 ### 9. Delivery
 
-Epoch messages and group messages are wire messages (TAP-draft-private-channels §10.2), posted to the group room (§4) on the relays and bus of the roster the poster holds: on a relay with the `relaySend` method (§11.1 of that draft), on a ChannelBus with `send` or `sendMany` (§12.1 of that draft). Members read the group room as §11.3 and §12.2 of that draft specify, treat identical wire messages that arrive on several transports as one, and pass each to §5.4 or §6.3 by its first byte. Relays keep epoch messages under the protected bound of §11.2 of that draft, which other traffic cannot evict.
+Epoch messages and group messages are wire messages (TAP-draft-private-channels §10.2), posted to the group room (§4) on the relays and bus of the roster the poster holds: on a relay with the `relaySend` method (§11.1 of that draft), on a ChannelBus with `send` or `sendMany` (§12.1 of that draft). A ChannelBus is on BNB Smart Chain whatever the members' home chains (§12.1 of that draft): a group with members on Base (8453) or X Layer (196) uses relays, or a ChannelBus on BNB Smart Chain, each poster posting from an account funded there. Members read the group room as §11.3 and §12.2 of that draft specify, treat identical wire messages that arrive on several transports as one, and pass each to §5.4 or §6.3 by its first byte. Relays keep epoch messages under the protected bound of §11.2 of that draft, which other traffic cannot evict.
 
 A new epoch message is the only checkpoint of a group. The owner **SHOULD** repost the current epoch message, unchanged, whenever it invites a container and at least as often as its transports forget data, so that a member returning from a long absence can catch up (RECOMMENDED: every 30 minutes on a ChannelBus read through public nodes, and every 10 minutes on a relay whose idle rooms expire after 15 minutes). A repost is a duplicate for every member that already holds the epoch (§5.4 step 2).
 
@@ -290,12 +290,9 @@ Nothing in this TAP needs saved state to keep confidentiality or authentication:
 
 This TAP changes nothing in TAP-10 and nothing in TAP-draft-private-channels: it uses the wire types `0x04` and `0x05` that the channel draft reserves for group messaging, and relays and ChannelBus carry them as they carry any wire message. A client that does not implement this TAP drops them (TAP-draft-private-channels §10.2) and ignores group invites, whose `kind` it does not know (§6.1 of that draft).
 
-**Historical name.** This specification was first published in the TapeAPI repository as TAP-27 (renamed TAPI-27 on 2026-09-30; neither is a TAP number). The number of this TAP is assigned by the editors. The following constants contain the old name or were fixed under it. They are frozen, do not denote any TAP number, and will never change:
+**Historical name.** This specification was first published in the TapeAPI repository as TAP-27 (renamed TAPI-27 on 2026-09-30; neither is a TAP number). The number of this TAP is assigned by the editors. The strings `tape.group/roster` and `tape.group/invite` were fixed under the old name and are frozen.
 
-- Labels: `TAP-27/room/v1`, `TAP-27/wrap/v1`, `TAP-27/commit/v1`, `TAP-27/epoch/v1`, `TAP-27/sender/v1`, `TAP-27/msg/v1`;
-- Strings: `tape.group/roster`, `tape.group/invite`.
-
-The question of a possible collision with the labels of a future official TAP with the same number was put to the editors for the channel draft (#11); the same answer applies here.
+**Labels.** The labels of §4 to §6 still begin with `TAP-27/`: `TAP-27/room/v1`, `TAP-27/wrap/v1`, `TAP-27/commit/v1`, `TAP-27/epoch/v1`, `TAP-27/sender/v1`, `TAP-27/msg/v1`. In #11 the editors asked for the labels of the channel draft to use a prefix that does not look like a TAP number, and said that the same applies to `TAP-27/`. The author agrees, and these labels will change to `tape-group/…`, with the same suffixes, before merge. The new labels will ship with the next major version of the reference implementation, TapeAPI 2.0: it holds these labels as frozen constants of its version 1 and makes breaking changes only in a major version. The test vectors and the Reference Implementation commit will be updated in the same change.
 
 **Larger groups.** The reference implementation also carries, as an experimental option, a second format for groups of up to 128 members. It is not part of this TAP and would be proposed separately. It marks the high half of the epoch field, so every receiver that follows this TAP rejects its epoch messages and group messages (§5.4, §6.3).
 
