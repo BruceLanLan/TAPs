@@ -7,7 +7,8 @@ discussions-to: https://github.com/TapeOutProtocol/TAPs/issues/25
 status: Draft
 type: Application
 created: 2026-09-30
-requires: TAP-10, TAP-11, TAP-13
+updated: 2026-10-08
+requires: TAP-10, TAP-11, TAP-13, WHATWG URL Standard (commit snapshot fde3f74, 2026-10-07)
 license: CC0-1.0
 ---
 
@@ -43,6 +44,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 - **Parsed as JSON**: decoded as UTF-8, with one leading U+FEFF removed and each invalid sequence replaced by U+FFFD, and then parsed as JSON text (RFC 8259); where an object repeats a member name, its last value counts. Bytes that do not parse have no value. This applies to request bodies and answers, never to receipts (§9.3).
 - **2xx** means an HTTP status from 200 to 299.
 - Event-stream terms (**line**, **comment**, **field line**, **event**, **dispatched**, **data**, **event name**, **ambiguous line**, **close while an event is unfinished**) are those of §5.2; the **end** of a stream and **after the end** are those of §6.1.
+- **External specifications.** Besides TAP-10, TAP-11, TAP-13 and the key-word RFCs above, this TAP relies on FIPS 180-4 (August 2015) for SHA-256, RFC 4648 for base64url, RFC 8259 for JSON, RFC 9110 and RFC 9112 for HTTP status codes, header fields, content codings and transfer codings, and the WHATWG URL Standard at commit snapshot `fde3f74f063341a28d437216f75735b8b40128f5` (2026-10-07) for parsing and serialising URLs (§3.2). It relies on no other document. In particular, the AI APIs named in §2 are named for orientation only: every rule this TAP takes from them (the paths of §2, the request member of §6.3, the final lines and sentinel of §6.1, the members read in §7.3 and the headers of §8) is written in this TAP, and Appendix A describes those APIs informatively.
 
 ### 2. Formats
 
@@ -55,6 +57,7 @@ This TAP defines four formats. Every other request under a service root carries 
 | `anthropic-messages` | Anthropic Messages | `/v1/messages` | empty | `anthropic_messages` | yes |
 | `openai-embeddings` | OpenAI Embeddings | `/v1/embeddings` | `/v1` | `openai_embeddings` | no |
 
+- A format is what this TAP specifies for it. The column API names the API each format is taken from, for orientation only: a server that answers by these rules is a server of that format whoever runs it, and a change to that API changes nothing in this TAP until this TAP is changed (Appendix A).
 - A request is **metered** when its HTTP method is `POST` and its API path equals, byte for byte, one of the metered paths of the endpoint's format. Case, percent-encoding and slashes are not normalised.
 - The **requested model** of a request is the value of the member `model` when the request body, parsed as JSON, is an object with a string member `model` of 1 to 256 UTF-16 code units; otherwise there is none.
 - A later TAP MAY add formats. It names the format, its metered paths, `baseUrl` suffix, receipt method (matching `^[a-z][a-z0-9_]{0,63}$`, distinct from every other receipt method and from `receipt`) and the rows it adds to the tables of §6.1 and §7.3. Its receipt method is then reserved under §3.5 as well.
@@ -84,7 +87,7 @@ This TAP defines four formats. Every other request under a service root carries 
 |---|---|---|
 | `endpoints` | array | 1 to 16 entries, at most one per `format` |
 | `endpoints[].format` | string | Matches `^[a-z][a-z0-9-]{0,63}$` |
-| `endpoints[].baseUrl` | string | An absolute `https://` URL without query, fragment, user name or password. It is used as the WHATWG URL Standard parses and serialises it, with trailing `/` characters removed |
+| `endpoints[].baseUrl` | string | An absolute `https://` URL without query, fragment, user name or password. It is used as the WHATWG URL Standard (§1) parses and serialises it, with trailing `/` characters removed |
 
 - The **service root** of an endpoint is its `baseUrl` with the format's suffix (§2) removed from the end; its **root path** is the path of the service root without trailing `/` characters (empty when the service root is an origin). A client MUST ignore an endpoint whose format it does not know, and an endpoint whose `baseUrl` does not end with its format's suffix.
 - A request of a format goes to the service root followed by an API path. A request URL has an **API path** only when it has the service root's origin and its path begins with the root path followed by `/`; the API path is then that path with the root path removed from the front. The query is not part of it.
@@ -195,7 +198,7 @@ An answer is a **stream** when its format streams (§2), the upstream's `Content
 
 For a whole answer, `responseSha256` is `sha256hex` of the response body bytes exactly as the client receives them, after any HTTP content coding is removed (zero bytes for status 101, 204, 205 and 304).
 
-For a stream, the bytes the client receives are parsed as a server-sent event stream by these rules (those of the WHATWG HTML event-stream format), which sidecars and clients MUST apply exactly:
+For a stream, the bytes the client receives are parsed as a server-sent event stream by these rules, which sidecars and clients MUST apply exactly. They are complete as written here. (They follow the event-stream interpretation of the WHATWG HTML Standard, restricted to what this TAP reads; that standard is not needed to apply them.)
 
 1. Lines end at `CR LF`, `LF` or `CR`. One U+FEFF (bytes `EF BB BF`) at the very start of the stream is skipped. Any other U+FEFF is part of the line it is in: inside a line it belongs to the field name, value or comment, and at the start of a line it begins a field name (an ambiguous line, below).
 2. A line that begins with `:` is a **comment** and is ignored.
@@ -244,7 +247,7 @@ The first field line decides where the sidecar places the receipt, and the dispa
 
 #### 6.3 Usage injection
 
-An `openai-chat` stream reports usage only when the request sets `stream_options.include_usage` to `true`. When the request body, parsed as JSON, is an object in which `stream` is `true` and which does not have a `stream_options` object whose `include_usage` is `true`, a sidecar MAY send the upstream, instead of the client's bytes, the JSON serialisation of that object in which `stream_options` is replaced by an object holding the members of the original `stream_options` (when it was an object) and `"include_usage": true`. It MUST NOT change the request it sends upstream in any other way. When it does so:
+A request **asks for usage** when its body, parsed as JSON, is an object with a `stream_options` member that is an object whose `include_usage` is `true`. When the request body of an `openai-chat` request, parsed as JSON, is an object in which `stream` is `true` and the request does not ask for usage, a sidecar MAY send the upstream, instead of the client's bytes, the JSON serialisation of that object in which `stream_options` is replaced by an object holding the members of the original `stream_options` (when it was an object) and `"include_usage": true`. It MUST NOT change the request it sends upstream in any other way. When it does so:
 
 - It MUST remove from the client's copy of the stream every event held back under §6.2 item 2 whose data, parsed as JSON, is an object with a `usage` member that is an object and a `choices` member that is an array in which every element **carries nothing**. An element carries nothing when it is an object whose member names are all among `index`, `delta`, `finish_reason` and `logprobs` (whatever their values), whose `delta` is an object whose members are all `null` (an empty object qualifies), and whose `finish_reason` and `logprobs` are absent. An empty `choices` array qualifies. The whole event is removed, from its first line through its empty line.
 - Removed events are not hashed (§5.2), and the sidecar reads them under §7.3.
@@ -329,7 +332,7 @@ The method `receipt` is a method of TAP-13 §3 with `params` `{ "id": string, "r
 - A sidecar forwards a metered request to the upstream with the client's body bytes unchanged, except under §6.3. The upstream's address comes from the sidecar's configuration, never from a request.
 - It MUST NOT forward a request whose path equals a metered path only after percent-encoded unreserved characters are decoded, runs of `/` are collapsed or a trailing `/` is removed; it MAY answer such a request with an error of its own.
 - It MUST NOT follow an upstream redirect (a status from 300 to 399 other than 304), and signs no receipt for one.
-- It forwards the caller headers that the format needs (content type and encoding, `Accept`, the format's authentication, version and beta headers, and the official clients' identity headers), and MUST NOT forward cookies, `Forwarded`, `X-Forwarded-*`, `X-Real-IP`, `CF-*` or hop-by-hop headers.
+- It forwards these caller headers when the request carries them: `Content-Type`, `Content-Encoding` and `Accept`; for `openai-chat`, `openai-responses` and `openai-embeddings`, `Authorization`, `OpenAI-Beta`, `OpenAI-Organization` and `OpenAI-Project`; for `anthropic-messages`, `X-Api-Key`, `Authorization`, `Anthropic-Version` and `Anthropic-Beta`. It may forward other headers by which a client identifies itself (Appendix A). It MUST NOT forward `Cookie`, `Cookie2`, `Forwarded`, `X-Real-IP`, a header whose name begins with `X-Forwarded-` or `CF-`, or the hop-by-hop headers `Connection`, `Keep-Alive`, `Proxy-Connection`, `Proxy-Authenticate`, `Proxy-Authorization`, `TE`, `Trailer`, `Transfer-Encoding` and `Upgrade`. Header names are compared without regard to ASCII case.
 - An answer the sidecar makes itself (for example for its own rate limit, a request over its size limit or with a loosely written path, or an upstream that cannot be reached, does not answer in time, redirects or sends a whole answer over the sidecar's size limit) has no upstream answer to bind and carries no receipt and no signature. It uses the body `{ "error": { "message": …, "type": …, "param": …, "code": … } }` and MAY carry the header `x-tapeapi-sidecar-error: 1`. That header is informative: anyone on the path can add or remove it.
 
 ### 9. Client verification
@@ -474,3 +477,17 @@ The attacker considered can read, delay, drop, replay and modify traffic between
 ## Copyright
 
 Copyright and related rights waived via [CC0](../LICENSE).
+
+## Appendix A. The AI APIs the formats are taken from (informative)
+
+This appendix describes the vendor APIs from which the four formats of §2 are taken, as their providers documented them and as the reference implementation observed them up to 2026-10-08. Nothing in it is a requirement. Where it differs from the Specification, the Specification applies, and a later change to a vendor API changes nothing in this TAP.
+
+**OpenAI Chat Completions (`openai-chat`).** Clients send `POST /v1/chat/completions` to a base URL ending in `/v1`, authenticated with `Authorization: Bearer <key>` and optionally `OpenAI-Organization`, `OpenAI-Project` and `OpenAI-Beta`. With `"stream": true` the answer is a server-sent event stream of `data:` lines without `event:` lines, one JSON chunk per event, ended by `data: [DONE]`. A stream reports usage only when the request sets `stream_options.include_usage` to `true`; the usage then comes in one more chunk before `[DONE]`, with `choices` `[]` (some compatible servers send `[{"index":0,"delta":{}}]` instead). Usage has `prompt_tokens` (cache reads included), `completion_tokens` (reasoning included), `total_tokens`, `prompt_tokens_details.cached_tokens` and `completion_tokens_details.reasoning_tokens`; some compatible servers report cache reads as `prompt_cache_hit_tokens`.
+
+**OpenAI Responses (`openai-responses`).** `POST /v1/responses`; `POST /v1/responses/compact` compacts a conversation and is billed like a response. A stream carries typed events (`event: response.created`, `response.output_text.delta`, …) whose JSON data repeats the event name in `type`, and ends with `response.completed`, `response.incomplete` or `response.failed`, whose `response` member holds the whole response with its usage: `input_tokens` (cache reads included), `input_tokens_details.cached_tokens`, `output_tokens` (reasoning included), `output_tokens_details.reasoning_tokens` and `total_tokens`. Some OpenAI-compatible gateways send the same events as `data:` lines only and end the stream with `data: [DONE]`, or add `data: [DONE]` after the final event.
+
+**Anthropic Messages (`anthropic-messages`).** Clients send `POST /v1/messages` to a base URL without `/v1`, authenticated with `X-Api-Key` (or `Authorization: Bearer`), with `Anthropic-Version` and optionally `Anthropic-Beta`. A stream carries `message_start` (the message with its `id`, `model` and initial usage), `content_block_start`, `content_block_delta`, `content_block_stop`, `message_delta` (the stop reason and cumulative usage), `message_stop`, `ping` and `error` events, each with an `event:` line, and has no sentinel. Usage reports `input_tokens` without cache reads and writes, which come as `cache_read_input_tokens` and `cache_creation_input_tokens`; `cache_creation.ephemeral_5m_input_tokens` and `cache_creation.ephemeral_1h_input_tokens` split cache writes by how long the cache is kept; `output_tokens` includes thinking; `server_tool_use.web_search_requests` counts server-side web searches, which are billed per use.
+
+**OpenAI Embeddings (`openai-embeddings`).** `POST /v1/embeddings`, with the headers of the other OpenAI formats. It never streams, and its usage has `prompt_tokens` and `total_tokens`.
+
+**Client headers.** Besides the headers of §8, the official SDKs send `User-Agent` and headers whose names begin with `X-Stainless-`, which describe the SDK, the language and the platform, and some applications built on them send session headers that tie a caller's requests together. Forwarding them affects what the upstream learns about the caller (Security Considerations), not what is hashed or read.
