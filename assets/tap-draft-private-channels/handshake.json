@@ -1,5 +1,5 @@
 {
-  "note": "Generated from the reference implementation at BruceLanLan/tapeapi@fda84db889d2a732915f264a799af24073177a85 (sdk/src/channel.js, sdk/src/sig.js, sdk/src/canon.js). Hex is lowercase; values without 0x are raw hex. Every field is an input or an exact expected output unless it is under \"example\".",
+  "note": "Generated from the reference implementation at BruceLanLan/tapeapi@4a1ac4fe2a0b2e3327652a794794765dd5da98ef (TapeAPI 1.8.1, with the option labels: 'v2') (sdk/src/channel.js, sdk/src/sig.js, sdk/src/canon.js). Hex is lowercase; values without 0x are raw hex. Every field is an input or an exact expected output unless it is under \"example\".",
   "covers": "Invite, inviteHash, transcript, triple Diffie-Hellman, key schedule, confirmation tags, accept and ready (Specification §5, §7, §8).",
   "now": 1789000000,
   "initiator": {
@@ -41,12 +41,12 @@
     "t": "accept",
     "cid": "697f8ba7adb6dae6fa02182440464f73",
     "e": "f1368a893e4ebdc30447b930a172a1678f0e277574148811eafc11eabc0dbd0f",
-    "confirm": "3092108c20817757546bcd77b087004920b07e0a3aaa723e1390f0703bce71d7"
+    "confirm": "1a2e701d721634ea79c6bf591a2a567243791f087bd3a1daf24f5c01c5317278"
   },
   "ready": {
     "t": "ready",
     "cid": "697f8ba7adb6dae6fa02182440464f73",
-    "confirm": "a3c441906d1c8662009ea4d9d37694919aab520c17ac99f93169be11f330197a"
+    "confirm": "aa1180ec0a32e9af361eeab8f1f520aa3cd87e244b4c23875ad5ea45831d3103"
   },
   "expected": {
     "endpointA": "0000000000000000000000380000000000000000000000000000000000000a11",
@@ -55,12 +55,12 @@
     "dh1_eA_SB": "bd2b19bdb545796e5fab33b494263b7794af55abdbe5aca76fc218dc7051541f",
     "dh2_sA_EB": "3adf55080156f4954380afd4400ff03dfae9755a5cd6076cfa7fa9b098473b72",
     "dh3_eA_EB": "c85fb962646a38a55375e801892be9e554fc9cc448d3590a21eeedd6162f5c1f",
-    "transcript": "5af331b094be1ae41871ee7fa361617d5404144c5a50d1411e218e45ff88c5ca",
-    "kAB": "2ec2eeae36709adfe932f011ec40d811988a3073a0adb83940e0a9d194bb2c54",
-    "kBA": "b17bbbc2d2ac61f57245b80a45b79af78d256d7621ca13ea4585a64b65b1ce27",
-    "cA": "8a6d91ce3c2abfa8e96d8cb55cb82bd56902724b50f09dd158b3a26c3f0c557c",
-    "cB": "1b91145cb9aa202e693846fd8d71cfa76d604e9fe5597ebc28d4573f4ca0eed7",
-    "confirmInitiator": "a3c441906d1c8662009ea4d9d37694919aab520c17ac99f93169be11f330197a",
-    "confirmResponder": "3092108c20817757546bcd77b087004920b07e0a3aaa723e1390f0703bce71d7"
+    "transcript": "01ff7da66b0a2468470fc19f89752682b57ef63f32d0846d61f0cf939adbfa26",
+    "kAB": "bed5971c4d125f968853d42b740bb065dc07d4b391f1ec38554679551e434ce0",
+    "kBA": "b21f6df8eb0a29fa1dd3aac43bd6b555c73189fc7b5114ddc159b60ad643da88",
+    "cA": "99390b22a0f0dad7a6ad5285e72afd729ea554ac40cded50f22c1907c765f564",
+    "cB": "268002c31ed4472dd7131a88a821008de5eaf581b2f1edd005f869c4af6eb7d9",
+    "confirmInitiator": "aa1180ec0a32e9af361eeab8f1f520aa3cd87e244b4c23875ad5ea45831d3103",
+    "confirmResponder": "1a2e701d721634ea79c6bf591a2a567243791f087bd3a1daf24f5c01c5317278"
   }
 }

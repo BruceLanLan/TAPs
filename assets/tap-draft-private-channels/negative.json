@@ -1,5 +1,5 @@
 {
-  "note": "Generated from the reference implementation at BruceLanLan/tapeapi@fda84db889d2a732915f264a799af24073177a85 (sdk/src/channel.js, sdk/src/sig.js, sdk/src/canon.js). Hex is lowercase; values without 0x are raw hex. Every field is an input or an exact expected output unless it is under \"example\".",
+  "note": "Generated from the reference implementation at BruceLanLan/tapeapi@4a1ac4fe2a0b2e3327652a794794765dd5da98ef (TapeAPI 1.8.1, with the option labels: 'v2') (sdk/src/channel.js, sdk/src/sig.js, sdk/src/canon.js). Hex is lowercase; values without 0x are raw hex. Every field is an input or an exact expected output unless it is under \"example\".",
   "covers": "Inputs every implementation must reject (or, where marked, accept). Keys, invite and frames are those of handshake.json and session.json; now = 1789000000 unless stated. sdkError is the reference implementation's message and is informative only.",
   "cases": [
     {
@@ -113,7 +113,7 @@
         "t": "accept",
         "cid": "697f8ba7adb6dae6fa02182440464f73",
         "e": "f1368a893e4ebdc30447b930a172a1678f0e277574148811eafc11eabc0dbd0f",
-        "confirm": "1de781b16e2ae27ba99b1a433ca5571c56476ae20fdb1eb553940a96a7b1dfee"
+        "confirm": "d94ccdaa1458b7171f9e713c3b7258befe54b4886700d400fcb14f4061937138"
       },
       "sdkError": "accept.confirm does not verify: the peer does not hold the static key published for its container"
     },
@@ -123,7 +123,7 @@
       "ready": {
         "t": "ready",
         "cid": "697f8ba7adb6dae6fa02182440464f73",
-        "confirm": "a3c441906d1c8662009ea4d9d37694919aab520c17ac99f93169be11f330197a"
+        "confirm": "aa1180ec0a32e9af361eeab8f1f520aa3cd87e244b4c23875ad5ea45831d3103"
       }
     },
     {
@@ -133,7 +133,7 @@
         "t": "accept",
         "cid": "697f8ba7adb6dae6fa02182440464f73",
         "e": "f1368a893e4ebdc30447b930a172a1678f0e277574148811eafc11eabc0dbd0f",
-        "confirm": "3092108c20817757546bcd77b087004920b07e0a3aaa723e1390f0703bce71d0"
+        "confirm": "1a2e701d721634ea79c6bf591a2a567243791f087bd3a1daf24f5c01c5317270"
       },
       "sdkError": "accept.confirm does not verify: the peer does not hold the static key published for its container"
     },
@@ -158,7 +158,7 @@
       "ready": {
         "t": "ready",
         "cid": "697f8ba7adb6dae6fa02182440464f73",
-        "confirm": "a3c441906d1c8662009ea4d9d37694919aab520c17ac99f93169be11f3301970"
+        "confirm": "aa1180ec0a32e9af361eeab8f1f520aa3cd87e244b4c23875ad5ea45831d3100"
       },
       "sdkError": "ready.confirm does not verify: the initiator does not hold the static key published for its container"
     },

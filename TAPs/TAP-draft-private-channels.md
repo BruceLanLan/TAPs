@@ -38,8 +38,8 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 - **Initiator** (A) and **responder** (B): the party that sends the invite and the party that receives it. `sA`, `SA` and `sB`, `SB` are their static X25519 private and public keys; `eA`, `EA` and `eB`, `EB` their ephemeral ones.
 - **Service**: a container that publishes a service manifest as TAP-11 §3 specifies and answers calls as TAP-13 §3 and §4 specify. The relay transport (§11) and the relay references of §3.1 and §5 depend on these two drafts; the rest of this TAP depends only on TAP-10 and on the canonical JSON of TAP-11 §6 (§2).
 - **Wire message**: the unit every transport carries (§10).
-- Notation follows TAP-10 §1: `‖` is concatenation, `uint64(x)` and `uint32(x)` are big-endian, ASCII labels such as `"TAP-26/frame/v1"` are their raw bytes without a terminator. `DH(x, Y)` is X25519 (RFC 7748) of private key `x` and public key `Y`. HKDF-SHA256 is RFC 5869, written `HKDF-SHA256(IKM, salt, info, L)`; HMAC-SHA256 is RFC 2104; ChaCha20-Poly1305 is RFC 8439 (12-byte nonce); XChaCha20-Poly1305 is draft-irtf-cfrg-xchacha-03 (24-byte nonce). "Hex" means lowercase hexadecimal; a field described as "`0x` hex" carries the prefix, one described as "bare hex" does not.
-- The labels in this TAP begin with `TAP-26/`, which does not refer to any TAP number (see Rationale and Backwards Compatibility).
+- Notation follows TAP-10 §1: `‖` is concatenation, `uint64(x)` and `uint32(x)` are big-endian, ASCII labels such as `"tape-channel/frame/v1"` are their raw bytes without a terminator. `DH(x, Y)` is X25519 (RFC 7748) of private key `x` and public key `Y`. HKDF-SHA256 is RFC 5869, written `HKDF-SHA256(IKM, salt, info, L)`; HMAC-SHA256 is RFC 2104; ChaCha20-Poly1305 is RFC 8439 (12-byte nonce); XChaCha20-Poly1305 is draft-irtf-cfrg-xchacha-03 (24-byte nonce). "Hex" means lowercase hexadecimal; a field described as "`0x` hex" carries the prefix, one described as "bare hex" does not.
+- The labels in this TAP begin with `tape-channel/` (see Rationale and Backwards Compatibility).
 
 ### 2. Canonical JSON and strict parsing
 
@@ -181,15 +181,15 @@ The initiator obtains the responder's static key per §4.1 before sending, and s
 Every container that has a channel key record has an **inbox room**:
 
 ```
-inboxRoom(container, chainId) = SHA-256( "TAP-26/inbox/v1" ‖ endpoint(container, chainId) )     (32 bytes)
+inboxRoom(container, chainId) = SHA-256( "tape-channel/inbox/v1" ‖ endpoint(container, chainId) )     (32 bytes)
 ```
 
 on every relay and ChannelBus that its record lists under `inbox`. To post content `m` (a JSON object) to B's inbox, a sender with B's record `x25519` key `R`:
 
 ```
 e  = 32 random bytes;  E = X25519(e, 9);  N = 24 random bytes;  room = inboxRoom(B)
-K  = HKDF-SHA256( IKM = DH(e, R), salt = "TAP-26/inbox/v1", info = E ‖ R ‖ room, L = 32 )
-C  = XChaCha20-Poly1305-Encrypt( K, N, UTF-8(canonicalJSON(m)), aad = "TAP-26/inbox/v1" ‖ E ‖ room )
+K  = HKDF-SHA256( IKM = DH(e, R), salt = "tape-channel/inbox/v1", info = E ‖ R ‖ room, L = 32 )
+C  = XChaCha20-Poly1305-Encrypt( K, N, UTF-8(canonicalJSON(m)), aad = "tape-channel/inbox/v1" ‖ E ‖ room )
 wire = 0x03 ‖ E ‖ N ‖ C                                                        (at most 16,448 bytes)
 ```
 
@@ -245,12 +245,12 @@ The initiator's pending state (`eA` and everything derived from it) **MUST NOT**
 
 ```
 inviteHash = SHA-256( UTF-8( canonicalJSON(invite) ) )                    -- the invite object exactly as received
-transcript = SHA-256( "TAP-26/transcript/v1" ‖ cid ‖ endpointA ‖ endpointB ‖ SA ‖ SB ‖ EA ‖ EB ‖ uint64(exp) ‖ inviteHash )
+transcript = SHA-256( "tape-channel/transcript/v1" ‖ cid ‖ endpointA ‖ endpointB ‖ SA ‖ SB ‖ EA ‖ EB ‖ uint64(exp) ‖ inviteHash )
 ikm        = DH(eA, SB) ‖ DH(sA, EB) ‖ DH(eA, EB)                         -- B computes DH(sB, EA) ‖ DH(eB, SA) ‖ DH(eB, EA)
-okm        = HKDF-SHA256( IKM = ikm, salt = transcript, info = "TAP-26/keys/v1", L = 128 )
+okm        = HKDF-SHA256( IKM = ikm, salt = transcript, info = "tape-channel/keys/v1", L = 128 )
 kAB ‖ kBA ‖ cA ‖ cB = okm                                                  -- 32 bytes each
-confirmInitiator = HMAC-SHA256( cA, "TAP-26/confirm/initiator" ‖ transcript )
-confirmResponder = HMAC-SHA256( cB, "TAP-26/confirm/responder" ‖ transcript )
+confirmInitiator = HMAC-SHA256( cA, "tape-channel/confirm/initiator" ‖ transcript )
+confirmResponder = HMAC-SHA256( cB, "tape-channel/confirm/responder" ‖ transcript )
 ```
 
 `endpointA` = `endpoint(from.container, from.chainId)` and `endpointB` the responder's endpoint ID; `cid` is 16 bytes. `kAB` encrypts frames from A to B and `kBA` frames from B to A; neither is used for the other direction. Implementations **SHOULD** erase `ikm`, `okm`, `cA`, `cB` and the three DH outputs once the tags are computed.
@@ -259,7 +259,7 @@ confirmResponder = HMAC-SHA256( cB, "TAP-26/confirm/responder" ‖ transcript )
 
 ```
 frame = uint64(seq) ‖ ChaCha20-Poly1305-Encrypt( key, nonce = uint32(0) ‖ uint64(seq), plaintext, aad )
-aad   = "TAP-26/frame/v1" ‖ cid ‖ dir ‖ uint64(seq)          -- dir = 0x00 for A→B (key kAB), 0x01 for B→A (key kBA)
+aad   = "tape-channel/frame/v1" ‖ cid ‖ dir ‖ uint64(seq)          -- dir = 0x00 for A→B (key kAB), 0x01 for B→A (key kBA)
 ```
 
 - Each direction has its own `seq`, starting at 0 and increasing by 1 per frame. A sender **MUST NOT** reuse a `seq` and **MUST** open a new channel before `seq` reaches 2^32.
@@ -274,7 +274,7 @@ aad   = "TAP-26/frame/v1" ‖ cid ‖ dir ‖ uint64(seq)          -- dir = 0x00
 #### 10.1 Channel rooms
 
 ```
-room(dir) = SHA-256( "TAP-26/room/v1" ‖ cid ‖ dir )      toInitiator = room(0x00), toResponder = room(0x01)
+room(dir) = SHA-256( "tape-channel/room/v1" ‖ cid ‖ dir )      toInitiator = room(0x00), toResponder = room(0x01)
 ```
 
 Messages to the initiator (`accept`, B's frames) go to `toInitiator`; messages to the responder (`ready`, A's frames) go to `toResponder`. A room ID is written as 64 hex digits on relays and as `bytes32` on a ChannelBus.
@@ -371,7 +371,7 @@ Parties **MAY** carry wire messages over a WebRTC data channel. The initiator's 
 - **A contract as the transport of last resort.** A relay needs an operator and can be switched off. ChannelBus has no operator, state or owner; the price is gas and permanent public metadata, which a party accepts by choosing it. Events suffice; storage would cost more and add nothing.
 - **Union of node answers for bus logs, not agreement.** TAP-10 §5.2 requires agreement for reads a client must trust. A bus log is not trusted: every frame authenticates itself, a forged log fails to decode, and an omitted one is supplied by another node or reported as a gap. Requiring agreement would stop the channel whenever one node lags, prunes history or refuses `eth_getLogs`. ChannelBus is not a TapeOut contract, so TAP-10 §2.2's rule against learning addresses from messages does not cover it; a bus address in an invite or record is covered by the transcript or the holder's signature.
 - **How a record is read.** A channel record decides whom a party encrypts to and authenticates, which is what TAP-10 §12.2 and §14.4 protect with strict agreement at a fresh pinned block, so §3.3 does the same (TAP-11 adopts most of its reads under default agreement). Two site rules of TAP-10 are treated differently, for different reasons. *Activation* (TAP-10 §6.3) decides whether a shell displays a site and is how the site fee is enforced; TAP-10 §12.2 exempts messaging from it, and a channel is messaging, so §3.3 does not check it. TAP-11 does gate a service on activation; the editors confirmed in #11 that this is an application choosing to be stricter, which is allowed, and that a channel, being messaging, is not gated. *Implementation pinning* (TAP-10 §6.1) guards the bytes of every site file a client reads, and TAP-10 forbids reading a site under a store implementation it does not accept, so §3.3 checks it, although TAP-10 §12.2 lets TapeSend proceed without it: TapeSend reads no site file. The editors confirmed this reading in #11 as well.
-- **Labels.** Labels, `kind` values and the record tag are inside deployed key derivations, digests and signatures. The labels begin with `TAP-26/` because this design was first published under that self-assigned name; they are not references to a TAP number. The editors asked in #11 for a prefix that does not look like a TAP number, because a label containing a TAP number reads as a citation of that TAP (TAP-01 §2) and a future TAP with that number should not have to avoid its own labels; the author agrees, and the labels will change to `tape-channel/…` (Backwards Compatibility). They are disjoint from TAP-10's `TAP-10/…` labels, so no key or digest of one protocol can be taken for the other's.
+- **Labels.** Labels, `kind` values and the record tag are inside key derivations, digests and signatures. The labels begin with `tape-channel/`, the prefix of the record path and of the key kind `tape-channel/v1`. At the editors' request in #11 they do not look like a TAP number: a label containing a TAP number reads as a citation of that TAP (TAP-01 §2), and a future TAP with that number should not have to avoid its own labels. They are disjoint from TAP-10's `TAP-10/…` labels, so no key or digest of one protocol can be taken for the other's.
 - **Not chosen:** signing handshakes with the `ed25519` key (a second signature scheme where DH already authenticates, adding non-repudiation the parties may not want); carrying frames as TapeSend messages (a transaction per frame, public metadata, no forward secrecy).
 
 ## Backwards Compatibility
@@ -383,19 +383,19 @@ This TAP changes nothing in TAP-10: no contract, hub function, payload version o
 - Strings: `tape.channel/invite`, `tape-channel/v1`, `tapesend/v1`, the record tag `"tapechannel": "1"`, the path `.well-known/tape-channel.json`;
 - EIP-712: domain name `TapeAPI`, version `1`, type `ChannelKeys(...)` (§3.2).
 
-**Labels.** The labels of §6 to §10 still begin with `TAP-26/`: `TAP-26/inbox/v1`, `TAP-26/transcript/v1`, `TAP-26/keys/v1`, `TAP-26/confirm/initiator`, `TAP-26/confirm/responder`, `TAP-26/frame/v1`, `TAP-26/room/v1`. The author agrees with the editors (#11) that they should not look like a TAP number, and they will change to `tape-channel/…`, with the same suffixes. The new labels will ship with the next major version of the reference implementation, TapeAPI 2.0: it holds these labels as frozen constants of its version 1 and makes breaking changes only in a major version. The test vectors and the Reference Implementation commit will be updated in the same change. Channel key records will not be affected: the `ChannelKeys` typed data contains no label, and relays and ChannelBus carry only room IDs and wire bytes.
+**Labels.** The labels of §6 to §10 begin with `tape-channel/`, as the editors asked in #11. Earlier revisions of this draft, and the reference implementation up to TapeAPI 1.8.0, used the same labels under the prefix of the historical name above; only the prefix differs, and the two sets do not interoperate, since every room, key, tag and sealed invite depends on a label. The reference implementation implements the labels of this TAP from TapeAPI 1.8.1 as an option (`labels: 'v2'`), keeps its earlier labels as the default of its 1.x versions (they are frozen constants of its own version 1), and makes the labels of this TAP its default in TapeAPI 2.0. An invite does not say which set it uses, so both parties use the labels of this TAP. Channel key records are not affected: the `ChannelKeys` typed data contains no label, and relays and ChannelBus carry only room IDs and wire bytes.
 
 **Differences from the reference implementation** at the commit below, and the planned changes (all additive for existing users):
 
 1. The earlier text defined a TapeSend "durable fallback" sealed to the channel key (see Rationale). It is removed here; the SDK's helpers for it will be documented as producing TAP-10 content only, to be sent by a TAP-10 client.
-2. The SDK reads a channel key record with its own node quorum at the latest block, derives the container with `hub.accountOf` (plus `factory.isCPU`) rather than `opener.accountOf`, does not check `eth_chainId`, and by default only warns when the site store implementation is not accepted. A mode that follows §3.3 exactly (strict agreement at one pinned block, TAP-10 §4.3, §5.4 and §6.1) is planned as an option, and later as the default.
-3. The SDK reads the `tapesend/v1` key with ordinary rather than strict agreement; the same option will cover it.
+2. The SDK reads a channel key record with its own node quorum at the latest block, derives the container with `hub.accountOf` (plus `factory.isCPU`) rather than `opener.accountOf`, does not check `eth_chainId`, and by default only warns when the site store implementation is not accepted. A mode that follows §3.3 exactly (strict agreement at one pinned block, TAP-10 §4.3, §5.4 and §6.1) is available as an experimental option (`conform: 'tap10'`, since TapeAPI 1.5) and is planned as the default later.
+3. By default the SDK reads the `tapesend/v1` key with ordinary rather than strict agreement; the same option covers it.
 4. The SDK accepts endpoint `chainId` values up to 2^64 − 1; TAP-10 §12.1 requires rejecting values above 2^53 − 1. All supported chains are far below both limits.
 5. The SDK's bus reader computes the end of its ranges differently (the lowest head reported by its quorum, minus 2 blocks); the result is never above the TAP-10 pinned block, so it already meets §12.2.
 6. The earlier text did not name the chain of `bus`; the only deployment is on BNB Smart Chain, and §12.1 now says so.
 7. The SDK is more lenient than §2, §5 and §7 on two points: its UTF-8 decoder removes a leading byte order mark instead of rejecting the text (as §2 and TAP-10 §16 do), and it accepts `0x`-prefixed or uppercase hex where bare lowercase hex is specified. Both will be tightened.
 
-The wire formats, labels, record format and signatures are unchanged, so every channel, record and deployment in use remains valid.
+The wire formats, record format and signatures are unchanged. The labels of this TAP are the reference implementation's option `labels: 'v2'`; its default in 1.x keeps the earlier labels, so every channel, record and deployment in use remains valid.
 
 ## Test Cases
 
@@ -411,11 +411,11 @@ Test vectors are in `assets/tap-draft-private-channels/` while this pull request
 | `channel-bus.json` | §12.1: reverts and successes of the deployed contract (empty, 16,448 and 16,449 bytes; empty, 16-, 17-element and truncated batches) |
 | `negative.json` | §4 to §10: low-order, non-canonical and top-bit X25519 keys; small-order and off-curve Ed25519 keys; invites that expired, expire too far ahead, name another `from`, an unknown key kind or bad relays, or were replayed; an `accept` over a tampered invite (and the genuine `accept` still completing afterwards); forged and late `accept` and `ready`; frames before `ready`, replayed, reordered, tampered, reflected, too short or too long; non-UTF-8 text frames; unknown and malformed wire messages |
 
-The reference implementation at the commit below reproduces every value. The handshake, session, record and sealed-invite values are also those of `spec/vectors/tap-26-channel.json` and `spec/vectors/tap-26-identity.json` at that commit, which `spec/vectors/verify.py`, an independent Python implementation, recomputes.
+The reference implementation at the commit below, with the option `labels: 'v2'`, reproduces every value. The handshake, session, record and sealed-invite values are also those of `spec/vectors/tapi-26-v2-channel.json` and `spec/vectors/tapi-26-v2-identity.json` at that commit, which `spec/vectors/verify.py`, an independent Python implementation, recomputes. `channel-keys.json` and `channel-bus.json` contain no label and are unchanged from the earlier revision.
 
 ## Reference Implementation
 
-[BruceLanLan/tapeapi at `fda84db889d2a732915f264a799af24073177a85`](https://github.com/BruceLanLan/tapeapi/tree/fda84db889d2a732915f264a799af24073177a85) (TapeAPI 1.3.0, MIT licensed):
+[BruceLanLan/tapeapi at `4a1ac4fe2a0b2e3327652a794794765dd5da98ef`, with the option `labels: 'v2'`](https://github.com/BruceLanLan/tapeapi/tree/4a1ac4fe2a0b2e3327652a794794765dd5da98ef) (TapeAPI 1.8.1, MIT licensed). The labels of this TAP are selected by passing `labels: 'v2'` to `createInvite`, `acceptInvite`, `roomsFor`, `inboxRoom`, `sealInvite` and `openInvite`; without it, TapeAPI 1.x uses its earlier labels.
 
 | Component | Location |
 |---|---|
@@ -425,8 +425,8 @@ The reference implementation at the commit below reproduces every value. The han
 | Record reading and publishing (`chain.channelKeys`, `tx.publishChannelKeys`) | `sdk/src/index.js` |
 | Relay room store and methods | `examples/relay-service/relay-core.mjs` |
 | ChannelBus | `contracts/src/ChannelBus.sol`, tests `contracts/test/ChannelBus.t.sol` |
-| Tests | `sdk/test/channel.test.mjs`, `sdk/test/channel-keys.test.mjs`, `sdk/test/bus-transport.test.mjs`, `examples/relay-service/relay.test.mjs` |
-| Vectors and independent check | `spec/vectors/tap-26-channel.json`, `spec/vectors/tap-26-identity.json`, `spec/vectors/verify.py` |
+| Tests | `sdk/test/channel.test.mjs`, `sdk/test/channel-keys.test.mjs`, `sdk/test/bus-transport.test.mjs`, `sdk/test/channel-labels.test.mjs`, `examples/relay-service/relay.test.mjs` |
+| Vectors and independent check | `spec/vectors/tapi-26-v2-channel.json`, `spec/vectors/tapi-26-v2-identity.json`, `spec/vectors/verify.py` |
 
 A reference deployment of the relay core runs at `https://relay.tapeapi.fun`; its on-chain name was not activated at the time of writing, so TAP-11 resolves it as `unpaid`. No part has had an independent audit.
 
