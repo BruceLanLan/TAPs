@@ -242,7 +242,7 @@ digest           = keccak256(0x19 ‖ 0x01 ‖ DOMAIN_SEPARATOR ‖ structHash)
 
 本 TAP 不增加合约、中枢函数、载荷格式或名字语法，也不改动 TAP-10 的任何内容。不实施本 TAP 的 TAP-10 客户端把清单看作普通站点文件。
 
-**历史与冻结常量。** 本规范此前在 TapeAPI 仓库中以自行起的名字 "TAP-20" 发布（配套文档为 "TAP-21" 至 "TAP-27"）。那些是本地名字，不是 TAP 编号；本 TAP 的编号由编辑分配（TAP-01 §6.1）。以旧名字部署的常量是历史常量，永不改变：EIP-712 域名 `"TapeAPI"` 与版本 `"1"`、类型串 `Delegation(address container,address signer,uint64 expires)` 与 `ManifestContent(address container,bytes32 contentHash)`、路径 `/.well-known/tapeapi.json`、版本字符串 `"0.1"`，以及配套草稿中的 `TAPI-1/resp/v2` 与以 `TAP-26/` 开头的标签等。它们都不表示本 TAP 的编号。
+**历史与冻结常量。** 本规范此前在 TapeAPI 仓库中以自行起的名字 "TAP-20" 发布（配套文档为 "TAP-21" 至 "TAP-27"）。那些是本地名字，不是 TAP 编号；本 TAP 的编号由编辑分配（TAP-01 §6.1）。以旧名字部署的常量是历史常量，永不改变：EIP-712 域名 `"TapeAPI"` 与版本 `"1"`、类型串 `Delegation(address container,address signer,uint64 expires)` 与 `ManifestContent(address container,bytes32 contentHash)`、路径 `/.well-known/tapeapi.json`、版本字符串 `"0.1"`，以及配套草稿中的 `TAPI-1/resp/v2` 等字符串。它们都不表示本 TAP 的编号。
 
 **现有清单。** 清单格式不变。早先文本中以建议形式出现的两条规则现在是要求，而参考实现早已执行这两条：拒绝重复成员名，以及 366 天上限。`11.1013.tape` 的线上清单满足这两条（见测试用例）。
 
