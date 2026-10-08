@@ -1,0 +1,11 @@
+{
+  "name": "tap-draft-payment-vouchers-vectors",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "description": "Generates the test vectors of TAP-draft-payment-vouchers. Run: npm install && node gen.mjs; then python3 check.py",
+  "dependencies": {
+    "@noble/curves": "1.9.7",
+    "@noble/hashes": "1.8.0"
+  }
+}
