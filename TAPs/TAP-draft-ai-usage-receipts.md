@@ -120,7 +120,7 @@ This TAP defines four formats. Every other request under a service root carries 
 | `reasoning` | Optional decimal. Output tokens spent on reasoning |
 
 - A **decimal** is a JSON string matching `^(0|[1-9][0-9]{0,17})(\.[0-9]{1,8})?$`: at most 18 integer digits without leading zeros, at most 8 fraction digits, no sign, exponent or whitespace. Its value is read exactly; trailing zeros after the point do not change it.
-- A currency code names the unit of account in which the entry's amounts are stated. This TAP moves no funds and binds no code to a token or contract; a TAP that settles amounts does that.
+- A currency code names the unit of account in which the entry's amounts are stated. This TAP moves no funds and binds no code to a token or contract; §7.6 says how a receipt's amounts relate to a payment.
 - The order of the price entries of a model is kept in receipts and has no other meaning.
 - The `priceBEM` of manifest methods is unrelated to this table.
 
@@ -335,6 +335,18 @@ The method `receipt` is a method of TAP-13 §3 with `params` `{ "id": string, "r
 - When no stored receipt matches, the provider answers a signed `BAD_REQUEST`. A provider MAY refuse, with a signed `BAD_REQUEST`, a lookup that does not give `requestSha256`.
 - A provider SHOULD keep every receipt retrievable for at least one hour after the answer, and MAY limit lookups with the unsigned rate-limit answer of TAP-13 §7.
 
+#### 7.6 Receipts and payment
+
+A receipt states amounts. It is not a payment, a promise to pay or an invoice, and this TAP moves no funds. A payment TAP under discussion in #38 (https://github.com/TapeOutProtocol/TAPs/issues/38) may charge for metered answers; this section says what a receipt offers such a mechanism, and requires nothing of it.
+
+- **Units.** Every amount in a receipt is an integer number of 10^-8 units of its currency (§4.3), written with exactly 8 fraction digits. For the code `BEM` these are the units of TAP-11: `payment.unit` `"BEM"` with `payment.decimals` 8, and an amount of the form of `priceBEM` (TAP-11 §3.3). A receipt's `BEM` amount is therefore a valid `priceBEM` string with the same value, and `A` of §4.3 is the same amount in base units.
+- **One amount per published currency, no conversion.** `prices` holds one amount for each price entry of the matched model, each computed from the usage and that entry alone. No amount is converted from another, and a receipt carries no exchange rate. When a table publishes both a `USD` and a `BEM` entry, the receipt carries both amounts; neither has to equal the other at any rate.
+- **A charge made at a rate.** When a charge is quoted in one currency and paid in another (for example quoted in `USD` and paid in BEM at a rate taken when the answer is charged), the rate and the amount paid are not part of the receipt; the record of the charge carries them. Whoever holds that record and the receipt can check one against the other: the quoted amount is the receipt's amount for the quoting currency, and the amount paid follows from it and the recorded rate under the rounding that the payment mechanism defines.
+- **Naming a receipt.** A receipt is named by its container, its `id` and its `params.requestSha256`, which select it under §7.5, or by its envelope digest (§10), which covers every member of `result`. A charge that names the digest names exactly one receipt.
+- **Answers without an amount.** A receipt whose `prices` is `null` states no amount (the status was not 2xx, no usage was reported, or no entry matched). A receipt with `complete` `false` and non-null `prices` states the amount for the usage the upstream reported. Whether either is charged is for the payment mechanism to decide.
+- **Receipts and vouchers.** A receipt is signed by the provider's signer and states what the provider claims an answer cost. A cumulative voucher of the kind discussed in #38 would be signed by the caller and state what the caller commits to pay. Neither implies the other; a caller can compare the total of the receipts it accepted with the total it has committed to.
+- `result` has no member for a rate, an amount paid or a voucher, and a sidecar adds none (§7.2).
+
 ### 8. Sidecar
 
 - A sidecar forwards a metered request to the upstream with the client's body bytes unchanged, except under §6.3. The upstream's address comes from the sidecar's configuration, never from a request.
@@ -400,7 +412,7 @@ Why no receipt is accepted as an answer, and no answer as a receipt:
 - **Usage injection.** Without it, a streamed Chat request that did not ask for usage could not be priced. The sidecar asks upstream and removes only the event its change caused; the "carries nothing" rule accepts the empty-delta form some compatible servers send and never removes an event with content, a finish reason or an unknown member.
 - **One usage shape.** Anthropic reports input tokens without cache reads and writes; the OpenAI formats include them. One shape in which subsets are subsets lets one formula price every format, each token once.
 - **Exact matching, reported model first.** Any fuzzy rule lets two parties price one receipt differently. The reported model names what answered; the requested model is a fallback for formats that report none.
-- **Integer arithmetic, rounding up once.** Floating point differs between platforms, and rounding per bucket would make the sum depend on how tokens are split; rounding up means a receipt never states less than the exact amount. Prices are published, not settled: settlement needs payment rules that belong in a separate TAP.
+- **Integer arithmetic, rounding up once.** Floating point differs between platforms, and rounding per bucket would make the sum depend on how tokens are split; rounding up means a receipt never states less than the exact amount. Prices are published, not settled: how a receipt relates to a payment is in §7.6, and the payment itself is outside this TAP.
 - **`ok` is always true.** A receipt states what the upstream answered, failures included: an HTTP 429 becomes attributable, with `usage` and `prices` `null`, and an answer that broke off is priced from the usage it reported, with `complete` `false`, because the upstream bills it. The sidecar's own errors have nothing to bind and are unsigned.
 - **A separate TAP.** Receipts need a price table, a usage schema, stream parsing and a lookup method that no client of TAP-13 needs; that TAP's §9 is the only link.
 
