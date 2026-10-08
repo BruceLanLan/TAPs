@@ -40,8 +40,8 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 - **Member**: a container listed in the roster of an epoch, the owner included. A member's **index** is its position in that roster, starting at 0.
 - **Epoch** `n`: an integer from 0 to 2^32 − 1. Each epoch has its own group key `K`, roster and set of members.
 - **Receiver**: a member processing an epoch message or a group message.
-- Notation follows TAP-10 §1: `‖` is concatenation, `uint64(x)` and `uint32(x)` are big-endian, and ASCII labels such as `"TAP-27/room/v1"` are their raw bytes without a terminator. `X25519(k, U)` is RFC 7748; `HKDF-SHA256(IKM, salt, info, L)` is RFC 5869; XChaCha20-Poly1305 is draft-irtf-cfrg-xchacha-03 with a 32-byte key, a 24-byte nonce and a 16-byte tag, written `XChaCha20-Poly1305(key, nonce, aad).encrypt(plaintext)`; Ed25519 is RFC 8032, written `Ed25519(signer, message)`. "Hex" means lowercase hexadecimal; a field described as "`0x` hex" carries the prefix, one described as "bare hex" does not.
-- The labels in this TAP begin with `TAP-27/`, which does not refer to any TAP number (see Backwards Compatibility).
+- Notation follows TAP-10 §1: `‖` is concatenation, `uint64(x)` and `uint32(x)` are big-endian, and ASCII labels such as `"tape-group/room/v1"` are their raw bytes without a terminator. `X25519(k, U)` is RFC 7748; `HKDF-SHA256(IKM, salt, info, L)` is RFC 5869; XChaCha20-Poly1305 is draft-irtf-cfrg-xchacha-03 with a 32-byte key, a 24-byte nonce and a 16-byte tag, written `XChaCha20-Poly1305(key, nonce, aad).encrypt(plaintext)`; Ed25519 is RFC 8032, written `Ed25519(signer, message)`. "Hex" means lowercase hexadecimal; a field described as "`0x` hex" carries the prefix, one described as "bare hex" does not.
+- The labels in this TAP begin with `tape-group/` (see Backwards Compatibility).
 
 ### 2. What this TAP takes from TAP-draft-private-channels
 
@@ -73,7 +73,7 @@ A client **MAY** reuse an accepted record for member verification within the 300
 All traffic of a group, epoch messages and group messages alike, goes to one room:
 
 ```
-groupRoom(gid) = SHA-256( "TAP-27/room/v1" ‖ gid )                         (32 bytes)
+groupRoom(gid) = SHA-256( "tape-group/room/v1" ‖ gid )                         (32 bytes)
 ```
 
 on every relay and ChannelBus the current roster names (§5.2). A room ID is written as 64 hex digits on relays and as `bytes32` on a ChannelBus (TAP-draft-private-channels §10.1).
@@ -85,14 +85,14 @@ on every relay and ChannelBus the current roster names (§5.2). A room ID is wri
 The owner starts epoch `n` by drawing, from a cryptographically secure generator and fresh for every epoch, a 32-byte group key `K`, a 32-byte X25519 private key `e` with `E = X25519(e, 9)`, and a 24-byte nonce `N`. With members `0 … count − 1` in roster order, `R_i` the `x25519` key of member `i` and `rosterObject` the roster of §5.2:
 
 ```
-commit   = SHA-256( "TAP-27/commit/v1" ‖ K )
+commit   = SHA-256( "tape-group/commit/v1" ‖ K )
 header   = 0x04 ‖ gid (16) ‖ uint64(n) ‖ E (32) ‖ N (24) ‖ commit (32) ‖ count (1)      (114 bytes)
-kek_i    = HKDF-SHA256( IKM = X25519(e, R_i), salt = "TAP-27/wrap/v1", info = E ‖ R_i ‖ gid ‖ uint64(n), L = 32 )
+kek_i    = HKDF-SHA256( IKM = X25519(e, R_i), salt = "tape-group/wrap/v1", info = E ‖ R_i ‖ gid ‖ uint64(n), L = 32 )
 slot_i   = XChaCha20-Poly1305( kek_i, N, aad = header ).encrypt( K )                      (48 bytes)
 slots    = slot_0 ‖ slot_1 ‖ … ‖ slot_(count−1)
 roster   = XChaCha20-Poly1305( K, N, aad = header ‖ slots ).encrypt( UTF-8( canonicalJSON(rosterObject) ) )
 body     = header ‖ slots ‖ uint32(|roster|) ‖ roster
-sig      = Ed25519( owner's ed25519 private key, "TAP-27/epoch/v1" ‖ body )             (64 bytes)
+sig      = Ed25519( owner's ed25519 private key, "tape-group/epoch/v1" ‖ body )             (64 bytes)
 wire     = body ‖ sig
 ```
 
@@ -148,10 +148,10 @@ An epoch message is one wire message, and an owner **MUST NOT** post one larger 
 
 A receiver processes epoch messages one at a time, and the epoch it holds never decreases. An epoch message is **well formed** when its first byte is `0x04`; its length is at least 246 and at most 16,448 bytes; `count` is 1 to 32; its length equals `114 + 48 · count + 4 + L + 64` for the `L` read at offset `114 + 48 · count`; and the value of its epoch field is at most 2^32 − 1. A receiver **MUST** reject a message that is not well formed, and **MUST** accept a well-formed message only if all of the following hold, checked in this order; a rejected message changes no state.
 
-1. **Owner.** `gid` is the group's, and `sig` verifies (§2) as the owner's Ed25519 signature over `"TAP-27/epoch/v1" ‖ body`, where `body` is the wire without its last 64 bytes. The owner's key is the `ed25519` of the owner's channel key record, read when the receiver joined (§7).
+1. **Owner.** `gid` is the group's, and `sig` verifies (§2) as the owner's Ed25519 signature over `"tape-group/epoch/v1" ‖ body`, where `body` is the wire without its last 64 bytes. The owner's key is the `ed25519` of the owner's channel key record, read when the receiver joined (§7).
 2. **Duplicates and equivocation.** Two epoch messages are the **same** when their `body` bytes are equal. If the receiver has already accepted a message for epoch `n`, the same message is a duplicate and is ignored without error. A different message for the same `n` that passes step 1 is evidence that the owner equivocated (§5.6): the receiver **MUST** reject it and **MUST** report the equivocation to the application. A receiver **SHOULD** remember the `body` hash of every epoch message it accepted for the epochs from 64 below the newest it accepted up to the newest; an epoch it no longer remembers is handled by step 3.
 3. **Newer.** `n` is greater than the epoch the receiver holds, and not below the minimum epoch it was given after a restart (§10).
-4. **Key.** With its channel X25519 private key `r` and public key `R`, the receiver computes `X25519(r, E)` once, rejecting the message if that fails or gives 32 zero bytes, derives `kek` as in §5.1 with its own `R`, and tries every slot. Exactly one slot **MUST** open, and `SHA-256("TAP-27/commit/v1" ‖ K)` for the `K` it yields **MUST** equal `commit`.
+4. **Key.** With its channel X25519 private key `r` and public key `R`, the receiver computes `X25519(r, E)` once, rejecting the message if that fails or gives 32 zero bytes, derives `kek` as in §5.1 with its own `R`, and tries every slot. Exactly one slot **MUST** open, and `SHA-256("tape-group/commit/v1" ‖ K)` for the `K` it yields **MUST** equal `commit`.
 5. **Roster.** `roster` decrypts under `K`, `N` and `aad = header ‖ slots`; the plaintext is strict JSON (TAP-draft-private-channels §2) whose value is an object, and:
    - `v` is 1 and `kind` is `"tape.group/roster"`; `gid` and `epoch` equal the header's;
    - `issued` is an integer, not more than 3,600 seconds after the receiver's clock and not more than 2,592,000 seconds (30 days) before it;
@@ -188,10 +188,10 @@ Two wires `w1` and `w2` are evidence that the owner of a group equivocated when 
 A member **MUST** send only under the epoch it holds, with its own index `s` in that epoch's roster:
 
 ```
-key_s  = HKDF-SHA256( IKM = K, salt = gid ‖ uint64(n), info = "TAP-27/sender/v1" ‖ uint32(s), L = 32 )
+key_s  = HKDF-SHA256( IKM = K, salt = gid ‖ uint64(n), info = "tape-group/sender/v1" ‖ uint32(s), L = 32 )
 header = 0x05 ‖ gid (16) ‖ uint64(n) ‖ uint32(s) ‖ uint64(seq) ‖ nonce (24)                    (61 bytes)
 ct     = XChaCha20-Poly1305( key_s, nonce, aad = header ).encrypt( plaintext )
-sig    = Ed25519( the sender's ed25519 private key, "TAP-27/msg/v1" ‖ header ‖ ct )          (64 bytes)
+sig    = Ed25519( the sender's ed25519 private key, "tape-group/msg/v1" ‖ header ‖ ct )          (64 bytes)
 wire   = header ‖ ct ‖ sig
 ```
 
@@ -218,7 +218,7 @@ A receiver **MUST** process a group message in this order and **MUST** reject it
 
 1. The first byte is `0x05`, the length is 141 to 16,448 bytes, `gid` is the group's, and the value of the epoch field is at most 2^32 − 1.
 2. Epoch `n` is the epoch the receiver holds or its previous epoch (§5.5), and `s` is below the number of members of that epoch's roster.
-3. `sig` verifies (§2) with the `ed25519` key of `members[s]` in that epoch's roster over `"TAP-27/msg/v1" ‖ header ‖ ct`, where `header` is the first 61 bytes and `ct` lies between `header` and the last 64 bytes. The receiver **MUST** verify the signature before it decrypts or changes any state, including for its own messages.
+3. `sig` verifies (§2) with the `ed25519` key of `members[s]` in that epoch's roster over `"tape-group/msg/v1" ‖ header ‖ ct`, where `header` is the first 61 bytes and `ct` lies between `header` and the last 64 bytes. The receiver **MUST** verify the signature before it decrypts or changes any state, including for its own messages.
 4. If `s` is the receiver's own index, the message was sent under the receiver's own identity; the receiver **MAY** stop here and ignore it without error.
 5. If `n` is the previous epoch, the rules of §5.5 hold for sender `s`.
 6. `seq` is greater than the highest `seq` the receiver has accepted from `s` in epoch `n`.
@@ -277,7 +277,7 @@ Nothing in this TAP needs saved state to keep confidentiality or authentication:
 
 - **An owner, not consensus.** Agreement among many parties on membership is the hard part of group protocols, and much of MLS (RFC 9420) is devoted to it. One owner who signs every roster is simple, verifiable and enough for a group that someone creates and runs. Its cost, a single point of control and of failure, is stated under Security Considerations.
 - **Slots without fingerprints, unlike TAP-10 §15.3.** TAP-10's sealed payload gives each slot a fingerprint, `SHA-256(R)[0..8) ‖ wrapped`, 56 bytes per slot, so that a reader finds its slot at once and can tell `damaged` from `not-for-key`; TAP-10's Security Considerations state the other side of that choice, that slot fingerprints reveal which key a message was sealed to. For a TapeSend message, whose sender and recipient are public in any case, this is a reasonable trade. For a group, the member list is what this TAP sets out to hide, and channel key records are public, so fingerprints would let anyone who hashes the published keys read a group's membership. The slots of this TAP are therefore the 48-byte wrapped key alone, and a receiver tries every slot, at the cost of one X25519 and at most 32 AEAD openings per epoch message. What is given up is the distinction between a damaged message and one not sealed to the reader: a receiver whose key opens no slot learns only that.
-- **The same primitives as TAP-10, in their own domain.** The suite is TAP-10's suite 1 (§14.1), the key commitment follows TAP-10 §15.3's `D`, and the key wrap binds `E ‖ R ‖ gid ‖ uint64(n)` as TAP-10 binds `E ‖ R ‖ X`. Every label begins with `TAP-27/` and differs from TAP-10's and from the channel draft's, so no key, ciphertext or signature of one protocol can be taken for another's.
+- **The same primitives as TAP-10, in their own domain.** The suite is TAP-10's suite 1 (§14.1), the key commitment follows TAP-10 §15.3's `D`, and the key wrap binds `E ‖ R ‖ gid ‖ uint64(n)` as TAP-10 binds `E ‖ R ‖ X`. Every label begins with `tape-group/` and differs from TAP-10's and from the channel draft's, so no key, ciphertext or signature of one protocol can be taken for another's.
 - **A key commitment in the signed header.** XChaCha20-Poly1305 is not key-committing: a malicious owner could build a roster ciphertext that opens under two keys, or wrap different keys for different members. Committing to `K` in the header the owner signs makes every member hold the same key or reject the message (`negative.json` has an owner that tries).
 - **An encrypted roster.** The channel draft hides from relays who talks to whom. Publishing a group's member list in clear would undo that, so the roster travels under the epoch key, and the slot count is all that shows.
 - **Per-sender keys and random nonces.** Every member encrypts under keys derived from one epoch key; separate keys per sender keep senders apart, and a 24-byte random nonce makes a collision negligible without any counter to save. A nonce built from `seq` would need state that survives restarts: a member that restarted and accepted the same epoch again would reuse a (key, nonce) pair and reveal the XOR of two plaintexts.
@@ -292,18 +292,18 @@ This TAP changes nothing in TAP-10 and nothing in TAP-draft-private-channels: it
 
 **Historical name.** This specification was first published in the TapeAPI repository as TAP-27 (renamed TAPI-27 on 2026-09-30; neither is a TAP number). The number of this TAP is assigned by the editors. The strings `tape.group/roster` and `tape.group/invite` were fixed under the old name and are frozen.
 
-**Labels.** The labels of §4 to §6 still begin with `TAP-27/`: `TAP-27/room/v1`, `TAP-27/wrap/v1`, `TAP-27/commit/v1`, `TAP-27/epoch/v1`, `TAP-27/sender/v1`, `TAP-27/msg/v1`. In #11 the editors asked for the labels of the channel draft to use a prefix that does not look like a TAP number, and said that the same applies to `TAP-27/`. The author agrees, and these labels will change to `tape-group/…`, with the same suffixes. The new labels will ship with the next major version of the reference implementation, TapeAPI 2.0: it holds these labels as frozen constants of its version 1 and makes breaking changes only in a major version. The test vectors and the Reference Implementation commit will be updated in the same change.
+**Labels.** The labels of §4 to §6 begin with `tape-group/`. In #11 the editors asked for the labels of the channel draft to use a prefix that does not look like a TAP number, and said that the same applies to this draft. Earlier revisions of this draft, and the reference implementation up to TapeAPI 1.8.0, used the same labels under the prefix of the historical name above, and sealed invites under the channel draft's earlier labels; only the prefixes differ, and groups of the two sets do not interoperate. The reference implementation implements the labels of this TAP from TapeAPI 1.8.1 as an option (`labels: 'v2'`, which also selects the channel draft's labels for invites), keeps its earlier labels as the default of its 1.x versions (they are frozen constants of its own version 1), and makes the labels of this TAP its default in TapeAPI 2.0. A group invite does not say which set it uses: it is read from the inbox room of the channel draft's labels, and the group keeps the labels of this TAP for its whole life.
 
 **Larger groups.** The reference implementation also carries, as an experimental option, a second format for groups of up to 128 members. It is not part of this TAP and would be proposed separately. It marks the high half of the epoch field, so every receiver that follows this TAP rejects its epoch messages and group messages (§5.4, §6.3).
 
 **Differences from the reference implementation** at the commit below, and the planned changes, none of which changes a message that the reference implementation produces:
 
-1. Member verification reads channel key records as the reference implementation reads them for the channel draft, which differs from TAP-draft-private-channels §3.3 in the ways listed in that draft's Backwards Compatibility (item 2); the planned option that follows §3.3 exactly will cover group verification too.
+1. Member verification reads channel key records as the reference implementation reads them for the channel draft, which by default differs from TAP-draft-private-channels §3.3 in the ways listed in that draft's Backwards Compatibility (item 2); the experimental option that follows §3.3 exactly (`conform: 'tap10'`) covers group verification too, since `api.groupVerifier()` reads records through `chain.channelKeys`.
 2. The reference member verifier (`api.groupVerifier()`) reads records only on the chain its client is configured for. For a member on another chain it fails with `GROUP_INVALID`, the same code as a rejection, so such an epoch is not installed and the application cannot tell the cause from the code; an application can pass a verifier that reads each member's own chain. The verifier will do so by default, and will report a failure to read as no answer.
 3. The reference receiver is more lenient than §5.2, §5.4 and §7 on four points: it accepts a roster that begins with a UTF-8 byte order mark (which strict JSON excludes), a member `chainId` above 2^53 − 1, a roster `owner` or invite `owner` without `chainId` (taken as 56) and a roster without `relays` (taken as empty); and it checks only that an invite's `owner.container` is a string. The reference owner produces none of these inputs. The receiver will be tightened to this draft in a 1.x release, as an erratum.
 4. The reference invite reader also recognises an invite key `format`, used by the experimental larger-group format, and refuses values other than 1 and 2 instead of ignoring the key. This will stay until that format is proposed or withdrawn.
 
-The wire formats, labels and signatures are unchanged, so every group in use remains valid.
+The wire formats and signatures are unchanged. The labels of this TAP are the reference implementation's option `labels: 'v2'`; its default in 1.x keeps the earlier labels, so every group in use remains valid.
 
 ## Test Cases
 
@@ -316,11 +316,11 @@ Test vectors are in `assets/tap-draft-private-groups/` (directory name as asked 
 | `membership.json` | §5.5, §6.3, §7, §8: a sealed invite to member-1's inbox room; epoch 1, which removes member-2, with `prev`, slots and sender keys; messages in both epochs; and a sequence of steps with expected outcomes: messages still in flight under the previous epoch accepted, a removed member's and a moved-on sender's previous-epoch messages rejected, the previous epoch expiring after 600 seconds, and the removed member unable to accept epoch 1 |
 | `negative.json` | §5.4, §5.5, §6.3: 50 cases, each with the receiver's state and clock: forged, re-signed and tampered epoch messages; an owner giving one member another key; equivocation and duplicates; rollback with and without a persisted minimum epoch; the 30-day and 3,600-second bounds at and past their limits; malformed, non-canonical-form and inconsistent rosters; broken `prev` chains; replayed, reattributed, tampered, cross-group, out-of-range and wrongly keyed messages; gaps; non-UTF-8 text; oversize wire messages |
 
-The epoch message, sender keys and messages of `epoch.json` and `messages.json` are those of `spec/vectors/tap-27-group.json` at the commit below, which `spec/vectors/verify.py`, an independent Python implementation, recomputes. The reference implementation at that commit reproduces every value and every outcome in the four files; the positive values have also been recomputed from their inputs with the Python primitives of `verify.py`. Channel key records (§5.4 step 6) are taken, in the vectors, to hold exactly the keys listed.
+The epoch message, sender keys and messages of `epoch.json` and `messages.json` are those of `spec/vectors/tapi-27-v2-group.json` at the commit below, which `spec/vectors/verify.py`, an independent Python implementation, recomputes. The reference implementation at that commit, with the option `labels: 'v2'`, reproduces every value and every outcome in the four files. Channel key records (§5.4 step 6) are taken, in the vectors, to hold exactly the keys listed.
 
 ## Reference Implementation
 
-[BruceLanLan/tapeapi at `fda84db889d2a732915f264a799af24073177a85`](https://github.com/BruceLanLan/tapeapi/tree/fda84db889d2a732915f264a799af24073177a85) (TapeAPI 1.3.0, MIT licensed):
+[BruceLanLan/tapeapi at `4a1ac4fe2a0b2e3327652a794794765dd5da98ef`, with the option `labels: 'v2'`](https://github.com/BruceLanLan/tapeapi/tree/4a1ac4fe2a0b2e3327652a794794765dd5da98ef) (TapeAPI 1.8.1, MIT licensed). The labels of this TAP are selected by passing `labels: 'v2'` to `createGroup`, `joinGroup`, `openGroupInvite`, `groupRoom` and `checkGroupInvites` (`deliverGroupUpdate` and `inviteFor` follow the group's); without it, TapeAPI 1.x uses its earlier labels.
 
 | Component | Location |
 |---|---|
@@ -328,10 +328,10 @@ The epoch message, sender keys and messages of `epoch.json` and `messages.json` 
 | Posting an epoch message and its invites in one call; reading an inbox for invites | `sdk/src/group-delivery.js` (`deliverGroupUpdate`, `checkGroupInvites`) |
 | Member verifier over channel key records | `sdk/src/index.js` (`api.groupVerifier()`) |
 | Inbox sealing, relay and bus transports, key checks | `sdk/src/channel.js` |
-| Tests | `sdk/test/group.test.mjs`, `sdk/test/audit-group.test.mjs` |
-| Vectors and independent check | `spec/vectors/tap-27-group.json`, `spec/vectors/verify.py` |
+| Tests | `sdk/test/group.test.mjs`, `sdk/test/audit-group.test.mjs`, `sdk/test/channel-labels.test.mjs` |
+| Vectors and independent check | `spec/vectors/tapi-27-v2-group.json`, `spec/vectors/verify.py` |
 
-Reference error codes (informative): `GROUP_INVALID` for a rejected epoch message or group message, `GROUP_EQUIVOCATION` for §5.4 step 2, with the SHA-256 of both `body`s. The same commit also contains the experimental larger-group format (`tap-27-group-v2.json`, `group-v2.test.mjs`), which is not part of this TAP. No part has had an independent audit.
+Reference error codes (informative): `GROUP_INVALID` for a rejected epoch message or group message, `GROUP_EQUIVOCATION` for §5.4 step 2, with the SHA-256 of both `body`s. The same commit also contains the experimental larger-group format (`tapi-27-v2-group-format2.json`, `group-v2.test.mjs`), which is not part of this TAP. No part has had an independent audit.
 
 ## Deployments
 

@@ -1,5 +1,5 @@
 {
-  "note": "Generated from the reference implementation at BruceLanLan/tapeapi@fda84db889d2a732915f264a799af24073177a85 (sdk/src/group.js, sdk/src/channel.js, sdk/src/canon.js) and reproduced by it (every value and every outcome). Byte strings are lowercase hex with 0x, except inside roster and invite objects and in prev, which are written as a roster carries them (bare hex for gid and prev). Every field is an input or an exact expected output; sdkCode and sdkError are the reference implementation's error code and message and are informative only. The values are those of spec/vectors/tap-27-group.json at that commit.",
+  "note": "Generated from the reference implementation at BruceLanLan/tapeapi@4a1ac4fe2a0b2e3327652a794794765dd5da98ef (TapeAPI 1.8.1, with the option labels: 'v2') (sdk/src/group.js, sdk/src/channel.js, sdk/src/canon.js) and reproduced by it (every value and every outcome). Byte strings are lowercase hex with 0x, except inside roster and invite objects and in prev, which are written as a roster carries them (bare hex for gid and prev). Every field is an input or an exact expected output; sdkCode and sdkError are the reference implementation's error code and message and are informative only. The values are those of spec/vectors/tapi-27-v2-group.json at that commit.",
   "covers": "§6 (group messages): the sender keys of epoch 0 of epoch.json and two messages. seq = 1789000000000 × 2^16, the value a sender starting from the clock at 1789000000 s draws (§6.2).",
   "epoch": 0,
   "gid": "0x678391a8b4bcd8e6fd09112d3b525e66",
@@ -7,15 +7,15 @@
   "senderKeys": [
     {
       "sender": 0,
-      "key": "0xdc7a2ee473f06196f5264117113240967941f8957ecb26f869e8283efda6d581"
+      "key": "0xad821e56ccfee170bff514fd18e986c151ccf82fc792728f7be918e743a55491"
     },
     {
       "sender": 1,
-      "key": "0x63c47d54c13173adc58a86ad8919d5e8e368c6c1adebb0dc027ac873d8c8e9c7"
+      "key": "0xe3ba31e6a96cbb2372bffdc628b46c020ee9b918a6fd8bbc7db31efb1fa221a1"
     },
     {
       "sender": 2,
-      "key": "0x64a411298eaad5c1ac11d7c968348bf6aa530fb9a52d3674893dc83066b2e914"
+      "key": "0xb900bf088a22fb140650f7a3018a22f68a2dd62be6cd44ffe6cb37b5da72e4f4"
     }
   ],
   "messages": [
@@ -25,9 +25,9 @@
       "nonce": "0x6d84896074c2d9deb5c9172e330a1e6c83885f73c1d8ddb4",
       "plaintext": "hello, group",
       "header": "0x05678391a8b4bcd8e6fd09112d3b525e6600000000000000000000000001a088b5a20000006d84896074c2d9deb5c9172e330a1e6c83885f73c1d8ddb4",
-      "ciphertext": "0x9e07d4c156913b6130db644a9c8991dd077ab77f5f5a862fe8daafe2",
-      "signature": "0x86cb5fb75859d7d666f8927a77b28a1275d8e2454a0cd9f7890ac993d028c7254f73700b2b43fffa6f178416eeb08afd8e744a64c1ac8e2b6f4a659e2aa35206",
-      "wire": "0x05678391a8b4bcd8e6fd09112d3b525e6600000000000000000000000001a088b5a20000006d84896074c2d9deb5c9172e330a1e6c83885f73c1d8ddb49e07d4c156913b6130db644a9c8991dd077ab77f5f5a862fe8daafe286cb5fb75859d7d666f8927a77b28a1275d8e2454a0cd9f7890ac993d028c7254f73700b2b43fffa6f178416eeb08afd8e744a64c1ac8e2b6f4a659e2aa35206"
+      "ciphertext": "0x355ce2271a443ef2f6d89c8887e4af6eb1724f10c299f1bca7f8fd5f",
+      "signature": "0xf5b1e7e0093366b36c6fabaa7c630dd09e4db4f7cf8ad220063f7e4320c5a9566c10de3ad82db27c417d8672f47a0cbb81afe071cf2fbc687df82f94eef0430e",
+      "wire": "0x05678391a8b4bcd8e6fd09112d3b525e6600000000000000000000000001a088b5a20000006d84896074c2d9deb5c9172e330a1e6c83885f73c1d8ddb4355ce2271a443ef2f6d89c8887e4af6eb1724f10c299f1bca7f8fd5ff5b1e7e0093366b36c6fabaa7c630dd09e4db4f7cf8ad220063f7e4320c5a9566c10de3ad82db27c417d8672f47a0cbb81afe071cf2fbc687df82f94eef0430e"
     },
     {
       "sender": 1,
@@ -35,9 +35,9 @@
       "nonce": "0x6d84896075c2d9deb5ca172e330a1f6c83885f74c1d8ddb4",
       "plaintext": "你好 from member 1",
       "header": "0x05678391a8b4bcd8e6fd09112d3b525e6600000000000000000000000101a088b5a20000006d84896075c2d9deb5ca172e330a1f6c83885f74c1d8ddb4",
-      "ciphertext": "0xbb997198037007e10b3512c996b6ae1d3674bc1626d0ba33fd9859cc3982b70a228d5392",
-      "signature": "0xa4b5e592b0e21ae39922a20d2614b872eaedbb1e31650388a27a271d2cedaa001efde10db810fe6805245877d16ced7cd457993c0634e06113f4af7c3ca6cd0c",
-      "wire": "0x05678391a8b4bcd8e6fd09112d3b525e6600000000000000000000000101a088b5a20000006d84896075c2d9deb5ca172e330a1f6c83885f74c1d8ddb4bb997198037007e10b3512c996b6ae1d3674bc1626d0ba33fd9859cc3982b70a228d5392a4b5e592b0e21ae39922a20d2614b872eaedbb1e31650388a27a271d2cedaa001efde10db810fe6805245877d16ced7cd457993c0634e06113f4af7c3ca6cd0c"
+      "ciphertext": "0xb60a19ea1ec0b0b032291b0d3189fc8f1a8cfbe8f3861917bcdc096e79df1b47558cd834",
+      "signature": "0x26c25439eafec7b3e8e4879e0edccbe33c2b4bdb7e59a65f2d5fbfe03965e0fdb3531ed8e2746f8eaca9f050dcd99f26657e3d8331d6fd10d5f9e071b5cc3702",
+      "wire": "0x05678391a8b4bcd8e6fd09112d3b525e6600000000000000000000000101a088b5a20000006d84896075c2d9deb5ca172e330a1f6c83885f74c1d8ddb4b60a19ea1ec0b0b032291b0d3189fc8f1a8cfbe8f3861917bcdc096e79df1b47558cd83426c25439eafec7b3e8e4879e0edccbe33c2b4bdb7e59a65f2d5fbfe03965e0fdb3531ed8e2746f8eaca9f050dcd99f26657e3d8331d6fd10d5f9e071b5cc3702"
     }
   ]
 }
