@@ -102,7 +102,7 @@ Only "resolved" allows a client to treat the signer as speaking for the service.
 | `endpoints.live` | array of strings | yes | Absolute `https://` URLs without query, fragment, user name or password. May be empty. Providers SHOULD list at most 4 |
 | `endpoints.async` | boolean | yes | `true` states that the service accepts requests as TAP-10 messages sent to its endpoint ID (TAP-10 §12.1). Either `live` is non-empty or `async` is `true` |
 | `methods` | array of objects | yes | Non-empty; method names unique (§3.3) |
-| `payment` | object | see rule | `{ "escrow": string, "unit": "BEM", "decimals": 8 }`. REQUIRED when any method's `priceBEM` is not exactly the string `"0"`, and then `escrow` MUST be a non-zero address in the form of `circuits`. Otherwise optional; an `escrow` that is present MUST be an address in that form. `unit` and `decimals` MAY be omitted and are then read as `"BEM"` and `8`; any other value is invalid |
+| `payment` | object | see rule | `{ "escrow": string, "unit": "BEM", "decimals": 8 }`. REQUIRED when any method's `priceBEM` is not exactly the string `"0"`, and then `escrow` MUST be a non-zero address in the form of `circuits`. Otherwise optional; an `escrow` that is present MUST be an address in that form. `unit` and `decimals` MAY be omitted and are then read as `"BEM"` and `8`; any other value is invalid. The chain on which `escrow` is an address is named by the TAP that defines settlement |
 | `contentSig` | string | no | The holder's signature over the rest of the manifest (§5) |
 
 #### 3.3 Method descriptor
@@ -110,7 +110,7 @@ Only "resolved" allows a client to treat the signer as speaking for the service.
 | Member | Type | Required | Rule |
 |---|---|---|---|
 | `name` | string | yes | Matches `^[A-Za-z_][A-Za-z0-9_]{0,63}$` and is not `__proto__`, `constructor` or `prototype` |
-| `priceBEM` | string | yes | Matches `^[0-9]+(\.[0-9]{1,8})?$`: an amount of the BEM token (BNB Smart Chain `0x5ce033B2bFCa3Af30b3e8C8457DeaF776A8b695a`, 8 decimals). `"0"` means free. How a price is paid and settled is outside this TAP |
+| `priceBEM` | string | yes | Matches `^[0-9]+(\.[0-9]{1,8})?$`: an amount of the BEM token (BNB Smart Chain `0x5ce033B2bFCa3Af30b3e8C8457DeaF776A8b695a`, 8 decimals). `"0"` means free. How a price is paid and settled is outside this TAP. A later TAP MAY give `priceBEM` the meaning of an upper bound per call for methods it prices in another unit |
 | `params` | object | yes | Parameter name to type name; may be `{}`. Type names are informative |
 | `returns` | object | yes | Field name to type name; may be `{}`. Informative |
 | `description` | string | no | At most 256 Unicode code points |

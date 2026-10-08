@@ -104,7 +104,7 @@ TAP-10 给每个电路容器一个字节可被任何人核验的网站，以及�
 | `endpoints.live` | 字符串数组 | 是 | 绝对 `https://` URL，不含查询、片段、用户名或密码。可以为空。提供者 SHOULD 至多列 4 个 |
 | `endpoints.async` | boolean | 是 | `true` 表示服务接受发往其端点 ID（TAP-10 §12.1）的 TAP-10 消息形式的请求。`live` 非空与 `async` 为 `true` 至少其一成立 |
 | `methods` | 对象数组 | 是 | 非空；方法名唯一（§3.3） |
-| `payment` | object | 见规则 | `{ "escrow": string, "unit": "BEM", "decimals": 8 }`。任何方法的 `priceBEM` 不恰为字符串 `"0"` 时为 REQUIRED，此时 `escrow` MUST 为形式同 `circuits` 的非零地址。否则可选；出现的 `escrow` MUST 为该形式的地址。`unit` 与 `decimals` MAY 省略，省略时按 `"BEM"` 与 `8` 读取；其它值无效 |
+| `payment` | object | 见规则 | `{ "escrow": string, "unit": "BEM", "decimals": 8 }`。任何方法的 `priceBEM` 不恰为字符串 `"0"` 时为 REQUIRED，此时 `escrow` MUST 为形式同 `circuits` 的非零地址。否则可选；出现的 `escrow` MUST 为该形式的地址。`unit` 与 `decimals` MAY 省略，省略时按 `"BEM"` 与 `8` 读取；其它值无效。`escrow` 是哪条链上的地址，由定义结算的 TAP 指明 |
 | `contentSig` | string | 否 | 持有人对清单其余部分的签名（§5） |
 
 #### 3.3 方法描述
@@ -112,7 +112,7 @@ TAP-10 给每个电路容器一个字节可被任何人核验的网站，以及�
 | 成员 | 类型 | 必需 | 规则 |
 |---|---|---|---|
 | `name` | string | 是 | 匹配 `^[A-Za-z_][A-Za-z0-9_]{0,63}$`，且不是 `__proto__`、`constructor`、`prototype` |
-| `priceBEM` | string | 是 | 匹配 `^[0-9]+(\.[0-9]{1,8})?$`：BEM 代币数量（BNB Smart Chain `0x5ce033B2bFCa3Af30b3e8C8457DeaF776A8b695a`，8 位小数）。`"0"` 表示免费。价格如何支付与结算不在本 TAP 范围内 |
+| `priceBEM` | string | 是 | 匹配 `^[0-9]+(\.[0-9]{1,8})?$`：BEM 代币数量（BNB Smart Chain `0x5ce033B2bFCa3Af30b3e8C8457DeaF776A8b695a`，8 位小数）。`"0"` 表示免费。价格如何支付与结算不在本 TAP 范围内。后续 TAP MAY 对它以其它单位计价的方法，把 `priceBEM` 定义为每次调用的上限 |
 | `params` | object | 是 | 参数名到类型名；可以为 `{}`。类型名仅供参考 |
 | `returns` | object | 是 | 字段名到类型名；可以为 `{}`。仅供参考 |
 | `description` | string | 否 | 至多 256 个 Unicode 码点 |
