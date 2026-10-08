@@ -1,6 +1,6 @@
 {
   "tap": "TAP-draft-ai-usage-receipts, Specification §5.2, §6.1, §9.2 and §9.3 item 8",
-  "source": "Generated with createSseScanner and scanSse of sdk/src/ai.js at https://github.com/BruceLanLan/tapeapi/tree/d991f5e27429e13a480025bc3bdb8c2c29231574 (TapeAPI 1.5.0), each stream pushed whole; every value was recomputed by stream-shapes-check.py in this directory, an independent whole-text parser written from the text of this TAP.",
+  "source": "Generated with createSseScanner and scanSse of sdk/src/ai.js at https://github.com/BruceLanLan/tapeapi/tree/d991f5e27429e13a480025bc3bdb8c2c29231574 (TapeAPI 1.5.0), each stream pushed whole; every value was recomputed by stream-shapes-check.py in this directory, an independent whole-text parser written from the text of this TAP. The cases with \"added\": \"2026-10-08\" (which streams `data: [DONE]` applies to, Specification §6.1) were generated the same way at the same commit, and stream-shapes-check.py recomputes them too.",
   "note": "Every receipt comment here is the placeholder `: tapeapi-receipt AAAA` (a comment like any other); these vectors check parsing, not signatures. streamBase64 is the exact byte sequence (standard base64); streamText is the same text for reading. end is the byte offset of the end (§6.1) in the stream, or null when the stream has no end before it closes. responseSha256 is the §5.2 hash of the events dispatched up to and including the end (all of them when there is no end); wholeStreamSha256 is the same hash over every event of the stream. eventsAtEnd and eventsAfterEnd count hashed events (sentinels excluded). Ambiguous lines and unfinishedAtClose are as defined in §5.2. item8 gives the outcome of §9.3 item 8 for a client that stops passing the stream on at its end, and for one that passes every byte on.",
   "cases": [
     {
@@ -397,6 +397,215 @@
       "item8": {
         "stopsAtEnd": "pass",
         "passesEverythingOn": "pass"
+      }
+    },
+    {
+      "name": "[DONE] applies: a data-only stream ending in data:[DONE] without the space",
+      "format": "openai-responses",
+      "added": "2026-10-08",
+      "streamBase64": "ZGF0YTogeyJ0eXBlIjoicmVzcG9uc2Uub3V0cHV0X3RleHQuZGVsdGEiLCJkZWx0YSI6IkhpIn0KCjogdGFwZWFwaS1yZWNlaXB0IEFBQUEKCmRhdGE6W0RPTkVdCgo=",
+      "streamText": "data: {\"type\":\"response.output_text.delta\",\"delta\":\"Hi\"}\n\n: tapeapi-receipt AAAA\n\ndata:[DONE]\n\n",
+      "end": 95,
+      "eventsAtEnd": 1,
+      "responseSha256": "18fa53a54204280c16bb0f338c79bee72fccec29ea5d790e3f43dbaaf05a299f",
+      "wholeStreamSha256": "18fa53a54204280c16bb0f338c79bee72fccec29ea5d790e3f43dbaaf05a299f",
+      "eventsAfterEnd": 0,
+      "ambiguousLinesBeforeEnd": 0,
+      "ambiguousLinesAfterEnd": 0,
+      "unfinishedAtClose": false,
+      "item8": {
+        "stopsAtEnd": "pass",
+        "passesEverythingOn": "pass"
+      }
+    },
+    {
+      "name": "[DONE] applies: a data-only stream ending in [DONE], CRLF line ends",
+      "format": "openai-responses",
+      "added": "2026-10-08",
+      "streamBase64": "ZGF0YTogeyJ0eXBlIjoicmVzcG9uc2Uub3V0cHV0X3RleHQuZGVsdGEiLCJkZWx0YSI6IkhpIn0NCg0KOiB0YXBlYXBpLXJlY2VpcHQgQUFBQQ0KDQpkYXRhOiBbRE9ORV0NCg0K",
+      "streamText": "data: {\"type\":\"response.output_text.delta\",\"delta\":\"Hi\"}\r\n\r\n: tapeapi-receipt AAAA\r\n\r\ndata: [DONE]\r\n\r\n",
+      "end": 102,
+      "eventsAtEnd": 1,
+      "responseSha256": "18fa53a54204280c16bb0f338c79bee72fccec29ea5d790e3f43dbaaf05a299f",
+      "wholeStreamSha256": "18fa53a54204280c16bb0f338c79bee72fccec29ea5d790e3f43dbaaf05a299f",
+      "eventsAfterEnd": 0,
+      "ambiguousLinesBeforeEnd": 0,
+      "ambiguousLinesAfterEnd": 0,
+      "unfinishedAtClose": false,
+      "item8": {
+        "stopsAtEnd": "pass",
+        "passesEverythingOn": "pass"
+      }
+    },
+    {
+      "name": "[DONE] applies with event lines too: response.completed, then [DONE], nothing after (the [DONE] after the end is not hashed and fails nothing)",
+      "format": "openai-responses",
+      "added": "2026-10-08",
+      "streamBase64": "ZXZlbnQ6IHJlc3BvbnNlLm91dHB1dF90ZXh0LmRlbHRhCmRhdGE6IHsidHlwZSI6InJlc3BvbnNlLm91dHB1dF90ZXh0LmRlbHRhIiwiZGVsdGEiOiJIaSJ9Cgo6IHRhcGVhcGktcmVjZWlwdCBBQUFBCgpldmVudDogcmVzcG9uc2UuY29tcGxldGVkCmRhdGE6IHsidHlwZSI6InJlc3BvbnNlLmNvbXBsZXRlZCJ9CgpkYXRhOiBbRE9ORV0KCg==",
+      "streamText": "event: response.output_text.delta\ndata: {\"type\":\"response.output_text.delta\",\"delta\":\"Hi\"}\n\n: tapeapi-receipt AAAA\n\nevent: response.completed\ndata: {\"type\":\"response.completed\"}\n\ndata: [DONE]\n\n",
+      "end": 179,
+      "eventsAtEnd": 2,
+      "responseSha256": "40ce1c205b6ce2825830f3cd7f132d615a338a70fb87cb7fb6600682435cd5bc",
+      "wholeStreamSha256": "40ce1c205b6ce2825830f3cd7f132d615a338a70fb87cb7fb6600682435cd5bc",
+      "eventsAfterEnd": 0,
+      "ambiguousLinesBeforeEnd": 0,
+      "ambiguousLinesAfterEnd": 0,
+      "unfinishedAtClose": false,
+      "item8": {
+        "stopsAtEnd": "pass",
+        "passesEverythingOn": "pass"
+      }
+    },
+    {
+      "name": "[DONE] applies with event lines too: [DONE] before response.completed is the end, and response.completed is an event after it",
+      "format": "openai-responses",
+      "added": "2026-10-08",
+      "streamBase64": "ZXZlbnQ6IHJlc3BvbnNlLm91dHB1dF90ZXh0LmRlbHRhCmRhdGE6IHsidHlwZSI6InJlc3BvbnNlLm91dHB1dF90ZXh0LmRlbHRhIiwiZGVsdGEiOiJIaSJ9Cgo6IHRhcGVhcGktcmVjZWlwdCBBQUFBCgpkYXRhOiBbRE9ORV0KCmV2ZW50OiByZXNwb25zZS5jb21wbGV0ZWQKZGF0YTogeyJ0eXBlIjoicmVzcG9uc2UuY29tcGxldGVkIn0KCg==",
+      "streamText": "event: response.output_text.delta\ndata: {\"type\":\"response.output_text.delta\",\"delta\":\"Hi\"}\n\n: tapeapi-receipt AAAA\n\ndata: [DONE]\n\nevent: response.completed\ndata: {\"type\":\"response.completed\"}\n\n",
+      "end": 130,
+      "eventsAtEnd": 1,
+      "responseSha256": "18fa53a54204280c16bb0f338c79bee72fccec29ea5d790e3f43dbaaf05a299f",
+      "wholeStreamSha256": "40ce1c205b6ce2825830f3cd7f132d615a338a70fb87cb7fb6600682435cd5bc",
+      "eventsAfterEnd": 1,
+      "ambiguousLinesBeforeEnd": 0,
+      "ambiguousLinesAfterEnd": 0,
+      "unfinishedAtClose": false,
+      "item8": {
+        "stopsAtEnd": "pass",
+        "passesEverythingOn": "fail"
+      }
+    },
+    {
+      "name": "[DONE] applies whatever the event name: an event named done whose data is [DONE] is the end",
+      "format": "openai-responses",
+      "added": "2026-10-08",
+      "streamBase64": "ZXZlbnQ6IHJlc3BvbnNlLm91dHB1dF90ZXh0LmRlbHRhCmRhdGE6IHsidHlwZSI6InJlc3BvbnNlLm91dHB1dF90ZXh0LmRlbHRhIiwiZGVsdGEiOiJIaSJ9Cgo6IHRhcGVhcGktcmVjZWlwdCBBQUFBCgpldmVudDogZG9uZQpkYXRhOiBbRE9ORV0KCg==",
+      "streamText": "event: response.output_text.delta\ndata: {\"type\":\"response.output_text.delta\",\"delta\":\"Hi\"}\n\n: tapeapi-receipt AAAA\n\nevent: done\ndata: [DONE]\n\n",
+      "end": 142,
+      "eventsAtEnd": 1,
+      "responseSha256": "18fa53a54204280c16bb0f338c79bee72fccec29ea5d790e3f43dbaaf05a299f",
+      "wholeStreamSha256": "18fa53a54204280c16bb0f338c79bee72fccec29ea5d790e3f43dbaaf05a299f",
+      "eventsAfterEnd": 0,
+      "ambiguousLinesBeforeEnd": 0,
+      "ambiguousLinesAfterEnd": 0,
+      "unfinishedAtClose": false,
+      "item8": {
+        "stopsAtEnd": "pass",
+        "passesEverythingOn": "pass"
+      }
+    },
+    {
+      "name": "only the exact data [DONE]: \"[DONE] \" with a trailing space and \"[done]\" are data, hashed, and no end",
+      "format": "openai-responses",
+      "added": "2026-10-08",
+      "streamBase64": "ZGF0YTogeyJ0eXBlIjoicmVzcG9uc2Uub3V0cHV0X3RleHQuZGVsdGEiLCJkZWx0YSI6IkhpIn0KCmRhdGE6IFtET05FXSAKCmRhdGE6IFtkb25lXQoKOiB0YXBlYXBpLXJlY2VpcHQgQUFBQQo=",
+      "streamText": "data: {\"type\":\"response.output_text.delta\",\"delta\":\"Hi\"}\n\ndata: [DONE] \n\ndata: [done]\n\n: tapeapi-receipt AAAA\n",
+      "end": null,
+      "eventsAtEnd": 3,
+      "responseSha256": "db4e1ff92b7bdd94482267658a89c1c49ba5c5d7e101d23422b929f2f8c2c43d",
+      "wholeStreamSha256": "db4e1ff92b7bdd94482267658a89c1c49ba5c5d7e101d23422b929f2f8c2c43d",
+      "eventsAfterEnd": 0,
+      "ambiguousLinesBeforeEnd": 0,
+      "ambiguousLinesAfterEnd": 0,
+      "unfinishedAtClose": false,
+      "item8": {
+        "stopsAtEnd": "pass",
+        "passesEverythingOn": "pass"
+      }
+    },
+    {
+      "name": "only the exact data [DONE]: [DONE] joined with a second data line is data, hashed, and no end",
+      "format": "openai-responses",
+      "added": "2026-10-08",
+      "streamBase64": "ZGF0YTogeyJ0eXBlIjoicmVzcG9uc2Uub3V0cHV0X3RleHQuZGVsdGEiLCJkZWx0YSI6IkhpIn0KCjogdGFwZWFwaS1yZWNlaXB0IEFBQUEKCmRhdGE6IFtET05FXQpkYXRhOiB4Cgo6IHRhcGVhcGktcmVjZWlwdCBBQUFBCg==",
+      "streamText": "data: {\"type\":\"response.output_text.delta\",\"delta\":\"Hi\"}\n\n: tapeapi-receipt AAAA\n\ndata: [DONE]\ndata: x\n\n: tapeapi-receipt AAAA\n",
+      "end": null,
+      "eventsAtEnd": 2,
+      "responseSha256": "b34a0dcfec9a47f16d7e81211108d5c600dffcfc214c5b4683d9858926b42a46",
+      "wholeStreamSha256": "b34a0dcfec9a47f16d7e81211108d5c600dffcfc214c5b4683d9858926b42a46",
+      "eventsAfterEnd": 0,
+      "ambiguousLinesBeforeEnd": 0,
+      "ambiguousLinesAfterEnd": 0,
+      "unfinishedAtClose": false,
+      "item8": {
+        "stopsAtEnd": "pass",
+        "passesEverythingOn": "pass"
+      }
+    },
+    {
+      "name": "[DONE] applies: ends at data:[DONE] without the space",
+      "format": "openai-chat",
+      "added": "2026-10-08",
+      "streamBase64": "ZGF0YTogeyJjaG9pY2VzIjpbeyJkZWx0YSI6eyJjb250ZW50IjoiSGkifX1dfQoKOiB0YXBlYXBpLXJlY2VpcHQgQUFBQQoKZGF0YTpbRE9ORV0KCg==",
+      "streamText": "data: {\"choices\":[{\"delta\":{\"content\":\"Hi\"}}]}\n\n: tapeapi-receipt AAAA\n\ndata:[DONE]\n\n",
+      "end": 85,
+      "eventsAtEnd": 1,
+      "responseSha256": "145f1c5b1189d63e75f171e8059d6bfc1fbebab37fcea891c8b22a9a5399b56f",
+      "wholeStreamSha256": "145f1c5b1189d63e75f171e8059d6bfc1fbebab37fcea891c8b22a9a5399b56f",
+      "eventsAfterEnd": 0,
+      "ambiguousLinesBeforeEnd": 0,
+      "ambiguousLinesAfterEnd": 0,
+      "unfinishedAtClose": false,
+      "item8": {
+        "stopsAtEnd": "pass",
+        "passesEverythingOn": "pass"
+      }
+    },
+    {
+      "name": "an event: response.completed line does not end an openai-chat stream; [DONE] does",
+      "format": "openai-chat",
+      "added": "2026-10-08",
+      "streamBase64": "ZXZlbnQ6IHJlc3BvbnNlLmNvbXBsZXRlZApkYXRhOiB7ImNob2ljZXMiOlt7ImRlbHRhIjp7ImNvbnRlbnQiOiJIaSJ9fV19Cgo6IHRhcGVhcGktcmVjZWlwdCBBQUFBCgpkYXRhOiBbRE9ORV0KCg==",
+      "streamText": "event: response.completed\ndata: {\"choices\":[{\"delta\":{\"content\":\"Hi\"}}]}\n\n: tapeapi-receipt AAAA\n\ndata: [DONE]\n\n",
+      "end": 112,
+      "eventsAtEnd": 1,
+      "responseSha256": "145f1c5b1189d63e75f171e8059d6bfc1fbebab37fcea891c8b22a9a5399b56f",
+      "wholeStreamSha256": "145f1c5b1189d63e75f171e8059d6bfc1fbebab37fcea891c8b22a9a5399b56f",
+      "eventsAfterEnd": 0,
+      "ambiguousLinesBeforeEnd": 0,
+      "ambiguousLinesAfterEnd": 0,
+      "unfinishedAtClose": false,
+      "item8": {
+        "stopsAtEnd": "pass",
+        "passesEverythingOn": "pass"
+      }
+    },
+    {
+      "name": "[DONE] does not apply: before message_stop it is data like any other, hashed, and no end",
+      "format": "anthropic-messages",
+      "added": "2026-10-08",
+      "streamBase64": "ZXZlbnQ6IG1lc3NhZ2Vfc3RhcnQKZGF0YTogeyJ0eXBlIjoibWVzc2FnZV9zdGFydCJ9CgpkYXRhOiBbRE9ORV0KCjogdGFwZWFwaS1yZWNlaXB0IEFBQUEKCmV2ZW50OiBtZXNzYWdlX3N0b3AKZGF0YTogeyJ0eXBlIjoibWVzc2FnZV9zdG9wIn0KCg==",
+      "streamText": "event: message_start\ndata: {\"type\":\"message_start\"}\n\ndata: [DONE]\n\n: tapeapi-receipt AAAA\n\nevent: message_stop\ndata: {\"type\":\"message_stop\"}\n\n",
+      "end": 142,
+      "eventsAtEnd": 3,
+      "responseSha256": "35dca3ceeb9e22f06cdc960e13385ca9413cf21a85ee0e7c099f62c84ad2518f",
+      "wholeStreamSha256": "35dca3ceeb9e22f06cdc960e13385ca9413cf21a85ee0e7c099f62c84ad2518f",
+      "eventsAfterEnd": 0,
+      "ambiguousLinesBeforeEnd": 0,
+      "ambiguousLinesAfterEnd": 0,
+      "unfinishedAtClose": false,
+      "item8": {
+        "stopsAtEnd": "pass",
+        "passesEverythingOn": "pass"
+      }
+    },
+    {
+      "name": "[DONE] does not apply: after message_stop it is an event after the end",
+      "format": "anthropic-messages",
+      "added": "2026-10-08",
+      "streamBase64": "ZXZlbnQ6IG1lc3NhZ2Vfc3RhcnQKZGF0YTogeyJ0eXBlIjoibWVzc2FnZV9zdGFydCJ9Cgo6IHRhcGVhcGktcmVjZWlwdCBBQUFBCgpldmVudDogbWVzc2FnZV9zdG9wCmRhdGE6IHsidHlwZSI6Im1lc3NhZ2Vfc3RvcCJ9CgpkYXRhOiBbRE9ORV0KCg==",
+      "streamText": "event: message_start\ndata: {\"type\":\"message_start\"}\n\n: tapeapi-receipt AAAA\n\nevent: message_stop\ndata: {\"type\":\"message_stop\"}\n\ndata: [DONE]\n\n",
+      "end": 128,
+      "eventsAtEnd": 2,
+      "responseSha256": "eb77426b3d4aeadbf9830724da637adcd5c1f2bf23c0ba07efc1f7ce40c4d125",
+      "wholeStreamSha256": "be1329aeb4c611782e067bbeefe300e9d92289969e08682350dd96b2f70ab079",
+      "eventsAfterEnd": 1,
+      "ambiguousLinesBeforeEnd": 0,
+      "ambiguousLinesAfterEnd": 0,
+      "unfinishedAtClose": false,
+      "item8": {
+        "stopsAtEnd": "pass",
+        "passesEverythingOn": "fail"
       }
     }
   ]
