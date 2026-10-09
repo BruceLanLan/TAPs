@@ -143,6 +143,8 @@ The **principal** and the **agent** are the containers `mandate.principal` and `
 6. `verdict.mandateHash` equals `subject` and `verdict.deliverableHash` equals `result.deliverableHash`: `verdict-mismatch`.
 7. `mandateSig` and `verdictSig` are holder signatures of the principal's current holder over the mandate hash and the verdict's hash, and `deliver` verifies against the agent's current signer: `evidence-signature`.
 
+A verifier MAY decline EIP-1271 here, as §5 allows. When it does and the principal's current holder has code, it cannot verify `mandateSig` or `verdictSig`: it reports `evidence-signature-unsupported` instead of `evidence-signature` at step 7, and the record is level 0 as for any other evidence problem. A verifier that supports EIP-1271 checks both signatures against the holder as TAP-11 §4.4 item 2 does.
+
 Either verdict value is valid evidence. Neither the mandate's revocation nor its nonce is checked: a level-2 record shows that a task was delegated, delivered and judged, not that the mandate is still valid.
 
 ### 5. Signing
