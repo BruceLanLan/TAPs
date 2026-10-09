@@ -1,6 +1,6 @@
 {
   "description": "Delegation (Specification §4). Every value is an input or an exact expected output. Test holder key only: never use it for anything else.",
-  "reproducedBy": "https://github.com/BruceLanLan/tapeapi/tree/fda84db889d2a732915f264a799af24073177a85 (sdk/src/sig.js delegationDomain, delegationDigest, signDigest, recoverAddress; sdk/src/manifest.js MAX_DELEGATION_S)",
+  "reproducedBy": "https://github.com/BruceLanLan/tapeapi/tree/4a1ac4fe2a0b2e3327652a794794765dd5da98ef (sdk/src/sig.js delegationDomain, delegationDigest, signDigest, recoverAddress; sdk/src/manifest.js MAX_DELEGATION_S)",
   "constants": {
     "domainType": "EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)",
     "domainTypeHash": "0x8b73c3c69bb8fe3d512ecc4cf759cc79239f7b179b0ffacaa9a75d522b39400f",
