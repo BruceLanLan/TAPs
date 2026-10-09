@@ -245,7 +245,7 @@ This TAP adds no contract, hub function, payload format or name syntax, and chan
 
 **Existing manifests.** The manifest format is unchanged. Two rules that the earlier text stated as recommendations are now requirements, and the reference implementation already enforced both: rejecting duplicate member names, and the 366-day bound. The live manifest of `11.1013.tape` satisfies both (Test Cases).
 
-**Differences between this text and the reference implementation.** The reference implementation (Reference Implementation, commit `4a1ac4f`, version 1.8.1) resolves a service as this TAP says when it is created with the option `conform: 'tap10'`, its TAP-10 conformance mode, which that version marks experimental. Its default resolution path was written to the earlier text and is kept unchanged within its 1.x versions; a client that needs this TAP's verdicts uses the conformance mode. The rows below list, for each area, what the default path does, what the conformance mode does, and what this TAP says:
+**Differences between this text and the reference implementation.** The reference implementation (Reference Implementation, commit `4a1ac4f`, version 1.8.1) resolves a service as this TAP says when it is created with the option `conform: 'tap10'`, its TAP-10 conformance mode, which that version marks experimental. Its default resolution path was written to the earlier text and has not changed within its 1.x versions; a client that needs this TAP's verdicts uses the conformance mode. The rows below list, for each area, what the default path does, what the conformance mode does, and what this TAP says:
 
 | Area | Default path (1.8.1) | `conform: 'tap10'` (1.8.1) | This TAP |
 |---|---|---|---|
