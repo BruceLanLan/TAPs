@@ -7,6 +7,7 @@ discussions-to: https://github.com/TapeOutProtocol/TAPs/issues/7
 status: Draft
 type: Application
 created: 2026-09-30
+updated: 2026-10-09
 requires: TAP-10
 license: CC0-1.0
 ---
@@ -244,27 +245,27 @@ This TAP adds no contract, hub function, payload format or name syntax, and chan
 
 **Existing manifests.** The manifest format is unchanged. Two rules that the earlier text stated as recommendations are now requirements, and the reference implementation already enforced both: rejecting duplicate member names, and the 366-day bound. The live manifest of `11.1013.tape` satisfies both (Test Cases).
 
-**Differences between this text and the reference implementation.** The reference implementation (Reference Implementation, commit `fda84db`) was written to the earlier text and does not yet conform to this TAP. The known differences, and the planned changes:
+**Differences between this text and the reference implementation.** The reference implementation (Reference Implementation, commit `4a1ac4f`, version 1.8.1) resolves a service as this TAP says when it is created with the option `conform: 'tap10'`, its TAP-10 conformance mode, which that version marks experimental. Its default resolution path was written to the earlier text and is kept unchanged within its 1.x versions; a client that needs this TAP's verdicts uses the conformance mode. The rows below list, for each area, what the default path does, what the conformance mode does, and what this TAP says:
 
-| Area | Reference implementation today | This TAP | Plan |
+| Area | Default path (1.8.1) | `conform: 'tap10'` (1.8.1) | This TAP |
 |---|---|---|---|
-| Container derivation | `hub.accountOf(circuits, tokenId)` | `opener.accountOf` under TAP-10 §4.2 | Read the opener. For the accepted hub implementations both return the same ERC-6551 address (checked for `11.1013.tape` at BNB Smart Chain block 124890135) |
-| Container address input | Reads the manifest from that container, then takes the processor contract and #ID from the manifest and checks that they derive the container and that the factory knows the processor contract; does not call `token()` or find the processor number | TAP-10 §4.3 before any file is read; the manifest's identity values are only compared (§2.2 step 5) | Resolve under TAP-10 §4.3 first. Both paths accept the same circuit, because the container is derived from the processor contract and #ID |
-| Label input | With a directory contract configured by the caller (there is no default), any other string is looked up there as a label | Not an input form (§2.1) | Keep label lookup outside resolution under this TAP |
-| Missing file | Detected by `fileInfo.size` 0 | `chunkCount` 0 (§2.2 step 3, TAP-10 §7.1) | Use `chunkCount` |
-| Decoding | Replaces bytes that are not valid UTF-8 and drops a leading byte order mark before parsing | Both make the manifest invalid (§3.1) | Decode strictly |
-| Opened | Not read | TAP-10 §4.2 step 5, §6.2 `not-opened` | Read `isOpened` |
-| Activation | Not checked | TAP-10 §6.2 `unpaid` ends resolution | Check `isLive` and `isContainerLive`. The author's two services, `11.1013.tape` and `12.1013.tape`, were not activated when read on 2026-09-30 and resolve as `unpaid` under this TAP until their holder activates them |
-| Implementation pinning | Checks the hub and site store slots and by default only warns | Site store and payment contract, fail-closed (`store-changed`) | Check the payment contract too; make fail-closed the default (announced as a security fix, with an opt-out, or in a major version) |
-| Pinned block | Reads at `latest` by default; optional pinning uses the finality tag and a timestamp age | One pinned block per resolution, freshness by block lag (TAP-10 §5.3) | Adopt TAP-10 §5.3 |
-| Input without chain information | Resolved on the caller's or configured chain only | Every active chain, `ambiguous` (TAP-10 §4.1) | Resolve on every active chain |
-| Name ranges | #ID and processor number up to 78 digits | TAP-10 §3.1 ranges | Apply TAP-10 §3.1 |
-| What counts as an answer | Some JSON-RPC errors are compared across nodes as answers | Only results and reverts are answers (TAP-10 §1) | Treat other errors as node failures |
-| Keeping results | Keeps `accountOf` answers and the implementation slots for up to 300 seconds across resolutions | Holder and site status are relied on for at most 60 seconds; only the processor table is kept (§7.1, TAP-10 §11) | Reread per resolution, keeping the processor table |
-| Chain check | Does not check `eth_chainId` when resolving | Recommended (TAP-10 §5.4) | Add the check |
-| Outcome names | `MANIFEST_INVALID` (also for a missing file, a non-existent token, `no-hash` and `incomplete`), `DELEGATION_INVALID`, `NOT_FOUND`, `RPC_DISAGREE`, `RPC_UNAVAILABLE`, `RPC_STALE` | §2.3 and TAP-10 names | Add the §2.3 name to each error, keeping the existing codes |
+| Container derivation | `hub.accountOf(circuits, tokenId)` | `opener.accountOf`, compared with a local ERC-6551 derivation | `opener.accountOf` under TAP-10 §4.2. For the accepted hub implementations both return the same ERC-6551 address (checked for `11.1013.tape` at BNB Smart Chain block 124890135) |
+| Container address input | Reads the manifest from that container, then takes the processor contract and #ID from the manifest and checks that they derive the container and that the factory knows the processor contract; does not call `token()` or find the processor number | TAP-10 §4.3 before any file is read: `token()`, `isCPU`, the processor number (a processor table shipped with the SDK, each hit confirmed by one `cpuAt` at the pinned block, otherwise a paged scan of `cpuAt`), then `opener.accountOf` must derive the given address | TAP-10 §4.3 before any file is read; the manifest's identity values are only compared (§2.2 step 5) |
+| Label input | With a directory contract configured by the caller (there is no default), any other string is looked up there as a label | An input error; the inputs are those of TAP-10 §3.4 and the object forms for a container and for a processor contract with an #ID | Not an input form (§2.1) |
+| Missing file | Detected by `fileInfo.size` 0 | `chunkCount` 0 is `no-manifest` | `chunkCount` 0 (§2.2 step 3, TAP-10 §7.1) |
+| Decoding | Replaces bytes that are not valid UTF-8 and drops a leading byte order mark before parsing | Both make the manifest invalid | Both make the manifest invalid (§3.1) |
+| Opened | Not read | `isOpened` is read; `not-opened` ends resolution | TAP-10 §4.2 step 5, §6.2 `not-opened` |
+| Activation | Not checked | `isLive` and `isContainerLive` are read; `unpaid` ends resolution | TAP-10 §6.2 `unpaid` ends resolution. The author's two services, `11.1013.tape` and `12.1013.tape`, were not activated when the Test Cases were recorded (2026-09-30) and resolved as `unpaid`; their holder activated them on 2026-10-01, and on 2026-10-09 `isContainerLive` was true for both containers when read from two operators at BNB Smart Chain block 126658102 (hash `0x152776aae99baff145411961ab761000d7825f21046648848d053a8a02b8b8ea`) |
+| Implementation pinning | Reads the hub's and the site store's implementation slots and by default only warns | Site store and payment contract, read at the pinned block, fail-closed (`store-changed`); the hub's slot is still read under the warning-only check | Site store and payment contract, fail-closed (`store-changed`) |
+| Pinned block | Reads at `latest` by default; the optional pinning uses a finality tag and a timestamp age | One block per resolution, chosen as TAP-10 §5.3 says (each operator's lowest head, the Q-th highest minus 2, read by its hash) and refused as `stale-block` by block lag | One pinned block per resolution, freshness by block lag (TAP-10 §5.3) |
+| Input without chain information | Resolved on the caller's or configured chain only | Only with the further option `allChains: true`: every active chain, each at its own pinned block, `ambiguous` when more than one resolves it. Without that option a container address is resolved on the client's chain when it is a container of that chain and is otherwise refused as `unsupported`, and a processor contract with an #ID given as one string is refused as `unsupported` before any request; neither is answered `not-tapeout` | Every active chain, `ambiguous` (TAP-10 §4.1) |
+| Agreement for the holder | Default agreement for every read | `eth_chainId`, `ownerOf` and a contract holder's `eth_getCode` and `isValidSignature` under strict agreement; every other read under default agreement | Strict agreement for `ownerOf` and the EIP-1271 call is recommended (§2.2); every read needs at least default agreement |
+| What counts as an answer | Some JSON-RPC errors are compared across nodes as answers | Only results and reverts are answers; any other error is a node failure | Only results and reverts are answers (TAP-10 §1) |
+| Keeping results | Keeps `accountOf` and `cpuAt` answers and the implementation slots for up to 300 seconds across resolutions | Only the processor table is kept; the holder, opened, activation and the implementation slots are read again at a new pinned block, and a kept service is resolved again before a call once it is 60 seconds old | Holder and site status are relied on for at most 60 seconds; only the processor table is kept (§7.1, TAP-10 §11) |
+| Chain check | Does not check `eth_chainId` when resolving | Checked once per client, under strict agreement, before its first read is adopted | Recommended (TAP-10 §5.4) |
+| Outcome names | `MANIFEST_INVALID` (also for a missing file, a non-existent token, `no-hash` and `incomplete`), `DELEGATION_INVALID`, `NOT_FOUND`, `RPC_DISAGREE`, `RPC_UNAVAILABLE`, `RPC_STALE` | Every error carries the §2.3 or TAP-10 name in `error.data.status`; the codes are kept, and `SITE_STATUS` is added for `not-opened` and `unpaid` | §2.3 and TAP-10 names |
 
-Apart from the rows above, a client built to the earlier text and a client of this TAP reach the same verdict on the same manifest. The earlier text also defined a label directory, a shell capability and MCP and AI bindings (Rationale, "Left out"); a client of this TAP ignores the `mcp` and `ai` members as unknown members.
+The name ranges of TAP-10 §3.1 (#ID at most 10^18, processor number at most 10^9) apply on both paths since version 1.4.0; the earlier version of this table listed them as a difference. Apart from the rows above, the default path and a client of this TAP reach the same verdict on the same manifest. The earlier text also defined a label directory, a shell capability and MCP and AI bindings (Rationale, "Left out"); a client of this TAP ignores the `mcp` and `ai` members as unknown members.
 
 ## Test Cases
 
