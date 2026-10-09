@@ -7,6 +7,7 @@ discussions-to: https://github.com/TapeOutProtocol/TAPs/issues/7
 status: Draft
 type: Application
 created: 2026-09-30
+updated: 2026-10-09
 requires: TAP-10
 license: CC0-1.0
 ---
@@ -246,31 +247,31 @@ digest           = keccak256(0x19 ‖ 0x01 ‖ DOMAIN_SEPARATOR ‖ structHash)
 
 **现有清单。** 清单格式不变。早先文本中以建议形式出现的两条规则现在是要求，而参考实现早已执行这两条：拒绝重复成员名，以及 366 天上限。`11.1013.tape` 的线上清单满足这两条（见测试用例）。
 
-**本文与参考实现的差异。** 参考实现（见参考实现一节，提交 `fda84db`）是按早先文本编写的，目前尚不符合本 TAP。已知差异及计划中的改动如下：
+**本文与参考实现的差异。** 参考实现（见参考实现一节，提交 `4a1ac4f`，版本 1.8.1）在以选项 `conform: 'tap10'`（其 TAP-10 一致模式，该版本标为实验性）创建时按本 TAP 解析服务。它的默认解析路径是按早先文本编写的，在其 1.x 各版本内保持不变；需要本 TAP 结论的客户端使用一致模式。下表按方面列出默认路径的做法、一致模式的做法与本 TAP 的规定：
 
-| 方面 | 参考实现现状 | 本 TAP | 计划 |
+| 方面 | 默认路径（1.8.1） | `conform: 'tap10'`（1.8.1） | 本 TAP |
 |---|---|---|---|
-| 容器推导 | `hub.accountOf(circuits, tokenId)` | 按 TAP-10 §4.2 的 `opener.accountOf` | 读 opener。对已接受的中枢实现，两者返回同一个 ERC-6551 地址（已在 BNB Smart Chain 块 124890135 对 `11.1013.tape` 核对） |
-| 容器地址输入 | 先从该容器读取清单，再取清单中的处理器合约与 #ID，检查它们能推导出该容器、且工厂认得该处理器合约；不调用 `token()`，也不查处理器编号 | 在读取任何文件之前按 TAP-10 §4.3 解析；清单中的身份值只用于比较（§2.2 第 5 步） | 先按 TAP-10 §4.3 解析。两种路径接受的是同一个电路，因为容器由处理器合约与 #ID 推导 |
-| 标签输入 | 调用方配置了目录合约时（没有默认值），其它字符串会在目录中按标签查找 | 不是输入形式（§2.1） | 按本 TAP 解析时不再查标签 |
-| 缺文件 | 以 `fileInfo.size` 为 0 判断 | `chunkCount` 为 0（§2.2 第 3 步、TAP-10 §7.1） | 改用 `chunkCount` |
-| 解码 | 解析前把非法 UTF-8 字节替换掉，并去掉开头的字节顺序标记 | 两者都使清单无效（§3.1） | 严格解码 |
-| 开通 | 不读 | TAP-10 §4.2 第 5 步、§6.2 `not-opened` | 读 `isOpened` |
-| 激活 | 不检查 | TAP-10 §6.2 `unpaid` 结束解析 | 检查 `isLive` 与 `isContainerLive`。作者的两个服务 `11.1013.tape` 与 `12.1013.tape` 在 2026-09-30 读取时未激活，在其持有人激活之前按本 TAP 解析为 `unpaid` |
-| 实现钉住 | 检查中枢与站点存储的实现槽，默认只警告 | 站点存储与付费合约，失败即关闭（`store-changed`） | 把付费合约也纳入；默认改为失败即关闭（作为安全修复公告并保留退出选项，或在大版本中改） |
-| 钉块 | 默认在 `latest` 读取；可选的钉块用 finality 标签与时间戳年龄 | 每次解析一个钉块，按块差判新鲜度（TAP-10 §5.3） | 采用 TAP-10 §5.3 |
-| 无链信息的输入 | 只在调用方给出的链或配置链上解析 | 在所有活跃链上解析，`ambiguous`（TAP-10 §4.1） | 在所有活跃链上解析 |
-| 名字数值范围 | #ID 与处理器编号最长 78 位 | TAP-10 §3.1 的范围 | 按 TAP-10 §3.1 |
-| 什么算回答 | 部分 JSON-RPC 错误被当作回答跨节点比较 | 只有结果与回滚算回答（TAP-10 §1） | 其它错误按节点故障处理 |
-| 结果保留 | `accountOf` 回答与实现槽跨解析保留至多 300 秒 | 持有人与站点状态至多依赖 60 秒；只保留处理器表（§7.1、TAP-10 §11） | 每次解析重读，只保留处理器表 |
-| 链检查 | 解析时不检查 `eth_chainId` | 建议（TAP-10 §5.4） | 加上检查 |
-| 结果名 | `MANIFEST_INVALID`（也用于缺文件、token 不存在、`no-hash`、`incomplete`）、`DELEGATION_INVALID`、`NOT_FOUND`、`RPC_DISAGREE`、`RPC_UNAVAILABLE`、`RPC_STALE` | §2.3 与 TAP-10 的名字 | 在每个错误上附加 §2.3 的名字，保留现有错误码 |
+| 容器推导 | `hub.accountOf(circuits, tokenId)` | `opener.accountOf`，并与本地 ERC-6551 推导比对 | 按 TAP-10 §4.2 的 `opener.accountOf`。对已接受的中枢实现，两者返回同一个 ERC-6551 地址（已在 BNB Smart Chain 块 124890135 对 `11.1013.tape` 核对） |
+| 容器地址输入 | 先从该容器读取清单，再取清单中的处理器合约与 #ID，检查它们能推导出该容器、且工厂认得该处理器合约；不调用 `token()`，也不查处理器编号 | 在读取任何文件之前按 TAP-10 §4.3：`token()`、`isCPU`、处理器编号（随 SDK 发布的处理器表，每次命中先在钉块上读一次 `cpuAt` 核实，否则分页扫描 `cpuAt`），然后 `opener.accountOf` 必须推导出给定的地址 | 在读取任何文件之前按 TAP-10 §4.3 解析；清单中的身份值只用于比较（§2.2 第 5 步） |
+| 标签输入 | 调用方配置了目录合约时（没有默认值），其它字符串会在目录中按标签查找 | 输入错误；输入形式为 TAP-10 §3.4 的各种形式，以及容器与"处理器合约加 #ID"的对象形式 | 不是输入形式（§2.1） |
+| 缺文件 | 以 `fileInfo.size` 为 0 判断 | `chunkCount` 为 0 即 `no-manifest` | `chunkCount` 为 0（§2.2 第 3 步、TAP-10 §7.1） |
+| 解码 | 解析前把非法 UTF-8 字节替换掉，并去掉开头的字节顺序标记 | 两者都使清单无效 | 两者都使清单无效（§3.1） |
+| 开通 | 不读 | 读 `isOpened`；`not-opened` 结束解析 | TAP-10 §4.2 第 5 步、§6.2 `not-opened` |
+| 激活 | 不检查 | 读 `isLive` 与 `isContainerLive`；`unpaid` 结束解析 | TAP-10 §6.2 `unpaid` 结束解析。作者的两个服务 `11.1013.tape` 与 `12.1013.tape` 在记录测试用例时（2026-09-30）未激活，解析为 `unpaid`；其持有人于 2026-10-01 激活了它们，2026-10-09 从两家运营方钉在 BNB Smart Chain 块 126658102（哈希 `0x152776aae99baff145411961ab761000d7825f21046648848d053a8a02b8b8ea`）读取时两个容器的 `isContainerLive` 均为 true |
+| 实现钉住 | 读中枢与站点存储的实现槽，默认只警告 | 站点存储与付费合约在钉块上读取，失败即关闭（`store-changed`）；中枢的实现槽仍按只警告的检查读取 | 站点存储与付费合约，失败即关闭（`store-changed`） |
+| 钉块 | 默认在 `latest` 读取；可选的钉块用 finality 标签与时间戳年龄 | 每次解析一个区块，按 TAP-10 §5.3 选取（每家运营方取其最低头块，取第 Q 高者减 2，按哈希读取），按块差判为 `stale-block` | 每次解析一个钉块，按块差判新鲜度（TAP-10 §5.3） |
+| 无链信息的输入 | 只在调用方给出的链或配置链上解析 | 仅在另加选项 `allChains: true` 时：在每条活跃链上各自钉块解析，多于一条链命中即 `ambiguous`。不加该选项时，容器地址在它是本链容器时于本链解析，否则拒绝为 `unsupported`；以一个字符串给出的"处理器合约加 #ID"在发出任何请求之前拒绝为 `unsupported`；两者都不会回答 `not-tapeout` | 在所有活跃链上解析，`ambiguous`（TAP-10 §4.1） |
+| 持有人读取的共识 | 所有读取用默认共识 | `eth_chainId`、`ownerOf` 以及合约持有人的 `eth_getCode` 与 `isValidSignature` 用严格共识；其它读取用默认共识 | 建议对 `ownerOf` 与 EIP-1271 调用采用严格共识（§2.2）；每个读取至少要默认共识 |
+| 什么算回答 | 部分 JSON-RPC 错误被当作回答跨节点比较 | 只有结果与回滚算回答；其它错误按节点故障处理 | 只有结果与回滚算回答（TAP-10 §1） |
+| 结果保留 | `accountOf` 与 `cpuAt` 的回答以及实现槽跨解析保留至多 300 秒 | 只保留处理器表；持有人、开通、激活与实现槽在新的钉块上重读，保留的服务满 60 秒后在调用前重新解析 | 持有人与站点状态至多依赖 60 秒；只保留处理器表（§7.1、TAP-10 §11） |
+| 链检查 | 解析时不检查 `eth_chainId` | 每个客户端在采用第一次读取之前检查一次，用严格共识 | 建议（TAP-10 §5.4） |
+| 结果名 | `MANIFEST_INVALID`（也用于缺文件、token 不存在、`no-hash`、`incomplete`）、`DELEGATION_INVALID`、`NOT_FOUND`、`RPC_DISAGREE`、`RPC_UNAVAILABLE`、`RPC_STALE` | 每个错误在 `error.data.status` 里带 §2.3 或 TAP-10 的名字；错误码保留，并为 `not-opened` 与 `unpaid` 新增 `SITE_STATUS` | §2.3 与 TAP-10 的名字 |
 
-除上表各行外，按早先文本实现的客户端与本 TAP 的客户端对同一份清单得出相同结论。早先文本还定义了标签目录、外壳能力以及 MCP 与 AI 绑定（见原理"未纳入的部分"）；本 TAP 的客户端把 `mcp` 与 `ai` 成员当作未知成员忽略。
+TAP-10 §3.1 的名字数值范围（#ID 至多 10^18，处理器编号至多 10^9）自 1.4.0 起在两条路径上都适用；本表的早先版本曾把它列为差异。除上表各行外，默认路径与本 TAP 的客户端对同一份清单得出相同结论。早先文本还定义了标签目录、外壳能力以及 MCP 与 AI 绑定（见原理"未纳入的部分"）；本 TAP 的客户端把 `mcp` 与 `ai` 成员当作未知成员忽略。
 
 ## 测试用例
 
-向量文件在 `assets/tap-11/`。每个文件给出输入与精确的期望输出。下方固定提交的参考实现可复现 `delegation.json`、`content-signature.json` 与 `canonical-json.json`（后者由 `sdk/src/canon.js` 产出），以及 `mainnet-11-1013.json` 中的文件核验与委托恢复部分。本 TAP 按 TAP-10 新增的读取（opener、`isOpened`、激活、付费合约的实现槽）以普通 `eth_call` 与 `eth_getStorageAt` 记录；参考实现尚未进行这些读取（见向后兼容）。
+向量文件在 `assets/tap-11/`。每个文件给出输入与精确的期望输出。下方固定提交的参考实现可复现 `delegation.json`、`content-signature.json` 与 `canonical-json.json`（后者由 `sdk/src/canon.js` 产出），以及 `mainnet-11-1013.json` 中的文件核验与委托恢复部分。本 TAP 按 TAP-10 新增的读取（opener、`isOpened`、激活、付费合约的实现槽）以普通 `eth_call` 与 `eth_getStorageAt` 记录；参考实现在 `conform: 'tap10'` 下进行这些读取，默认路径不进行（见向后兼容）。
 
 **`delegation.json`**（§4）。域分隔符、三条链上的完整算例、公开测试密钥的两个签名，以及应拒绝的情形。对 `container = 0x0000000000000000000000000000000000000002`、`signer = 0x0000000000000000000000000000000000000003`、`expires = 1790000000`：
 
@@ -307,16 +308,19 @@ digest           = keccak256(0x19 ‖ 0x01 ‖ DOMAIN_SEPARATOR ‖ structHash)
 
 ## 参考实现
 
-TapeAPI SDK，[BruceLanLan/tapeapi，提交 `fda84db889d2a732915f264a799af24073177a85`](https://github.com/BruceLanLan/tapeapi/tree/fda84db889d2a732915f264a799af24073177a85)（版本 1.3.0，MIT 许可）：
+TapeAPI SDK，[BruceLanLan/tapeapi，提交 `4a1ac4fe2a0b2e3327652a794794765dd5da98ef`](https://github.com/BruceLanLan/tapeapi/tree/4a1ac4fe2a0b2e3327652a794794765dd5da98ef)（版本 1.8.1，MIT 许可）。以 `createTapeAPI({ conform: 'tap10' })` 创建的客户端按 §2 解析；SDK 的默认路径与本文的差异列在向后兼容中。
 
 | 位置 | 覆盖 |
 |---|---|
-| `sdk/src/index.js`（`resolve`、`verifyDelegation`） | §2、§4.3–§4.4、§7.3（`delegationFloor`） |
+| `sdk/src/index.js`（`resolveConform`、`identifyAt`、`conformManifest`、`finishConform`、`siteStatus`） | `conform: 'tap10'` 下的 §2；§7.1（保留的服务满 60 秒后在调用前重新解析，`CONFORM_TTL_MS`） |
+| `sdk/src/index.js`（`resolve`、`verifyDelegation`、`holderApproves`、`contentSigProblem`） | 默认路径；§4.3–§4.4、§5.2–§5.3（`requireContentSig`）、§7.3（`delegationFloor`） |
 | `sdk/src/manifest.js` | §3 |
 | `sdk/src/sig.js` | §4.1、§5 |
 | `sdk/src/canon.js` | §6 |
-| `sdk/src/rpc.js`、`sdk/src/chains.js` | 节点共识、链表、名字 |
-| `spec/vectors/verify.py` | §4–§6 的独立 Python 实现，以仓库自己的向量和 `11.1013.tape` 清单的一份较早记录核对；它不读取测试用例中的文件 |
+| `sdk/src/rpc.js`（`tap10Block`；读取选项 `answers: 'tap10'` 与 `strict`）、`sdk/src/chains.js`、`sdk/src/processors-snapshot.js` | TAP-10 §5.3 的钉块、什么算回答、默认与严格共识、链表、名字及其范围、处理器表 |
+| `sdk/test/conform-tap10.test.mjs`、`sdk/test/conform-strict-holder.test.mjs`、`sdk/test/conform-allchains.test.mjs` | 一致模式在模拟链上的测试：输入形式、§2.2 与 TAP-10 §6.2 的顺序、钉块、`ownerOf` 与 EIP-1271 的严格共识、无链信息的输入 |
+| `docs/guides/upgrade-1.0.md` 的 "The TAP-10 conformance mode" 一节 | 如何开启该模式、它与默认路径的不同之处及其限制 |
+| `spec/vectors/verify.py` | §4–§6 的独立 Python 实现，以仓库自己的向量和 `11.1013.tape` 清单的一份较早记录（`sdk/test/fixtures/mainnet-11-1013-manifest.json`）核对；它不读取测试用例中的文件 |
 
 与本文的差异列在向后兼容中。BNB Smart Chain 上的服务 `https://api.tapeapi.fun`（`11.1013.tape`）与 `https://relay.tapeapi.fun`（`12.1013.tape`）以本格式发布清单。
 
