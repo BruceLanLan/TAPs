@@ -268,7 +268,7 @@ Apart from the rows above, a client built to the earlier text and a client of th
 
 ## Test Cases
 
-Vector files are in `assets/tap-11/`. Each gives inputs and exact expected outputs. The reference implementation at the fixed commit below reproduces `delegation.json`, `content-signature.json` and `canonical-json.json` (the last from `sdk/src/canon.js`), and the file verification and delegation recovery of `mainnet-11-1013.json`. The reads that this TAP adds from TAP-10 (opener, `isOpened`, activation, the payment contract's implementation slot) were recorded with plain `eth_call` and `eth_getStorageAt`; the reference implementation does not make them yet (Backwards Compatibility).
+Vector files are in `assets/tap-11/`. Each gives inputs and exact expected outputs. The reference implementation at the fixed commit below reproduces `delegation.json`, `content-signature.json` and `canonical-json.json` (the last from `sdk/src/canon.js`), and the file verification and delegation recovery of `mainnet-11-1013.json`. The reads that this TAP adds from TAP-10 (opener, `isOpened`, activation, the payment contract's implementation slot) were recorded with plain `eth_call` and `eth_getStorageAt`; the reference implementation makes them under `conform: 'tap10'` and not on its default path (Backwards Compatibility).
 
 **`delegation.json`** (§4). The domain separators, a worked example on all three chains, two signatures by a published test key, and rejections. For `container = 0x0000000000000000000000000000000000000002`, `signer = 0x0000000000000000000000000000000000000003`, `expires = 1790000000`:
 
@@ -305,16 +305,19 @@ Expected outcome at that block: **`unpaid`**. The file also gives the exact 3,41
 
 ## Reference Implementation
 
-The TapeAPI SDK at [BruceLanLan/tapeapi, commit `fda84db889d2a732915f264a799af24073177a85`](https://github.com/BruceLanLan/tapeapi/tree/fda84db889d2a732915f264a799af24073177a85) (version 1.3.0, MIT licensed):
+The TapeAPI SDK at [BruceLanLan/tapeapi, commit `4a1ac4fe2a0b2e3327652a794794765dd5da98ef`](https://github.com/BruceLanLan/tapeapi/tree/4a1ac4fe2a0b2e3327652a794794765dd5da98ef) (version 1.8.1, MIT licensed). A client created with `createTapeAPI({ conform: 'tap10' })` resolves as §2 says; the SDK's default path differs from this text as listed under Backwards Compatibility.
 
 | Location | Covers |
 |---|---|
-| `sdk/src/index.js` (`resolve`, `verifyDelegation`) | §2, §4.3–§4.4, §7.3 (`delegationFloor`) |
+| `sdk/src/index.js` (`resolveConform`, `identifyAt`, `conformManifest`, `finishConform`, `siteStatus`) | §2 under `conform: 'tap10'`; §7.1 (a kept service is resolved again before a call once it is 60 seconds old, `CONFORM_TTL_MS`) |
+| `sdk/src/index.js` (`resolve`, `verifyDelegation`, `holderApproves`, `contentSigProblem`) | The default path; §4.3–§4.4, §5.2–§5.3 (`requireContentSig`), §7.3 (`delegationFloor`) |
 | `sdk/src/manifest.js` | §3 |
 | `sdk/src/sig.js` | §4.1, §5 |
 | `sdk/src/canon.js` | §6 |
-| `sdk/src/rpc.js`, `sdk/src/chains.js` | Node agreement, chain table, names |
-| `spec/vectors/verify.py` | An independent Python implementation of §4–§6, checked against the repository's own vectors and an earlier recording of the `11.1013.tape` manifest; it does not read the files in Test Cases |
+| `sdk/src/rpc.js` (`tap10Block`; the read options `answers: 'tap10'` and `strict`), `sdk/src/chains.js`, `sdk/src/processors-snapshot.js` | The pinned block of TAP-10 §5.3, what counts as an answer, default and strict agreement, the chain table, names and their ranges, the processor table |
+| `sdk/test/conform-tap10.test.mjs`, `sdk/test/conform-strict-holder.test.mjs`, `sdk/test/conform-allchains.test.mjs` | Tests of the conformance mode against a simulated chain: input forms, the order of §2.2 and TAP-10 §6.2, the pinned block, strict agreement for `ownerOf` and EIP-1271, input without chain information |
+| `docs/guides/upgrade-1.0.md`, section "The TAP-10 conformance mode" | How the mode is enabled, what it does differently from the default path, and its limits |
+| `spec/vectors/verify.py` | An independent Python implementation of §4–§6, checked against the repository's own vectors and an earlier recording of the `11.1013.tape` manifest (`sdk/test/fixtures/mainnet-11-1013-manifest.json`); it does not read the files in Test Cases |
 
 The differences from this text are listed under Backwards Compatibility. The services `https://api.tapeapi.fun` (`11.1013.tape`) and `https://relay.tapeapi.fun` (`12.1013.tape`) on BNB Smart Chain publish manifests in this format.
 
