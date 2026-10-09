@@ -7,6 +7,7 @@ discussions-to: https://github.com/TapeOutProtocol/TAPs/issues/38
 status: Draft
 type: Application
 created: 2026-10-08
+updated: 2026-10-21
 requires: TAP-10, TAP-11, TAP-13
 license: CC0-1.0
 ---
