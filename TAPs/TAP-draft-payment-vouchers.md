@@ -243,11 +243,13 @@ A provider SHOULD also check, through F4, that the funds held for the channel co
 | `reason` | absent | REQUIRED | One of `malformed`, `provider`, `expired`, `lifetime`, `signature`, `rate`, `stale`, `insufficient`, `funds` (§5.2). A client MUST treat a value it does not know as a refusal |
 | `price` | REQUIRED | REQUIRED | Base-unit string: the charge of this call now. For a USD-priced method, at the rate of `quote` |
 | `priceUSD` | USD-priced only | USD-priced only | Amount object in `"USD"`: the method's price in `usdPricing` |
-| `quote` | USD-priced only | USD-priced only | A current quote (§4.4) |
+| `quote` | USD-priced only | USD-priced only; see below | A current quote (§4.4) |
 | `minVoucherLifeS` | §5.2 item 3 | §5.2 item 3 | Integer seconds |
 | `lastCumulative` | absent | with `stale` or `insufficient` | Base-unit string: `last` (§5.2) |
 | `onChainClaimed` | absent | with `stale` or `insufficient` | Base-unit string: the amount paid on the channel (F2) |
 | `voucher` | absent | with `stale` or `insufficient`, when the provider holds one | `{ "cumulative", "expires", "sig" }`: the accepted voucher whose `cumulative` equals `lastCumulative`, as the consumer's voucher signer signed it |
+
+The `quote` of a `PAYMENT_REQUIRED` is a quote that has not passed its `validUntil`: one the provider derives now, or one it stated earlier. A provider that has none and cannot derive one, for example because it cannot read its rate sources, MUST answer `INTERNAL` (TAP-13 §6) instead of `PAYMENT_REQUIRED`; it charges nothing. In a `BAD_VOUCHER` it MAY leave `quote` out for the same reason; `price` is then the cap of the method (§4.2).
 
 `price`, `priceUSD` and `quote` are hints. A client that finds `price` different from the charge it computed from its copy of the manifest MUST reread the service (TAP-11 §7.1) before it signs a voucher for more.
 
