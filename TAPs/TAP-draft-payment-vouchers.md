@@ -221,7 +221,7 @@ Before it serves a priced call, a provider MUST check, and on the first failure 
 
 1. `voucher` is an object whose members satisfy the table of §3.2 (`malformed`);
 2. `provider` equals the service container (`provider`);
-3. the current time is at most `expires` (`expired`). A provider MAY require a minimum remaining lifetime of the voucher and of the authorisation of its signer (F3), so that it can settle in time; one that does MUST state the minimum as `minVoucherLifeS` in every `PAYMENT_REQUIRED`, and in every `BAD_VOUCHER` that the minimum causes (`lifetime`);
+3. the current time is at most `expires` (`expired`). A provider MAY require a minimum remaining lifetime of the voucher and of the authorisation of its signer (F3), so that it can settle in time; one that does MUST state the minimum as `minVoucherLifeS` in every `PAYMENT_REQUIRED`, and in every `BAD_VOUCHER` that the minimum causes (`lifetime`). This item checks the lifetime of the voucher itself. The signer is known only after item 4 has recovered it, so the lifetime of the signer's authorisation is checked right after item 4, and a short one is refused with `lifetime` as well (an authorisation that has expired is `signature`, item 4);
 4. the signature satisfies §3.1 and recovers to a voucher signer acceptable under §3.3 (`signature`);
 5. for a USD-priced method, `rate` is present and honoured under §4.4 (`rate`);
 6. `cumulative` − `last` is at least the charge of the call: §4.3 at the voucher's `rate` for a USD-priced method, `priceBEM` for a BEM-priced one (`stale` when `cumulative` ≤ `last`, `insufficient` otherwise).
