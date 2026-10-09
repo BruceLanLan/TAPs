@@ -112,7 +112,7 @@ A voucher travels in the `voucher` member of a TAP-13 request (TAP-13 §3):
 | `expires` | yes | A JSON integer, Unix seconds, 0 ≤ `expires` ≤ 2^53 − 1 |
 | `sig` | yes | `0x` and 130 hex digits |
 | `signer` | no | `0x` and 40 hex digits: the voucher signer, when it is not the consumer. Informative: the provider uses the address it recovers |
-| `rate` | for a USD-priced method | The rate of the quote the client used (§4.4), exactly as the quote wrote it |
+| `rate` | for a USD-priced method | A string: the rate of the quote the client used (§4.4), exactly as the quote wrote it |
 
 As TAP-13 §3 states, `voucher` is not part of the request object and is not covered by the envelope's signature; the charge record (§7) binds the accepted voucher to the answer.
 
@@ -219,11 +219,11 @@ A provider SHOULD derive its quotes from the sources it lists, and SHOULD set `a
 
 Before it serves a priced call, a provider MUST check, and on the first failure refuse with the `reason` given:
 
-1. `voucher` is an object whose members satisfy the table of §3.2 (`malformed`);
+1. `voucher` is an object whose members satisfy the table of §3.2 (`malformed`). A `rate` that is present but not a string is `malformed`; a `rate` that is missing is left to item 5;
 2. `provider` equals the service container (`provider`);
 3. the current time is at most `expires` (`expired`). A provider MAY require a minimum remaining lifetime of the voucher and of the authorisation of its signer (F3), so that it can settle in time; one that does MUST state the minimum as `minVoucherLifeS` in every `PAYMENT_REQUIRED`, and in every `BAD_VOUCHER` that the minimum causes (`lifetime`). This item checks the lifetime of the voucher itself. The signer is known only after item 4 has recovered it, so the lifetime of the signer's authorisation is checked right after item 4, and a short one is refused with `lifetime` as well (an authorisation that has expired is `signature`, item 4);
 4. the signature satisfies §3.1 and recovers to a voucher signer acceptable under §3.3 (`signature`);
-5. for a USD-priced method, `rate` is present and honoured under §4.4 (`rate`);
+5. for a USD-priced method, `rate` is present, is a string of the form of §4.4 and is honoured under §4.4 (`rate`, also for a string of another form and for a rate that the provider has not stated);
 6. `cumulative` − `last` is at least the charge of the call: §4.3 at the voucher's `rate` for a USD-priced method, `priceBEM` for a BEM-priced one (`stale` when `cumulative` ≤ `last`, `insufficient` otherwise).
 
 A provider SHOULD also check, through F4, that the funds held for the channel cover `cumulative` minus the amount paid, and refuse with `funds` when they do not. A provider that serves without this check extends credit at its own risk.
