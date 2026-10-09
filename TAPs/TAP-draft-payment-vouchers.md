@@ -251,7 +251,7 @@ A provider SHOULD also check, through F4, that the funds held for the channel co
 
 The `quote` of a `PAYMENT_REQUIRED` is a quote that has not passed its `validUntil`: one the provider derives now, or one it stated earlier. A provider that has none and cannot derive one, for example because it cannot read its rate sources, MUST answer `INTERNAL` (TAP-13 §6) instead of `PAYMENT_REQUIRED`; it charges nothing. In a `BAD_VOUCHER` it MAY leave `quote` out for the same reason; `price` is then the cap of the method (§4.2).
 
-`price`, `priceUSD` and `quote` are hints. A client that finds `price` different from the charge it computed from its copy of the manifest MUST reread the service (TAP-11 §7.1) before it signs a voucher for more.
+`price`, `priceUSD` and `quote` are hints. A client MUST reread the service (TAP-11 §7.1) before it signs a voucher for more when it finds, for a USD-priced method, `priceUSD` different from the price that its copy of the manifest states in `usdPricing`, or, for a BEM-priced method, `price` different from its `priceBEM`. For a USD-priced method `price` follows the rate of `quote` and so differs from any earlier figure; it is only a hint, and a client pays the charge it computes itself (§4.3, §8.2). A client that finds `price` different from that charge MAY report the difference.
 
 ### 7. Charge record
 
