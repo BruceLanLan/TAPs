@@ -247,7 +247,7 @@ digest           = keccak256(0x19 ‖ 0x01 ‖ DOMAIN_SEPARATOR ‖ structHash)
 
 **现有清单。** 清单格式不变。早先文本中以建议形式出现的两条规则现在是要求，而参考实现早已执行这两条：拒绝重复成员名，以及 366 天上限。`11.1013.tape` 的线上清单满足这两条（见测试用例）。
 
-**本文与参考实现的差异。** 参考实现（见参考实现一节，提交 `4a1ac4f`，版本 1.8.1）在以选项 `conform: 'tap10'`（其 TAP-10 一致模式，该版本标为实验性）创建时按本 TAP 解析服务。它的默认解析路径是按早先文本编写的，在其 1.x 各版本内保持不变；需要本 TAP 结论的客户端使用一致模式。下表按方面列出默认路径的做法、一致模式的做法与本 TAP 的规定：
+**本文与参考实现的差异。** 参考实现（见参考实现一节，提交 `4a1ac4f`，版本 1.8.1）在以选项 `conform: 'tap10'`（其 TAP-10 一致模式，该版本标为实验性）创建时按本 TAP 解析服务。它的默认解析路径是按早先文本编写的，在其 1.x 各版本内没有变化；需要本 TAP 结论的客户端使用一致模式。下表按方面列出默认路径的做法、一致模式的做法与本 TAP 的规定：
 
 | 方面 | 默认路径（1.8.1） | `conform: 'tap10'`（1.8.1） | 本 TAP |
 |---|---|---|---|
@@ -271,7 +271,7 @@ TAP-10 §3.1 的名字数值范围（#ID 至多 10^18，处理器编号至多 10
 
 ## 测试用例
 
-向量文件在 `assets/tap-11/`。每个文件给出输入与精确的期望输出。下方固定提交的参考实现可复现 `delegation.json`、`content-signature.json` 与 `canonical-json.json`（后者由 `sdk/src/canon.js` 产出），以及 `mainnet-11-1013.json` 中的文件核验与委托恢复部分。本 TAP 按 TAP-10 新增的读取（opener、`isOpened`、激活、付费合约的实现槽）以普通 `eth_call` 与 `eth_getStorageAt` 记录；参考实现在 `conform: 'tap10'` 下进行这些读取，默认路径不进行（见向后兼容）。
+向量文件在 `assets/tap-11/`。每个文件给出输入与精确的期望输出。下方固定提交的参考实现可复现 `delegation.json`、`content-signature.json` 与 `canonical-json.json`（后者由 `sdk/src/canon.js` 产出），`mainnet-11-1013.json` 中的文件核验与委托恢复部分，以及在 `conform: 'tap10'` 下 `mainnet-11-1013-resolved.json` 与 `mainnet-12-1013-resolved.json` 的整个解析过程（它们各用自己的钉块，所以新跑一次读取的是更晚的块）。本 TAP 按 TAP-10 新增的读取（opener、`isOpened`、激活、付费合约的实现槽）以普通 `eth_call` 与 `eth_getStorageAt` 记录；参考实现在 `conform: 'tap10'` 下进行这些读取，默认路径不进行（见向后兼容）。
 
 **`delegation.json`**（§4）。域分隔符、三条链上的完整算例、公开测试密钥的两个签名，以及应拒绝的情形。对 `container = 0x0000000000000000000000000000000000000002`、`signer = 0x0000000000000000000000000000000000000003`、`expires = 1790000000`：
 
@@ -305,6 +305,20 @@ TAP-10 §3.1 的名字数值范围（#ID 至多 10^18，处理器编号至多 10
 | `fileInfo(container, ".well-known/tapeapi.json")` | 3,414 字节，`application/json`，SHA-256 `0xee57f304f8316802978695e8e9f14e89ce1f9e5c79123b5a583fdcfd3b52c37a` |
 
 该块上的期望结果：**`unpaid`**。文件还给出精确的 3,414 字节清单（其 SHA-256 等于声明的哈希），以及第 3–6 步用这些字节得出的结果：`signer` 为 `0xaB70dEe8e1CEabb1D10eDFeBcbe0c313c53cf154`，`expires` 为 1798190813，委托摘要 `0x2477541749b1b28de5dba42ee4d9f252e904dfb9042eb15068527e3213fb4a7b`，恢复出持有人。两个应拒绝的情形：从该容器提供另一个服务的有效清单，以及把本清单的 `container` 换掉，都是 `manifest-invalid`。
+
+**`mainnet-11-1013-resolved.json` 与 `mainnet-12-1013-resolved.json`**（§2）。以 `resolved` 结束的主网向量，记录于 2026-10-09，此时持有人已于 2026-10-01 激活了两个名字。BNB Smart Chain 上的服务 `11.1013.tape` 与 `12.1013.tape`，各在自己的钉块上解析，钉块由参考实现按 TAP-10 §5.3 所述选取：块 126658959（哈希 `0x02ecbf9d24fee5a1f800494e0f146d97de79766d45cbf4aca24a6204607ec47d`）与块 126658973（哈希 `0xc4bbddc3d1145064954e919104b0ca1c3ff964ffc1a22d44f1b31ff209899864`）。每个文件列出在该块上进行的每一次 `eth_call` 与 `eth_getStorageAt`，附目标、调用数据与返回值，以及给出该回答的运营方：`bsc-dataseed.bnbchain.org`、`bsc-mainnet.public.blastapi.io`、`rpc-bsc.48.club`（参考实现的三个默认节点，它们在严格共识下采纳了 `ownerOf`），以及在同一块哈希上重放同样调用的 `bsc-rpc.publicnode.com`；每一次读取，四家的回答都完全一致。主网向量只在节点保留窗口内可复现，该窗口因运营方而异：记录下来的 `eth_call` 数据与返回值就是向量。结果：
+
+| 值 | `11.1013.tape` | `12.1013.tape` |
+|---|---|---|
+| 容器（`opener.accountOf`），是否已开通 | `0x1b2A657BcBa9D3229f57aC2f4FcbEE2AA756aAe8`，true | `0x9cD838625251576c199B2DeF7A17e50266843185`，true |
+| `ownerOf`（持有人） | `0x086bFB1908B1DF8C0c4412f28E4DD22Bdd52d715` | `0x086bFB1908B1DF8C0c4412f28E4DD22Bdd52d715` |
+| `isLive(name, container)`、`isContainerLive(container)` | true、true | true、true |
+| 站点存储与付费合约的实现 | `0x1d279D138A4D803378a7d4557c056f1beD53c261`、`0xaa226181a6588d3f9AC0035e5f3dBaF311039bCE`（均被接受） | 相同 |
+| 清单 | 3,414 字节，SHA-256 `0xee57f304f8316802978695e8e9f14e89ce1f9e5c79123b5a583fdcfd3b52c37a` | 901 字节，SHA-256 `0x593116a7fde831acc782a33dacc74406ec52e94fc91a7d3d9d2fab677afdfa9b` |
+| `signer`、`delegation.expires` | `0xaB70dEe8e1CEabb1D10eDFeBcbe0c313c53cf154`、1798190813 | `0x3cF7fb12C72653ba8415515387dBa9eF0353a0DD`、1798219806 |
+| 委托摘要、恢复出的地址 | `0x2477541749b1b28de5dba42ee4d9f252e904dfb9042eb15068527e3213fb4a7b`，持有人 | `0xf7bfac35220e3bc63e813fd09f707d6b5e35d77e4f1fab152447d046344786bc`，持有人 |
+
+期望结果：**`resolved`**，对从钉块时间戳起至 `expires` 为止的任何 `now`。每个文件还给出精确的清单字节（其 SHA-256 等于声明的哈希），以及参考实现解析的输出（`resolution`）。
 
 ## 参考实现
 
