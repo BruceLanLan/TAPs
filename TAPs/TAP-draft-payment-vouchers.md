@@ -38,6 +38,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 - **Container**, **holder**: as in TAP-10 §1. **Service**, **manifest**, **method**: as in TAP-11 §1 and §3. **Signer**, **provider**, **client**, **envelope**, **live endpoint**: as in TAP-13 §1.
 - **BEM** is the ERC-20 token at `0x5ce033B2bFCa3Af30b3e8C8457DeaF776A8b695a` on BNB Smart Chain (chain ID 56), with 8 decimals (TAP-11 §3.3). A **base unit** is 10^-8 BEM.
 - A method whose `priceBEM` is zero in value (for example `"0"` or `"0.00"`) is free. Every other method is a **priced method**. A **USD-priced method** is a priced method listed in the manifest member `usdPricing` (§4.1); every other priced method is **BEM-priced**.
+- A service **applies this TAP** when its manifest has the member `usdPricing` (§4.1), valid or not. For the priced methods of such a service, USD-priced or BEM-priced, a provider follows §5 to §7, including the member `reason` of `BAD_VOUCHER` (§6) and the charge record (§7), and a client applies §8.3. For the priced methods of any other service this TAP defines only the voucher (§3) and the way it travels in a request (§3.2): that service need not return a charge record or a `reason`, and a client MUST NOT apply §8.3 to it or treat the absence of `charge` in its results as a fault.
 - The **consumer** is the address that owes the payment. The **provider address** of a voucher is the service container. A **channel** is a pair (consumer, provider address).
 - The **settlement contract** is the contract named by the manifest's `payment.escrow` (TAP-11 §3.2). **F1** to **F4** are the facts read from it (§2.2).
 - A **voucher signer** is the address that signs a voucher: the consumer, or a key authorised by the consumer for that channel (§2.2 F3, §3.3).
@@ -314,7 +315,7 @@ On an *accepted error*, `last` does not change.
 
 ## Backwards Compatibility
 
-This TAP defines names that TAP-13 §6 reserves for it (`voucher`, `PAYMENT_REQUIRED`, `BAD_VOUCHER`) and does not change TAP-13. It does not change TAP-11 either; for USD-priced methods it reads `priceBEM` as a cap (Rationale). A client that implements only TAP-13 is unaffected: it treats both codes as errors, as TAP-13 §8 requires. A client that knows only TAP-11 reads the cap of a USD-priced method as its price, which overstates the cost but never understates it.
+This TAP defines names that TAP-13 §6 reserves for it (`voucher`, `PAYMENT_REQUIRED`, `BAD_VOUCHER`) and does not change TAP-13. It does not change TAP-11 either; for USD-priced methods it reads `priceBEM` as a cap (Rationale). A client that implements only TAP-13 is unaffected: it treats both codes as errors, as TAP-13 §8 requires. A service whose manifest has no `usdPricing` and that charges in BEM only, as TapeAPI 1.8.1 does, does not apply this TAP (§1): its answers are not faulted for lacking a charge record. A client that knows only TAP-11 reads the cap of a USD-priced method as its price, which overstates the cost but never understates it.
 
 When a Standards TAP that specifies a settlement interface providing F1 to F4 has a number, this TAP can add it to `requires`; until then §2.2 states what is needed from any settlement contract.
 
