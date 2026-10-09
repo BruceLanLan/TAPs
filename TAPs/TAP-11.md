@@ -269,7 +269,7 @@ The name ranges of TAP-10 §3.1 (#ID at most 10^18, processor number at most 10^
 
 ## Test Cases
 
-Vector files are in `assets/tap-11/`. Each gives inputs and exact expected outputs. The reference implementation at the fixed commit below reproduces `delegation.json`, `content-signature.json` and `canonical-json.json` (the last from `sdk/src/canon.js`), and the file verification and delegation recovery of `mainnet-11-1013.json`. The reads that this TAP adds from TAP-10 (opener, `isOpened`, activation, the payment contract's implementation slot) were recorded with plain `eth_call` and `eth_getStorageAt`; the reference implementation makes them under `conform: 'tap10'` and not on its default path (Backwards Compatibility).
+Vector files are in `assets/tap-11/`. Each gives inputs and exact expected outputs. The reference implementation at the fixed commit below reproduces `delegation.json`, `content-signature.json` and `canonical-json.json` (the last from `sdk/src/canon.js`), the file verification and delegation recovery of `mainnet-11-1013.json`, and, under `conform: 'tap10'`, the whole resolution of `mainnet-11-1013-resolved.json` and `mainnet-12-1013-resolved.json` (its own pinned block, so a new run reads a later block). The reads that this TAP adds from TAP-10 (opener, `isOpened`, activation, the payment contract's implementation slot) were recorded with plain `eth_call` and `eth_getStorageAt`; the reference implementation makes them under `conform: 'tap10'` and not on its default path (Backwards Compatibility).
 
 **`delegation.json`** (§4). The domain separators, a worked example on all three chains, two signatures by a published test key, and rejections. For `container = 0x0000000000000000000000000000000000000002`, `signer = 0x0000000000000000000000000000000000000003`, `expires = 1790000000`:
 
@@ -303,6 +303,20 @@ The test holder key `0x` followed by 64 digits `1` (address `0x19E7E376E7C213B7E
 | `fileInfo(container, ".well-known/tapeapi.json")` | 3,414 bytes, `application/json`, SHA-256 `0xee57f304f8316802978695e8e9f14e89ce1f9e5c79123b5a583fdcfd3b52c37a` |
 
 Expected outcome at that block: **`unpaid`**. The file also gives the exact 3,414 manifest bytes (their SHA-256 equals the declared hash) and what steps 3–6 produce with them: `signer` `0xaB70dEe8e1CEabb1D10eDFeBcbe0c313c53cf154`, `expires` 1798190813, delegation digest `0x2477541749b1b28de5dba42ee4d9f252e904dfb9042eb15068527e3213fb4a7b`, which recovers to the holder. Two rejections: another service's valid manifest served from this container, and this manifest with its `container` replaced, are both `manifest-invalid`.
+
+**`mainnet-11-1013-resolved.json` and `mainnet-12-1013-resolved.json`** (§2). Mainnet vector ending in `resolved`, recorded 2026-10-09, after the holder activated both names on 2026-10-01. The services `11.1013.tape` and `12.1013.tape` on BNB Smart Chain, each resolved at its own pinned block, chosen by the reference implementation as TAP-10 §5.3 says: block 126658959 (hash `0x02ecbf9d24fee5a1f800494e0f146d97de79766d45cbf4aca24a6204607ec47d`) and block 126658973 (hash `0xc4bbddc3d1145064954e919104b0ca1c3ff964ffc1a22d44f1b31ff209899864`). Each file lists every `eth_call` and `eth_getStorageAt` made at that block, with target, calldata and return value, and the operators that gave that answer: `bsc-dataseed.bnbchain.org`, `bsc-mainnet.public.blastapi.io`, `rpc-bsc.48.club` (the three default nodes of the reference implementation, which adopted `ownerOf` under strict agreement) and, replaying the same calls at the same block hash, `bsc-rpc.publicnode.com`; all four answers were identical for every read. The mainnet vectors are reproducible only within the node retention window, which differs by operator: the recorded `eth_call` data and return values are the vector. Results:
+
+| Value | `11.1013.tape` | `12.1013.tape` |
+|---|---|---|
+| Container (`opener.accountOf`), opened | `0x1b2A657BcBa9D3229f57aC2f4FcbEE2AA756aAe8`, true | `0x9cD838625251576c199B2DeF7A17e50266843185`, true |
+| `ownerOf` (holder) | `0x086bFB1908B1DF8C0c4412f28E4DD22Bdd52d715` | `0x086bFB1908B1DF8C0c4412f28E4DD22Bdd52d715` |
+| `isLive(name, container)`, `isContainerLive(container)` | true, true | true, true |
+| Site store and payment contract implementations | `0x1d279D138A4D803378a7d4557c056f1beD53c261`, `0xaa226181a6588d3f9AC0035e5f3dBaF311039bCE` (both accepted) | the same |
+| Manifest | 3,414 bytes, SHA-256 `0xee57f304f8316802978695e8e9f14e89ce1f9e5c79123b5a583fdcfd3b52c37a` | 901 bytes, SHA-256 `0x593116a7fde831acc782a33dacc74406ec52e94fc91a7d3d9d2fab677afdfa9b` |
+| `signer`, `delegation.expires` | `0xaB70dEe8e1CEabb1D10eDFeBcbe0c313c53cf154`, 1798190813 | `0x3cF7fb12C72653ba8415515387dBa9eF0353a0DD`, 1798219806 |
+| Delegation digest, recovered address | `0x2477541749b1b28de5dba42ee4d9f252e904dfb9042eb15068527e3213fb4a7b`, the holder | `0xf7bfac35220e3bc63e813fd09f707d6b5e35d77e4f1fab152447d046344786bc`, the holder |
+
+Expected outcome: **`resolved`**, for any `now` from the pinned block's timestamp up to `expires`. Each file also gives the exact manifest bytes (their SHA-256 equals the declared hash) and the output of the reference implementation's resolution (`resolution`).
 
 ## Reference Implementation
 
