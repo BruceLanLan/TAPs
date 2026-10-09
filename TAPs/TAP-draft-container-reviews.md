@@ -205,7 +205,7 @@ A client that shows a **summary** of the reviews of a reviewee:
 1. MUST compute it from records it verified under §6, after applying §7;
 2. MUST count, for each pair `(reviewer, reviewee)`, at most one record: among the counted current records of that pair, the one with the highest `issued`, and of two with the same `issued` the one with the greater review hash;
 3. MUST show level 1 and level 2 separately, each with the number of distinct reviewer containers, the number of distinct current holders of those reviewers, the number of records with each score, and the earliest and latest `issued`;
-4. MUST NOT add level-0 records, or records not counted, to these numbers, and MAY show how many pairs have only such records;
+4. MUST NOT add level-0 records, or records not counted, to these numbers, and MAY show how many pairs have only such records and how many keys were discarded for `conflict` (§7). A summary states the number of such keys and nothing about the records of a conflict, not even their problems;
 5. MUST NOT weight a record by any amount paid, staked or held;
 6. MUST NOT present a summary as proof of quality, honesty or availability.
 
