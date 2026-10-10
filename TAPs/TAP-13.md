@@ -206,7 +206,7 @@ An earlier envelope version used the prefix `TAPI-1/resp/v1` and covered neither
 Two public services have signed every answer, errors included, with this envelope since 2026-09-27, and the TapeAPI SDK 1.x verifies it (Reference Implementation). Nothing in this TAP changes a byte they send or accept. Compared with the TapeAPI document, this text:
 
 - states that a `params` that is present but not an object is refused bound to `params` `{}` (binding rule 2), which the reference provider already does, and that an unparseable request is bound to the path segment as its method;
-- requires a client's `id` to be well-formed Unicode, which neither the reference client nor the reference provider checks yet;
+- requires a client's `id` to be well-formed Unicode. Since version 1.5.0 the reference client refuses such an `id` before it sends anything, and the reference provider treats it as invalid and answers under binding rule 1 (§4);
 - leaves out the client-side error codes of the TapeAPI SDK and describes client outcomes in words instead (§1, §8);
 - takes canonical JSON from TAP-11 §6 instead of defining it here;
 - keeps `TOOLS_CHANGED` only as a reserved code (§6, reserved names), because the tool-server binding that used it is not part of TAP-11; the reference implementation's tool-server proxy still sends it;
