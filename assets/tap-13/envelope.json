@@ -1,6 +1,7 @@
 {
   "tap": "TAP-draft-signed-responses, Specification §5",
   "source": "Cases 1-4 from spec/vectors/tap-21-envelope.json at https://github.com/BruceLanLan/tapeapi/tree/fda84db889d2a732915f264a799af24073177a85; case 5 and the negatives written for this TAP. Generated with sdk/src/sig.js at that commit and checked with the canonicalisation and secp256k1 recovery routines of spec/vectors/verify.py at the same commit.",
+  "reproducedBy": "https://github.com/BruceLanLan/tapeapi/tree/4a1ac4fe2a0b2e3327652a794794765dd5da98ef (sdk/src/sig.js responseDigest, personalDigest, signDigest, recoverAddress; sdk/src/canon.js canonicalJSON; spec/vectors/verify.py)",
   "prefix": "TAPI-1/resp/v2",
   "prefixHex": "0x544150492d312f726573702f7632",
   "layout": "preimage (139 bytes) = \"TAPI-1/resp/v2\" (14) || container (20) || keccak256(utf8(id)) (32) || keccak256(utf8(canonicalJSON({method, params}))) (32) || ok (1: 0x01 or 0x00) || keccak256(utf8(canonicalJSON(body))) (32) || uint64 big-endian ts (8); digest = keccak256(preimage); eip191Digest = keccak256(\"\\x19Ethereum Signed Message:\\n32\" || digest); sig = r || s || v over eip191Digest",
