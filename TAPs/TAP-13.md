@@ -251,7 +251,7 @@ TapeAPI 1.8.1, at commit [`4a1ac4fe2a0b2e3327652a794794765dd5da98ef`](https://gi
 - [`sdk/src/index.js`](https://github.com/BruceLanLan/tapeapi/blob/4a1ac4fe2a0b2e3327652a794794765dd5da98ef/sdk/src/index.js): client verification (§8);
 - [`spec/vectors/verify.py`](https://github.com/BruceLanLan/tapeapi/blob/4a1ac4fe2a0b2e3327652a794794765dd5da98ef/spec/vectors/verify.py): an independent Python implementation of the canonical JSON and of §5, with Keccak-256 and secp256k1 recovery written from their specifications.
 
-Two services answer with this envelope: `https://api.tapeapi.fun` (container `0x1b2A657BcBa9D3229f57aC2f4FcbEE2AA756aAe8`, #11 of processor `0xe02c26c7432A7121168AA9B610DE24eCf9a1a414` on BNB Smart Chain) and `https://relay.tapeapi.fun` (container `0x9cD838625251576c199B2DeF7A17e50266843185`, #12 of the same processor). They are not audited. Under TAP-11 they do not resolve at the time of writing, because their names are not activated (see Backwards Compatibility there); the envelopes they send are unaffected.
+Two services answer with this envelope: `https://api.tapeapi.fun` (container `0x1b2A657BcBa9D3229f57aC2f4FcbEE2AA756aAe8`, #11 of processor `0xe02c26c7432A7121168AA9B610DE24eCf9a1a414` on BNB Smart Chain) and `https://relay.tapeapi.fun` (container `0x9cD838625251576c199B2DeF7A17e50266843185`, #12 of the same processor). They are not audited. Their holder activated both names on 2026-10-01. On 2026-10-09 `isContainerLive` was true for both containers when read from two operators at BNB Smart Chain block 126658102 (hash `0x152776aae99baff145411961ab761000d7825f21046648848d053a8a02b8b8ea`), so under TAP-11 they no longer end resolution as `unpaid` (TAP-10 §6.2). The envelopes they send were never affected.
 
 ## Deployments
 
