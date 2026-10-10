@@ -7,6 +7,7 @@ discussions-to: https://github.com/TapeOutProtocol/TAPs/issues/9
 status: Draft
 type: Application
 created: 2026-09-30
+updated: 2026-10-10
 requires: TAP-10, TAP-11
 license: CC0-1.0
 ---
@@ -217,7 +218,7 @@ Where the reference implementation's resolution of a service differs from TAP-10
 
 ## Test Cases
 
-The vector files are in `assets/tap-13/`. They were generated with the reference implementation at the commit given below and checked with the canonicalisation and recovery routines of the independent Python implementation at the same commit. Keys and addresses in them are test values.
+The vector files are in `assets/tap-13/`. They were generated with the reference implementation at commit `fda84db` (version 1.3.0) and checked with the canonicalisation and recovery routines of the independent Python implementation at the same commit. The reference implementation at the fixed commit below (version 1.8.1) reproduces every value in them (`sdk/src/canon.js`, `sdk/src/sig.js`), and so does the independent Python implementation at that commit (`spec/vectors/verify.py`). Keys and addresses in them are test values.
 
 The canonical JSON vectors of TAP-11 (its Test Cases, `canonical-json.json`) apply to this TAP unchanged. This TAP adds:
 
@@ -242,13 +243,13 @@ recovers        0x1563915e194D8CfBA1943570603F7606A3115508
 
 ## Reference Implementation
 
-TapeAPI 1.3.0, at commit [`fda84db889d2a732915f264a799af24073177a85`](https://github.com/BruceLanLan/tapeapi/tree/fda84db889d2a732915f264a799af24073177a85):
+TapeAPI 1.8.1, at commit [`4a1ac4fe2a0b2e3327652a794794765dd5da98ef`](https://github.com/BruceLanLan/tapeapi/tree/4a1ac4fe2a0b2e3327652a794794765dd5da98ef):
 
-- [`sdk/src/canon.js`](https://github.com/BruceLanLan/tapeapi/blob/fda84db889d2a732915f264a799af24073177a85/sdk/src/canon.js): canonical JSON (TAP-11 §6) and the strict parser (§2);
-- [`sdk/src/sig.js`](https://github.com/BruceLanLan/tapeapi/blob/fda84db889d2a732915f264a799af24073177a85/sdk/src/sig.js): the digest, signing and low-`s` recovery (§5);
-- [`server/src/index.js`](https://github.com/BruceLanLan/tapeapi/blob/fda84db889d2a732915f264a799af24073177a85/server/src/index.js): a provider (§3, §4, §6, §7);
-- [`sdk/src/index.js`](https://github.com/BruceLanLan/tapeapi/blob/fda84db889d2a732915f264a799af24073177a85/sdk/src/index.js): client verification (§8);
-- [`spec/vectors/verify.py`](https://github.com/BruceLanLan/tapeapi/blob/fda84db889d2a732915f264a799af24073177a85/spec/vectors/verify.py): an independent Python implementation of the canonical JSON and of §5, with Keccak-256 and secp256k1 recovery written from their specifications.
+- [`sdk/src/canon.js`](https://github.com/BruceLanLan/tapeapi/blob/4a1ac4fe2a0b2e3327652a794794765dd5da98ef/sdk/src/canon.js): canonical JSON (TAP-11 §6) and the strict parser (§2);
+- [`sdk/src/sig.js`](https://github.com/BruceLanLan/tapeapi/blob/4a1ac4fe2a0b2e3327652a794794765dd5da98ef/sdk/src/sig.js): the digest, signing and low-`s` recovery (§5);
+- [`server/src/index.js`](https://github.com/BruceLanLan/tapeapi/blob/4a1ac4fe2a0b2e3327652a794794765dd5da98ef/server/src/index.js): a provider (§3, §4, §6, §7);
+- [`sdk/src/index.js`](https://github.com/BruceLanLan/tapeapi/blob/4a1ac4fe2a0b2e3327652a794794765dd5da98ef/sdk/src/index.js): client verification (§8);
+- [`spec/vectors/verify.py`](https://github.com/BruceLanLan/tapeapi/blob/4a1ac4fe2a0b2e3327652a794794765dd5da98ef/spec/vectors/verify.py): an independent Python implementation of the canonical JSON and of §5, with Keccak-256 and secp256k1 recovery written from their specifications.
 
 Two services answer with this envelope: `https://api.tapeapi.fun` (container `0x1b2A657BcBa9D3229f57aC2f4FcbEE2AA756aAe8`, #11 of processor `0xe02c26c7432A7121168AA9B610DE24eCf9a1a414` on BNB Smart Chain) and `https://relay.tapeapi.fun` (container `0x9cD838625251576c199B2DeF7A17e50266843185`, #12 of the same processor). They are not audited. Under TAP-11 they do not resolve at the time of writing, because their names are not activated (see Backwards Compatibility there); the envelopes they send are unaffected.
 
