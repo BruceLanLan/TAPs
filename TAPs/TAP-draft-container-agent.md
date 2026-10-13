@@ -425,14 +425,18 @@ The offer and the mandate agree in `principal`, `taskHash`, `mode` and `nonce` (
 
 ## Reference Implementation
 
-TapeAPI 1.7.1 at commit [`2fbface78beabe91cba634ca0510f109f8846ff6`](https://github.com/BruceLanLan/tapeapi/tree/2fbface78beabe91cba634ca0510f109f8846ff6) (MIT licensed, experimental, not audited); paths are relative to that commit:
+TapeAPI 2.0.0 at commit [`e29bcd00a0314946e5d97db9b444f59031e8877c`](https://github.com/BruceLanLan/tapeapi/tree/e29bcd00a0314946e5d97db9b444f59031e8877c) (MIT licensed, experimental, not audited), the experimental subpath `@tapeapi/sdk/agent`; paths are relative to that commit:
 
+- `sdk/src/agent-public.js`: the subpath's entry point (what `@tapeapi/sdk/agent` exports);
 - `sdk/src/agent-sig.js`: §3;
 - `sdk/src/agent-verify.js`: §4–§8 and §10 (`createAgentKit`);
 - `sdk/src/agent-pay.js`: §9 payment (TAP-10 §16 content, §19 verification, unsigned transfers);
 - `sdk/types/agent.d.ts`: the interface;
 - `spec/vectors/container-agent.json`, checked by `spec/vectors/verify.py` (independent Python) and `contracts/test/AgentMandateTypehash.t.sol` (Solidity);
+- `sdk/test/agent.test.mjs`, `sdk/test/agent-vectors.test.mjs`, `sdk/test/agent-pay.test.mjs` and `sdk/test/agent-resolution.test.mjs`: the tests of this TAP's rules;
 - `examples/agent-service/`: an agent runtime and a principal's script that run a thread on a simulated chain.
+
+At this commit the subpath also contains rules for mandates that name funds, which this TAP does not define (it reserves those values, §3.8). They apply only when a caller passes the option `enforcement: 'escrow-channel'`; without it every check is the phase-0 check of this TAP. The escrow they rely on is not audited and not deployed, and that code has been checked only on local chains.
 
 The differences from this text are listed under Backwards Compatibility.
 
