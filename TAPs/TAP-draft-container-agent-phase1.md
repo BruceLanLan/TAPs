@@ -306,7 +306,9 @@ The rules of phase-0 draft §10 apply. Every escrow read of §5 and §7 MUST be 
 
 ## Test Cases
 
-In the reference implementation at the commit given under Reference Implementation, `spec/vectors/container-agent.json`, member `phase1` (expectations written by hand, rule text in `phase1.rules`), checked by the SDK's tests and by `spec/vectors/verify.py`, an independent Python implementation written from the rule text:
+The vector file is `assets/tap-draft-container-agent-phase1/container-agent.json`, copied unchanged from `spec/vectors/container-agent.json` of the reference implementation at the commit given under Reference Implementation (815211 bytes, SHA-256 `9de2283e1fa77f4167676debb2ccc0eb1693a6ee2e5e880be780b24c50257eb0`). Keys and addresses in it are test values; the escrow and provider addresses are not deployments. This TAP uses its member `phase1`. The other members test the phase-0 draft; those that its assets also contain (in `vectors.json` and `thread-revocation-vectors.json`, at the commit named in the Abstract) are equal to them in every input and expected output. The members `phase1.resume` and `phase1.keyVault` test the reference runtime's restart and key storage, which this TAP does not specify. The expected values were written by hand from the rule text in `phase1.rules`, not produced by the SDK; where that wording and this TAP differ, this TAP prevails.
+
+The groups of `phase1` this TAP uses, with the number of cases:
 
 - `static` (22 mandates): the static rules and warnings of §4, with and without the phase-1 request, and whether the nonce is recorded;
 - `mapping` (32 abstract chain states) and `liveness` (6): the checks of §5.3 in order, the readings, and the lifetime of a withdraw request at its edges;
@@ -314,7 +316,11 @@ In the reference implementation at the commit given under Reference Implementati
 - `spend` (45) and `recheck` (19): the agent's limit of §8;
 - `statement` (10) and `evidence` (36): the spend statement and its reconciliation of §10.
 
-On a local copy of the unchanged escrow (Foundry tests, nothing broadcast): `contracts/test/Phase1Mapping.t.sol` (12) pins the escrow behaviour §5.1 relies on; `Phase1Claims.t.sol` (9) the residual windows of Security Considerations (a leaked key draining every channel in one transaction without a provider, a full request being no barrier to the key, a lapsed request exposing the channel again, re-authorisation reviving a voucher); `Phase1Plan.t.sol` (15) executes the plans the SDK builds and reads them back; `Phase1Spend.t.sol` (6) executes the vouchers the agent's limiter signs, up to exactly the cap.
+Reproduced at that commit:
+
+- **SDK.** `sdk/test/agent-phase1.test.mjs` (`static`, `plan`; 13 tests), `agent-phase1-chain.test.mjs` (`mapping`, `liveness`; 16), `agent-phase1-plan.test.mjs` (`closeOut`, `applied`; 32), `agent-phase1-spend.test.mjs` (`spend`, `recheck`; 28) and `agent-phase1-evidence.test.mjs` (`statement`, `evidence`; 8): 97 tests, all passing (`node --test`, Node.js 20 or later). The 10 `history` cases are not read by these files; the SDK's `sessionHistory` reproduces all 10.
+- **Independent Python.** `spec/vectors/verify.py`, written from the rule text with the Python standard library only, agrees with every expected value: 1695 checks over all vector files, 0 disagreements; 755 of them check `phase1`, of which 704 check the groups above (`static` 132, `mapping` 116, `liveness` 7, `plan` 229, `history` 10, `closeOut` 69, `applied` 31, `spend` 45, `recheck` 19, `statement` 10, `evidence` 36) and 51 check `resume` and `keyVault`.
+- **Escrow.** Foundry tests on a local copy of the unchanged escrow, nothing broadcast, 42 tests, all passing: `contracts/test/Phase1Mapping.t.sol` (12) pins the escrow behaviour §5.1 relies on; `Phase1Claims.t.sol` (9) the residual windows of Security Considerations (a leaked key draining every channel in one transaction without a provider, a full request being no barrier to the key, a lapsed request exposing the channel again, re-authorisation reviving a voucher); `Phase1Plan.t.sol` (15) executes the plans the SDK builds and reads them back; `Phase1Spend.t.sol` (6) executes the vouchers the agent's limiter signs, up to exactly the cap.
 
 ## Reference Implementation
 
