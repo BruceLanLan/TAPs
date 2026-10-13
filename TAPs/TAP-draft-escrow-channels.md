@@ -23,13 +23,6 @@ A contract in which a caller sets money aside for one online service, the servic
 
 This TAP specifies the interface of an escrow instance: a contract that holds exactly one ERC-20 token, keeps one channel per pair (consumer, provider), and pays out of a channel only to that channel's provider, against an EIP-712 voucher in which the consumer, or a session key it authorised for that channel, states the cumulative amount it owes. It specifies the functions with their selectors, the events with their topics, the errors with their selectors, the order of every check, and the state machine of a channel: funding (immediate), settlement (by anyone, partial when the channel is short), withdrawal (a public request, a 48-hour cooldown, then a 7-day window), session keys (per channel, at most 30 days ahead, extend-only, no revoke), and an optional maintenance contribution that a provider sets for itself and that is accrued for a treasury. It states what the token of an instance has to satisfy, the views that answer the four facts the payment-voucher draft (#52) reads from a settlement contract, and the identities that anyone can check from the logs. Amounts are in base units of the instance's token. The token that TAP-11 prices refer to is BEM on BNB Smart Chain.
 
-**Builds on drafts not yet merged.** None of the following is normative for this TAP; they are listed so that readers can follow the dependencies in both directions.
-
-- Idea [#38](https://github.com/TapeOutProtocol/TAPs/issues/38), the discussion thread of this TAP. An editor noted there that contract interfaces are Standards content and that the voucher and its transport (Application) and the settlement interface (Standards) are two TAPs.
-- Pull request [#52](https://github.com/TapeOutProtocol/TAPs/pull/52), "Payment Vouchers for Container Services" (Application): the voucher's signing rules, its transport in a TAP-13 request, prices in US dollars and the provider's checks. It names the settlement contract only through the manifest's `payment.escrow` and lists four facts F1 to F4 it reads from it; §12 of this TAP gives those facts as functions. The voucher type and domain of #52 §3.1 are the ones `settle` verifies here (§8.1).
-- Pull request [#53](https://github.com/TapeOutProtocol/TAPs/pull/53), a change to TAP-11 that leaves the chain of `payment.escrow` to "the TAP that defines settlement"; §2.3 names it.
-- Pull request [#47](https://github.com/TapeOutProtocol/TAPs/pull/47), container agent mandates, phase 0, which reserves a cap and a token per provider in a mandate; Ideas [#40](https://github.com/TapeOutProtocol/TAPs/issues/40) and [#41](https://github.com/TapeOutProtocol/TAPs/issues/41) describe a phase 1 in which those values are enforced by channels of this interface.
-
 ## Motivation
 
 A cumulative voucher is only a promise. A provider that accepts one off chain needs to know, before it serves, that the money exists, that nobody else can take it first, and that the voucher it holds can still be paid when it settles. A consumer needs to know that a provider can never take more than it set aside for that provider, and that it can recover what is left. Neither can know this from the voucher alone: it depends on the contract that pays it.
@@ -37,6 +30,13 @@ A cumulative voucher is only a promise. A provider that accepts one off chain ne
 TAP-11 lets a manifest name that contract (`payment.escrow`), and #52 says what a client and a provider read from it, but no TAP says what the contract does. Without a specification, every provider has to audit the contract a service names before accepting its vouchers, a client cannot tell a settlement contract from a contract that only reports the right token, and two implementations of "the escrow" can disagree on when a withdrawal takes effect or which key may sign.
 
 This TAP fixes the interface and the behaviour, so that independent implementations of providers, clients, agents and monitoring tools read the same functions and events, and so that a deployment can be checked against a text rather than against one team's code.
+
+**Builds on drafts not yet merged.** None of the following is normative for this TAP; they are listed so that readers can follow the dependencies in both directions.
+
+- Idea [#38](https://github.com/TapeOutProtocol/TAPs/issues/38), the discussion thread of this TAP. An editor noted there that contract interfaces are Standards content and that the voucher and its transport (Application) and the settlement interface (Standards) are two TAPs.
+- Pull request [#52](https://github.com/TapeOutProtocol/TAPs/pull/52), "Payment Vouchers for Container Services" (Application): the voucher's signing rules, its transport in a TAP-13 request, prices in US dollars and the provider's checks. It names the settlement contract only through the manifest's `payment.escrow` and lists four facts F1 to F4 it reads from it; §12 of this TAP gives those facts as functions. The voucher type and domain of #52 §3.1 are the ones `settle` verifies here (§8.1).
+- Pull request [#53](https://github.com/TapeOutProtocol/TAPs/pull/53), a change to TAP-11 that leaves the chain of `payment.escrow` to "the TAP that defines settlement"; §2.3 names it.
+- Pull request [#47](https://github.com/TapeOutProtocol/TAPs/pull/47), container agent mandates, phase 0, which reserves a cap and a token per provider in a mandate; Ideas [#40](https://github.com/TapeOutProtocol/TAPs/issues/40) and [#41](https://github.com/TapeOutProtocol/TAPs/issues/41) describe a phase 1 in which those values are enforced by channels of this interface.
 
 ## Specification
 
@@ -268,7 +268,7 @@ digest           = keccak256(0x19 ‖ 0x01 ‖ DOMAIN_SEPARATOR ‖ structHash)
 
 This is the domain and type of #52 §3.1, byte for byte; for an instance on BNB Smart Chain, `chainId` is 56 as #52 states. How a voucher is signed, carried and checked off chain is #52's subject and is not repeated here.
 
-`sig` is 65 bytes `r ‖ s ‖ v`. The instance recovers the signer with `ecrecover(digest, v, r, s)` and treats the signature as invalid, recovering no signer, when: `sig` is not 65 bytes; `v` is not 0, 1, 27 or 28 (0 and 1 are read as 27 and 28); `s > 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5D576E7357A4501DDFE92F46681B20A0`; or `ecrecover` returns the zero address. An instance MUST NOT accept EIP-1271 signatures. An instance MAY refuse a `v` of 0 or 1; the reference implementation accepts them, and #52 requires off-chain verifiers to refuse them, so a voucher signed as #52 requires is accepted either way.
+`sig` is 65 bytes `r ‖ s ‖ v`. An instance MUST accept a `v` of 27 or 28, and MAY accept a `v` of 0 or 1, read as 27 and 28. The reference implementation accepts 0 and 1, while #52 requires off-chain verifiers to refuse them, so a voucher signed as #52 requires is accepted either way. The instance recovers the signer with `ecrecover(digest, v, r, s)` and recovers no signer when `sig` is not 65 bytes, `v` is not one it accepts, `s > 0x7FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF5D576E7357A4501DDFE92F46681B20A0`, or `ecrecover` returns the zero address. An instance MUST NOT accept EIP-1271 signatures.
 
 #### 8.2 Settle
 
@@ -330,14 +330,14 @@ A treasury that cannot receive the token never blocks a settlement (§8.2 step 9
 
 ### 12. Facts for other TAPs
 
-#52 §2.2 reads four facts from a settlement contract. For an instance of this TAP they are:
+The payment-voucher draft #52 reads four facts from a settlement contract (its §2.2). For an instance of this TAP they are:
 
 | Fact | Read as |
 |---|---|
 | F1, the token settled | `token()`, on the instance's chain (§2.3) |
 | F2, the amount paid on a channel | `claimedOf(consumer, provider)` |
 | F3, whether a key is authorised for a channel, and until when | `sessionExpiry(consumer, provider, key)`: authorised at time `t` exactly when the result is at least `t` |
-| F4, whether the channel's funds cover an amount `a` | `a ≤ available`, where `available = channelOf(consumer, provider) − amount` while the channel's request is live (§6.4) and `channelOf(consumer, provider)` otherwise, never below 0 |
+| F4, whether the channel's funds cover an amount `a` | `a ≤ available`, where `available = channelOf(consumer, provider)` minus the `amount` of the channel's withdrawal request while that request is live (§6.4) and `channelOf(consumer, provider)` otherwise, never below 0 |
 
 A reader that cannot read these views at one block MUST treat the facts as unknown.
 
@@ -437,7 +437,7 @@ More vouchers, with signatures and recovered addresses, are in [`spec/vectors/ta
 | `EscrowInvariant.t.sol` | 1 | Stateful campaign, 256 runs × depth 128 = 32,768 calls: `invariant_solvency`, `invariant_contributionConservation`, `invariant_claimedMonotone`, `invariant_noOverpayment_andInRangeVouchersPayInFull`, `invariant_callSummary` |
 | `DeployEscrow.t.sol` | 11 (8 skipped) | The deployment script's pre-flight checks on the token and the treasury |
 
-These are 173 tests: 165 passed and 8 skipped. The other 103 are `Phase1*.t.sol` (42, which check the use of channels described for the phase 1 of #40), and tests of other contracts of the repository (61). The identities of §13.4 are the invariants `invariant_solvency` (1 and 2) and `invariant_contributionConservation` (4); identity 3 is asserted on every settlement inside the campaign's handlers.
+These are 173 tests: 165 passed and 8 skipped. The other 103 are `Phase1*.t.sol` (42, which check the use of channels described for the phase 1 of #40), and tests of other contracts of the repository (61). The identities of §13.4 are checked by the invariants `invariant_solvency` (1, and the sum of 2 over all channels), `invariant_noOverpayment_andInRangeVouchersPayInFull` (2, channel by channel) and `invariant_contributionConservation` (4); identity 3 is asserted on every settlement inside the campaign's handlers.
 
 ## Reference Implementation
 
@@ -462,7 +462,7 @@ No instance is deployed on any chain, and none has been audited.
 
 The attacker considered can call every function, run its own providers, consumers and contracts, choose any token for an instance it deploys, observe and reorder pending transactions, and may hold a consumer's session key, a provider's keys or the owner's key.
 
-- **Status.** The reference contract is not audited and not deployed. Reviews during development, which are not audits, reported no way to lock or take funds in version 3; their findings are tests listed under Test Cases. This TAP specifies an interface; it does not show that the interface or any implementation is secure, and an instance holds funds safely only if its code does what this text says.
+- **Status.** The reference contract is not audited and not deployed. Reviews during development, which are not audits, are recorded as the tests listed under Test Cases. This TAP specifies an interface; it does not show that the interface or any implementation is secure, and an instance holds funds safely only if its code does what this text says.
 - **What a channel bounds.** A consumer's exposure toward a provider is the channel's balance. A provider, or anyone holding a voucher, cannot be paid more than the channel holds and cannot touch another channel of the same consumer. A consumer may fund a channel toward itself; that moves only its own money.
 - **The cooldown is the provider's protection.** A provider is paid for what it served within the channel if it settles before `availableAt` of every request on the channel (§6.1). At exactly `availableAt` both `settle` and `withdraw` succeed and the order of transactions decides who is paid, so a provider that waits for that second can lose. A provider that is offline for more than the cooldown can lose what it has not settled. A top-up made during a live request can leave with it, up to the amount requested, which is why F4 subtracts the live request (§12). Partial settlement is credit: a provider that serves beyond the channel is paid the rest only if the consumer funds again.
 - **The window works the other way too.** A consumer who wants its money back waits at least 48 hours, while a provider can settle at any moment. When the token's market price falls, the provider can act at once and the consumer cannot; modest channels limit what is at stake.
