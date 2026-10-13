@@ -376,14 +376,14 @@ This TAP adds no contract, hub function, payload format or name syntax, and chan
 
 **Reading of TAP-10 §19 step 14.** Step 14 makes the result `unavailable` for "an earlier entry whose wallet cannot be determined". TAP-10 §19 uses that wording for step 8 ("the sending wallet of m could not be determined") and lists `indirect` separately as step 9, so the reference implementation reads the parenthesis as the step 8 case (§18.5 step 1 failing) and, for an earlier entry whose message is `indirect`, compares only its sending container. The other reading would make a payment `unavailable` whenever a message sent through a contract by anyone lies among the at most 60 entries between the transfer's block and the payment message. This is the authors' reading, not a requirement of this TAP; if the TAP-10 editors read step 14 otherwise, the reference implementation will follow them.
 
-**Differences between this text and the reference implementation.** Revocation in a thread (§7.5, §7.6) and the reading of the revocation file (§6.2: `chunkCount`, the first site store with a path, the implementations of TAP-10 §6.1, a byte order mark refused) are aligned in 1.7.1. Remaining:
+**Differences between this text and the reference implementation.** Revocation in a thread (§7.5, §7.6) and the reading of the revocation file (§6.2: `chunkCount`, the first site store with a path, the implementations of TAP-10 §6.1, a byte order mark refused) are aligned since 1.7.1. The four rows of the table of differences in earlier revisions of this draft are closed by TapeAPI 2.0.0, at the commit named under Reference Implementation; the table says in which release each was closed and how:
 
-| Area | Reference implementation (1.7.1) | This TAP | Plan |
+| Area | This TAP | Closed in | How, at that commit |
 |---|---|---|---|
-| Pinned block | Every read, including the revocation file and the implementation slots, is strict at `latest`, not at one pinned block | §4, §6.2 | 1.8 |
-| Principal identity | `token()`, `hub.accountOf`, `factory.isCPU`, `ownerOf`; `not-a-container` and `wrong-chain` where TAP-10 says `not-tapeout` | §4 | 1.8, as TAP-11's plan for the same difference |
-| Agent and provider resolution | The SDK's `resolve`, default agreement, with the differences TAP-11 lists | TAP-11 §2 | 1.8, as TAP-11 |
-| Input leniency | Holder messages accept upper-case `bytes32`, `uint256` as JSON numbers and a missing `reasonHash` (as zero); agent `ts`/`exp` may be negative; a receipt `ok` that is not a boolean reads as `false` | §3.7, §8 | Refuse (1.8; no hash changes) |
+| Pinned block | §4, §6.2 | 1.8.0 | Every read of one verification (the principal's identity and holder, EIP-1271 calls, both implementation slots, the revocation file) is made at one TAP-10 pinned block, by block hash |
+| Principal identity | §4 | 1.8.0 | The principal is resolved as TAP-10 §4.3 says (the chain's container opener, `factory.isCPU`, the processor number, `ownerOf`); every identity failure is `not-tapeout` or `no-such-token` |
+| Agent and provider resolution | TAP-11 §2 | 2.0.0 | Without a `resolve` option the kit resolves them through the SDK's conformance mode (`conform: 'tap10'`). With a caller's own `resolve`, that function is used instead; on a client whose contracts are not those TAP-10 lists for its chain (a local or test deployment), the client's own resolution is used. `kit.resolution` says which |
+| Input leniency | §3.7, §7.2, §8 | 1.8.0 | Messages received from a counterparty are read only in the forms of §3.7; a non-boolean receipt `ok`, a negative `ts` or `exp` and a missing `reasonHash` are refused; no hash changed |
 
 ## Test Cases
 
@@ -438,7 +438,7 @@ TapeAPI 2.0.0 at commit [`e29bcd00a0314946e5d97db9b444f59031e8877c`](https://git
 
 At this commit the subpath also contains rules for mandates that name funds, which this TAP does not define (it reserves those values, §3.8). They apply only when a caller passes the option `enforcement: 'escrow-channel'`; without it every check is the phase-0 check of this TAP. The escrow they rely on is not audited and not deployed, and that code has been checked only on local chains.
 
-The differences from this text are listed under Backwards Compatibility.
+Where earlier releases of that subpath differed from this text, and where each difference was closed, is recorded under Backwards Compatibility.
 
 ## Deployments
 
