@@ -257,7 +257,18 @@ The values were computed with the EIP-712, TAP-13 and canonical-JSON code of Tap
 
 ## Reference Implementation
 
-To be implemented.
+TapeAPI 2.0.0 (tag `v2.0.0`) at commit [`e29bcd00a0314946e5d97db9b444f59031e8877c`](https://github.com/BruceLanLan/tapeapi/tree/e29bcd00a0314946e5d97db9b444f59031e8877c) (MIT licensed, experimental, not audited), the experimental subpath `@tapeapi/sdk/review`, outside that SDK's 2.x compatibility promise; paths are relative to that commit:
+
+- `sdk/src/review-public.js`: the subpath's entry point (what `@tapeapi/sdk/review` exports);
+- `sdk/src/review-sig.js`: §2, §3 and §5 (the record, its hashes, its typed data and its signature, without the chain), and the parts of §4 that need no chain (the request id of §4.2, the subject and the hash of the evidence);
+- `sdk/src/review-verify.js`: §4 and §6–§10 (`checkReview` with given chain facts, `createReviewKit` reading the chain, the site file and TapeSend readers, `summarizeReviews`, `reviewTextForDisplay`); for §4.3 it reuses the types and the form checks of the SDK's container-agent code (`sdk/src/agent-sig.js`, `sdk/src/agent-verify.js`);
+- `sdk/types/review.d.ts`: the interface;
+- `spec/vectors/tap-draft-container-reviews.json`: a byte copy of `reviews.json` (Test Cases), replayed by `sdk/test/review-vectors.test.mjs`; `spec/vectors/verify.py` recomputes, independently of the SDK and without applying the rules of §6, the review hash and the signer of every case that the vectors accept, the subject and the signers of its evidence, and the hashes of its text and evidence;
+- `sdk/bin/tapeapi-verify.js`: the experimental subcommand `tapeapi-verify review <reviewee>`, which verifies the records about one container, taken from reviewers' site files, a file of records or the reviewee's inbox, and prints them with their summary.
+
+One difference from this text at that commit:
+
+- §4.3 step 4: a `deliver` whose `result` has no `exp` that is an integer from 0 to 2^53 − 1 is `evidence-malformed` (`taskEvidence` in `sdk/src/review-verify.js` applies `agentMessageProblem` of `sdk/src/agent-verify.js`, which makes this form check of every agent message). This text leaves `exp` among the "other members the task draft defines" and does not check it, so a verifier that follows this text alone does not reject such a record at step 4. Every delivery in the vectors carries `exp`, so no vector exercises the case.
 
 ## Deployments
 
