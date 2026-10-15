@@ -7,7 +7,7 @@ discussions-to: https://github.com/TapeOutProtocol/TAPs/issues/40
 status: Draft
 type: Application
 created: 2026-10-08
-updated: 2026-10-13
+updated: 2026-10-15
 requires: TAP-10, TAP-11, TAP-13
 license: CC0-1.0
 ---
@@ -384,7 +384,7 @@ Mitigations are small channels (funding by milestone), short mandates, and close
 - **Lapsed requests.** The escrow's view keeps a lapsed withdraw request; a verifier that reads the view alone fails closed for ever (§5.3).
 - **Top-up during a live request.** The top-up is both spendable and withdrawable (§6.2 rule 4).
 - **A provider changing its escrow instance.** The agent stops (§8); the old channel must be closed out before the same mandate is funded on the new instance, and the new funding is only what the key has not spent (§7.2).
-- **A circuit changing hands or being listed.** The old mandate stops verifying at once, but the sessions live until `expires`: on the `container` path the buyer inherits the channels; on the `holder` path the seller remains exposed. Close out before listing.
+- **A circuit changing hands or being listed.** The old mandate stops verifying at once (§5.3 item 1, the holder signature), but every session lives until its `expires`, and no session, funding, withdrawal or settlement function of the escrow reads the holder. On the `holder` path the channels and sessions remain the seller's: the seller is exposed to its own keys exactly as before the transfer, and the buyer has no exposure. On the `container` path the buyer inherits the channels together with every session the seller authorised; it cannot revoke or list them through the escrow (N9), it can shrink a channel only through `execute` and a `requestWithdraw` that takes effect 48 hours later, and anything it funds on such a channel before then is spendable by the seller's keys. A buyer reads the escrow's `SessionAuthorized` logs for the container before funding any of its channels, and treats logs it cannot obtain as an unknown history, not an empty one (§6.3, §7.1); a seller closes out every mandate (§7.3) before listing or transferring.
 - **Phishing consoles.** A console can ask the holder to fund an attacker's provider for an attacker's key; on the `container` path the wallet shows only an opaque `execute`. Only what the wallet shows is reliable; the `holder` path shows every field.
 - **The container's implementation.** `execute`'s owner-only rule, its fee and its gates can change with an upgrade by the container's owner.
 - **Tokens.** Only tokens that cannot be frozen or paused are suitable; a token's value is not protected.
