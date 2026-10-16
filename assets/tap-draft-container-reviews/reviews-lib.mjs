@@ -47,6 +47,7 @@ const WORD_RE = /^[a-z0-9][a-z0-9._/-]{0,63}$/
 const SIG65_RE = /^0x[0-9a-fA-F]{130}$/
 const SIGANY_RE = /^0x([0-9a-fA-F]{2}){65,1024}$/
 const MAX_SAFE = Number.MAX_SAFE_INTEGER
+const METHOD_RE = /^[A-Za-z_][A-Za-z0-9_]{0,63}$/   // a TAP-13 §3 path segment
 
 export class Problem extends Error { constructor(code, msg) { super(msg ?? code); this.code = code } }
 const bad = (code, msg) => { throw new Problem(code, msg) }
@@ -118,11 +119,12 @@ const tsOk = (t) => Number.isSafeInteger(t) && t >= 0
 function hashOnlyReceiptForm(r) {
   return isObj(r) && r.v === 2 && isObj(r.service) && abi.isAddress(r.service.container) && typeof r.method === 'string' &&
     typeof r.requestHash === 'string' && HASH_RE.test(r.requestHash) && typeof r.bodyHash === 'string' && HASH_RE.test(r.bodyHash) &&
-    typeof r.id === 'string' && r.id.length >= 1 && r.id.length <= 128 && tsOk(r.ts) &&
-    typeof r.ok === 'boolean' && typeof r.sig === 'string' && SIG65_RE.test(r.sig)
+    // id as TAP-13 §4 gives it: 1 to 128 code units, or empty in a refusal of a request the provider could not parse
+    typeof r.ok === 'boolean' && typeof r.id === 'string' && r.id.length <= 128 && (r.id.length >= 1 || r.ok === false) && tsOk(r.ts) &&
+    typeof r.sig === 'string' && SIG65_RE.test(r.sig)
 }
 function deliverReceiptForm(r) {
-  return isObj(r) && r.v === 1 && isObj(r.service) && abi.isAddress(r.service.container) && typeof r.method === 'string' &&
+  return isObj(r) && r.v === 1 && isObj(r.service) && abi.isAddress(r.service.container) && typeof r.method === 'string' && METHOD_RE.test(r.method) &&
     (r.params === undefined || isObj(r.params)) && typeof r.id === 'string' && r.id.length >= 1 && r.id.length <= 128 &&
     tsOk(r.ts) && r.ok === true && isObj(r.result) && typeof r.sig === 'string' && SIG65_RE.test(r.sig)
 }
@@ -155,7 +157,7 @@ function taskEvidence(ev, rv, re, issued, F, hub) {
     if (agent.phase0Problems(m).length || m.subdelegate) bad('evidence-malformed', 'mandate breaks the phase-0 rule')
     const res = d.result
     if (!eq(d.service.container, agentEp.container) || res.kind !== 'tape.agent/deliver' || res.mandateHash !== mandateHash ||
-      typeof res.deliverableHash !== 'string' || !HASH_RE.test(res.deliverableHash)) bad('evidence-malformed', 'deliver does not name this agent and mandate')
+      typeof res.deliverableHash !== 'string' || !HASH_RE.test(res.deliverableHash) || !tsOk(res.exp)) bad('evidence-malformed', 'deliver does not name this agent and mandate, or has no uint64 result.exp')
     if (!(m.notBefore <= d.ts && d.ts <= m.expires && v.issued >= d.ts && issued >= v.issued)) bad('evidence-time', 'deliver outside the mandate, verdict before deliver, or review before verdict')
     if (v.mandateHash !== mandateHash || v.deliverableHash !== res.deliverableHash) bad('verdict-mismatch', 'verdict is about another mandate or delivery')
     const holder = F.holder(principal)

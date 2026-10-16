@@ -58,7 +58,7 @@ function receipt({ service, signerKey, id, method = 'quote', params = { pair: 'B
   return { full, hashOnly, subject: abi.toHex(sig.responseDigest(env)) }
 }
 function responseEvidence(o) { const r = receipt(o); return { evidence: { kind: 'response', receipt: r.hashOnly }, subject: r.subject, full: r.full } }
-function taskEvidence({ principal, agentP, principalKey, agentSignerKey, mandateKey = principalKey, verdictKey = principalKey, verdictValue = 1, deliverTs = T - 7200, verdictIssued = T - 3600, mandateOver = {}, deliverOver = {}, verdictOver = {} }) {
+function taskEvidence({ principal, agentP, principalKey, agentSignerKey, mandateKey = principalKey, verdictKey = principalKey, verdictValue = 1, deliverTs = T - 7200, verdictIssued = T - 3600, mandateOver = {}, deliverOver = {}, verdictOver = {}, deliverMethod = 'task_deliver' }) {
   const task = { kind: 'chain-report', text: 'Summarise BEM transfers of block 64000000.' }
   const m = { principal: principal.container, agent: agentP.container, agentKey: K.A_agent_key.address, mode: 0, taskHash: agent.taskHashOf(task),
     scope: [], feeToken: abi.ZERO_ADDRESS, feeCap: '0', notBefore: T - 86400, expires: T + 86400, nonce: '7', subdelegate: false, ...mandateOver }
@@ -68,9 +68,10 @@ function taskEvidence({ principal, agentP, principalKey, agentSignerKey, mandate
   const deliverable = { report: 'three transfers', count: 3 }
   const receiptsList = []
   const result = { kind: 'tape.agent/deliver', mandateHash, deliverableHash: agent.jsonHashOf(deliverable), receipts: receiptsList, receiptsHash: agent.jsonHashOf(receiptsList), exp: T + 86400, ...deliverOver }
+  for (const k of Object.keys(result)) if (result[k] === undefined) delete result[k]   // deliverOver: { exp: undefined } drops exp
   const did = 'deliver-0001'
-  const dsig = sig.signResponse({ container: agentP.container, id: did, method: 'task_deliver', params: { mandateHash }, ok: true, body: result, ts: deliverTs }, agentSignerKey.privateKey)
-  const deliver = { v: 1, service: { container: agentP.container }, method: 'task_deliver', params: { mandateHash }, id: did, ts: deliverTs, ok: true, result, sig: dsig }
+  const dsig = sig.signResponse({ container: agentP.container, id: did, method: deliverMethod, params: { mandateHash }, ok: true, body: result, ts: deliverTs }, agentSignerKey.privateKey)
+  const deliver = { v: 1, service: { container: agentP.container }, method: deliverMethod, params: { mandateHash }, id: did, ts: deliverTs, ok: true, result, sig: dsig }
   const verdict = { mandateHash, deliverableHash: result.deliverableHash, verdict: verdictValue, reasonHash: L.ZERO32, issued: verdictIssued, ...verdictOver }
   const verdictSig = sig.signDigest(agent.taskVerdictDigest(principal.chainId, HUB, verdict), verdictKey.privateKey)
   // the mandate in its JSON form (#47 §3.7): addresses as given, uint256 as decimal strings
@@ -148,6 +149,16 @@ add('task evidence: mandate breaks the phase-0 rule', record(review(withEvidence
 const ev2late = taskEvidence({ principal: P.A, agentP: P.B, principalKey: K.A_holder, agentSignerKey: K.B_signer, mandateOver: { nonce: '11' }, verdictIssued: T + 1000 })
 add('task evidence: the review is issued before the verdict', record(review(withEvidence({ reviewer: P.A, reviewee: P.B, score: 5, issued: T + 94 }, ev2late)), K.A_holder, { evidence: ev2late.evidence }), { valid: true, level: 0, signedBy: 'holder', counted: false, problems: ['evidence-time'] })
 add('task evidence cited by a third party (C is neither principal nor agent)', record(review(withEvidence({ reviewer: P.C, reviewee: P.B, score: 5, issued: T + 95 }, ev2)), K.C_holder, { evidence: ev2.evidence }), { valid: true, level: 0, signedBy: 'holder', counted: false, problems: ['evidence-wrong-party'] })
+const ev2noexp = taskEvidence({ principal: P.A, agentP: P.B, principalKey: K.A_holder, agentSignerKey: K.B_signer, mandateOver: { nonce: '20' }, deliverOver: { exp: undefined } })
+add('task evidence: the delivery has no result.exp', record(review(withEvidence({ reviewer: P.A, reviewee: P.B, score: 5, issued: T + 110 }, ev2noexp)), K.A_holder, { evidence: ev2noexp.evidence }), { valid: true, level: 0, signedBy: 'holder', counted: false, problems: ['evidence-malformed'] })
+const ev2negexp = taskEvidence({ principal: P.A, agentP: P.B, principalKey: K.A_holder, agentSignerKey: K.B_signer, mandateOver: { nonce: '21' }, deliverOver: { exp: -1 } })
+add('task evidence: the delivery has a negative result.exp', record(review(withEvidence({ reviewer: P.A, reviewee: P.B, score: 5, issued: T + 111 }, ev2negexp)), K.A_holder, { evidence: ev2negexp.evidence }), { valid: true, level: 0, signedBy: 'holder', counted: false, problems: ['evidence-malformed'] })
+const ev2method = taskEvidence({ principal: P.A, agentP: P.B, principalKey: K.A_holder, agentSignerKey: K.B_signer, mandateOver: { nonce: '22' }, deliverMethod: 'task deliver' })
+add('task evidence: the delivery\'s method is not a TAP-13 path segment', record(review(withEvidence({ reviewer: P.A, reviewee: P.B, score: 5, issued: T + 112 }, ev2method)), K.A_holder, { evidence: ev2method.evidence }), { valid: true, level: 0, signedBy: 'holder', counted: false, problems: ['evidence-malformed'] })
+const ev1emptyRefusal = responseEvidence({ service: P.B, signerKey: K.B_signer, id: '', ok: false, body: { code: 'PARSE_ERROR', message: 'request is not JSON' }, method: 'quote', params: {} })
+add('level 1: a refusal with an empty id (TAP-13 §4) does not name the reviewer', record(review(withEvidence({ reviewer: P.A, reviewee: P.B, score: 2, issued: T + 113 }, ev1emptyRefusal)), K.A_holder, { evidence: ev1emptyRefusal.evidence }), { valid: true, level: 0, signedBy: 'holder', counted: false, problems: ['evidence-unbound'] })
+const ev1emptyAnswer = responseEvidence({ service: P.B, signerKey: K.B_signer, id: '' })
+add('level 1: an answer (ok true) with an empty id is malformed', record(review(withEvidence({ reviewer: P.A, reviewee: P.B, score: 5, issued: T + 114 }, ev1emptyAnswer)), K.A_holder, { evidence: ev1emptyAnswer.evidence }), { valid: true, level: 0, signedBy: 'holder', counted: false, problems: ['evidence-malformed'] })
 
 
 // added after the first review of the draft

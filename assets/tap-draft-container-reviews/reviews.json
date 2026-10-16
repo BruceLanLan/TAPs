@@ -1514,6 +1514,311 @@
       }
     },
     {
+      "name": "task evidence: the delivery has no result.exp",
+      "record": {
+        "review": {
+          "reviewer": "0x000000000000000000000038573a95bcd88eb3ecaf3cf4e3357331d5da738ca6",
+          "reviewee": "0x0000000000000000000000383595a8b5793d60e910adc215ae5e489ed1031f42",
+          "kind": 1,
+          "score": 5,
+          "subject": "0xde5568f6413e9682b977e5cfc51b35ac79097d17b6d793b2ec94c867118f2191",
+          "evidenceHash": "0xd847ec12db24e9662a7d566c7b2b42f9af793e10ca1e2c212c55c3b3c80f3154",
+          "textHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "issued": 1791000110
+        },
+        "sig": "0x47f58aa2b73d565ca33659e907ea6f1f71c7a94780dac34dcfe3c645ec23870474ed14bd5f194c3f43c3980252bac2842fcb6b729eb4edaf11f4046f01d2c30a1c",
+        "evidence": {
+          "kind": "task",
+          "mandate": {
+            "principal": "0x573A95bcD88Eb3ECAF3cf4E3357331d5Da738Ca6",
+            "agent": "0x3595A8b5793d60E910AdC215aE5e489ED1031F42",
+            "agentKey": "0x862d0A023ce1b2Cf809CaC4778F455Ce2eAE2391",
+            "mode": 0,
+            "taskHash": "0x9170a7cce20aeefb9d9fff225aa5725e78cd6707bc5bbe5c27261db222fd9edb",
+            "scope": [],
+            "feeToken": "0x0000000000000000000000000000000000000000",
+            "feeCap": "0",
+            "notBefore": 1790913600,
+            "expires": 1791086400,
+            "nonce": "20",
+            "subdelegate": false
+          },
+          "mandateSig": "0xb16cf0137699e38b8aafaefa5d3082f58f2d0b0467cfeed423dd4bbe957c4d09178bb91a48beccec3203fb1929dc5ec9bdf833cae43ee91f45b2888df1e6f8911b",
+          "deliver": {
+            "v": 1,
+            "service": {
+              "container": "0x3595A8b5793d60E910AdC215aE5e489ED1031F42"
+            },
+            "method": "task_deliver",
+            "params": {
+              "mandateHash": "0xde5568f6413e9682b977e5cfc51b35ac79097d17b6d793b2ec94c867118f2191"
+            },
+            "id": "deliver-0001",
+            "ts": 1790992800,
+            "ok": true,
+            "result": {
+              "kind": "tape.agent/deliver",
+              "mandateHash": "0xde5568f6413e9682b977e5cfc51b35ac79097d17b6d793b2ec94c867118f2191",
+              "deliverableHash": "0x5e3a0dc9d6352249ab6253143ed7c1d1dfa81a188c3f90a73ac91b3fac37f44c",
+              "receipts": [],
+              "receiptsHash": "0x518674ab2b227e5f11e9084f615d57663cde47bce1ba168b4c19c7ee22a73d70"
+            },
+            "sig": "0x9ac30cde9ab9e1c79268de7f291556ae9849703ba79ba4f5040657479721a39946b9d21cc1568541bad121ba40022168e73b208bdada8c621ce2c4e99bf8325b1b"
+          },
+          "verdict": {
+            "mandateHash": "0xde5568f6413e9682b977e5cfc51b35ac79097d17b6d793b2ec94c867118f2191",
+            "deliverableHash": "0x5e3a0dc9d6352249ab6253143ed7c1d1dfa81a188c3f90a73ac91b3fac37f44c",
+            "verdict": 1,
+            "reasonHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+            "issued": 1790996400
+          },
+          "verdictSig": "0x8da310ab57975438d2b9b5a8daf7d95c60dadd5e979012fdbc60fdc575d62c7350bec7248078b12ed679c9beaf6be3920e62ee93b8dcf040416a46b388a05cd31c"
+        }
+      },
+      "expect": {
+        "valid": true,
+        "level": 0,
+        "signedBy": "holder",
+        "counted": false,
+        "problems": [
+          "evidence-malformed"
+        ],
+        "hash": "0x07e0aaad84f7d4df568a83edd8319b8df65bcda67463588a57330937989320bf"
+      }
+    },
+    {
+      "name": "task evidence: the delivery has a negative result.exp",
+      "record": {
+        "review": {
+          "reviewer": "0x000000000000000000000038573a95bcd88eb3ecaf3cf4e3357331d5da738ca6",
+          "reviewee": "0x0000000000000000000000383595a8b5793d60e910adc215ae5e489ed1031f42",
+          "kind": 1,
+          "score": 5,
+          "subject": "0x8e0a8ec98d970701a2abb3d5eb530b6374feadf3614237549670405d6e8d45b3",
+          "evidenceHash": "0xdb4fb22dc93daf2cb216d11c44a851189d6ec6690461c2169e6d28f34f1ffaa4",
+          "textHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "issued": 1791000111
+        },
+        "sig": "0x14ac5fbbadc0e126e5bae73a738b6e7a7d5f8c7f0f899e684967c10b20499f985ef1323ccad8352db888c38f94a417211e78b8cd1936d9a32265342d1c9c13a41b",
+        "evidence": {
+          "kind": "task",
+          "mandate": {
+            "principal": "0x573A95bcD88Eb3ECAF3cf4E3357331d5Da738Ca6",
+            "agent": "0x3595A8b5793d60E910AdC215aE5e489ED1031F42",
+            "agentKey": "0x862d0A023ce1b2Cf809CaC4778F455Ce2eAE2391",
+            "mode": 0,
+            "taskHash": "0x9170a7cce20aeefb9d9fff225aa5725e78cd6707bc5bbe5c27261db222fd9edb",
+            "scope": [],
+            "feeToken": "0x0000000000000000000000000000000000000000",
+            "feeCap": "0",
+            "notBefore": 1790913600,
+            "expires": 1791086400,
+            "nonce": "21",
+            "subdelegate": false
+          },
+          "mandateSig": "0x5700f3ac5453ec96b0065a068b712edd7d1769190e0bb5e8b6deb8806ecd2beb52548a2172a95550fc0a3c669780fc53755bc3ce6f71d1e9dabe328fe471e2111b",
+          "deliver": {
+            "v": 1,
+            "service": {
+              "container": "0x3595A8b5793d60E910AdC215aE5e489ED1031F42"
+            },
+            "method": "task_deliver",
+            "params": {
+              "mandateHash": "0x8e0a8ec98d970701a2abb3d5eb530b6374feadf3614237549670405d6e8d45b3"
+            },
+            "id": "deliver-0001",
+            "ts": 1790992800,
+            "ok": true,
+            "result": {
+              "kind": "tape.agent/deliver",
+              "mandateHash": "0x8e0a8ec98d970701a2abb3d5eb530b6374feadf3614237549670405d6e8d45b3",
+              "deliverableHash": "0x5e3a0dc9d6352249ab6253143ed7c1d1dfa81a188c3f90a73ac91b3fac37f44c",
+              "receipts": [],
+              "receiptsHash": "0x518674ab2b227e5f11e9084f615d57663cde47bce1ba168b4c19c7ee22a73d70",
+              "exp": -1
+            },
+            "sig": "0x49c2090d6578ff8411c72f8c4f381ff25f6ad2aacf0284ee9da7e195d85c72243c58b5adea068a17c18aa412a2642353937f0e09f84b0d99a3d5bb40469b017f1b"
+          },
+          "verdict": {
+            "mandateHash": "0x8e0a8ec98d970701a2abb3d5eb530b6374feadf3614237549670405d6e8d45b3",
+            "deliverableHash": "0x5e3a0dc9d6352249ab6253143ed7c1d1dfa81a188c3f90a73ac91b3fac37f44c",
+            "verdict": 1,
+            "reasonHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+            "issued": 1790996400
+          },
+          "verdictSig": "0xa659960fd87f59563e779dac7b46cafa266330e20333f4022eeca45932dc3e9061819728f48e9d4b6652d47004755d4375f0ccf7a72a3223c3d73468bb9770791c"
+        }
+      },
+      "expect": {
+        "valid": true,
+        "level": 0,
+        "signedBy": "holder",
+        "counted": false,
+        "problems": [
+          "evidence-malformed"
+        ],
+        "hash": "0xd3f6b19f415d7533f607bf61ddc009844769e752dcdf21570a0e2f5d64665a02"
+      }
+    },
+    {
+      "name": "task evidence: the delivery's method is not a TAP-13 path segment",
+      "record": {
+        "review": {
+          "reviewer": "0x000000000000000000000038573a95bcd88eb3ecaf3cf4e3357331d5da738ca6",
+          "reviewee": "0x0000000000000000000000383595a8b5793d60e910adc215ae5e489ed1031f42",
+          "kind": 1,
+          "score": 5,
+          "subject": "0x1e81fe2939cac83a308a69ac36e7269e48b5c9a13cccd9dfd18eafce3bde4a33",
+          "evidenceHash": "0xee87703314773faf82dd28acdde5471a7940c23e03fa3a1f2d1308c25ba349db",
+          "textHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "issued": 1791000112
+        },
+        "sig": "0x49195eba660411cca45e2604fa18a0b8520a4fb985a374685fb0977ccef6931e4cf04766d481bba9f6530555c7cda9487e0368c5109b9ba54247b97c09ac9a531b",
+        "evidence": {
+          "kind": "task",
+          "mandate": {
+            "principal": "0x573A95bcD88Eb3ECAF3cf4E3357331d5Da738Ca6",
+            "agent": "0x3595A8b5793d60E910AdC215aE5e489ED1031F42",
+            "agentKey": "0x862d0A023ce1b2Cf809CaC4778F455Ce2eAE2391",
+            "mode": 0,
+            "taskHash": "0x9170a7cce20aeefb9d9fff225aa5725e78cd6707bc5bbe5c27261db222fd9edb",
+            "scope": [],
+            "feeToken": "0x0000000000000000000000000000000000000000",
+            "feeCap": "0",
+            "notBefore": 1790913600,
+            "expires": 1791086400,
+            "nonce": "22",
+            "subdelegate": false
+          },
+          "mandateSig": "0x0f9110f36f049b2ba6f28103ef10f13ed2a15190a69eed38e0bf01ee6e5cda5265b690419fdb4e156e14b71aaf0cf4960bb4c4202ead51edd36ba022fbf3c9451c",
+          "deliver": {
+            "v": 1,
+            "service": {
+              "container": "0x3595A8b5793d60E910AdC215aE5e489ED1031F42"
+            },
+            "method": "task deliver",
+            "params": {
+              "mandateHash": "0x1e81fe2939cac83a308a69ac36e7269e48b5c9a13cccd9dfd18eafce3bde4a33"
+            },
+            "id": "deliver-0001",
+            "ts": 1790992800,
+            "ok": true,
+            "result": {
+              "kind": "tape.agent/deliver",
+              "mandateHash": "0x1e81fe2939cac83a308a69ac36e7269e48b5c9a13cccd9dfd18eafce3bde4a33",
+              "deliverableHash": "0x5e3a0dc9d6352249ab6253143ed7c1d1dfa81a188c3f90a73ac91b3fac37f44c",
+              "receipts": [],
+              "receiptsHash": "0x518674ab2b227e5f11e9084f615d57663cde47bce1ba168b4c19c7ee22a73d70",
+              "exp": 1791086400
+            },
+            "sig": "0x6aa99dff11334c7ef62b96e9deb4e060f68bf01ea89e3c784be45bfcf158d78303ac108b60a12d4fd57d8e551c5ad4760ad3e427bb21b68074f9a80df124494a1c"
+          },
+          "verdict": {
+            "mandateHash": "0x1e81fe2939cac83a308a69ac36e7269e48b5c9a13cccd9dfd18eafce3bde4a33",
+            "deliverableHash": "0x5e3a0dc9d6352249ab6253143ed7c1d1dfa81a188c3f90a73ac91b3fac37f44c",
+            "verdict": 1,
+            "reasonHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+            "issued": 1790996400
+          },
+          "verdictSig": "0x5600864b03e65296d3af235c35e1d7906b57a6adfdfcfa0dc95f883bed0a2c252499b9e9279fb8e30caa35ab47995afa2cf3fbd05f2a24c3eaae26a8f39d02fb1c"
+        }
+      },
+      "expect": {
+        "valid": true,
+        "level": 0,
+        "signedBy": "holder",
+        "counted": false,
+        "problems": [
+          "evidence-malformed"
+        ],
+        "hash": "0xae074020c371475e73075c3b8a74b17c20cfb3a53d209e14f3056869964fddea"
+      }
+    },
+    {
+      "name": "level 1: a refusal with an empty id (TAP-13 §4) does not name the reviewer",
+      "record": {
+        "review": {
+          "reviewer": "0x000000000000000000000038573a95bcd88eb3ecaf3cf4e3357331d5da738ca6",
+          "reviewee": "0x0000000000000000000000383595a8b5793d60e910adc215ae5e489ed1031f42",
+          "kind": 1,
+          "score": 2,
+          "subject": "0x017e75c9e6273b18abb5b647a8fada9f9a013426d1c0adce7b843f43836c8a5a",
+          "evidenceHash": "0xa78a41370e098eb5ad79af513e156de6a87947c9eb8c1b3cba9eba2ca270ee48",
+          "textHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "issued": 1791000113
+        },
+        "sig": "0xff47936395a486ba342ae336143c3e1b07e75dce477477d67da9656d7ec7bbd351639849a9edfe0208dab552906017e77021bf7fc2e0d075277269c0aa0c7c1f1c",
+        "evidence": {
+          "kind": "response",
+          "receipt": {
+            "v": 2,
+            "service": {
+              "container": "0x3595A8b5793d60E910AdC215aE5e489ED1031F42"
+            },
+            "method": "quote",
+            "requestHash": "0xd60dfeb03064317f28445b1b0a11385790102df456ad95869530d1167f2153bc",
+            "id": "",
+            "ts": 1790996400,
+            "ok": false,
+            "bodyHash": "0xe3f18614f73cfbf43bbd5f824e88ad1585dfb4b6579e79ed0d3941395cd9ceac",
+            "sig": "0xebe11fa5dbd169b1ff7183d195c88238f36e18550fb83d9d3288c91c91b97f091741c6a591740de7968d6e4d99446af481579e16b00bd1b81aebf87194026f751c"
+          }
+        }
+      },
+      "expect": {
+        "valid": true,
+        "level": 0,
+        "signedBy": "holder",
+        "counted": false,
+        "problems": [
+          "evidence-unbound"
+        ],
+        "hash": "0xb95cee95e46880866f17bb85ed068f5316ed6c18d607e6b9f0224caf6d61e15c"
+      }
+    },
+    {
+      "name": "level 1: an answer (ok true) with an empty id is malformed",
+      "record": {
+        "review": {
+          "reviewer": "0x000000000000000000000038573a95bcd88eb3ecaf3cf4e3357331d5da738ca6",
+          "reviewee": "0x0000000000000000000000383595a8b5793d60e910adc215ae5e489ed1031f42",
+          "kind": 1,
+          "score": 5,
+          "subject": "0x965470ddcbdbd6a780e37dda26aa34f084c74998dd3123a8917fea01fea0f846",
+          "evidenceHash": "0x078bb6c44de314e9e4a98ec2a3a19c73bf9282e1e3bffc50216eb6eaa456cd36",
+          "textHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
+          "issued": 1791000114
+        },
+        "sig": "0xa472ae85ee128bb779ba372846eeb11d80a6933e97c9e888588cb1724781a6452ed5673c229af9dfe78808689adb66f238cd3bdf46f9b7da549eb50db0ca35261c",
+        "evidence": {
+          "kind": "response",
+          "receipt": {
+            "v": 2,
+            "service": {
+              "container": "0x3595A8b5793d60E910AdC215aE5e489ED1031F42"
+            },
+            "method": "quote",
+            "requestHash": "0x127b3fa67a86c8db6484d3dc0699874f52d1cdbb19c5bacd4cde18a654489c7a",
+            "id": "",
+            "ts": 1790996400,
+            "ok": true,
+            "bodyHash": "0x1dcf1c4bbfc1997b2cf19b9c041abac644ae5fabe8fb4bacf807ce15e84aacee",
+            "sig": "0x0384c9540fa05794cd29d6d2d4ecaa46bfeebd9c1b849e7b03143bdafd30ea686f5d5de085105ec9bc5c7e77796450161afe8a04cd32aa520fcf80bcb6b8392d1b"
+          }
+        }
+      },
+      "expect": {
+        "valid": true,
+        "level": 0,
+        "signedBy": "holder",
+        "counted": false,
+        "problems": [
+          "evidence-malformed"
+        ],
+        "hash": "0x56cc645f4ec3b423cd2e0c08a91e48e63282b56e63fb4195a11c452166fc2ebc"
+      }
+    },
+    {
       "name": "level 1 with text withheld (counted; only the text hash is published)",
       "record": {
         "review": {
@@ -2765,6 +3070,11 @@
           "task evidence: mandate breaks the phase-0 rule",
           "task evidence: the review is issued before the verdict",
           "task evidence cited by a third party (C is neither principal nor agent)",
+          "task evidence: the delivery has no result.exp",
+          "task evidence: the delivery has a negative result.exp",
+          "task evidence: the delivery's method is not a TAP-13 path segment",
+          "level 1: a refusal with an empty id (TAP-13 §4) does not name the reviewer",
+          "level 1: an answer (ok true) with an empty id is malformed",
           "level 1 with text withheld (counted; only the text hash is published)",
           "withdrawal of a level-0 review (subject zero)",
           "evidence present while evidenceHash is zero: ignored, level 0",
