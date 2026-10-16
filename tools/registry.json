@@ -1,0 +1,370 @@
+{
+  "about": "Fixed identifiers defined by merged TAPs, grouped by the namespace a later TAP could add to or collide with. Each entry names the section that defines it; `node tools/check-tap.mjs --registry` confirms every id still appears in the file it cites. Deployed contract selectors, events and revert data are left out: they are fixed by deployed code, not by a namespace a draft can extend.",
+  "taps": "TAP-02, TAP-10 (version 1.1), TAP-11, TAP-12, TAP-13 as merged at 075dd83",
+  "namespaces": [
+    {
+      "name": "site-paths",
+      "title": "Paths in a container's DeWEB site",
+      "rule": "A later TAP that reads a fixed path picks one that is not listed here and not under a reserved prefix.",
+      "entries": [
+        { "id": "/sw.js", "match": "exact", "reserved": true, "tap": 10, "section": "§8.8", "meaning": "the Service Worker gateway; a site file at this path is never read" },
+        { "id": "/.tape/", "match": "prefix", "tap": 10, "section": "§8.8", "meaning": "Reserved prefix for the gateway; site files under it are never read" },
+        { "id": "/.tape/status", "match": "exact", "tap": 10, "section": "§8.8", "meaning": "Gateway status page every site has" },
+        { "id": "/.well-known/tapeapi.json", "match": "exact", "tap": 11, "section": "§2.2 step 3", "meaning": "Service manifest (registry key .well-known/tapeapi.json)" }
+      ]
+    },
+    {
+      "name": "url-schemes",
+      "title": "URL schemes and the name suffix",
+      "rule": "Fixed (TAP-10 §21 item 1).",
+      "entries": [
+        { "id": "tape://", "tap": 10, "section": "§3.2", "meaning": "Access-layer URL scheme" },
+        { "id": "web+tape://", "tap": 10, "section": "§3.2", "meaning": "Alias for web environments" },
+        { "id": ".tape", "tap": 10, "section": "§3.1, §3.2", "meaning": "Suffix of every on-chain name" }
+      ]
+    },
+    {
+      "name": "gateway-headers",
+      "title": "HTTP headers on verified gateway responses",
+      "rule": "No growth rule stated; a later TAP that adds a header should not reuse the x-tape- prefix for another meaning.",
+      "entries": [
+        { "id": "x-tape-name", "tap": 10, "section": "§8.8" },
+        { "id": "x-tape-status", "tap": 10, "section": "§8.8" },
+        { "id": "x-tape-container", "tap": 10, "section": "§8.8" },
+        { "id": "x-tape-block", "tap": 10, "section": "§8.8" },
+        { "id": "x-tape-sha256", "tap": 10, "section": "§8.8" },
+        { "id": "x-tape-verified", "tap": 10, "section": "§8.8" }
+      ]
+    },
+    {
+      "name": "tap10-identity-outcomes",
+      "title": "TAP-10 identity outcomes",
+      "rule": "Only ever added; names and meanings never change (TAP-10 §21 item 7).",
+      "entries": [
+        { "id": "wrong-chain", "tap": 10, "section": "§4.4" },
+        { "id": "ambiguous", "tap": 10, "section": "§4.4" },
+        { "id": "no-such-cpu", "tap": 10, "section": "§4.4" },
+        { "id": "no-such-token", "tap": 10, "section": "§4.4" },
+        { "id": "not-tapeout", "tap": 10, "section": "§4.4" },
+        { "id": "unavailable", "tap": 10, "section": "§4.4" }
+      ]
+    },
+    {
+      "name": "tap10-site-status",
+      "title": "TAP-10 site status codes",
+      "rule": "Only ever added (TAP-10 §6.4, §21 item 7).",
+      "entries": [
+        { "id": "ok", "tap": 10, "section": "§6.4" },
+        { "id": "unpaid", "tap": 10, "section": "§6.4" },
+        { "id": "not-opened", "tap": 10, "section": "§6.4" },
+        { "id": "no-such-cpu", "tap": 10, "section": "§6.4" },
+        { "id": "no-such-token", "tap": 10, "section": "§6.4" },
+        { "id": "not-tapeout", "tap": 10, "section": "§6.4" },
+        { "id": "blocked", "tap": 10, "section": "§6.4" },
+        { "id": "store-changed", "tap": 10, "section": "§6.4" }
+      ]
+    },
+    {
+      "name": "tap10-file-outcomes",
+      "title": "TAP-10 file outcomes",
+      "rule": "Not stated separately; read with TAP-10 §21 item 7.",
+      "entries": [
+        { "id": "ok", "tap": 10, "section": "§7.1" },
+        { "id": "no-hash", "tap": 10, "section": "§7.1" },
+        { "id": "incomplete", "tap": 10, "section": "§7.1" },
+        { "id": "too-large", "tap": 10, "section": "§7.1" }
+      ]
+    },
+    {
+      "name": "tap10-message-status",
+      "title": "TAP-10 messaging status codes",
+      "rule": "Only ever added (TAP-10 §18.6, §21 item 7).",
+      "entries": [
+        { "id": "ok", "tap": 10, "section": "§18.6" },
+        { "id": "unsupported", "tap": 10, "section": "§18.6" },
+        { "id": "damaged", "tap": 10, "section": "§18.6" },
+        { "id": "not-for-key", "tap": 10, "section": "§18.6" },
+        { "id": "pending", "tap": 10, "section": "§18.6" },
+        { "id": "unavailable", "tap": 10, "section": "§18.6" },
+        { "id": "stale-block", "tap": 10, "section": "§5.3, §18.6" },
+        { "id": "clock-skew", "tap": 10, "section": "§5.3, §18.6", "meaning": "Kept but no longer produced since TAP-10 v1.1" },
+        { "id": "wrong-chain", "tap": 10, "section": "§18.6" },
+        { "id": "ambiguous", "tap": 10, "section": "§18.6" },
+        { "id": "hub-mismatch", "tap": 10, "section": "§12.2, §18.6" },
+        { "id": "hub-missing", "tap": 10, "section": "§18.6" },
+        { "id": "hub-changed", "tap": 10, "section": "§18.6" },
+        { "id": "circuits-changed", "tap": 10, "section": "§18.6" },
+        { "id": "no-key", "tap": 10, "section": "§18.6" },
+        { "id": "key-stale", "tap": 10, "section": "§18.6" },
+        { "id": "bad-key", "tap": 10, "section": "§18.6" },
+        { "id": "key-changed", "tap": 10, "section": "§18.6, §20 step 3" }
+      ]
+    },
+    {
+      "name": "tap10-attachment-results",
+      "title": "TAP-10 asset attachment verification results",
+      "rule": "Only ever added (TAP-10 §21 item 7).",
+      "entries": [
+        { "id": "pending", "tap": 10, "section": "§19" },
+        { "id": "mismatch", "tap": 10, "section": "§19" },
+        { "id": "unavailable", "tap": 10, "section": "§19" },
+        { "id": "unverifiable", "tap": 10, "section": "§19" },
+        { "id": "late", "tap": 10, "section": "§19" },
+        { "id": "indirect", "tap": 10, "section": "§19" },
+        { "id": "third-party", "tap": 10, "section": "§19" },
+        { "id": "stale", "tap": 10, "section": "§19" },
+        { "id": "crowded", "tap": 10, "section": "§19" },
+        { "id": "not-first", "tap": 10, "section": "§19" },
+        { "id": "ok", "tap": 10, "section": "§19" },
+        { "id": "other-chain", "tap": 10, "section": "§19" }
+      ]
+    },
+    {
+      "name": "tap11-outcomes",
+      "title": "TAP-11 service resolution outcomes, beyond those taken from TAP-10",
+      "rule": "Outcome names are only ever added (TAP-11 §2.3).",
+      "entries": [
+        { "id": "no-manifest", "tap": 11, "section": "§2.3" },
+        { "id": "manifest-invalid", "tap": 11, "section": "§2.3" },
+        { "id": "delegation-invalid", "tap": 11, "section": "§2.3" }
+      ]
+    },
+    {
+      "name": "tap11-manifest-members",
+      "title": "Top-level members of the service manifest",
+      "rule": "Later TAPs MAY define further top-level members (TAP-11 §3.1); clients ignore members they do not know. Two drafts must not define the same name.",
+      "entries": [
+        { "id": "tapeapi", "tap": 11, "section": "§3.2" },
+        { "id": "name", "tap": 11, "section": "§3.2" },
+        { "id": "circuits", "tap": 11, "section": "§3.2" },
+        { "id": "tokenId", "tap": 11, "section": "§3.2" },
+        { "id": "container", "tap": 11, "section": "§3.2" },
+        { "id": "signer", "tap": 11, "section": "§3.2" },
+        { "id": "delegation", "tap": 11, "section": "§3.2" },
+        { "id": "endpoints", "tap": 11, "section": "§3.2" },
+        { "id": "methods", "tap": 11, "section": "§3.2" },
+        { "id": "payment", "tap": 11, "section": "§3.2" },
+        { "id": "contentSig", "tap": 11, "section": "§3.2, §5" }
+      ]
+    },
+    {
+      "name": "tap11-method-members",
+      "title": "Members of a method descriptor",
+      "rule": "A later TAP may define a member that lists what a method offers (TAP-13 §6, 'What a descriptor offers'); clients ignore unknown members at every level (TAP-11 §3.1).",
+      "entries": [
+        { "id": "name", "tap": 11, "section": "§3.3" },
+        { "id": "priceBEM", "tap": 11, "section": "§3.3" },
+        { "id": "params", "tap": 11, "section": "§3.3" },
+        { "id": "returns", "tap": 11, "section": "§3.3" },
+        { "id": "description", "tap": 11, "section": "§3.3" }
+      ]
+    },
+    {
+      "name": "eip712",
+      "title": "EIP-712 domains and primary types",
+      "rule": "Fixed and never change (TAP-11 §4.1). A later TAP that signs typed data under the TapeAPI domain must pick a primary type not listed here.",
+      "entries": [
+        { "id": "TapeAPI", "kind": "domain name", "tap": 11, "section": "§4.1", "meaning": "Domain name, version \"1\", verifyingContract = the hub" },
+        { "id": "Delegation(address container,address signer,uint64 expires)", "kind": "primary type", "tap": 11, "section": "§4.1" },
+        { "id": "ManifestContent(address container,bytes32 contentHash)", "kind": "primary type", "tap": 11, "section": "§5.2" }
+      ]
+    },
+    {
+      "name": "ascii-labels",
+      "title": "ASCII labels and prefixes used for domain separation",
+      "rule": "Fixed for payload format 0x02 (TAP-10 §21 item 8) and as a wire constant (TAP-13 §5). A later TAP picks its own label; the TAP-10/ and TAPI-1/ families belong to these TAPs.",
+      "entries": [
+        { "id": "TAP-10/key/v2", "tap": 10, "section": "§14.2 step 5", "meaning": "HKDF salt for the messaging key" },
+        { "id": "TAP-10/commit/v2", "tap": 10, "section": "§15.3", "meaning": "Key commitment D" },
+        { "id": "TAP-10/X/v2", "tap": 10, "section": "§15.3", "meaning": "Sealing context X" },
+        { "id": "TAP-10/wrap/v2", "tap": 10, "section": "§15.3", "meaning": "HKDF salt for slot key wrapping" },
+        { "id": "TAP-10/msg/v2", "tap": 10, "section": "§17", "meaning": "Message ID; reused as the TAP-12 commitment ID (TAP-12 §3.3)" },
+        { "id": "TAPI-1/resp/v2", "tap": 13, "section": "§5", "meaning": "Response envelope digest prefix" },
+        { "id": "TAPI-1/resp/v1", "tap": 13, "section": "Backwards Compatibility", "meaning": "Superseded envelope prefix; envelopes with it are rejected" }
+      ]
+    },
+    {
+      "name": "tapesend-key-text",
+      "title": "Fixed strings in the TapeSend key-derivation text",
+      "rule": "The text is fixed (TAP-10 §14.2, §21 item 8).",
+      "entries": [
+        { "id": "www.tapesend.com", "tap": 10, "section": "§14.2", "meaning": "EIP-4361 domain of the key text; the only origin of the official web client" },
+        { "id": "tapesendkey", "tap": 10, "section": "§14.2", "meaning": "Nonce prefix, followed by the key index" },
+        { "id": "tapesend:container:", "tap": 10, "section": "§14.2" },
+        { "id": "tapesend:hub:", "tap": 10, "section": "§14.2" },
+        { "id": "tapesend:key-index:", "tap": 10, "section": "§14.2" }
+      ]
+    },
+    {
+      "name": "tapesend-payload",
+      "title": "TapeSend payload header",
+      "rule": "Anything that must differ gets a new format version (TAP-10 §21 item 8).",
+      "entries": [
+        { "id": "TS", "kind": "magic 0x54 0x53", "tap": 10, "section": "§15.1" },
+        { "id": "0x02", "kind": "format version", "tap": 10, "section": "§15.1", "meaning": "0x01 was draft v0.5 and is unsupported" },
+        { "id": "0x00", "kind": "payload kind", "tap": 10, "section": "§15.1, §15.2", "meaning": "public" },
+        { "id": "0x01", "kind": "payload kind", "tap": 10, "section": "§15.1, §15.3", "meaning": "sealed" }
+      ]
+    },
+    {
+      "name": "tapesend-content-kinds",
+      "title": "Values of kind in a TapeSend content object",
+      "rule": "A client shows any kind other than \"message\" as unsupported (TAP-10 §16). A TAP that defines its own kind picks one not listed here.",
+      "entries": [
+        { "id": "\"message\"", "tap": 10, "section": "§16" }
+      ]
+    },
+    {
+      "name": "tapesend-content-members",
+      "title": "Top-level members of a TapeSend content object",
+      "rule": "Unknown members are ignored (TAP-10 §16). A later TAP that adds a member picks a name not listed here, as TAP-12 did with scv.",
+      "entries": [
+        { "id": "v", "tap": 10, "section": "§16" },
+        { "id": "kind", "tap": 10, "section": "§16", "meaning": "Only \"message\" is defined; any other value is unsupported" },
+        { "id": "subject", "tap": 10, "section": "§16" },
+        { "id": "body", "tap": 10, "section": "§16" },
+        { "id": "ts", "tap": 10, "section": "§16" },
+        { "id": "attachments", "tap": 10, "section": "§16, §16.1" },
+        { "id": "scv", "tap": 12, "section": "§3.4, §4.3, §5.3" }
+      ]
+    },
+    {
+      "name": "tapesend-attachment-types",
+      "title": "TapeSend attachment types",
+      "rule": "An attachment that fails §16.1 is dropped and counted (TAP-10 §16); no growth rule is stated.",
+      "entries": [
+        { "id": "image", "tap": 10, "section": "§16.1" },
+        { "id": "native", "tap": 10, "section": "§16.1" },
+        { "id": "erc20", "tap": 10, "section": "§16.1" },
+        { "id": "erc721", "tap": 10, "section": "§16.1" }
+      ]
+    },
+    {
+      "name": "tapesend-ref-tags",
+      "title": "Tags in bytes 0–3 of a TapeSend ref",
+      "rule": "TAP-10 leaves ref to the sender (§17). A TAP that gives ref a layout claims a 4-byte tag; two TAPs must not claim the same tag.",
+      "entries": [
+        { "id": "SCV1", "kind": "0x53 0x43 0x56 0x31", "tap": 12, "section": "§2", "meaning": "Sealed commitments and verdicts; record types 0x01 commitment, 0x02 reveal, 0x03 verdict" }
+      ]
+    },
+    {
+      "name": "tap13-request-members",
+      "title": "Members of a TAP-13 request body",
+      "rule": "voucher is reserved for a later payment TAP (TAP-13 §6, reserved names).",
+      "entries": [
+        { "id": "id", "tap": 13, "section": "§3" },
+        { "id": "method", "tap": 13, "section": "§3" },
+        { "id": "params", "tap": 13, "section": "§3" },
+        { "id": "voucher", "tap": 13, "section": "§3, §6", "reserved": true, "meaning": "Reserved for a payment TAP" }
+      ]
+    },
+    {
+      "name": "tap13-envelope-members",
+      "title": "Members of a TAP-13 response envelope",
+      "rule": "No growth rule stated.",
+      "entries": [
+        { "id": "id", "tap": 13, "section": "§4" },
+        { "id": "ok", "tap": 13, "section": "§4" },
+        { "id": "result", "tap": 13, "section": "§4" },
+        { "id": "error", "tap": 13, "section": "§4" },
+        { "id": "container", "tap": 13, "section": "§4" },
+        { "id": "ts", "tap": 13, "section": "§4" },
+        { "id": "block", "tap": 13, "section": "§4" },
+        { "id": "sig", "tap": 13, "section": "§4" }
+      ]
+    },
+    {
+      "name": "tap13-error-codes",
+      "title": "Provider error codes",
+      "rule": "Only ever added, never removed or renamed (TAP-13 §6). A reserved code may be defined only by the TAP it is reserved for.",
+      "entries": [
+        { "id": "PAYMENT_REQUIRED", "tap": 13, "section": "§6", "reserved": true, "meaning": "Reserved for a payment TAP" },
+        { "id": "BAD_VOUCHER", "tap": 13, "section": "§6", "reserved": true, "meaning": "Reserved for a payment TAP" },
+        { "id": "METHOD_NOT_FOUND", "tap": 13, "section": "§6" },
+        { "id": "BAD_REQUEST", "tap": 13, "section": "§6" },
+        { "id": "INTERNAL", "tap": 13, "section": "§6" },
+        { "id": "TOOLS_CHANGED", "tap": 13, "section": "§6", "reserved": true, "meaning": "Reserved for a TAP that binds a service to a tool server" },
+        { "id": "RATE_LIMITED", "tap": 13, "section": "§7", "meaning": "Unsigned 429 answer only; never in a signed envelope" }
+      ]
+    },
+    {
+      "name": "tap02-opcodes",
+      "title": "Netlist record opcodes",
+      "rule": "Any other opcode makes a netlist ill-formed (TAP-02 §3 condition 1).",
+      "entries": [
+        { "id": "0x00", "kind": "NAND", "tap": 2, "section": "§2" },
+        { "id": "0x01", "kind": "LATCH", "tap": 2, "section": "§2" },
+        { "id": "0x02", "kind": "REF", "tap": 2, "section": "§2" }
+      ]
+    },
+    {
+      "name": "tap10-chain-numbers",
+      "title": "Chain bitmap bits and area codes",
+      "rule": "Assigned once, never changed or reused; new chains are appended. Area codes 0 and 1 are reserved and never assigned (TAP-10 §2.1, §21 item 3).",
+      "entries": [
+        { "id": "bnb", "kind": "bitmap bit 0, no area code", "tap": 10, "section": "§2.1" },
+        { "id": "base", "kind": "bitmap bit 1, area code 3", "tap": 10, "section": "§2.1" },
+        { "id": "xlayer", "kind": "bitmap bit 2, area code 2", "tap": 10, "section": "§2.1" }
+      ]
+    }
+  ],
+  "proposed_about": "Identifiers proposed by open drafts and Ideas, not registered. Listed only to find collisions early; each names the pull request head it was read from and changes when the draft does. Contract errors, draft-local result and problem codes, and identifiers a draft only cites are left out.",
+  "proposed": [
+    { "id": ".well-known/tape-channel.json", "namespace": "site-paths", "pr": 12, "head": "496c3c9", "file": "TAPs/TAP-draft-private-channels.md", "section": "§3.1", "line": 54 },
+    { "id": "ChannelKeys", "namespace": "eip712", "pr": 12, "head": "496c3c9", "file": "TAPs/TAP-draft-private-channels.md", "section": "§3.2", "line": 89 },
+    { "id": "tape-channel/v1", "namespace": "ascii-labels", "pr": 12, "head": "496c3c9", "file": "TAPs/TAP-draft-private-channels.md", "section": "§4.1", "line": 138 },
+    { "id": "tape.channel/invite", "namespace": "tapesend-content-kinds", "pr": 12, "head": "496c3c9", "file": "TAPs/TAP-draft-private-channels.md", "section": "§5", "line": 160 },
+    { "id": "tape-channel/inbox/v1", "namespace": "ascii-labels", "pr": 12, "head": "496c3c9", "file": "TAPs/TAP-draft-private-channels.md", "section": "§6.1", "line": 184 },
+    { "id": "tape-channel/transcript/v1", "namespace": "ascii-labels", "pr": 12, "head": "496c3c9", "file": "TAPs/TAP-draft-private-channels.md", "section": "§8", "line": 248 },
+    { "id": "tape-channel/keys/v1", "namespace": "ascii-labels", "pr": 12, "head": "496c3c9", "file": "TAPs/TAP-draft-private-channels.md", "section": "§8", "line": 250 },
+    { "id": "tape-channel/confirm/initiator", "namespace": "ascii-labels", "pr": 12, "head": "496c3c9", "file": "TAPs/TAP-draft-private-channels.md", "section": "§8", "line": 252 },
+    { "id": "tape-channel/confirm/responder", "namespace": "ascii-labels", "pr": 12, "head": "496c3c9", "file": "TAPs/TAP-draft-private-channels.md", "section": "§8", "line": 253 },
+    { "id": "tape-channel/frame/v1", "namespace": "ascii-labels", "pr": 12, "head": "496c3c9", "file": "TAPs/TAP-draft-private-channels.md", "section": "§9", "line": 262 },
+    { "id": "tape-channel/room/v1", "namespace": "ascii-labels", "pr": 12, "head": "496c3c9", "file": "TAPs/TAP-draft-private-channels.md", "section": "§10.1", "line": 277 },
+    { "id": "relaySend", "namespace": "fixed-method-names", "pr": 12, "head": "496c3c9", "file": "TAPs/TAP-draft-private-channels.md", "section": "§11.1", "line": 301 },
+    { "id": "relayHandshake", "namespace": "fixed-method-names", "pr": 12, "head": "496c3c9", "file": "TAPs/TAP-draft-private-channels.md", "section": "§11.1", "line": 302 },
+    { "id": "relayRecv", "namespace": "fixed-method-names", "pr": 12, "head": "496c3c9", "file": "TAPs/TAP-draft-private-channels.md", "section": "§11.1", "line": 303 },
+    { "id": "mcp", "namespace": "tap11-manifest-members", "pr": 16, "head": "648dd6a", "file": "TAPs/TAP-draft-mcp-tools.md", "section": "§2", "line": 46 },
+    { "id": "TOOLS_CHANGED", "namespace": "tap13-error-codes", "pr": 16, "head": "648dd6a", "file": "TAPs/TAP-draft-mcp-tools.md", "section": "§5.1", "line": 138, "note": "Reserved for this kind of TAP by TAP-13 §6; this draft would be the defining TAP" },
+    { "id": "attestedRead", "namespace": "tap11-method-members", "pr": 18, "head": "fbae74c", "file": "TAPs/TAP-draft-attested-reads.md", "section": "§2", "line": 45 },
+    { "id": "tape-group/room/v1", "namespace": "ascii-labels", "pr": 20, "head": "126a73f", "file": "TAPs/TAP-draft-private-groups.md", "section": "§4", "line": 76 },
+    { "id": "tape-group/commit/v1", "namespace": "ascii-labels", "pr": 20, "head": "126a73f", "file": "TAPs/TAP-draft-private-groups.md", "section": "§5.1", "line": 88 },
+    { "id": "tape-group/wrap/v1", "namespace": "ascii-labels", "pr": 20, "head": "126a73f", "file": "TAPs/TAP-draft-private-groups.md", "section": "§5.1", "line": 90 },
+    { "id": "tape-group/epoch/v1", "namespace": "ascii-labels", "pr": 20, "head": "126a73f", "file": "TAPs/TAP-draft-private-groups.md", "section": "§5.1", "line": 95 },
+    { "id": "tape.group/roster", "namespace": "tapesend-content-kinds", "pr": 20, "head": "126a73f", "file": "TAPs/TAP-draft-private-groups.md", "section": "§5.2", "line": 122 },
+    { "id": "tape-group/sender/v1", "namespace": "ascii-labels", "pr": 20, "head": "126a73f", "file": "TAPs/TAP-draft-private-groups.md", "section": "§6.1", "line": 191 },
+    { "id": "tape-group/msg/v1", "namespace": "ascii-labels", "pr": 20, "head": "126a73f", "file": "TAPs/TAP-draft-private-groups.md", "section": "§6.1", "line": 194 },
+    { "id": "tape.group/invite", "namespace": "tapesend-content-kinds", "pr": 20, "head": "126a73f", "file": "TAPs/TAP-draft-private-groups.md", "section": "§7", "line": 236 },
+    { "id": "openai_chat", "namespace": "fixed-method-names", "pr": 26, "head": "f9544f7", "file": "TAPs/TAP-draft-ai-usage-receipts.md", "section": "§2", "line": 55 },
+    { "id": "openai_responses", "namespace": "fixed-method-names", "pr": 26, "head": "f9544f7", "file": "TAPs/TAP-draft-ai-usage-receipts.md", "section": "§2", "line": 56 },
+    { "id": "anthropic_messages", "namespace": "fixed-method-names", "pr": 26, "head": "f9544f7", "file": "TAPs/TAP-draft-ai-usage-receipts.md", "section": "§2", "line": 57 },
+    { "id": "openai_embeddings", "namespace": "fixed-method-names", "pr": 26, "head": "f9544f7", "file": "TAPs/TAP-draft-ai-usage-receipts.md", "section": "§2", "line": 58 },
+    { "id": "ai", "namespace": "tap11-manifest-members", "pr": 26, "head": "f9544f7", "file": "TAPs/TAP-draft-ai-usage-receipts.md", "section": "§3.1", "line": 69 },
+    { "id": "receipt", "namespace": "fixed-method-names", "pr": 26, "head": "f9544f7", "file": "TAPs/TAP-draft-ai-usage-receipts.md", "section": "§3.5", "line": 131 },
+    { "id": "x-tapeapi-receipt", "namespace": "service-headers", "pr": 26, "head": "f9544f7", "file": "TAPs/TAP-draft-ai-usage-receipts.md", "section": "§7.4", "line": 326 },
+    { "id": "x-tapeapi-sidecar-error", "namespace": "service-headers", "pr": 26, "head": "f9544f7", "file": "TAPs/TAP-draft-ai-usage-receipts.md", "section": "§8", "line": 356 },
+    { "id": "Mandate", "namespace": "eip712", "pr": 47, "head": "50a5a6f", "file": "TAPs/TAP-draft-container-agent.md", "section": "§3.2", "line": 81 },
+    { "id": "Scope", "namespace": "eip712", "pr": 47, "head": "50a5a6f", "file": "TAPs/TAP-draft-container-agent.md", "section": "§3.2", "line": 81 },
+    { "id": "TaskOffer", "namespace": "eip712", "pr": 47, "head": "50a5a6f", "file": "TAPs/TAP-draft-container-agent.md", "section": "§3.3", "line": 102 },
+    { "id": "TaskVerdict", "namespace": "eip712", "pr": 47, "head": "50a5a6f", "file": "TAPs/TAP-draft-container-agent.md", "section": "§3.4", "line": 111 },
+    { "id": "MandateRevocation", "namespace": "eip712", "pr": 47, "head": "50a5a6f", "file": "TAPs/TAP-draft-container-agent.md", "section": "§3.5", "line": 120 },
+    { "id": ".well-known/tapeapi-mandates.json", "namespace": "site-paths", "pr": 47, "head": "50a5a6f", "file": "TAPs/TAP-draft-container-agent.md", "section": "§6.2", "line": 206 },
+    { "id": "tape.agent/", "namespace": "tapesend-content-kinds", "pr": 47, "head": "50a5a6f", "file": "TAPs/TAP-draft-container-agent.md", "section": "§7.1", "line": 235 },
+    { "id": "agent", "namespace": "tap11-manifest-members", "pr": 49, "head": "5a3e3ec", "file": "TAPs/TAP-draft-container-agent-listing.md", "section": "§1", "line": 34 },
+    { "id": "TapeAPIEscrow", "namespace": "eip712", "pr": 52, "head": "0451918", "file": "TAPs/TAP-draft-payment-vouchers.md", "section": "§3.1", "line": 77 },
+    { "id": "Voucher", "namespace": "eip712", "pr": 52, "head": "0451918", "file": "TAPs/TAP-draft-payment-vouchers.md", "section": "§3.1", "line": 81 },
+    { "id": "voucher", "namespace": "tap13-request-members", "pr": 52, "head": "0451918", "file": "TAPs/TAP-draft-payment-vouchers.md", "section": "§3.2", "line": 100, "note": "Reserved for this kind of TAP by TAP-13 §6; this draft would be the defining TAP" },
+    { "id": "usdPricing", "namespace": "tap11-manifest-members", "pr": 52, "head": "0451918", "file": "TAPs/TAP-draft-payment-vouchers.md", "section": "§4.1", "line": 128 },
+    { "id": "PAYMENT_REQUIRED", "namespace": "tap13-error-codes", "pr": 52, "head": "0451918", "file": "TAPs/TAP-draft-payment-vouchers.md", "section": "§5.1", "line": 213, "note": "Reserved for this kind of TAP by TAP-13 §6; this draft would be the defining TAP" },
+    { "id": "BAD_VOUCHER", "namespace": "tap13-error-codes", "pr": 52, "head": "0451918", "file": "TAPs/TAP-draft-payment-vouchers.md", "section": "§5.1", "line": 213, "note": "Reserved for this kind of TAP by TAP-13 §6; this draft would be the defining TAP" },
+    { "id": "Review", "namespace": "eip712", "pr": 54, "head": "7a3a4dd", "file": "TAPs/TAP-draft-container-reviews.md", "section": "§2.1", "line": 51 },
+    { "id": "tape-review:", "namespace": "ascii-labels", "pr": 54, "head": "7a3a4dd", "file": "TAPs/TAP-draft-container-reviews.md", "section": "§4.2", "line": 107 },
+    { "id": ".well-known/tapeapi-reviews.json", "namespace": "site-paths", "pr": 54, "head": "7a3a4dd", "file": "TAPs/TAP-draft-container-reviews.md", "section": "§8.1", "line": 185 },
+    { "id": "review", "namespace": "tapesend-content-members", "pr": 54, "head": "7a3a4dd", "file": "TAPs/TAP-draft-container-reviews.md", "section": "§8.2", "line": 191 },
+    { "id": "TapeAPIEscrow", "namespace": "eip712", "pr": 59, "head": "098de45", "file": "TAPs/TAP-draft-escrow-channels.md", "section": "§8.1", "line": 255, "note": "Same domain and type as #52, by design" },
+    { "id": "Voucher", "namespace": "eip712", "pr": 59, "head": "098de45", "file": "TAPs/TAP-draft-escrow-channels.md", "section": "§8.1", "line": 259, "note": "Same domain and type as #52, by design" },
+    { "id": "mandateHash", "namespace": "tap13-request-members", "pr": 60, "head": "42ce7ae", "file": "TAPs/TAP-draft-container-agent-phase1.md", "section": "§9", "line": 251 },
+    { "id": "mandate", "namespace": "tap13-request-members", "pr": 60, "head": "42ce7ae", "file": "TAPs/TAP-draft-container-agent-phase1.md", "section": "§9", "line": 251 },
+    { "id": "/.well-known/tape-type.json", "namespace": "site-paths", "issue": 62, "note": "Idea, no draft file yet" }
+  ]
+}
