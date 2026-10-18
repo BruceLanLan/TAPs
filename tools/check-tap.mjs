@@ -11,6 +11,8 @@
 //         With no file, checks every TAPs/*.md that is not a translation.
 //         A draft is also checked against tools/registry.json (warnings only);
 //         --registry checks the registry itself against the merged TAPs.
+//         Every file is also checked for citations of a section a TAP in TAPs/
+//         does not have (warnings only).
 // Exit:   1 if any file has an error, otherwise 0. Warnings never fail.
 // Output: key words are counted separately, so "MUST 18, MUST NOT 15" means 18
 //         MUSTs not followed by NOT; some drafts report MUST as 33 (both together).
@@ -98,6 +100,7 @@ function checkFile(path, root) {
   } else {
     errors.push('file name is neither TAP-<nn>.md nor TAP-draft-<short-title>.md (TAP-01 §6.2)');
   }
+  warnings.push(...citationWarnings(text, root));
 
   // §7.2 title heading and sections
   const h1 = lines.find((l) => l.startsWith('# '));
@@ -211,6 +214,42 @@ function checkRegistry(root) {
 }
 
 // An id as a whole token, so that `v` or `ok` is not found inside another word.
+// "TAP-10 §7.1" or "TAP-10 Appendix A" where TAP-10 is in TAPs/ but has no such
+// heading: usually a section that was renumbered after the citing text was written.
+let headingCache = null;
+function headings(root) {
+  if (headingCache) return headingCache;
+  headingCache = new Map();
+  for (const f of readdirSync(join(root, 'TAPs'))) {
+    const m = /^TAP-(\d{2,})\.md$/.exec(f);
+    if (!m) continue;
+    const hs = new Set();
+    for (const line of readFileSync(join(root, 'TAPs', f), 'utf8').split('\n')) {
+      const h = /^#+\s+(?:Appendix\s+)?([0-9A-Z]+(?:\.[0-9]+)*)[.\s]/.exec(line);
+      if (h) hs.add(h[1]);
+    }
+    headingCache.set(Number(m[1]), hs);
+  }
+  return headingCache;
+}
+
+function citationWarnings(text, root) {
+  const hs = headings(root);
+  const warnings = [];
+  const seen = new Set();
+  const lineOf = (i) => text.slice(0, i).split('\n').length;
+  const check = (n, sec, i) => {
+    const key = `TAP-${String(n).padStart(2, '0')} ${sec}`;
+    if (!hs.has(n) || seen.has(key)) return;
+    if (!hs.get(n).has(sec.replace(/^(§|Appendix )/, ''))) { seen.add(key); warnings.push(`line ${lineOf(i)}: cites ${key}, which has no such heading`); }
+  };
+  for (const m of text.matchAll(/TAP-(\d+)((?:\s*(?:§|,\s*§|and\s+§|–§)\s*\d+(?:\.\d+)*)+)/g)) {
+    for (const s of m[2].matchAll(/§\s*(\d+(?:\.\d+)*)/g)) check(Number(m[1]), `§${s[1]}`, m.index);
+  }
+  for (const m of text.matchAll(/TAP-(\d+),? Appendix ([A-Z])\b/g)) check(Number(m[1]), `Appendix ${m[2]}`, m.index);
+  return warnings;
+}
+
 function token(id) {
   return new RegExp(`(?<![A-Za-z0-9_-])${id.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?![A-Za-z0-9_-])`);
 }
