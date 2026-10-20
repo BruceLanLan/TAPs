@@ -82,6 +82,9 @@ function checkFile(path, root) {
   }
   if (fm.author && !/\(@[A-Za-z0-9-]+\)/.test(fm.author)) warnings.push('author has no GitHub handle in the form Name (@handle)');
   if (fm.title && /\bTAP-\d/.test(fm.title)) errors.push('title must not contain a TAP number');
+  for (const r of (fm.requires ?? '').split(',').map((x) => x.trim()).filter(Boolean)) {
+    if (/^TAP-/i.test(r) && !/^TAP-\d{2,}$/.test(r)) warnings.push(`requires names "${r}", which is not a numbered TAP (TAP-01 §6.1, §7.1); cite a draft in the text instead`);
+  }
   if (fm.description && sentences(fm.description) > 1) warnings.push('description looks like more than one sentence');
   if (fm['discussions-to'] && !/^https:\/\//.test(fm['discussions-to'])) errors.push('discussions-to is not an https URL');
 
