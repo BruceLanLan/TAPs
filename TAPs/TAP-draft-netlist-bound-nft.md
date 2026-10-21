@@ -7,6 +7,7 @@ discussions-to: https://github.com/TapeOutProtocol/TAPs/issues/66
 status: Draft
 type: Standards
 created: 2026-10-18
+updated: 2026-10-22
 requires: TAP-02, TAP-10, ERC-165, ERC-173, ERC-721, ERC-4906, CAIP-19 (ChainAgnostic/CAIPs commit 1a897eede982d3d4eb68982f3798ebb0878c6ef5)
 license: CC0-1.0
 ---
@@ -562,9 +563,9 @@ Tools SHOULD show whether the container that serves a collection's content is lo
 
 **Existing specifications.** The token identifier is CAIP-19, because wallets and indexers already parse it. The hashes are served by dedicated functions rather than ERC-7496 traits because they are fixed by the manifest and proven by Merkle proofs, while ERC-7496 traits are values an owner may set; `TAP-draft-pod-attributes` uses ERC-7496 for facts that are snapshots of another contract. No existing ERC defines a committed, publicly recomputable reveal, so §5–§6 define one with the smallest primitives available on all chains.
 
-**Relationship to other TAPs.** Three proposals extend TAP-721 and require it, as ERC-4906 and ERC-7496 extend ERC-721: `TAP-draft-netlist-nft-bridging` (moving TAP-721 tokens between chains), `TAP-draft-pod-attributes` (Proof-of-Design attributes for TAP-721 tokens) and `TAP-draft-netlist-structural-hash` (a structural hash of `tapnet/1` files). They are separate TAPs for four reasons. One topic per TAP: each can be reviewed, accepted or rejected without reopening this one. Upgradeable dependencies: bridging depends on a message layer and its own security analysis, and the PoD attributes read contracts that can be upgraded; neither should hold this core back or tie it to their changes. Application type: PoD facts (task, burns, cost, optimal-first status) change over time and belong to one application, so they are an Application TAP, while this one is a Standards TAP. Algorithm evolution: recognising one design under renumbered gates has known limits, and its algorithm can change without changing the netlist hash of §2.3.
+**Relationship to other TAPs.** Five proposals extend TAP-721 and require it, as ERC-4906 and ERC-7496 extend ERC-721: `TAP-draft-netlist-nft-bridging` (moving TAP-721 tokens between chains), `TAP-draft-pod-attributes` (Proof-of-Design attributes for TAP-721 tokens), `TAP-draft-netlist-structural-hash` (a structural hash of `tapnet/1` files), `TAP-draft-design-credits` (checked publication facts and signed credit statements about netlists) and `TAP-draft-soulbound-credentials` (non-transferable tokens bound to a netlist at mint). They are separate TAPs for four reasons. One topic per TAP: each can be reviewed, accepted or rejected without reopening this one. Upgradeable dependencies: bridging depends on a message layer and its own security analysis, and the PoD attributes read contracts that can be upgraded; neither should hold this core back or tie it to their changes. Application type: PoD facts (task, burns, cost, optimal-first status) change over time and belong to one application, so they are an Application TAP, while this one is a Standards TAP. Algorithm evolution: recognising one design under renumbered gates has known limits, and its algorithm can change without changing the netlist hash of §2.3.
 
-**Names used by other drafts (informative).** §7.1 lets other TAPs define further members of `tap`, and §5.1 further members of the manifest. The following names are used by drafts that build on this one (some not yet submitted); a new member should not reuse them.
+**Names used by other drafts (informative).** §7.1 lets other TAPs define further members of `tap`, and §5.1 further members of the manifest. The following names are used by drafts that build on this one (all submitted as pull requests to the TAPs repository); a new member should not reuse them.
 
 | Name | Where | Draft | Content |
 |---|---|---|---|
@@ -630,13 +631,15 @@ Measured costs of the reference implementation for a pool of 10,000 (informative
 ## Reference Implementation
 
 - Python, standard library only: `assets/tap-draft-netlist-bound-nft/tapnft.py` (file check, hashes, source file construction, Merkle tree, pool seeds, permutation, manifest and token-set checks, assignment, metadata and edition checks, and the unverifiable status of other formats), with the TAP-02 reference implementation `tap02_reference.py`, copied from `assets/tap-02/reference.py` (TAPs repository) with only the header comment changed, the generator `make_vectors.py` and the test suite `test_tapnft.py`.
-- Solidity: https://github.com/BruceLanLan/TAP-721, to be linked at a fixed commit before Review (TAP-01 §7.2 item 8). It contains the interfaces of §8; `TapNetlistNFT` (an L1 collection), `TapCompanion` (L1 for an existing ERC-721), the libraries `TapPermutation`, `TapMerkle`, `TapNetlistCheck`, `TapNetlistStore` and `TapNetlistVM`, and their tests.
+- Solidity: [BruceLanLan/TAP-721, commit `a39f30b538e723e918bf9c3bb2998ee95f8e2f1a`](https://github.com/BruceLanLan/TAP-721/tree/a39f30b538e723e918bf9c3bb2998ee95f8e2f1a) (MIT; Foundry project `contracts/`, solc 0.8.28). It contains the interfaces of §8 (`contracts/src/interfaces/ITapNetlistNFT.sol`, `ITapCompanion.sol`, `ITapNetlistEval.sol`, `ITapNetlistTokenSet.sol`); under `contracts/src/core/`, `TapNetlistNFT.sol` (an L1 collection), `TapCompanion.sol` (L1 for an existing ERC-721) and the libraries `TapPermutation.sol`, `TapMerkle.sol`, `TapNetlistCheck.sol`, `TapNetlistStore.sol` and `TapNetlistVM.sol`; `contracts/src/tools/TapContainerLock.sol` (§8.6); and their tests under `contracts/test/`, which read the same `vectors.json` as the Python suite. The same commit holds a copy of this text, of its translation and of `assets/tap-draft-netlist-bound-nft/`. The contracts are not deployed and have not been audited externally.
 - Implementation-defined entry points of the reference L1 contract, which clients will meet: `commitManifest`, `commitManifestTokenSet` and `commitManifestNoReveal` (§5.1, §6.1); `scheduleBlockhashReveal` and `revealFromBlockhash`, with a delay of at most 1,000,000 blocks; `loadTokenSet` and `loadTokenSetChunk` (§8.5); `loadPool` and `loadPoolChunk` (§8.2 item 3); `markKnown(uint256 tokenId)` (§8.2 item 4); `poolSeed(uint256)` (§6.2). The reference contract accepts at most 100,000 covered tokens, a limit of the implementation, not of this TAP.
 - The reference library does not implement the network checks of §3.2 (steps 1, 2 and 5), the publication block of §5.1, §6.1 item 7 or §7.5. Paths under `assets/` are updated when a number is assigned.
 
 ## Deployments
 
 This TAP depends on no deployed contract of its own. Verifying a source (§3.2) uses the processor factories and processor contracts that TAP-02 and TAP-10 list under their Deployments; on BNB Smart Chain the processor factory is an upgradeable proxy that is not sealed (TAP-02, Deployments), so a verifier reads at a pinned block and relies on the netlist hash fixed in the NFT, not on the factory's future behaviour.
+
+None of the contracts of this TAP (the reference L1 collection, the companion and the libraries) is deployed yet. A testnet deployment of the reference implementation, with read-only steps to verify its addresses, code and interface identifiers, will be added to this section before Review; until then there is no deployment that a client has to recognise.
 
 ## Security Considerations
 
