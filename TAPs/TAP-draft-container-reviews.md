@@ -7,7 +7,7 @@ discussions-to: https://github.com/TapeOutProtocol/TAPs/issues/41
 status: Draft
 type: Application
 created: 2026-10-08
-updated: 2026-10-16
+updated: 2026-10-21
 requires: TAP-10, TAP-11, TAP-13
 license: CC0-1.0
 ---
@@ -270,6 +270,11 @@ TapeAPI 2.0.0 (tag `v2.0.0`) at commit [`e29bcd00a0314946e5d97db9b444f59031e8877
 - `sdk/bin/tapeapi-verify.js`: the experimental subcommand `tapeapi-verify review <reviewee>`, which verifies the records about one container, taken from reviewers' site files, a file of records or the reviewee's inbox, and prints them with their summary.
 
 At that commit `checkReview` gives every one of the 64 cases and 6 summaries of `reviews.json` (Test Cases) the expected result, and `signReview` gives every signature byte for byte; only the replay test's counts of cases (59) and of signed cases (39) are those of the earlier revision. The five cases added since then exercise rules that commit already applies.
+
+Two differences from this text at that commit, both from revisions of the text made after it:
+
+- §4.3: a verifier that declines EIP-1271 (`createReviewKit` with `eip1271: false`, and `checkReview`, which always declines it) reports `evidence-signature`, not `evidence-signature-unsupported`, when the principal's current holder has code; `evidence-signature-unsupported` is not among that commit's problem names. The record is level 0 either way. No vector exercises this case.
+- §8.2: `readReviewMessages` reads the reviewee's inbox on one chain per call (the reviewee's chain unless another is given), and `tapeapi-verify review` reads only the reviewee's chain; a reader of every active chain calls `readReviewMessages` once per chain.
 
 ## Deployments
 
