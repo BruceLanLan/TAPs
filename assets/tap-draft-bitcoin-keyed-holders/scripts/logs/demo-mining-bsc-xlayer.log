@@ -1,0 +1,136 @@
+
+=================== 0. build + holder address (TEST P2TR key, publicly known; holds nothing on mainnet)
+  forge build ok (writes ~/work/tap-bitcoin-keyed-holders/contracts/out only)
+  bitcoin address: bc1pdznq5ty2978g55m83a4uanyqw8mkvnjhl3ky7rp5ald95zhd697q258gca
+  holder (CREATE2 via 0x4e59b44847b379578588920cA78FbF26c0B4956C, salt 0): 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647
+
+=================== 1. BSC fork: anvil :8601 <- https://bsc-mainnet.public.blastapi.io @ 126455007
+  [PASS] chain id (56)
+  [PASS] mining.isSealed() (true)
+  [PASS] mining.owner() (0x0000000000000000000000000000000000000000)
+  [PASS] mining.token() = BEM (0x5ce033B2bFCa3Af30b3e8C8457DeaF776A8b695a)
+  [PASS] vault.bem() = BEM (0x5ce033B2bFCa3Af30b3e8C8457DeaF776A8b695a)
+  [PASS] vault.mining() (0x7E2E0DC66a3bD9103E69b766afA62d9f7b697b46)
+  BEM: "BEM" decimals 8
+  factory.cpuCount() = 1202
+  [PASS] factory.cpuAt(1) = PoD processor 0x1f5c…f12c (0x1F5Cb4aeaE1807Bf60c3b9C0D8aDBCC14e91f12C)
+  [PASS] factory.cpuAt(30) = PoD processor 0xb102…a14c (used here) (0xb1024b89886B9a34Aa4ff5F31C411D708b20a14C)
+  [PASS] holder not yet deployed on this BSC block (0x)
+  [PASS] holder deployed through the deterministic proxy, gasUsed 1607114
+  [PASS] holder.scriptPubKey (0x512068a60a2c8a2f8e8a53678f6bcecc8071f7664e57fc6c4f0c34efda5a0aedd17c)
+  funded holder with 0.1 BNB from account 0
+
+=================== 2. Path A — rig #16607 moves into the holder (owner impersonated, fork only)
+  [PASS] minerKey = keccak256(abi.encodePacked(circuits, id)) (0x134124f9b52574c52d4fcf8acb377584fa8367d326c1dddfb6daae7421384156)
+  [PASS] rig #16607 miner status ACTIVE before (1)
+  previous owner: 0x8eF0590e5DfD7622e6bc0f7CBA16DA5F27E909d1 (code bytes: 0)
+  [PASS] ownerOf(#16607) = holder (0x750D22d8B6dd3168c2a4a2EFDDD44A8BfE362647)
+  [PASS] miner status still ACTIVE after the NFT transfer (no stop, no re-start needed) (1)
+  at transfer: mining.pending 22945891, lens.pendingLive 23102227 (all accrued under the previous owner; now claimable by the holder)
+  after +1 day: mining.pending 22945891, lens.pendingLive 330089678 (BEM, 8 decimals)
+  note: mining.pending() is checkpoint-based and does not move with time alone; the client reads lensNext.pendingLive()
+  [PASS] pendingLive accrues while the holder owns the rig (330089678 > 23102227)
+
+=================== 3. Holder collects via execute(mining.claim(key)) — Bitcoin-signed, relayed by account 2, signed tip
+  signs: "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 56 calls 0x7e2e0dc66a3bd9103e69b766afa62d9f7b697b46 with value 0 and data 0xb84aa0698e4ef2c8f23e18fb09613f52289e0bc564fc49573e2252406b862c20, gas 300000, tip 1000000000000000, nonce 0, valid until 1791557479"
+  [PASS] claim #16607: execute() relayed by 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, nonce 0, gasUsed 183354
+  [PASS] relayer received exactly the signed tip (balance delta + gas cost) (1000000000000000)
+  Claimed event: 0x134124f9b52574c52d4fcf8acb377584fa8367d326c1dddfb6daae7421384156 0x000000000000000000000000750d22d8b6dd3168c2a4a2efddd44a8bfe362647 | 0000000000000000000000000000000000000000000000000000000013acd2af
+  [PASS] Claimed(to) = holder (0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647)
+  holder BEM: 0 -> 330093231
+  [PASS] claimed 330093231 >= pendingLive read one block earlier (330089678)
+  [PASS] BEM arrived at the holder (330093231 > 0)
+  [PASS] holder.nonce after one call (1)
+
+=================== 3b. claim() is permissionless: an unrelated account (no signature) claims, BEM still lands at the holder
+  [PASS] outsider 0x90F79bf6EB2c4f870365E785982E1f101E93b906 called claim(key) directly
+  [PASS] Claimed(to) = holder (the NFT owner), not the caller (0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647)
+  [PASS] holder BEM grew without any signature (342887928 > 330093231)
+  stop()/arm() need the NFT owner (custom error 0xa8ee9629 = Ownr()):
+  [PASS] stop(key) from a non-owner reverts Ownr() (custom error 0xa8ee9629)
+  [PASS] arm(circuits,id) from a non-owner reverts Ownr() (custom error 0xa8ee9629)
+
+=================== 4. Holder sends all its BEM to 0x90F79bf6EB2c4f870365E785982E1f101E93b906 (second Bitcoin-signed execute)
+  signs: "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 56 calls 0x5ce033b2bfca3af30b3e8c8457deaf776a8b695a with value 0 and data 0x99d139d3f276b0e731f6ff88140fe4a14834ee8027e1e23ff25676e543d7908a, gas 100000, tip 0, nonce 1, valid until 1791561081"
+  [PASS] BEM.transfer: execute() relayed by 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, nonce 1, gasUsed 83029
+  [PASS] holder BEM = 0 (0)
+  [PASS] outsider received the BEM (342887928)
+
+=================== 5. Holder moves the rig out (third Bitcoin-signed execute), rig keeps mining for the new owner
+  signs: "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 56 calls 0xb1024b89886b9a34aa4ff5f31c411d708b20a14c with value 0 and data 0xa42667132c7ed785dd06c87cff895beb5aad208394f4b273e2f11f69c33adaa7, gas 200000, tip 0, nonce 2, valid until 1791561082"
+  [PASS] transferFrom rig out: execute() relayed by 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, nonce 2, gasUsed 81792
+  [PASS] ownerOf(#16607) back to 0x8eF0590e5DfD7622e6bc0f7CBA16DA5F27E909d1 (0x8eF0590e5DfD7622e6bc0f7CBA16DA5F27E909d1)
+  [PASS] miner status still ACTIVE (1)
+  [PASS] holder.nonce = 3 (3)
+
+=================== 5b. Replay / wrong-key checks
+  [PASS] stale-nonce signature rejected (BadSignature) (custom error 0x5cd5d233)
+  [PASS] signature by a different Bitcoin key rejected (custom error 0x5cd5d233)
+
+=================== 6. Path B — owner of rig #16618 deposits it into RigVault with to = holder (owner impersonated)
+  [PASS] rig #16618 ACTIVE (1)
+  owner 0x9e299340ebF5Fad5BdCd5577054469fA7eaf0c4B, pending 158898680 (deposit() first claims this to the depositor, then pulls BOND = 10000)
+  [PASS] deposit(circuits, #16618, to = holder) value 332945795520078 wei (LayerZero fee), gasUsed 645115
+  [PASS] vault.deposits() incremented -> vault id 4 (4)
+  Deposited: 0x0000000000000000000000000000000000000000000000000000000000000004 0x000000000000000000000000b1024b89886b9a34aa4ff5f31c411d708b20a14c 0x00000000000000000000000000000000000000000000000000000000000040ea | 0000000000000000000000009e299340ebf5fad5bdcd5577054469fa7eaf0c4b 000000000000000000000000750d22d8b6dd3168c2a4a2efddd44a8bfe362647 00000000000000000000000000000000000000000000000000000000000000f3 84d8895a97ba3cdec4af4b987c49ce1a777954132a54d5088007bb2c813a2b62
+  [PASS] Deposited.to (X Layer voucher recipient) = holder (0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647)
+  [PASS] ownerOf(#16618) = the rig's EIP-1167 cell (not the holder) (0x3Ea0Ec03Ce5A8d56Cc2AD7eE269cCAb95F41501B)
+  vault.rigs(4) = 0xb1024b89886B9a34Aa4ff5F31C411D708b20a14C 16618 [1.661e4]   (no depositor/recipient stored on BSC)
+  [PASS] rig keeps mining inside the cell (1)
+  PacketSent to LayerZero emitted (X Layer delivery is NOT simulated: single-chain fork).
+
+=================== 7. Holder harvests vault id 4 via execute(vault.harvest([id])) with value = quoteHarvest(1)
+  pendingLive of the cell's rig after +2 days: 224019166 (BOND is 10000; below that the harvester must add BEM)
+  signs: "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 56 calls 0x48d43345656f0f9510dc3c06cba99dff597617c2 with value 331870456638943 and data 0x3b391da97358d7ad13f50d22079320f89d1232b476518884f70c2bf7240fed76, gas 900000, tip 0, nonce 3, valid until 1791733885"
+  [PASS] harvest([4]): execute() relayed by 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, nonce 3, gasUsed 570520
+  Harvested: 0x7e9b54706efa58a9c67289c2a175a4f3d678e2f8bee92a97a3dbcb4f780d3fe6 | 0000000000000000000000000000000000000000000000000000000000000040 0000000000000000000000000000000000000000000000000000000000000080 0000000000000000000000000000000000000000000000000000000000000001 0000000000000000000000000000000000000000000000000000000000000004 0000000000000000000000000000000000000000000000000000000000000001 0000000000000000000000000d5a429c000000000000000000000000000000f3
+  Claimed(to) inside harvest: 0x0000000000000000000000003ea0ec03ce5a8d56cc2ad7ee269ccab95f41501b  (the cell 0x3Ea0Ec03Ce5A8d56Cc2AD7eE269cCAb95F41501B)
+  [PASS] holder's BSC BEM unchanged: the yield is bridged to X Layer for the voucher holder (0)
+  [PASS] cell swept into the OFT adapter, dust left in cell: 66 (< DUST=100)
+
+=================== 7b. What the holder can NOT do on BSC
+  rescue(id,to) is onlyOwner (3/5 Safe). Holder-signed execute(vault.rescue) eth_call:
+  signs: "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 56 calls 0x48d43345656f0f9510dc3c06cba99dff597617c2 with value 0 and data 0x903e3fe8970b0002d3b1d1625ab1ec9a507a3faf96cef432efe389c61915ad10, gas 300000, tip 0, nonce 4, valid until 1791733885"
+  eth_call execute (rescue (expected revert)) -> Error: execution reverted: OwnableUnauthorizedAccount(0x750D22d8B6dd3168c2a4a2EFDDD44A8BfE362647)
+
+Context:
+- server returned an error response: error code 3: execution reverted: custom error 0x118cdaa7: 000000000000000000000000750d22d8b6dd3168c2a4a2efddd44a8bfe362647, data: "0x118cdaa7000000000000000000000000750d22d8b6dd3168c2a4a2efddd44a8bfe362647"
+  [PASS] rescue reverts OwnableUnauthorizedAccount(holder)
+  Redeem only exists on X Layer (RigVoucher.redeem by the voucher owner) -> see §9.
+
+=================== 8. Path C — the holder deposits a rig it holds into the vault itself (3 signed calls, to = holder)
+  [PASS] rig #16606 ACTIVE (1)
+  [PASS] ownerOf(#16606) = holder (0x750D22d8B6dd3168c2a4a2EFDDD44A8BfE362647)
+  [PASS] pending >= BOND, so deposit()'s own claim() funds the 0.0001 BEM bond (89840528 > 9999)
+  signs: "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 56 calls 0xb1024b89886b9a34aa4ff5f31c411d708b20a14c with value 0 and data 0xc9c8de0bf1e45d8d954ed933f84968e2cb694d901ca718a2bb8fdc83a7341e2b, gas 100000, tip 0, nonce 4, valid until 1791733887"
+  [PASS] approve rig to vault: execute() relayed by 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, nonce 4, gasUsed 92534
+  signs: "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 56 calls 0x5ce033b2bfca3af30b3e8c8457deaf776a8b695a with value 0 and data 0x9f2c053f08c502baa72ae04e162e096ff6bd3c170b7577caba441c9cddfd6a4f, gas 100000, tip 0, nonce 5, valid until 1791733887"
+  [PASS] approve BOND to vault: execute() relayed by 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, nonce 5, gasUsed 82445
+  signs: "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 56 calls 0x48d43345656f0f9510dc3c06cba99dff597617c2 with value 332945795520078 and data 0xa118593e89ee72acd77571623ece6cbcba8de421c0a25ff15226d0fcda66fd07, gas 900000, tip 0, nonce 6, valid until 1791733888"
+  [PASS] deposit(#16606, to = holder): execute() relayed by 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, nonce 6, gasUsed 684712
+  Deposited: 0x0000000000000000000000000000000000000000000000000000000000000005 0x000000000000000000000000b1024b89886b9a34aa4ff5f31c411d708b20a14c 0x00000000000000000000000000000000000000000000000000000000000040de | 000000000000000000000000750d22d8b6dd3168c2a4a2efddd44a8bfe362647 000000000000000000000000750d22d8b6dd3168c2a4a2efddd44a8bfe362647 000000000000000000000000000000000000000000000000000000000000003d 8989b10a9da779e3a0566ea1de5f42e4d058c66bb1ede824fac67558dc7ec942
+  [PASS] Deposited.from = holder (0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647)
+  [PASS] Deposited.to = holder (0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647)
+  [PASS] rig #16606 now in its cell (0xb148912BE852F9282506662d054Ab5A7F0152a37)
+  holder BEM after self-deposit (pending - BOND kept): 89831504
+
+=================== 9. X Layer fork: anvil :8602 <- https://xlayerrpc.okx.com @ 72698700 — RIG voucher #3 in the SAME holder address
+  [PASS] chain id (196)
+  [PASS] holder not yet deployed on X Layer (0x)
+  [PASS] holder deployed on X Layer through the same deterministic proxy
+  [PASS] code exists at the SAME address 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 196
+  funded holder with 0.1 OKB
+  voucher: "TapeOut Rig" / "RIG", rigs(3) = 0xb1024b89886B9a34Aa4ff5F31C411D708b20a14C 1791377786 [1.791e9] 16699 [1.669e4] 2 
+  [PASS] voucher ownerOf(3) = holder (0x750D22d8B6dd3168c2a4a2EFDDD44A8BfE362647)
+  [PASS] payeeAt(3, now) = holder (future harvests pay the holder) (0x750D22d8B6dd3168c2a4a2EFDDD44A8BfE362647)
+  powerHeld(holder) = 2
+  redeem dry run: execute(voucher.redeem(3, to = holder)) with value quoteRedeem = 2420404216477104, eth_call only:
+  signs: "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 196 calls 0x9cfc959cd42b2e1d39a0d850c528210e818ae520 with value 2420404216477104 and data 0x72a5cb41176467b200e6e3f0a7987d1fe92495717a1f7272cbe483f2fb29641d, gas 600000, tip 0, nonce 0, valid until 1791471338"
+  eth_call execute (redeem (dry)) -> 0x00000000000000000000000000000000000000000000000000000000000000200000000000000000000000000000000000000000000000000000000000000020e831f9683b270676576c29f471c57ab50144c1b338c6f23521be552748c18d80
+  [PASS] holder-signed redeem would succeed (burn voucher, LayerZero message to the vault, rig to holder on BSC)
+  signs: "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 196 calls 0x9cfc959cd42b2e1d39a0d850c528210e818ae520 with value 0 and data 0x96650b6934efa22889b0e888c99653aec910a239d0c270fa4fd340e64ad36892, gas 200000, tip 0, nonce 0, valid until 1791471338"
+  [PASS] voucher out: execute() relayed by 0x3C44CdDdB6a900fa2b585dd299e03d12FA4293BC, nonce 0, gasUsed 192305
+  [PASS] voucher back to 0xd18B9615388AfACf2c95282980c6B84A235a32a8 (0xd18B9615388AfACf2c95282980c6B84A235a32a8)
+  [PASS] X Layer holder nonce = 1 (independent per chain) (1)
+
+=================== RESULT: 65 passed, 0 failed

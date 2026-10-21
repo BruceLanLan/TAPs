@@ -1,0 +1,213 @@
+{
+ "wallet": "leather",
+ "atype": "p2tr",
+ "ext": "6.114.0",
+ "accounts": [
+  "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr"
+ ],
+ "publicKey": "03cc8a4bc64d897bddc5fbc2f670f7a8ba0b386779106cf1223c6fc5d7cd6fc115",
+ "exec": {
+  "holder": "0xc692affbbfae51c87535f0757cf45b106d7bdd64",
+  "nft": "0x1f5cb4aeae1807bf60c3b9c0d8adbcc14e91f12c",
+  "recipient": "0x00000000000000000000000000000000000c0b7a",
+  "tokenId": 920,
+  "data": "0x23b872dd000000000000000000000000c692affbbfae51c87535f0757cf45b106d7bdd6400000000000000000000000000000000000000000000000000000000000c0b7a0000000000000000000000000000000000000000000000000000000000000398",
+  "callGas": 150000,
+  "tip": 0,
+  "deadline": 1794283712
+ },
+ "signs": {
+  "sign": {
+   "message": "TapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+   "chars": 156,
+   "popupText": "1\nAccount 1\nWallet 1\n0.00 BTC\nSIGN MESSAGE\nRequested by http://127.0.0.1:18791 (127.0.0.1). This message is signed by bc1p5…edrcr\nTapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 signs 0xabababababababababababababababababababababababababababababababab\nNo fees are incurred\nMainnet\nCancel\nSign\nBy signing this message, you prove that you own this address",
+   "popupContainsFullText": true,
+   "popupLayout": [
+    {
+     "tag": "SPAN",
+     "visible": true,
+     "textLen": 156,
+     "equalsMessage": true,
+     "containsTail": true,
+     "clientHeight": 96,
+     "scrollHeight": 96,
+     "overflowY": "visible",
+     "textOverflow": "clip",
+     "lineClamp": "none",
+     "whiteSpace": "normal",
+     "wordBreak": "normal",
+     "rect": [
+      50,
+      249,
+      290,
+      96
+     ],
+     "clippingAncestors": [
+      {
+       "tag": "DIV",
+       "overflowY": "auto",
+       "maxHeight": "none",
+       "clientHeight": 144,
+       "scrollHeight": 144
+      }
+     ]
+    }
+   ],
+   "popupViewport": {
+    "width": 390,
+    "height": 756
+   },
+   "raw": {
+    "jsonrpc": "2.0",
+    "id": "c5388eca-aeb9-48fe-b7c4-c0e6ad9354bf",
+    "result": {
+     "signature": "AUC9puFAyGifnDi5JV60UzqR/QRGFEqQKCWJ3Ken0S4wbUem8bt2K2zI9blRZ4olVhIOwViKz5U1BQUbiuy+lFzR",
+     "address": "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr",
+     "message": "TapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 signs 0xabababababababababababababababababababababababababababababababab"
+    }
+   },
+   "result": {
+    "ok": "AUC9puFAyGifnDi5JV60UzqR/QRGFEqQKCWJ3Ken0S4wbUem8bt2K2zI9blRZ4olVhIOwViKz5U1BQUbiuy+lFzR"
+   },
+   "cliVerify": "valid",
+   "cliWitness": "0x0140bda6e140c8689f9c38b9255eb4533a91fd0446144a90282589dca7a7d12e306d47a6f1bb762b6cc8f5b951678a2556120ec1588acf953505051b8aecbe945cd1",
+   "rawLen": 66,
+   "rawHex": "0140bda6e140c8689f9c38b9255eb4533a91fd0446144a90282589dca7a7d12e306d47a6f1bb762b6cc8f5b951678a2556120ec1588acf953505051b8aecbe945cd1",
+   "witnessShape": {
+    "items": [
+     64
+    ],
+    "trailing": 0,
+    "sighash": "DEFAULT (64-byte Schnorr)"
+   }
+  },
+  "exec": {
+   "message": "TapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 calls 0x1f5cb4aeae1807bf60c3b9c0d8adbcc14e91f12c with value 0 and data 0x1a7b75dc5350c657842d2e5f787b5bcc9557550170f63358f3c944afba4598c3, gas 150000, tip 0, nonce 0, valid until 1794283712",
+   "chars": 273,
+   "popupText": "1\nAccount 1\nWallet 1\n0.00 BTC\nSIGN MESSAGE\nRequested by http://127.0.0.1:18791 (127.0.0.1). This message is signed by bc1p5…edrcr\nTapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 calls 0x1f5cb4aeae1807bf60c3b9c0d8adbcc14e91f12c with value 0 and data 0x1a7b75dc5350c657842d2e5f787b5bcc9557550170f63358f3c944afba4598c3, gas 150000, tip 0, nonce 0, valid until 1794283712\nNo fees are incurred\nMainnet\nCancel\nSign\nBy signing this message, you prove that you own this address",
+   "popupContainsFullText": true,
+   "popupLayout": [
+    {
+     "tag": "SPAN",
+     "visible": true,
+     "textLen": 273,
+     "equalsMessage": true,
+     "containsTail": true,
+     "clientHeight": 192,
+     "scrollHeight": 192,
+     "overflowY": "visible",
+     "textOverflow": "clip",
+     "lineClamp": "none",
+     "whiteSpace": "normal",
+     "wordBreak": "normal",
+     "rect": [
+      50,
+      249,
+      290,
+      192
+     ],
+     "clippingAncestors": [
+      {
+       "tag": "DIV",
+       "overflowY": "auto",
+       "maxHeight": "none",
+       "clientHeight": 240,
+       "scrollHeight": 240
+      }
+     ]
+    }
+   ],
+   "popupViewport": {
+    "width": 390,
+    "height": 756
+   },
+   "raw": {
+    "jsonrpc": "2.0",
+    "id": "83e63ccb-7f06-4743-a43a-0439fb44efde",
+    "result": {
+     "signature": "AUD6Ku5HdOaLbjdOQBP6fZabt0OzRgfkClmr0tPnOEScjpEy8ts9BTc9glGpG7I9QVCEsQJSfPDeNEUPNGvjGO5R",
+     "address": "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr",
+     "message": "TapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 calls 0x1f5cb4aeae1807bf60c3b9c0d8adbcc14e91f12c with value 0 and data 0x1a7b75dc5350c657842d2e5f787b5bcc9557550170f63358f3c944afba4598c3, gas 150000, tip 0, nonce 0, valid until 1794283712"
+    }
+   },
+   "result": {
+    "ok": "AUD6Ku5HdOaLbjdOQBP6fZabt0OzRgfkClmr0tPnOEScjpEy8ts9BTc9glGpG7I9QVCEsQJSfPDeNEUPNGvjGO5R"
+   },
+   "cliVerify": "valid",
+   "cliWitness": "0x0140fa2aee4774e68b6e374e4013fa7d969bb743b34607e40a59abd2d3e738449c8e9132f2db3d05373d8251a91bb23d415084b102527cf0de34450f346be318ee51",
+   "rawLen": 66,
+   "rawHex": "0140fa2aee4774e68b6e374e4013fa7d969bb743b34607e40a59abd2d3e738449c8e9132f2db3d05373d8251a91bb23d415084b102527cf0de34450f346be318ee51",
+   "witnessShape": {
+    "items": [
+     64
+    ],
+    "trailing": 0,
+    "sighash": "DEFAULT (64-byte Schnorr)"
+   }
+  },
+  "call": {
+   "message": "TapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 calls 0x00000000000000000000000000000000000000aa with value 0 and data 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470, gas 0, tip 0, nonce 1, valid until 1794283712",
+   "chars": 268,
+   "popupText": "1\nAccount 1\nWallet 1\n0.00 BTC\nSIGN MESSAGE\nRequested by http://127.0.0.1:18791 (127.0.0.1). This message is signed by bc1p5…edrcr\nTapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 calls 0x00000000000000000000000000000000000000aa with value 0 and data 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470, gas 0, tip 0, nonce 1, valid until 1794283712\nNo fees are incurred\nMainnet\nCancel\nSign\nBy signing this message, you prove that you own this address",
+   "popupContainsFullText": true,
+   "popupLayout": [
+    {
+     "tag": "SPAN",
+     "visible": true,
+     "textLen": 268,
+     "equalsMessage": true,
+     "containsTail": true,
+     "clientHeight": 192,
+     "scrollHeight": 192,
+     "overflowY": "visible",
+     "textOverflow": "clip",
+     "lineClamp": "none",
+     "whiteSpace": "normal",
+     "wordBreak": "normal",
+     "rect": [
+      50,
+      249,
+      290,
+      192
+     ],
+     "clippingAncestors": [
+      {
+       "tag": "DIV",
+       "overflowY": "auto",
+       "maxHeight": "none",
+       "clientHeight": 240,
+       "scrollHeight": 240
+      }
+     ]
+    }
+   ],
+   "popupViewport": {
+    "width": 390,
+    "height": 756
+   },
+   "raw": {
+    "jsonrpc": "2.0",
+    "id": "835eb9c5-c802-41b9-bfd7-a07348fc8c53",
+    "result": {
+     "signature": "AUC9pxnEL9VE3E/1eTM5XsBWFpCS+kHG7mS+DexEWKmfE5BGBwZZcy6kDlSiasU3NVeatonv9Ia0kZTwZEA/Jf76",
+     "address": "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr",
+     "message": "TapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 calls 0x00000000000000000000000000000000000000aa with value 0 and data 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470, gas 0, tip 0, nonce 1, valid until 1794283712"
+    }
+   },
+   "result": {
+    "ok": "AUC9pxnEL9VE3E/1eTM5XsBWFpCS+kHG7mS+DexEWKmfE5BGBwZZcy6kDlSiasU3NVeatonv9Ia0kZTwZEA/Jf76"
+   },
+   "cliVerify": "valid",
+   "cliWitness": "0x0140bda719c42fd544dc4ff57933395ec056169092fa41c6ee64be0dec4458a99f139046070659732ea40e54a26ac53735579ab689eff486b49194f064403f25fefa",
+   "rawLen": 66,
+   "rawHex": "0140bda719c42fd544dc4ff57933395ec056169092fa41c6ee64be0dec4458a99f139046070659732ea40e54a26ac53735579ab689eff486b49194f064403f25fefa",
+   "witnessShape": {
+    "items": [
+     64
+    ],
+    "trailing": 0,
+    "sighash": "DEFAULT (64-byte Schnorr)"
+   }
+  }
+ }
+}

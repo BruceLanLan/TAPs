@@ -1,0 +1,224 @@
+{
+ "label": "merged-swar",
+ "chainId": 56,
+ "creationCodeBytes": 8220,
+ "creationCodeKeccak": "0x315a80a90c37c376f80200e57f2270931a4b66c6a2620e111dffa12191dcf022",
+ "callGas": 100000,
+ "tip": 10000000000000000,
+ "kinds": {
+  "p2tr": {
+   "holder": "0x093f4be0fdf3cfe88e8f6f4b547408c22ec0da1f",
+   "deploy": 1679573,
+   "runtimeBytes": 7443,
+   "isValidSignature": [
+    {
+     "gas": 32908,
+     "ecrecover": null
+    },
+    {
+     "gas": 32908,
+     "ecrecover": null
+    },
+    {
+     "gas": 32908,
+     "ecrecover": null
+    },
+    {
+     "gas": 32893,
+     "ecrecover": null
+    },
+    {
+     "gas": 32920,
+     "ecrecover": null
+    },
+    {
+     "gas": 32920,
+     "ecrecover": null
+    },
+    {
+     "gas": 32893,
+     "ecrecover": null
+    },
+    {
+     "gas": 32881,
+     "ecrecover": null
+    }
+   ],
+   "execute": {
+    "gas": 88346,
+    "ecrecover": null
+   },
+   "executeNext": {
+    "gas": 71246,
+    "ecrecover": null
+   },
+   "executeTip": {
+    "gas": 96558,
+    "ecrecover": null
+   },
+   "separate": {
+    "1": {
+     "gas": 88346,
+     "txs": 1
+    },
+    "2": {
+     "gas": 159592,
+     "txs": 2
+    },
+    "4": {
+     "gas": 302030,
+     "txs": 4
+    },
+    "8": {
+     "gas": 582133,
+     "txs": 8
+    }
+   },
+   "batch": {
+    "1": {
+     "gas": 92965,
+     "chars": 286,
+     "calldataBytes": 612,
+     "ecrecover": null
+    },
+    "2": {
+     "gas": 113155,
+     "chars": 435,
+     "calldataBytes": 932,
+     "ecrecover": null
+    },
+    "4": {
+     "gas": 153636,
+     "chars": 733,
+     "calldataBytes": 1572,
+     "ecrecover": null
+    },
+    "8": {
+     "gas": 229817,
+     "chars": 1329,
+     "calldataBytes": 2852,
+     "ecrecover": null
+    }
+   },
+   "batch8Tip": {
+    "gas": 238041,
+    "chars": 1345,
+    "calldataBytes": 2852,
+    "ecrecover": null
+   },
+   "batch4Next": {
+    "gas": 136551,
+    "chars": 733,
+    "calldataBytes": 1572,
+    "ecrecover": null
+   }
+  },
+  "p2wpkh": {
+   "holder": "0x81e8d87c4d6a156923d5ec7d21bae98deeb806b7",
+   "deploy": 1677317,
+   "runtimeBytes": 7443,
+   "isValidSignature": [
+    {
+     "gas": 38805,
+     "ecrecover": 2
+    },
+    {
+     "gas": 35535,
+     "ecrecover": 1
+    },
+    {
+     "gas": 35606,
+     "ecrecover": 1
+    },
+    {
+     "gas": 38793,
+     "ecrecover": 2
+    },
+    {
+     "gas": 35618,
+     "ecrecover": 1
+    },
+    {
+     "gas": 35547,
+     "ecrecover": 1
+    },
+    {
+     "gas": 35547,
+     "ecrecover": 1
+    },
+    {
+     "gas": 38876,
+     "ecrecover": 2
+    }
+   ],
+   "execute": {
+    "gas": 91056,
+    "ecrecover": 1
+   },
+   "executeNext": {
+    "gas": 77214,
+    "ecrecover": 2
+   },
+   "executeTip": {
+    "gas": 102470,
+    "ecrecover": 2
+   },
+   "separate": {
+    "1": {
+     "gas": 91056,
+     "txs": 1
+    },
+    "2": {
+     "gas": 168270,
+     "txs": 2
+    },
+    "4": {
+     "gas": 322698,
+     "txs": 4
+    },
+    "8": {
+     "gas": 620202,
+     "txs": 8
+    }
+   },
+   "batch": {
+    "1": {
+     "gas": 95675,
+     "chars": 286,
+     "calldataBytes": 644,
+     "ecrecover": 1
+    },
+    "2": {
+     "gas": 119150,
+     "chars": 435,
+     "calldataBytes": 964,
+     "ecrecover": 2
+    },
+    "4": {
+     "gas": 156373,
+     "chars": 733,
+     "calldataBytes": 1604,
+     "ecrecover": 1
+    },
+    "8": {
+     "gas": 235714,
+     "chars": 1329,
+     "calldataBytes": 2884,
+     "ecrecover": 2
+    }
+   },
+   "batch8Tip": {
+    "gas": 240766,
+    "chars": 1345,
+    "calldataBytes": 2884,
+    "ecrecover": 1
+   },
+   "batch4Next": {
+    "gas": 142436,
+    "chars": 733,
+    "calldataBytes": 1604,
+    "ecrecover": 2
+   }
+  }
+ }
+}

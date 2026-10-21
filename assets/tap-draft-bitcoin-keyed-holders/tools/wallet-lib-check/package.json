@@ -1,0 +1,1 @@
+{"name":"r10-wallets","private":true,"type":"module","dependencies":{"@scure/btc-signer":"2.4.1","bip322-js":"4.0.0","bip322-js-v3":"npm:bip322-js@3.0.0"}}

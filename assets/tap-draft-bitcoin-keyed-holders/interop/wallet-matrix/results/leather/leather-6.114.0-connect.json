@@ -1,0 +1,63 @@
+{
+ "raw": {
+  "ok": {
+   "jsonrpc": "2.0",
+   "id": "a8120818-a7d6-4b0b-9ea3-8051743a4537",
+   "result": {
+    "addresses": [
+     {
+      "symbol": "BTC",
+      "type": "p2wpkh",
+      "address": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu",
+      "publicKey": "0330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+      "derivationPath": "m/84'/0'/0'/0/0",
+      "descriptor": "wpkh(xpub6CatWdiZiodmUeTDp8LT5or8nmbKNcuyvz7WyksVFkKB4RHwCD3XyuvPEbvqAQY3rAPshWcMLoP2fMFMKHPJ4ZeZXYVUhLv1VMrjPC7PW6V)",
+      "fingerprint": "73c5da0a"
+     },
+     {
+      "symbol": "BTC",
+      "type": "p2tr",
+      "address": "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr",
+      "publicKey": "03cc8a4bc64d897bddc5fbc2f670f7a8ba0b386779106cf1223c6fc5d7cd6fc115",
+      "tweakedPublicKey": "cc8a4bc64d897bddc5fbc2f670f7a8ba0b386779106cf1223c6fc5d7cd6fc115",
+      "derivationPath": "m/86'/0'/0'/0/0",
+      "descriptor": "tr(xpub6BgBgsespWvERF3LHQu6CnqdvfEvtMcQjYrcRzx53QJjSxarj2afYWcLteoGVky7D3UKDP9QyrLprQ3VCECoY49yfdDEHGCtMMj92pReUsQ)",
+      "fingerprint": "73c5da0a"
+     },
+     {
+      "symbol": "STX",
+      "kind": "single-sig",
+      "address": "SPC5KHM41H6WHAST7MWWDD807YSPRQKJ69FSH54J",
+      "publicKey": "03d5d038bce81b3965314dba54f636f093c7dbdd6617cded013a53474fbccb100c"
+     }
+    ]
+   }
+  }
+ },
+ "popupText": "CONNECT APP\nRequested by 127.0.0.1\nWith account\n1\nAccount 1\nSPC5…H54J\nbc1q…6fyu\nThis app would like to\n\nView your balances and activity\n\nRequest approval for transactions\n\nDeny\nConfirm",
+ "addresses": [
+  "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu",
+  "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr"
+ ],
+ "byKind": {
+  "p2wpkh": {
+   "symbol": "BTC",
+   "type": "p2wpkh",
+   "address": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu",
+   "publicKey": "0330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+   "derivationPath": "m/84'/0'/0'/0/0",
+   "descriptor": "wpkh(xpub6CatWdiZiodmUeTDp8LT5or8nmbKNcuyvz7WyksVFkKB4RHwCD3XyuvPEbvqAQY3rAPshWcMLoP2fMFMKHPJ4ZeZXYVUhLv1VMrjPC7PW6V)",
+   "fingerprint": "73c5da0a"
+  },
+  "p2tr": {
+   "symbol": "BTC",
+   "type": "p2tr",
+   "address": "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr",
+   "publicKey": "03cc8a4bc64d897bddc5fbc2f670f7a8ba0b386779106cf1223c6fc5d7cd6fc115",
+   "tweakedPublicKey": "cc8a4bc64d897bddc5fbc2f670f7a8ba0b386779106cf1223c6fc5d7cd6fc115",
+   "derivationPath": "m/86'/0'/0'/0/0",
+   "descriptor": "tr(xpub6BgBgsespWvERF3LHQu6CnqdvfEvtMcQjYrcRzx53QJjSxarj2afYWcLteoGVky7D3UKDP9QyrLprQ3VCECoY49yfdDEHGCtMMj92pReUsQ)",
+   "fingerprint": "73c5da0a"
+  }
+ }
+}

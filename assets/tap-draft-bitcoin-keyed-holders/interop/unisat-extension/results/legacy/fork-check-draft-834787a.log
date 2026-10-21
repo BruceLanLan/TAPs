@@ -1,0 +1,20 @@
+== Taproot (P2TR) wallet 1.7.22 bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr -> 0xa5671cc1283bce98aef473dfad1f92a0107aad25
+ holder code bytes: 7854
+ isValidSignature, wallet output: 0x1626ba7e
+ isValidSignature, last byte altered: 0xffffffff
+ isValidSignature, other digest: 0xffffffff
+ ownerOf before: 0xA5671cc1283bCe98AEF473dFad1F92a0107AAD25 (holder)
+ execute status: 0x1 gasUsed 165968
+ ownerOf after: 0x00000000000000000000000000000000000C0b7a expected 0x00000000000000000000000000000000000c0b7a
+ nonce after: 1
+ replay: rejected
+== Native Segwit (P2WPKH) wallet 1.7.22 bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu -> 0x844d2e8f076501fcebaae5299ff87cede9b2f1bd
+ holder code bytes: 7854
+ isValidSignature, wallet output: 0x1626ba7e
+ isValidSignature, last byte altered: 0xffffffff
+ isValidSignature, other digest: 0xffffffff
+ ownerOf before: 0x844D2e8F076501FCEBAAe5299FF87cede9b2f1bD (holder)
+ execute status: 0x1 gasUsed 192865
+ ownerOf after: 0x00000000000000000000000000000000000C0b7a expected 0x00000000000000000000000000000000000c0b7a
+ nonce after: 1
+ replay: rejected

@@ -1,0 +1,117 @@
+# Audit PoCs (holder-final-lab-audit/poc/contracts, copied unchanged except one line in test_batch_calls_holder_itself)
+# run against commit 187749d in a scratch copy: forge test --match-path 'test/audit/*' --gas-limit 100000000000 --fuzz-seed 0x5eed2 -vv
+Sat 10 Oct 2026 14:56:05 CST
+No files changed, compilation skipped
+Ran 17 tests for test/audit/AuditSemantics.t.sol:AuditSemantics
+[PASS] test_batchMessage_renders_unexecutable_batch() (gas: 109908)
+[PASS] test_batch_calls_holder_itself() (gas: 363536)
+[PASS] test_batch_floor_sweep_binding_check() (gas: 6990215458)
+Logs:
+  least outer gas 4123106
+  generous: 8th callee saw 2999701
+  0x1c26714c
+  successes in the 6,000-gas sweep 3000
+[PASS] test_batch_floor_sweep_last_call() (gas: 2317115885)
+Logs:
+  least outer gas 1194752
+  generous: 8th callee saw 119701
+  0x1c26714c
+  successes in the 6,000-gas sweep 3000
+[PASS] test_callee_reenters_next_nonce_and_event_order() (gas: 474517)
+[PASS] test_execute_floor_sweep_24k() (gas: 1669221443)
+Logs:
+  callGas 100000
+    least outer gas 162979
+    successes in sweep / below the least 4000 0
+  callGas 3000000
+    least outer gas 3108240
+    successes in sweep / below the least 4000 0
+[PASS] test_execute_huge_callGas_panics_after_signature() (gas: 160175)
+[PASS] test_frontrun_cost_to_relayer() (gas: 2703995)
+Logs:
+  data bytes per call 0
+    execution gas of the reverted batch (no intrinsic/calldata gas) 118782
+    calldata bytes 1860
+  data bytes per call 24000
+    execution gas of the reverted batch (no intrinsic/calldata gas) 1031292
+    calldata bytes 193860
+[PASS] test_isValidSignature_gas_cap_false_negative() (gas: 261387269)
+Logs:
+  least cap returning the magic value 20056
+  caps in [least - 8000, least) that return normally (false negatives) 0
+  caps in that window that revert 8000
+  least cap returning the magic value 14845
+  caps in [least - 8000, least) that return normally (false negatives) 0
+  caps in that window that revert 8000
+[PASS] test_noncanonical_init_code_gives_other_working_holders() (gas: 7995740)
+[PASS] test_returndata_bomb_cost() (gas: 2549404)
+Logs:
+  return bytes per call 0
+    ok 1
+    gas used by executeBatch (8 calls, callGas 400k each) 181438
+  return bytes per call 32000
+    ok 1
+    gas used by executeBatch (8 calls, callGas 400k each) 224465
+  return bytes per call 100000
+    ok 1
+    gas used by executeBatch (8 calls, callGas 400k each) 412823
+  return bytes per call 200000
+    ok 1
+    gas used by executeBatch (8 calls, callGas 400k each) 945620
+[PASS] test_returndata_bomb_cost_execute() (gas: 1515997)
+Logs:
+  execute: return bytes 0
+    ok 1
+    gas used 78567
+  execute: return bytes 200000
+    ok 1
+    gas used 1160715
+[PASS] test_revert_bomb_turns_typed_error_into_oog() (gas: 755092)
+Logs:
+  revert data length with 1.2M gas 356
+  revert data length with 3M gas 356
+[PASS] test_same_code_other_address_rejects() (gas: 375040)
+[PASS] test_short_and_unknown_calldata() (gas: 343614)
+[PASS] test_tip_recipient_replays_same_batch() (gas: 1101290)
+[PASS] test_values_over_balance() (gas: 490907)
+Suite result: ok. 17 passed; 0 failed; 0 skipped; finished in 26.78s (27.67s CPU time)
+Ran 3 tests for test/audit/AuditAbi.t.sol:AuditAbi
+[PASS] testFuzz_batch_calldata_mutation(uint256,uint256,uint256,uint256,bool) (runs: 60000, μ: 171955, ~: 153154)
+[PASS] testFuzz_execute_calldata_mutation(uint256,uint256,uint256,uint256) (runs: 60000, μ: 137138, ~: 131899)
+[PASS] testFuzz_isValidSignature_calldata_mutation(bytes32,uint256,uint256,uint256,uint256) (runs: 60000, μ: 84640, ~: 81937)
+Suite result: ok. 3 passed; 0 failed; 0 skipped; finished in 85.16s (120.50s CPU time)
+Ran 5 tests for test/audit/AuditMsg.t.sol:AuditMsg
+[PASS] testFuzz_batchMessage_vs_ref(uint256,uint256,uint256,uint256,uint256,uint256,uint64) (runs: 100000, μ: 546662, ~: 538798)
+[PASS] testFuzz_callMessage_vs_ref(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint64) (runs: 100000, μ: 229148, ~: 220055)
+[PASS] testFuzz_executeBatch_signs_ref_text(uint256,uint256,uint256,uint256,uint256,uint64,uint256) (runs: 50000, μ: 806474, ~: 761023)
+[PASS] testFuzz_execute_signs_ref_text(uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint64,uint256) (runs: 50000, μ: 372613, ~: 363686)
+[PASS] testFuzz_signMessage_vs_ref(uint256,uint256,bytes32) (runs: 100000, μ: 74880, ~: 71898)
+Suite result: ok. 5 passed; 0 failed; 0 skipped; finished in 94.36s (408.98s CPU time)
+Ran 6 tests for test/audit/AuditPyOracle.t.sol:AuditPyOracle
+[PASS] test_corpus_1() (gas: 1526670634)
+Logs:
+  corpus-1.txt 6510 221
+[PASS] test_corpus_2() (gas: 1566659124)
+Logs:
+  corpus-2.txt 6510 216
+[PASS] test_corpus_3() (gas: 1392912182)
+Logs:
+  corpus-3.txt 6510 220
+[PASS] test_corpus_4() (gas: 1564428559)
+Logs:
+  corpus-4.txt 6510 221
+[PASS] test_corpus_5() (gas: 1469872639)
+Logs:
+  corpus-5.txt 6510 216
+[PASS] test_corpus_6() (gas: 1351726065)
+Logs:
+  corpus-6.txt 6510 220
+Suite result: ok. 6 passed; 0 failed; 0 skipped; finished in 94.36s (6.34s CPU time)
+Ran 4 tests for test/audit/AuditSigDiff.t.sol:AuditSigDiff
+[PASS] testFuzz_holder_isValidSignature(uint256,bytes32,uint256,uint256,uint256) (runs: 150000, μ: 1194177, ~: 1172238)
+[PASS] testFuzz_p2tr_structured(uint256,uint256,uint256,uint256,uint256,uint256) (runs: 400000, μ: 110147, ~: 107345)
+[PASS] testFuzz_p2wpkh_structured(uint256,uint256,uint256,uint256,uint256,uint256) (runs: 400000, μ: 143088, ~: 141982)
+[PASS] testFuzz_raw_witness(bytes,bytes,bytes32,bool,uint8) (runs: 300000, μ: 19206, ~: 18632)
+Suite result: ok. 4 passed; 0 failed; 0 skipped; finished in 94.36s (276.90s CPU time)
+Ran 5 test suites in 94.36s (395.02s CPU time): 35 tests passed, 0 failed, 0 skipped (35 total tests)
+Sat 10 Oct 2026 14:57:39 CST

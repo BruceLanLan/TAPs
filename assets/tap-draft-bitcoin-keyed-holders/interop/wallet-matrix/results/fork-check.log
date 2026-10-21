@@ -1,0 +1,43 @@
+fork of chain 56 at block 126957655
+== xverse 2.9.3 p2tr bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr -> 0xc692affbbfae51c87535f0757cf45b106d7bdd64
+ holder code bytes: 7092
+ executeBatch transfers-8 (1329 chars): ok, gasUsed 284792, tokens moved 8; replay rejected
+ executeBatch mixed-3 (610 chars): ok, gasUsed 196238, tokens moved 2; replay rejected
+ isValidSignature: wallet output 0x1626ba7e, last byte altered 0xffffffff, other digest 0xffffffff
+ execute NFT #920: owner before 0xc692affbbfae51c87535f0757cf45b106d7bdd64, ok gasUsed 115808, owner after 0x00000000000000000000000000000000000c0b7a (expected 0x00000000000000000000000000000000000c0b7a); replay rejected
+ execute empty call (nonce 1): ok gasUsed 56270, nonce now 2; replay rejected
+== leather 6.114.0 p2tr bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr -> 0xc692affbbfae51c87535f0757cf45b106d7bdd64
+ holder code bytes: 7092
+ executeBatch transfers-8 (1329 chars): ok, gasUsed 284753, tokens moved 8; replay rejected
+ executeBatch mixed-3 (610 chars): ok, gasUsed 196265, tokens moved 2; replay rejected
+ isValidSignature: wallet output 0x1626ba7e, last byte altered 0xffffffff, other digest 0xffffffff
+ execute NFT #920: owner before 0xc692affbbfae51c87535f0757cf45b106d7bdd64, ok gasUsed 115835, owner after 0x00000000000000000000000000000000000c0b7a (expected 0x00000000000000000000000000000000000c0b7a); replay rejected
+ execute empty call (nonce 1): ok gasUsed 56243, nonce now 2; replay rejected
+== okx 4.18.1 p2tr bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr -> 0xc692affbbfae51c87535f0757cf45b106d7bdd64
+ holder code bytes: 7092
+ executeBatch transfers-8 (1329 chars): ok, gasUsed 284765, tokens moved 8; replay rejected
+ executeBatch mixed-3 (610 chars): ok, gasUsed 196265, tokens moved 2; replay rejected
+ isValidSignature: wallet output 0x1626ba7e, last byte altered 0xffffffff, other digest 0xffffffff
+ execute NFT #920: owner before 0xc692affbbfae51c87535f0757cf45b106d7bdd64, ok gasUsed 115835, owner after 0x00000000000000000000000000000000000c0b7a (expected 0x00000000000000000000000000000000000c0b7a); replay rejected
+ execute empty call (nonce 1): ok gasUsed 56243, nonce now 2; replay rejected
+== xverse 2.9.3 p2wpkh bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu -> 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b
+ holder code bytes: 7092
+ executeBatch transfers-8 (1329 chars): ok, gasUsed 290665, tokens moved 8; replay rejected
+ executeBatch mixed-3 (610 chars): ok, gasUsed 202245, tokens moved 2; replay rejected
+ isValidSignature: wallet output 0x1626ba7e, last byte altered 0xffffffff, other digest 0xffffffff
+ execute NFT #920: owner before 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b, ok gasUsed 118462, owner after 0x00000000000000000000000000000000000c0b7a (expected 0x00000000000000000000000000000000000c0b7a); replay rejected
+ execute empty call (nonce 1): ok gasUsed 58980, nonce now 2; replay rejected
+== leather 6.114.0 p2wpkh bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu -> 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b
+ holder code bytes: 7092
+ executeBatch transfers-8 (1329 chars): ok, gasUsed 290665, tokens moved 8; replay rejected
+ executeBatch mixed-3 (610 chars): ok, gasUsed 202245, tokens moved 2; replay rejected
+ isValidSignature: wallet output 0x1626ba7e, last byte altered 0xffffffff, other digest 0xffffffff
+ execute NFT #920: owner before 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b, ok gasUsed 121803, owner after 0x00000000000000000000000000000000000c0b7a (expected 0x00000000000000000000000000000000000c0b7a); replay rejected
+ execute empty call (nonce 1): ok gasUsed 62238, nonce now 2; replay rejected
+== okx 4.18.1 p2wpkh bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu -> 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b
+ holder code bytes: 7092
+ executeBatch transfers-8 (1329 chars): ok, gasUsed 290665, tokens moved 8; replay rejected
+ executeBatch mixed-3 (610 chars): ok, gasUsed 202245, tokens moved 2; replay rejected
+ isValidSignature: wallet output 0x1626ba7e, last byte altered 0xffffffff, other digest 0xffffffff
+ execute NFT #920: owner before 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b, ok gasUsed 121708, owner after 0x00000000000000000000000000000000000c0b7a (expected 0x00000000000000000000000000000000000c0b7a); replay rejected
+ execute empty call (nonce 1): ok gasUsed 62143, nonce now 2; replay rejected

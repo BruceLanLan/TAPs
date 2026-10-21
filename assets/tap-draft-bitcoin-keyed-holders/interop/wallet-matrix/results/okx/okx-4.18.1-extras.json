@@ -1,0 +1,265 @@
+{
+ "p2wpkh-default-ecdsa": {
+  "kind": "p2wpkh",
+  "address": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu",
+  "type": "(none: ecdsa default)",
+  "message": "TapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+  "popupText": "Confirm Signature request\nblank\n127.0.0.1:18791\nWallet used\nbc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu\n\u94b1\u5305B - \u94b1\u5305\nData\nReject\nConfirm",
+  "popupContainsFullText": false,
+  "popupLayout": [],
+  "popupViewport": {
+   "width": 360,
+   "height": 720
+  },
+  "expanded": {
+   "popupText": "Confirm Signature request\nblank\n127.0.0.1:18791\nWallet used\nbc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu\n\u94b1\u5305B - \u94b1\u5305\nData\nReject\nConfirm\nData\nTapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+   "popupContainsFullText": true,
+   "popupLayout": [
+    {
+     "tag": "DIV",
+     "visible": true,
+     "textLen": 156,
+     "equalsMessage": true,
+     "containsTail": true,
+     "clientHeight": 80,
+     "scrollHeight": 80,
+     "overflowY": "visible",
+     "textOverflow": "clip",
+     "lineClamp": "none",
+     "whiteSpace": "pre-wrap",
+     "wordBreak": "normal",
+     "rect": [
+      16,
+      624,
+      328,
+      80
+     ],
+     "clippingAncestors": [
+      {
+       "tag": "DIV",
+       "overflowY": "auto",
+       "maxHeight": "none",
+       "clientHeight": 80,
+       "scrollHeight": 80
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "auto",
+       "maxHeight": "none",
+       "clientHeight": 116,
+       "scrollHeight": 116
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "auto",
+       "maxHeight": "none",
+       "clientHeight": 116,
+       "scrollHeight": 116
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "visible",
+       "maxHeight": "calc(100% - 120px)",
+       "clientHeight": 168,
+       "scrollHeight": 168
+      }
+     ]
+    }
+   ],
+   "popupViewport": {
+    "width": 360,
+    "height": 720
+   }
+  },
+  "raw": "H8/Cqqpv6B56uvt/qY2sVhHiCelwjgxjgyBy4lDtioEVFkBCgNkckeifG5Klv6LQFSJrotJrsF5hjoSpr/tdJNo=",
+  "output": "H8/Cqqpv6B56uvt/qY2sVhHiCelwjgxjgyBy4lDtioEVFkBCgNkckeifG5Klv6LQFSJrotJrsF5hjoSpr/tdJNo=",
+  "cliVerify": "INVALID",
+  "cliWitness": "0x1fcfc2aaaa6fe81e7abafb7fa98dac5611e209e9708e0c63832072e250ed8a811516404280d91c91e89f1b92a5bfa2d015226ba2d26bb05e618e84a9affb5d24da",
+  "rawLen": 65,
+  "rawHex": "1fcfc2aaaa6fe81e7abafb7fa98dac5611e209e9708e0c63832072e250ed8a811516404280d91c91e89f1b92a5bfa2d015226ba2d26bb05e618e84a9affb5d24da",
+  "witnessShape": {
+   "items": [
+    63,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "trailing": null
+  }
+ },
+ "p2sh-bip322-simple": {
+  "kind": "p2sh",
+  "address": "37VucYSaXLCAsxYyAPfbSi9eh4iEcbShgf",
+  "type": "bip322-simple",
+  "message": "TapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+  "popupText": "Confirm Signature request\nblank\n127.0.0.1:18791\nWallet used\n37VucYSaXLCAsxYyAPfbSi9eh4iEcbShgf\n\u94b1\u5305B - \u94b1\u5305\nData\nReject\nConfirm",
+  "popupContainsFullText": false,
+  "popupLayout": [],
+  "popupViewport": {
+   "width": 360,
+   "height": 720
+  },
+  "expanded": {
+   "popupText": "Confirm Signature request\nblank\n127.0.0.1:18791\nWallet used\n37VucYSaXLCAsxYyAPfbSi9eh4iEcbShgf\n\u94b1\u5305B - \u94b1\u5305\nData\nReject\nConfirm\nData\nTapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+   "popupContainsFullText": true,
+   "popupLayout": [
+    {
+     "tag": "DIV",
+     "visible": true,
+     "textLen": 156,
+     "equalsMessage": true,
+     "containsTail": true,
+     "clientHeight": 80,
+     "scrollHeight": 80,
+     "overflowY": "visible",
+     "textOverflow": "clip",
+     "lineClamp": "none",
+     "whiteSpace": "pre-wrap",
+     "wordBreak": "normal",
+     "rect": [
+      16,
+      624,
+      328,
+      80
+     ],
+     "clippingAncestors": [
+      {
+       "tag": "DIV",
+       "overflowY": "auto",
+       "maxHeight": "none",
+       "clientHeight": 80,
+       "scrollHeight": 80
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "auto",
+       "maxHeight": "none",
+       "clientHeight": 116,
+       "scrollHeight": 116
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "auto",
+       "maxHeight": "none",
+       "clientHeight": 116,
+       "scrollHeight": 116
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "visible",
+       "maxHeight": "calc(100% - 120px)",
+       "clientHeight": 168,
+       "scrollHeight": 168
+      }
+     ]
+    }
+   ],
+   "popupViewport": {
+    "width": 360,
+    "height": 720
+   }
+  },
+  "err": "Error: Can not finalize input #0"
+ },
+ "p2pkh-bip322-simple": {
+  "kind": "p2pkh",
+  "address": "1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA",
+  "type": "bip322-simple",
+  "message": "TapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+  "popupText": "Confirm Signature request\nblank\n127.0.0.1:18791\nWallet used\n1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA\n\u94b1\u5305B - \u94b1\u5305\nData\nReject\nConfirm",
+  "popupContainsFullText": false,
+  "popupLayout": [],
+  "popupViewport": {
+   "width": 360,
+   "height": 720
+  },
+  "expanded": {
+   "popupText": "Confirm Signature request\nblank\n127.0.0.1:18791\nWallet used\n1LqBGSKuX5yYUonjxT5qGfpUsXKYYWeabA\n\u94b1\u5305B - \u94b1\u5305\nData\nReject\nConfirm\nData\nTapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+   "popupContainsFullText": true,
+   "popupLayout": [
+    {
+     "tag": "DIV",
+     "visible": true,
+     "textLen": 156,
+     "equalsMessage": true,
+     "containsTail": true,
+     "clientHeight": 80,
+     "scrollHeight": 80,
+     "overflowY": "visible",
+     "textOverflow": "clip",
+     "lineClamp": "none",
+     "whiteSpace": "pre-wrap",
+     "wordBreak": "normal",
+     "rect": [
+      16,
+      624,
+      328,
+      80
+     ],
+     "clippingAncestors": [
+      {
+       "tag": "DIV",
+       "overflowY": "auto",
+       "maxHeight": "none",
+       "clientHeight": 80,
+       "scrollHeight": 80
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "auto",
+       "maxHeight": "none",
+       "clientHeight": 116,
+       "scrollHeight": 116
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "auto",
+       "maxHeight": "none",
+       "clientHeight": 116,
+       "scrollHeight": 116
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "visible",
+       "maxHeight": "calc(100% - 120px)",
+       "clientHeight": 168,
+       "scrollHeight": 168
+      }
+     ]
+    }
+   ],
+   "popupViewport": {
+    "width": 360,
+    "height": 720
+   }
+  },
+  "err": "Error: Can not finalize input #0"
+ }
+}

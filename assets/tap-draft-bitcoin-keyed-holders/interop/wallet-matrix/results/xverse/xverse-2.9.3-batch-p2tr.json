@@ -1,0 +1,928 @@
+{
+ "wallet": "xverse",
+ "atype": "p2tr",
+ "ext": "2.9.3",
+ "address": "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr",
+ "scriptPubKey": "0x5120a60869f0dbcf1dc659c9cecbaf8050135ea9e8cdc487053f1dc6880949dc684c",
+ "holder": "0xc692affbbfae51c87535f0757cf45b106d7bdd64",
+ "cases": {
+  "transfers-8": {
+   "chainId": "56",
+   "tip": "0",
+   "nonce": "0",
+   "deadline": "2000000000",
+   "message": "TapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 makes 8 calls: (1) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x1565bd8fbbfdab8725034e16df6b549039e1bf64304c53e0631f105a4bcf85bd, gas 100000; (2) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xb918ad1bd4b525556ca2852ddc72338f3d55096519e3dab2094ca3e9f5168a64, gas 100000; (3) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x8e35f4c52c67658df94ae11d805aeeb115d889a39d0dcac72b146a85c061c844, gas 100000; (4) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xc6e5f616b2ed1b433360b9014444f6ef07a5a7d5bc8e2971427075fc10495124, gas 100000; (5) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xcd9f04222b6abedf78b7e5a25aa077ab4226c4479af8f1c7b2569764a59ca25a, gas 100000; (6) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xbf6b99632b1a826bc3aa025dc74b105cde2f701a8dbc79811b0bd605a397a1ef, gas 100000; (7) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x1e43aa6dbee62a572ee063d0d28b17956420d95273303e0c920c74b1223fbe46, gas 100000; (8) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xe6cdb490e050db1ddf97e755590bbc3e36a8b7a1b611753f75a14be588ac763b, gas 100000; tip 0, nonce 0, valid until 2000000000",
+   "chars": 1329,
+   "calls": [
+    {
+     "target": "0x00000000000000000000000000000000000000c1",
+     "value": "0",
+     "data": "0x42842e0e000000000000000000000000c692affbbfae51c87535f0757cf45b106d7bdd6400000000000000000000000000000000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000001",
+     "callGas": "100000"
+    },
+    {
+     "target": "0x00000000000000000000000000000000000000c1",
+     "value": "0",
+     "data": "0x42842e0e000000000000000000000000c692affbbfae51c87535f0757cf45b106d7bdd6400000000000000000000000000000000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000002",
+     "callGas": "100000"
+    },
+    {
+     "target": "0x00000000000000000000000000000000000000c1",
+     "value": "0",
+     "data": "0x42842e0e000000000000000000000000c692affbbfae51c87535f0757cf45b106d7bdd6400000000000000000000000000000000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000003",
+     "callGas": "100000"
+    },
+    {
+     "target": "0x00000000000000000000000000000000000000c1",
+     "value": "0",
+     "data": "0x42842e0e000000000000000000000000c692affbbfae51c87535f0757cf45b106d7bdd6400000000000000000000000000000000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000004",
+     "callGas": "100000"
+    },
+    {
+     "target": "0x00000000000000000000000000000000000000c1",
+     "value": "0",
+     "data": "0x42842e0e000000000000000000000000c692affbbfae51c87535f0757cf45b106d7bdd6400000000000000000000000000000000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000005",
+     "callGas": "100000"
+    },
+    {
+     "target": "0x00000000000000000000000000000000000000c1",
+     "value": "0",
+     "data": "0x42842e0e000000000000000000000000c692affbbfae51c87535f0757cf45b106d7bdd6400000000000000000000000000000000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000006",
+     "callGas": "100000"
+    },
+    {
+     "target": "0x00000000000000000000000000000000000000c1",
+     "value": "0",
+     "data": "0x42842e0e000000000000000000000000c692affbbfae51c87535f0757cf45b106d7bdd6400000000000000000000000000000000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000007",
+     "callGas": "100000"
+    },
+    {
+     "target": "0x00000000000000000000000000000000000000c1",
+     "value": "0",
+     "data": "0x42842e0e000000000000000000000000c692affbbfae51c87535f0757cf45b106d7bdd6400000000000000000000000000000000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000008",
+     "callGas": "100000"
+    }
+   ],
+   "popupText": "Account 1\nPrivate\nSign Message\n\nMessage\n\nTapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 makes 8 calls: (1) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x1565bd8fbbfdab8725034e16df6b549039e1bf64304c53e0631f105a4bcf85bd, gas 100000; (2) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xb918ad1bd4b525556ca2852ddc72338f3d55096519e3dab2094ca3e9f5168a64, gas 100000; (3) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x8e35f4c52c67658df94ae11d805aeeb115d889a39d0dcac72b146a85c061c844, gas 100000; (4) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xc6e5f616b2ed1b433360b9014444f6ef07a5a7d5bc8e2971427075fc10495124, gas 100000; (5) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xcd9f04222b6abedf78b7e5a25aa077ab4226c4479af8f1c7b2569764a59ca25a, gas 100000; (6) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xbf6b99632b1a826bc3aa025dc74b105cde2f701a8dbc79811b0bd605a397a1ef, gas 100000; (7) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x1e43aa6dbee62a572ee063d0d28b17956420d95273303e0c920c74b1223fbe46, gas 100000; (8) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xe6cdb490e050db1ddf97e755590bbc3e36a8b7a1b611753f75a14be588ac763b, gas 100000; tip 0, nonce 0, valid until 2000000000\n\nTapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 makes 8 calls: (1) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x1565bd8fbbfdab8725034e16df6b549039e1bf64304c53e0631f105a4bcf85bd, gas 100000; (2) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xb918ad1bd4b525556ca2852ddc72338f3d55096519e3dab2094ca3e9f5168a64, gas 100000; (3) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x8e35f4c52c67658df94ae11d805aeeb115d889a39d0dcac72b146a85c061c844, gas 100000; (4) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xc6e5f616b2ed1b433360b9014444f6ef07a5a7d5bc8e2971427075fc10495124, gas 100000; (5) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xcd9f04222b6abedf78b7e5a25aa077ab4226c4479af8f1c7b2569764a59ca25a, gas 100000; (6) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xbf6b99632b1a826bc3aa025dc74b105cde2f701a8dbc79811b0bd605a397a1ef, gas 100000; (7) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x1e43aa6dbee62a572ee063d0d28b17956420d95273303e0c920c74b1223fbe46, gas 100000; (8) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xe6cdb490e050db1ddf97e755590bbc3e36a8b7a1b611753f75a14be588ac763b, gas 100000; tip 0, nonce 0, valid until 2000000000\n\nMessage Hash\n\n9a3900e7b24f508aceaa8a2664e62c4920ef1400240088b9c8a6d513c7de10c7\n\n9a3900e7b24f508aceaa8a2664e62c4920ef1400240088b9c8a6d513c7de10c7\n\nSigning with address\n\nYour Ordinals address\n\nbc1p5c...kedrcr\n\nNo transactions will be broadcast and no fees will be applied.\n\nBy signing this message, you prove that you are the owner of an account without broadcasting any on chain transactions. This signature cannot be used to send transactions on your behalf. You should only sign messages you trust.\nCancel\nSign",
+   "popupContainsFullText": true,
+   "popupLayout": [
+    {
+     "tag": "P",
+     "visible": true,
+     "textLen": 1329,
+     "equalsMessage": true,
+     "containsTail": true,
+     "clientHeight": 18,
+     "scrollHeight": 18,
+     "overflowY": "hidden",
+     "textOverflow": "ellipsis",
+     "lineClamp": "none",
+     "whiteSpace": "nowrap",
+     "wordBreak": "normal",
+     "rect": [
+      33,
+      157,
+      260,
+      18
+     ],
+     "clippingAncestors": [
+      {
+       "tag": "P",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 18,
+       "scrollHeight": 18
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "scroll",
+       "maxHeight": "none",
+       "clientHeight": 490,
+       "scrollHeight": 609
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 490,
+       "scrollHeight": 490
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 600,
+       "scrollHeight": 600
+      }
+     ]
+    },
+    {
+     "tag": "P",
+     "visible": true,
+     "textLen": 1329,
+     "equalsMessage": true,
+     "containsTail": true,
+     "clientHeight": 792,
+     "scrollHeight": 792,
+     "overflowY": "visible",
+     "textOverflow": "clip",
+     "lineClamp": "none",
+     "whiteSpace": "normal",
+     "wordBreak": "normal",
+     "rect": [
+      33,
+      187,
+      309,
+      792
+     ],
+     "clippingAncestors": [
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 0,
+       "scrollHeight": 792
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "scroll",
+       "maxHeight": "none",
+       "clientHeight": 490,
+       "scrollHeight": 609
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 490,
+       "scrollHeight": 490
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 600,
+       "scrollHeight": 600
+      }
+     ]
+    }
+   ],
+   "popupViewport": {
+    "width": 375,
+    "height": 600
+   },
+   "expanded": {
+    "popupText": "Account 1\nPrivate\nSign Message\n\nMessage\n\nTapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 makes 8 calls: (1) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x1565bd8fbbfdab8725034e16df6b549039e1bf64304c53e0631f105a4bcf85bd, gas 100000; (2) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xb918ad1bd4b525556ca2852ddc72338f3d55096519e3dab2094ca3e9f5168a64, gas 100000; (3) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x8e35f4c52c67658df94ae11d805aeeb115d889a39d0dcac72b146a85c061c844, gas 100000; (4) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xc6e5f616b2ed1b433360b9014444f6ef07a5a7d5bc8e2971427075fc10495124, gas 100000; (5) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xcd9f04222b6abedf78b7e5a25aa077ab4226c4479af8f1c7b2569764a59ca25a, gas 100000; (6) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xbf6b99632b1a826bc3aa025dc74b105cde2f701a8dbc79811b0bd605a397a1ef, gas 100000; (7) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x1e43aa6dbee62a572ee063d0d28b17956420d95273303e0c920c74b1223fbe46, gas 100000; (8) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xe6cdb490e050db1ddf97e755590bbc3e36a8b7a1b611753f75a14be588ac763b, gas 100000; tip 0, nonce 0, valid until 2000000000\n\nMessage Hash\n\n9a3900e7b24f508aceaa8a2664e62c4920ef1400240088b9c8a6d513c7de10c7\n\n9a3900e7b24f508aceaa8a2664e62c4920ef1400240088b9c8a6d513c7de10c7\n\nSigning with address\n\nYour Ordinals address\n\nbc1p5c...kedrcr\n\nNo transactions will be broadcast and no fees will be applied.\n\nBy signing this message, you prove that you are the owner of an account without broadcasting any on chain transactions. This signature cannot be used to send transactions on your behalf. You should only sign messages you trust.\nCancel\nSign",
+    "popupContainsFullText": true,
+    "popupLayout": [
+     {
+      "tag": "P",
+      "visible": true,
+      "textLen": 1329,
+      "equalsMessage": true,
+      "containsTail": true,
+      "clientHeight": 792,
+      "scrollHeight": 792,
+      "overflowY": "visible",
+      "textOverflow": "clip",
+      "lineClamp": "none",
+      "whiteSpace": "normal",
+      "wordBreak": "normal",
+      "rect": [
+       33,
+       161,
+       309,
+       792
+      ],
+      "clippingAncestors": [
+       {
+        "tag": "DIV",
+        "overflowY": "hidden",
+        "maxHeight": "none",
+        "clientHeight": 792,
+        "scrollHeight": 792
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "scroll",
+        "maxHeight": "none",
+        "clientHeight": 490,
+        "scrollHeight": 1375
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "hidden",
+        "maxHeight": "none",
+        "clientHeight": 490,
+        "scrollHeight": 490
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "hidden",
+        "maxHeight": "none",
+        "clientHeight": 600,
+        "scrollHeight": 600
+       }
+      ]
+     }
+    ],
+    "popupViewport": {
+     "width": 375,
+     "height": 600
+    }
+   },
+   "raw": {
+    "jsonrpc": "2.0",
+    "result": {
+     "address": "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr",
+     "messageHash": "9a3900e7b24f508aceaa8a2664e62c4920ef1400240088b9c8a6d513c7de10c7",
+     "signature": "AUDbHc4O8e+6Ef+J+zyqxI88q/M1cz1WkgRfQwbp+92Riock+HSCLJRS1wTA28p5k2d4R6infCYlydpUQI3d50u8",
+     "protocol": "BIP322"
+    },
+    "id": "gQH57olw3QRyT3nF4j7ux"
+   },
+   "result": {
+    "ok": "AUDbHc4O8e+6Ef+J+zyqxI88q/M1cz1WkgRfQwbp+92Riock+HSCLJRS1wTA28p5k2d4R6infCYlydpUQI3d50u8"
+   },
+   "cliVerify": "valid",
+   "cliWitness": "0x0140db1dce0ef1efba11ff89fb3caac48f3cabf335733d5692045f4306e9fbdd918a8724f874822c9452d704c0dbca7993677847a8a77c2625c9da54408ddde74bbc",
+   "rawLen": 66,
+   "rawHex": "0140db1dce0ef1efba11ff89fb3caac48f3cabf335733d5692045f4306e9fbdd918a8724f874822c9452d704c0dbca7993677847a8a77c2625c9da54408ddde74bbc",
+   "witnessShape": {
+    "items": [
+     64
+    ],
+    "trailing": 0,
+    "sighash": "DEFAULT (64-byte Schnorr)"
+   }
+  },
+  "mixed-3": {
+   "chainId": "56",
+   "tip": "10000000000000000",
+   "nonce": "0",
+   "deadline": "2000000000",
+   "message": "TapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 makes 3 calls: (1) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x1565bd8fbbfdab8725034e16df6b549039e1bf64304c53e0631f105a4bcf85bd, gas 100000; (2) 0x00000000000000000000000000000000000000b0 with value 1000000000000000 and data 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470, gas 0; (3) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xb918ad1bd4b525556ca2852ddc72338f3d55096519e3dab2094ca3e9f5168a64, gas 100000; tip 10000000000000000, nonce 0, valid until 2000000000",
+   "chars": 610,
+   "calls": [
+    {
+     "target": "0x00000000000000000000000000000000000000c1",
+     "value": "0",
+     "data": "0x42842e0e000000000000000000000000c692affbbfae51c87535f0757cf45b106d7bdd6400000000000000000000000000000000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000001",
+     "callGas": "100000"
+    },
+    {
+     "target": "0x00000000000000000000000000000000000000b0",
+     "value": "1000000000000000",
+     "data": "0x",
+     "callGas": "0"
+    },
+    {
+     "target": "0x00000000000000000000000000000000000000c1",
+     "value": "0",
+     "data": "0x42842e0e000000000000000000000000c692affbbfae51c87535f0757cf45b106d7bdd6400000000000000000000000000000000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000002",
+     "callGas": "100000"
+    }
+   ],
+   "popupText": "Account 1\nPrivate\nSign Message\n\nMessage\n\nTapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 makes 3 calls: (1) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x1565bd8fbbfdab8725034e16df6b549039e1bf64304c53e0631f105a4bcf85bd, gas 100000; (2) 0x00000000000000000000000000000000000000b0 with value 1000000000000000 and data 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470, gas 0; (3) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xb918ad1bd4b525556ca2852ddc72338f3d55096519e3dab2094ca3e9f5168a64, gas 100000; tip 10000000000000000, nonce 0, valid until 2000000000\n\nTapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 makes 3 calls: (1) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x1565bd8fbbfdab8725034e16df6b549039e1bf64304c53e0631f105a4bcf85bd, gas 100000; (2) 0x00000000000000000000000000000000000000b0 with value 1000000000000000 and data 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470, gas 0; (3) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xb918ad1bd4b525556ca2852ddc72338f3d55096519e3dab2094ca3e9f5168a64, gas 100000; tip 10000000000000000, nonce 0, valid until 2000000000\n\nMessage Hash\n\nf82d79e27516037804c8500425e044ab147bf35516548868de150cd4a490ebff\n\nf82d79e27516037804c8500425e044ab147bf35516548868de150cd4a490ebff\n\nSigning with address\n\nYour Ordinals address\n\nbc1p5c...kedrcr\n\nNo transactions will be broadcast and no fees will be applied.\n\nBy signing this message, you prove that you are the owner of an account without broadcasting any on chain transactions. This signature cannot be used to send transactions on your behalf. You should only sign messages you trust.\nCancel\nSign",
+   "popupContainsFullText": true,
+   "popupLayout": [
+    {
+     "tag": "P",
+     "visible": true,
+     "textLen": 610,
+     "equalsMessage": true,
+     "containsTail": true,
+     "clientHeight": 18,
+     "scrollHeight": 18,
+     "overflowY": "hidden",
+     "textOverflow": "ellipsis",
+     "lineClamp": "none",
+     "whiteSpace": "nowrap",
+     "wordBreak": "normal",
+     "rect": [
+      33,
+      157,
+      260,
+      18
+     ],
+     "clippingAncestors": [
+      {
+       "tag": "P",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 18,
+       "scrollHeight": 18
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "scroll",
+       "maxHeight": "none",
+       "clientHeight": 490,
+       "scrollHeight": 609
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 490,
+       "scrollHeight": 490
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 600,
+       "scrollHeight": 600
+      }
+     ]
+    },
+    {
+     "tag": "P",
+     "visible": true,
+     "textLen": 610,
+     "equalsMessage": true,
+     "containsTail": true,
+     "clientHeight": 360,
+     "scrollHeight": 360,
+     "overflowY": "visible",
+     "textOverflow": "clip",
+     "lineClamp": "none",
+     "whiteSpace": "normal",
+     "wordBreak": "normal",
+     "rect": [
+      33,
+      187,
+      309,
+      360
+     ],
+     "clippingAncestors": [
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 0,
+       "scrollHeight": 360
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "scroll",
+       "maxHeight": "none",
+       "clientHeight": 490,
+       "scrollHeight": 609
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 490,
+       "scrollHeight": 490
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 600,
+       "scrollHeight": 600
+      }
+     ]
+    }
+   ],
+   "popupViewport": {
+    "width": 375,
+    "height": 600
+   },
+   "expanded": {
+    "popupText": "Account 1\nPrivate\nSign Message\n\nMessage\n\nTapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 makes 3 calls: (1) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x1565bd8fbbfdab8725034e16df6b549039e1bf64304c53e0631f105a4bcf85bd, gas 100000; (2) 0x00000000000000000000000000000000000000b0 with value 1000000000000000 and data 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470, gas 0; (3) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xb918ad1bd4b525556ca2852ddc72338f3d55096519e3dab2094ca3e9f5168a64, gas 100000; tip 10000000000000000, nonce 0, valid until 2000000000\n\nMessage Hash\n\nf82d79e27516037804c8500425e044ab147bf35516548868de150cd4a490ebff\n\nf82d79e27516037804c8500425e044ab147bf35516548868de150cd4a490ebff\n\nSigning with address\n\nYour Ordinals address\n\nbc1p5c...kedrcr\n\nNo transactions will be broadcast and no fees will be applied.\n\nBy signing this message, you prove that you are the owner of an account without broadcasting any on chain transactions. This signature cannot be used to send transactions on your behalf. You should only sign messages you trust.\nCancel\nSign",
+    "popupContainsFullText": true,
+    "popupLayout": [
+     {
+      "tag": "P",
+      "visible": true,
+      "textLen": 610,
+      "equalsMessage": true,
+      "containsTail": true,
+      "clientHeight": 360,
+      "scrollHeight": 360,
+      "overflowY": "visible",
+      "textOverflow": "clip",
+      "lineClamp": "none",
+      "whiteSpace": "normal",
+      "wordBreak": "normal",
+      "rect": [
+       33,
+       161,
+       309,
+       360
+      ],
+      "clippingAncestors": [
+       {
+        "tag": "DIV",
+        "overflowY": "hidden",
+        "maxHeight": "none",
+        "clientHeight": 360,
+        "scrollHeight": 360
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "scroll",
+        "maxHeight": "none",
+        "clientHeight": 490,
+        "scrollHeight": 943
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "hidden",
+        "maxHeight": "none",
+        "clientHeight": 490,
+        "scrollHeight": 490
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "hidden",
+        "maxHeight": "none",
+        "clientHeight": 600,
+        "scrollHeight": 600
+       }
+      ]
+     }
+    ],
+    "popupViewport": {
+     "width": 375,
+     "height": 600
+    }
+   },
+   "raw": {
+    "jsonrpc": "2.0",
+    "result": {
+     "address": "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr",
+     "messageHash": "f82d79e27516037804c8500425e044ab147bf35516548868de150cd4a490ebff",
+     "signature": "AUCNGMr54vzQWF7f9W5O1u8EPR6nBF4JWgFQcWIaWQd9qEmQzwA+CmsoSy5cvgjTZ7XvHulZ7LxFE1CaqLW2KJST",
+     "protocol": "BIP322"
+    },
+    "id": "CMEUWZCSDlIAatELRXpuL"
+   },
+   "result": {
+    "ok": "AUCNGMr54vzQWF7f9W5O1u8EPR6nBF4JWgFQcWIaWQd9qEmQzwA+CmsoSy5cvgjTZ7XvHulZ7LxFE1CaqLW2KJST"
+   },
+   "cliVerify": "valid",
+   "cliWitness": "0x01408d18caf9e2fcd0585edff56e4ed6ef043d1ea7045e095a015071621a59077da84990cf003e0a6b284b2e5cbe08d367b5ef1ee959ecbc4513509aa8b5b6289493",
+   "rawLen": 66,
+   "rawHex": "01408d18caf9e2fcd0585edff56e4ed6ef043d1ea7045e095a015071621a59077da84990cf003e0a6b284b2e5cbe08d367b5ef1ee959ecbc4513509aa8b5b6289493",
+   "witnessShape": {
+    "items": [
+     64
+    ],
+    "trailing": 0,
+    "sighash": "DEFAULT (64-byte Schnorr)"
+   }
+  },
+  "longest": {
+   "chainId": "18446744073709551615",
+   "tip": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+   "nonce": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+   "deadline": "18446744073709551615",
+   "message": "TapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 18446744073709551615 makes 8 calls: (1) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (2) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (3) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (4) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (5) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (6) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (7) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (8) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; tip 115792089237316195423570985008687907853269984665640564039457584007913129639935, nonce 115792089237316195423570985008687907853269984665640564039457584007913129639935, valid until 18446744073709551615",
+   "chars": 2239,
+   "calls": [
+    {
+     "target": "0xffffffffffffffffffffffffffffffffffffffff",
+     "value": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+     "data": "0x78787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878",
+     "callGas": "18446744073709551615"
+    },
+    {
+     "target": "0xffffffffffffffffffffffffffffffffffffffff",
+     "value": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+     "data": "0x78787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878",
+     "callGas": "18446744073709551615"
+    },
+    {
+     "target": "0xffffffffffffffffffffffffffffffffffffffff",
+     "value": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+     "data": "0x78787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878",
+     "callGas": "18446744073709551615"
+    },
+    {
+     "target": "0xffffffffffffffffffffffffffffffffffffffff",
+     "value": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+     "data": "0x78787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878",
+     "callGas": "18446744073709551615"
+    },
+    {
+     "target": "0xffffffffffffffffffffffffffffffffffffffff",
+     "value": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+     "data": "0x78787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878",
+     "callGas": "18446744073709551615"
+    },
+    {
+     "target": "0xffffffffffffffffffffffffffffffffffffffff",
+     "value": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+     "data": "0x78787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878",
+     "callGas": "18446744073709551615"
+    },
+    {
+     "target": "0xffffffffffffffffffffffffffffffffffffffff",
+     "value": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+     "data": "0x78787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878",
+     "callGas": "18446744073709551615"
+    },
+    {
+     "target": "0xffffffffffffffffffffffffffffffffffffffff",
+     "value": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+     "data": "0x78787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878",
+     "callGas": "18446744073709551615"
+    }
+   ],
+   "popupText": "Account 1\nPrivate\nSign Message\n\nMessage\n\nTapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 18446744073709551615 makes 8 calls: (1) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (2) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (3) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (4) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (5) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (6) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (7) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (8) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; tip 115792089237316195423570985008687907853269984665640564039457584007913129639935, nonce 115792089237316195423570985008687907853269984665640564039457584007913129639935, valid until 18446744073709551615\n\nTapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 18446744073709551615 makes 8 calls: (1) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (2) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (3) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (4) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (5) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (6) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (7) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (8) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; tip 115792089237316195423570985008687907853269984665640564039457584007913129639935, nonce 115792089237316195423570985008687907853269984665640564039457584007913129639935, valid until 18446744073709551615\n\nMessage Hash\n\nc8aa258bd2a3f32cb12169f11f0a99c125ed743d1896729ac2f566de8f9c9b99\n\nc8aa258bd2a3f32cb12169f11f0a99c125ed743d1896729ac2f566de8f9c9b99\n\nSigning with address\n\nYour Ordinals address\n\nbc1p5c...kedrcr\n\nNo transactions will be broadcast and no fees will be applied.\n\nBy signing this message, you prove that you are the owner of an account without broadcasting any on chain transactions. This signature cannot be used to send transactions on your behalf. You should only sign messages you trust.\nCancel\nSign",
+   "popupContainsFullText": true,
+   "popupLayout": [
+    {
+     "tag": "P",
+     "visible": true,
+     "textLen": 2239,
+     "equalsMessage": true,
+     "containsTail": true,
+     "clientHeight": 18,
+     "scrollHeight": 18,
+     "overflowY": "hidden",
+     "textOverflow": "ellipsis",
+     "lineClamp": "none",
+     "whiteSpace": "nowrap",
+     "wordBreak": "normal",
+     "rect": [
+      33,
+      157,
+      260,
+      18
+     ],
+     "clippingAncestors": [
+      {
+       "tag": "P",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 18,
+       "scrollHeight": 18
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "scroll",
+       "maxHeight": "none",
+       "clientHeight": 490,
+       "scrollHeight": 609
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 490,
+       "scrollHeight": 490
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 600,
+       "scrollHeight": 600
+      }
+     ]
+    },
+    {
+     "tag": "P",
+     "visible": true,
+     "textLen": 2239,
+     "equalsMessage": true,
+     "containsTail": true,
+     "clientHeight": 1188,
+     "scrollHeight": 1188,
+     "overflowY": "visible",
+     "textOverflow": "clip",
+     "lineClamp": "none",
+     "whiteSpace": "normal",
+     "wordBreak": "normal",
+     "rect": [
+      33,
+      187,
+      309,
+      1188
+     ],
+     "clippingAncestors": [
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 0,
+       "scrollHeight": 1188
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "scroll",
+       "maxHeight": "none",
+       "clientHeight": 490,
+       "scrollHeight": 609
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 490,
+       "scrollHeight": 490
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 600,
+       "scrollHeight": 600
+      }
+     ]
+    }
+   ],
+   "popupViewport": {
+    "width": 375,
+    "height": 600
+   },
+   "expanded": {
+    "popupText": "Account 1\nPrivate\nSign Message\n\nMessage\n\nTapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 18446744073709551615 makes 8 calls: (1) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (2) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (3) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (4) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (5) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (6) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (7) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (8) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; tip 115792089237316195423570985008687907853269984665640564039457584007913129639935, nonce 115792089237316195423570985008687907853269984665640564039457584007913129639935, valid until 18446744073709551615\n\nMessage Hash\n\nc8aa258bd2a3f32cb12169f11f0a99c125ed743d1896729ac2f566de8f9c9b99\n\nc8aa258bd2a3f32cb12169f11f0a99c125ed743d1896729ac2f566de8f9c9b99\n\nSigning with address\n\nYour Ordinals address\n\nbc1p5c...kedrcr\n\nNo transactions will be broadcast and no fees will be applied.\n\nBy signing this message, you prove that you are the owner of an account without broadcasting any on chain transactions. This signature cannot be used to send transactions on your behalf. You should only sign messages you trust.\nCancel\nSign",
+    "popupContainsFullText": true,
+    "popupLayout": [
+     {
+      "tag": "P",
+      "visible": true,
+      "textLen": 2239,
+      "equalsMessage": true,
+      "containsTail": true,
+      "clientHeight": 1188,
+      "scrollHeight": 1188,
+      "overflowY": "visible",
+      "textOverflow": "clip",
+      "lineClamp": "none",
+      "whiteSpace": "normal",
+      "wordBreak": "normal",
+      "rect": [
+       33,
+       161,
+       309,
+       1188
+      ],
+      "clippingAncestors": [
+       {
+        "tag": "DIV",
+        "overflowY": "hidden",
+        "maxHeight": "none",
+        "clientHeight": 1188,
+        "scrollHeight": 1188
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "scroll",
+        "maxHeight": "none",
+        "clientHeight": 490,
+        "scrollHeight": 1771
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "hidden",
+        "maxHeight": "none",
+        "clientHeight": 490,
+        "scrollHeight": 490
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "hidden",
+        "maxHeight": "none",
+        "clientHeight": 600,
+        "scrollHeight": 600
+       }
+      ]
+     }
+    ],
+    "popupViewport": {
+     "width": 375,
+     "height": 600
+    }
+   },
+   "raw": {
+    "jsonrpc": "2.0",
+    "result": {
+     "address": "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr",
+     "messageHash": "c8aa258bd2a3f32cb12169f11f0a99c125ed743d1896729ac2f566de8f9c9b99",
+     "signature": "AUAplO7NeJqjXHF6R8zBozjq6Fxp//iW/XDc4UzEPbrRYSlV8EL94ybGf6OE0Lxo4S5it0YQORYPW0odPrtWZycV",
+     "protocol": "BIP322"
+    },
+    "id": "NIsW8_Xq4UNKNMD8zWCI1"
+   },
+   "result": {
+    "ok": "AUAplO7NeJqjXHF6R8zBozjq6Fxp//iW/XDc4UzEPbrRYSlV8EL94ybGf6OE0Lxo4S5it0YQORYPW0odPrtWZycV"
+   },
+   "cliVerify": "valid",
+   "cliWitness": "0x01402994eecd789aa35c717a47ccc1a338eae85c69fff896fd70dce14cc43dbad1612955f042fde326c67fa384d0bc68e12e62b7461039160f5b4a1d3ebb56672715",
+   "rawLen": 66,
+   "rawHex": "01402994eecd789aa35c717a47ccc1a338eae85c69fff896fd70dce14cc43dbad1612955f042fde326c67fa384d0bc68e12e62b7461039160f5b4a1d3ebb56672715",
+   "witnessShape": {
+    "items": [
+     64
+    ],
+    "trailing": 0,
+    "sighash": "DEFAULT (64-byte Schnorr)"
+   }
+  }
+ },
+ "probes": {
+  "long4000": {
+   "message": "0000 TapeOut wallet length probe, printable ASCII only, no line breaks; 0001 TapeOut wallet length probe, printable ASCII only, no line breaks; 0002 TapeOut wallet length probe, printable ASCII only, no line breaks; 0003 TapeOut wallet length probe, printable ASCII only, no line breaks; 0004 TapeOut wallet length probe, printable ASCII only, no line breaks; 0005 TapeOut wallet length probe, printable ASCII only, no line breaks; 0006 TapeOut wallet length probe, printable ASCII only, no line breaks; 0007 TapeOut wallet length probe, printable ASCII only, no line breaks; 0008 TapeOut wallet length probe, printable ASCII only, no line breaks; 0009 TapeOut wallet length probe, printable ASCII only, no line breaks; 0010 TapeOut wallet length probe, printable ASCII only, no line breaks; 0011 TapeOut wallet length probe, printable ASCII only, no line breaks; 0012 TapeOut wallet length probe, printable ASCII only, no line breaks; 0013 TapeOut wallet length probe, printable ASCII only, no line breaks; 0014 TapeOut wallet length probe, printable ASCII only, no line breaks; 0015 TapeOut wallet length probe, printable ASCII only, no line breaks; 0016 TapeOut wallet length probe, printable ASCII only, no line breaks; 0017 TapeOut wallet length probe, printable ASCII only, no line breaks; 0018 TapeOut wallet length probe, printable ASCII only, no line breaks; 0019 TapeOut wallet length probe, printable ASCII only, no line breaks; 0020 TapeOut wallet length probe, printable ASCII only, no line breaks; 0021 TapeOut wallet length probe, printable ASCII only, no line breaks; 0022 TapeOut wallet length probe, printable ASCII only, no line breaks; 0023 TapeOut wallet length probe, printable ASCII only, no line breaks; 0024 TapeOut wallet length probe, printable ASCII only, no line breaks; 0025 TapeOut wallet length probe, printable ASCII only, no line breaks; 0026 TapeOut wallet length probe, printable ASCII only, no line breaks; 0027 TapeOut wallet length probe, printable ASCII only, no line breaks; 0028 TapeOut wallet length probe, printable ASCII only, no line breaks; 0029 TapeOut wallet length probe, printable ASCII only, no line breaks; 0030 TapeOut wallet length probe, printable ASCII only, no line breaks; 0031 TapeOut wallet length probe, printable ASCII only, no line breaks; 0032 TapeOut wallet length probe, printable ASCII only, no line breaks; 0033 TapeOut wallet length probe, printable ASCII only, no line breaks; 0034 TapeOut wallet length probe, printable ASCII only, no line breaks; 0035 TapeOut wallet length probe, printable ASCII only, no line breaks; 0036 TapeOut wallet length probe, printable ASCII only, no line breaks; 0037 TapeOut wallet length probe, printable ASCII only, no line breaks; 0038 TapeOut wallet length probe, printable ASCII only, no line breaks; 0039 TapeOut wallet length probe, printable ASCII only, no line breaks; 0040 TapeOut wallet length probe, printable ASCII only, no line breaks; 0041 TapeOut wallet length probe, printable ASCII only, no line breaks; 0042 TapeOut wallet length probe, printable ASCII only, no line breaks; 0043 TapeOut wallet length probe, printable ASCII only, no line breaks; 0044 TapeOut wallet length probe, printable ASCII only, no line breaks; 0045 TapeOut wallet length probe, printable ASCII only, no line breaks; 0046 TapeOut wallet length probe, printable ASCII only, no line breaks; 0047 TapeOut wallet length probe, printable ASCII only, no line breaks; 0048 TapeOut wallet length probe, printable ASCII only, no line breaks; 0049 TapeOut wallet length probe, printable ASCII only, no line breaks; 0050 TapeOut wallet length probe, printable ASCII only, no line breaks; 0051 TapeOut wallet length probe, printable ASCII only, no line breaks; 0052 TapeOut wallet length probe, printable ASCII only, no line breaks; 0053 TapeOut wallet length probe, printable ASCII only, no line breaks; 0054 TapeOut wallet length probe, printable ASCII only, no line breaks; 0055 TapeOut wallet length probe, printa",
+   "chars": 4000,
+   "popupText": "Account 1\nPrivate\nSign Message\n\nMessage\n\n0000 TapeOut wallet length probe, printable ASCII only, no line breaks; 0001 TapeOut wallet length probe, printable ASCII only, no line breaks; 0002 TapeOut wallet length probe, printable ASCII only, no line breaks; 0003 TapeOut wallet length probe, printable ASCII only, no line breaks; 0004 TapeOut wallet length probe, printable ASCII only, no line breaks; 0005 TapeOut wallet length probe, printable ASCII only, no line breaks; 0006 TapeOut wallet length probe, printable ASCII only, no line breaks; 0007 TapeOut wallet length probe, printable ASCII only, no line breaks; 0008 TapeOut wallet length probe, printable ASCII only, no line breaks; 0009 TapeOut wallet length probe, printable ASCII only, no line breaks; 0010 TapeOut wallet length probe, printable ASCII only, no line breaks; 0011 TapeOut wallet length probe, printable ASCII only, no line breaks; 0012 TapeOut wallet length probe, printable ASCII only, no line breaks; 0013 TapeOut wallet length probe, printable ASCII only, no line breaks; 0014 TapeOut wallet length probe, printable ASCII only, no line breaks; 0015 TapeOut wallet length probe, printable ASCII only, no line breaks; 0016 TapeOut wallet length probe, printable ASCII only, no line breaks; 0017 TapeOut wallet length probe, printable ASCII only, no line breaks; 0018 TapeOut wallet length probe, printable ASCII only, no line breaks; 0019 TapeOut wallet length probe, printable ASCII only, no line breaks; 0020 TapeOut wallet length probe, printable ASCII only, no line breaks; 0021 TapeOut wallet length probe, printable ASCII only, no line breaks; 0022 TapeOut wallet length probe, printable ASCII only, no line breaks; 0023 TapeOut wallet length probe, printable ASCII only, no line breaks; 0024 TapeOut wallet length probe, printable ASCII only, no line breaks; 0025 TapeOut wallet length probe, printable ASCII only, no line breaks; 0026 TapeOut wallet length probe, printable ASCII only, no line breaks; 0027 TapeOut wallet length probe, printable ASCII only, no line breaks; 0028 TapeOut wallet length probe, printable ASCII only, no line breaks; 0029 TapeOut wallet length probe, printable ASCII only, no line breaks; 0030 TapeOut wallet length probe, printable ASCII only, no line breaks; 0031 TapeOut wallet length probe, printable ASCII only, no line breaks; 0032 TapeOut wallet length probe, printable ASCII only, no line breaks; 0033 TapeOut wallet length probe, printable ASCII only, no line breaks; 0034 TapeOut wallet length probe, printable ASCII only, no line breaks; 0035 TapeOut wallet length probe, printable ASCII only, no line breaks; 0036 TapeOut wallet length probe, printable ASCII only, no line breaks; 0037 TapeOut wallet length probe, printable ASCII only, no line breaks; 0038 TapeOut wallet length probe, printable ASCII only, no line breaks; 0039 TapeOut wallet length probe, printable ASCII only, no line breaks; 0040 TapeOut wallet length probe, printable ASCII only, no line breaks; 0041 TapeOut wallet length probe, printable ASCII only, no line breaks; 0042 TapeOut wallet length probe, printable ASCII only, no line breaks; 0043 TapeOut wallet length probe, printable ASCII only, no line breaks; 0044 TapeOut wallet length probe, printable ASCII only, no line breaks; 0045 TapeOut wallet length probe, printable ASCII only, no line breaks; 0046 TapeOut wallet length probe, printable ASCII only, no line breaks; 0047 TapeOut wallet length probe, printable ASCII only, no line breaks; 0048 TapeOut wallet length probe, printable ASCII only, no line breaks; 0049 TapeOut wallet length probe, printable ASCII only, no line breaks; 0050 TapeOut wallet length probe, printable ASCII only, no line breaks; 0051 TapeOut wallet length probe, printable ASCII only, no line breaks; 0052 TapeOut wallet length probe, printable ASCII only, no line breaks; 0053 TapeOut wallet length probe, printable ASCII only, no line breaks; 0054 TapeOut wallet length probe, printable ASCII only, no line breaks; 0055 TapeOut wallet length probe, printa\n\n0000 TapeOut wallet length probe, printable ASCII only, no line breaks; 0001 TapeOut wallet length probe, printable ASCII only, no line breaks; 0002 TapeOut wallet length probe, printable ASCII only, no line breaks; 0003 TapeOut wallet length probe, printable ASCII only, no line breaks; 0004 TapeOut wallet length probe, printable ASCII only, no line breaks; 0005 TapeOut wallet length probe, printable ASCII only, no line breaks; 0006 TapeOut wallet length probe, printable ASCII only, no line breaks; 0007 TapeOut wallet length probe, printable ASCII only, no line breaks; 0008 TapeOut wallet length probe, printable ASCII only, no line breaks; 0009 TapeOut wallet length probe, printable ASCII only, no line breaks; 0010 TapeOut wallet length probe, printable ASCII only, no line breaks; 0011 TapeOut wallet length probe, printable ASCII only, no line breaks; 0012 TapeOut wallet length probe, printable ASCII only, no line breaks; 0013 TapeOut wallet length probe, printable ASCII only, no line breaks; 0014 TapeOut wallet length probe, printable ASCII only, no line breaks; 0015 TapeOut wallet length probe, printable ASCII only, no line breaks; 0016 TapeOut wallet length probe, printable ASCII only, no line breaks; 0017 TapeOut wallet length probe, printable ASCII only, no line breaks; 0018 TapeOut wallet length probe, printable ASCII only, no line breaks; 0019 TapeOut wallet length probe, printable ASCII only, no line breaks; 0020 TapeOut wallet length probe, printable ASCII only, no line breaks; 0021 TapeOut wallet length probe, printable ASCII only, no line breaks; 0022 TapeOut wallet length probe, printable ASCII only, no line breaks; 0023 TapeOut wallet length probe, printable ASCII only, no line breaks; 0024 TapeOut wallet length probe, printable ASCII only, no line breaks; 0025 TapeOut wallet length probe, printable ASCII only, no line breaks; 0026 TapeOut wallet length probe, printable ASCII only, no line breaks; 0027 TapeOut wallet length probe, printable ASCII only, no line breaks; 0028 TapeOut wallet length probe, printable ASCII only, no line breaks; 0029 TapeOut wallet length probe, printable ASCII only, no line breaks; 0030 TapeOut wallet length probe, printable ASCII only, no line breaks; 0031 TapeOut wallet length probe, printable ASCII only, no line breaks; 0032 TapeOut wallet length probe, printable ASCII only, no line breaks; 0033 TapeOut wallet length probe, printable ASCII only, no line breaks; 0034 TapeOut wallet length probe, printable ASCII only, no line breaks; 0035 TapeOut wallet length probe, printable ASCII only, no line breaks; 0036 TapeOut wallet length probe, printable ASCII only, no line breaks; 0037 TapeOut wallet length probe, printable ASCII only, no line breaks; 0038 TapeOut wallet length probe, printable ASCII only, no line breaks; 0039 TapeOut wallet length probe, printable ASCII only, no line breaks; 0040 TapeOut wallet length probe, printable ASCII only, no line breaks; 0041 TapeOut wallet length probe, printable ASCII only, no line breaks; 0042 TapeOut wallet length probe, printable ASCII only, no line breaks; 0043 TapeOut wallet length probe, printable ASCII only, no line breaks; 0044 TapeOut wallet length probe, printable ASCII only, no line breaks; 0045 TapeOut wallet length probe, printable ASCII only, no line breaks; 0046 TapeOut wallet length probe, printable ASCII only, no line breaks; 0047 TapeOut wallet length probe, printable ASCII only, no line breaks; 0048 TapeOut wallet length probe, printable ASCII only, no line breaks; 0049 TapeOut wallet length probe, printable ASCII only, no line breaks; 0050 TapeOut wallet length probe, printable ASCII only, no line breaks; 0051 TapeOut wallet length probe, printable ASCII only, no line breaks; 0052 TapeOut wallet length probe, printable ASCII only, no line breaks; 0053 TapeOut wallet length probe, printable ASCII only, no line breaks; 0054 TapeOut wallet length probe, printable ASCII only, no line breaks; 0055 TapeOut wallet length probe, printa\n\nMessage Hash\n\n863d9727b2906650a1d1c47a9937b878cf0198f107ae6087fa65a25e9f6b0f18\n\n863d9727b2906650a1d1c47a9937b878cf0198f107ae6087fa65a25e9f6b0f18\n\nSigning with address\n\nYour Ordinals address\n\nbc1p5c...kedrcr\n\nNo transactions will be broadcast and no fees will be applied.\n\nBy signing this message, you prove that you are the owner of an account without broadcasting any on chain transactions. This signature cannot be used to send transactions on your behalf. You should only sign messages you trust.\nCancel\nSign",
+   "popupContainsFullText": true,
+   "popupLayout": [
+    {
+     "tag": "P",
+     "visible": true,
+     "textLen": 4000,
+     "equalsMessage": true,
+     "containsTail": true,
+     "clientHeight": 18,
+     "scrollHeight": 18,
+     "overflowY": "hidden",
+     "textOverflow": "ellipsis",
+     "lineClamp": "none",
+     "whiteSpace": "nowrap",
+     "wordBreak": "normal",
+     "rect": [
+      33,
+      157,
+      260,
+      18
+     ],
+     "clippingAncestors": [
+      {
+       "tag": "P",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 18,
+       "scrollHeight": 18
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "scroll",
+       "maxHeight": "none",
+       "clientHeight": 490,
+       "scrollHeight": 609
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 490,
+       "scrollHeight": 490
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 600,
+       "scrollHeight": 600
+      }
+     ]
+    },
+    {
+     "tag": "P",
+     "visible": true,
+     "textLen": 4000,
+     "equalsMessage": true,
+     "containsTail": true,
+     "clientHeight": 1674,
+     "scrollHeight": 1674,
+     "overflowY": "visible",
+     "textOverflow": "clip",
+     "lineClamp": "none",
+     "whiteSpace": "normal",
+     "wordBreak": "normal",
+     "rect": [
+      33,
+      187,
+      309,
+      1674
+     ],
+     "clippingAncestors": [
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 0,
+       "scrollHeight": 1674
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "scroll",
+       "maxHeight": "none",
+       "clientHeight": 490,
+       "scrollHeight": 609
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 490,
+       "scrollHeight": 490
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 600,
+       "scrollHeight": 600
+      }
+     ]
+    }
+   ],
+   "popupViewport": {
+    "width": 375,
+    "height": 600
+   },
+   "expanded": {
+    "popupText": "Account 1\nPrivate\nSign Message\n\nMessage\n\n0000 TapeOut wallet length probe, printable ASCII only, no line breaks; 0001 TapeOut wallet length probe, printable ASCII only, no line breaks; 0002 TapeOut wallet length probe, printable ASCII only, no line breaks; 0003 TapeOut wallet length probe, printable ASCII only, no line breaks; 0004 TapeOut wallet length probe, printable ASCII only, no line breaks; 0005 TapeOut wallet length probe, printable ASCII only, no line breaks; 0006 TapeOut wallet length probe, printable ASCII only, no line breaks; 0007 TapeOut wallet length probe, printable ASCII only, no line breaks; 0008 TapeOut wallet length probe, printable ASCII only, no line breaks; 0009 TapeOut wallet length probe, printable ASCII only, no line breaks; 0010 TapeOut wallet length probe, printable ASCII only, no line breaks; 0011 TapeOut wallet length probe, printable ASCII only, no line breaks; 0012 TapeOut wallet length probe, printable ASCII only, no line breaks; 0013 TapeOut wallet length probe, printable ASCII only, no line breaks; 0014 TapeOut wallet length probe, printable ASCII only, no line breaks; 0015 TapeOut wallet length probe, printable ASCII only, no line breaks; 0016 TapeOut wallet length probe, printable ASCII only, no line breaks; 0017 TapeOut wallet length probe, printable ASCII only, no line breaks; 0018 TapeOut wallet length probe, printable ASCII only, no line breaks; 0019 TapeOut wallet length probe, printable ASCII only, no line breaks; 0020 TapeOut wallet length probe, printable ASCII only, no line breaks; 0021 TapeOut wallet length probe, printable ASCII only, no line breaks; 0022 TapeOut wallet length probe, printable ASCII only, no line breaks; 0023 TapeOut wallet length probe, printable ASCII only, no line breaks; 0024 TapeOut wallet length probe, printable ASCII only, no line breaks; 0025 TapeOut wallet length probe, printable ASCII only, no line breaks; 0026 TapeOut wallet length probe, printable ASCII only, no line breaks; 0027 TapeOut wallet length probe, printable ASCII only, no line breaks; 0028 TapeOut wallet length probe, printable ASCII only, no line breaks; 0029 TapeOut wallet length probe, printable ASCII only, no line breaks; 0030 TapeOut wallet length probe, printable ASCII only, no line breaks; 0031 TapeOut wallet length probe, printable ASCII only, no line breaks; 0032 TapeOut wallet length probe, printable ASCII only, no line breaks; 0033 TapeOut wallet length probe, printable ASCII only, no line breaks; 0034 TapeOut wallet length probe, printable ASCII only, no line breaks; 0035 TapeOut wallet length probe, printable ASCII only, no line breaks; 0036 TapeOut wallet length probe, printable ASCII only, no line breaks; 0037 TapeOut wallet length probe, printable ASCII only, no line breaks; 0038 TapeOut wallet length probe, printable ASCII only, no line breaks; 0039 TapeOut wallet length probe, printable ASCII only, no line breaks; 0040 TapeOut wallet length probe, printable ASCII only, no line breaks; 0041 TapeOut wallet length probe, printable ASCII only, no line breaks; 0042 TapeOut wallet length probe, printable ASCII only, no line breaks; 0043 TapeOut wallet length probe, printable ASCII only, no line breaks; 0044 TapeOut wallet length probe, printable ASCII only, no line breaks; 0045 TapeOut wallet length probe, printable ASCII only, no line breaks; 0046 TapeOut wallet length probe, printable ASCII only, no line breaks; 0047 TapeOut wallet length probe, printable ASCII only, no line breaks; 0048 TapeOut wallet length probe, printable ASCII only, no line breaks; 0049 TapeOut wallet length probe, printable ASCII only, no line breaks; 0050 TapeOut wallet length probe, printable ASCII only, no line breaks; 0051 TapeOut wallet length probe, printable ASCII only, no line breaks; 0052 TapeOut wallet length probe, printable ASCII only, no line breaks; 0053 TapeOut wallet length probe, printable ASCII only, no line breaks; 0054 TapeOut wallet length probe, printable ASCII only, no line breaks; 0055 TapeOut wallet length probe, printa\n\nMessage Hash\n\n863d9727b2906650a1d1c47a9937b878cf0198f107ae6087fa65a25e9f6b0f18\n\n863d9727b2906650a1d1c47a9937b878cf0198f107ae6087fa65a25e9f6b0f18\n\nSigning with address\n\nYour Ordinals address\n\nbc1p5c...kedrcr\n\nNo transactions will be broadcast and no fees will be applied.\n\nBy signing this message, you prove that you are the owner of an account without broadcasting any on chain transactions. This signature cannot be used to send transactions on your behalf. You should only sign messages you trust.\nCancel\nSign",
+    "popupContainsFullText": true,
+    "popupLayout": [
+     {
+      "tag": "P",
+      "visible": true,
+      "textLen": 4000,
+      "equalsMessage": true,
+      "containsTail": true,
+      "clientHeight": 1674,
+      "scrollHeight": 1674,
+      "overflowY": "visible",
+      "textOverflow": "clip",
+      "lineClamp": "none",
+      "whiteSpace": "normal",
+      "wordBreak": "normal",
+      "rect": [
+       33,
+       161,
+       309,
+       1674
+      ],
+      "clippingAncestors": [
+       {
+        "tag": "DIV",
+        "overflowY": "hidden",
+        "maxHeight": "none",
+        "clientHeight": 1674,
+        "scrollHeight": 1674
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "scroll",
+        "maxHeight": "none",
+        "clientHeight": 490,
+        "scrollHeight": 2257
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "hidden",
+        "maxHeight": "none",
+        "clientHeight": 490,
+        "scrollHeight": 490
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "hidden",
+        "maxHeight": "none",
+        "clientHeight": 600,
+        "scrollHeight": 600
+       }
+      ]
+     }
+    ],
+    "popupViewport": {
+     "width": 375,
+     "height": 600
+    }
+   },
+   "raw": {
+    "jsonrpc": "2.0",
+    "result": {
+     "address": "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr",
+     "messageHash": "863d9727b2906650a1d1c47a9937b878cf0198f107ae6087fa65a25e9f6b0f18",
+     "signature": "AUBjVxDr2lcMlO8u2cmsJV5ZnBRAKZSlJ6HmM9IV5+XjCgfvroda2L7XVEdYhbKtSO+WiEtM7Y7Vb9Awqtwqubvi",
+     "protocol": "BIP322"
+    },
+    "id": "DpcY8WUqNHkqt4r983mMi"
+   },
+   "result": {
+    "ok": "AUBjVxDr2lcMlO8u2cmsJV5ZnBRAKZSlJ6HmM9IV5+XjCgfvroda2L7XVEdYhbKtSO+WiEtM7Y7Vb9Awqtwqubvi"
+   },
+   "cliVerify": "valid",
+   "cliWitness": "0x0140635710ebda570c94ef2ed9c9ac255e599c14402994a527a1e633d215e7e5e30a07efae875ad8bed754475885b2ad48ef96884b4ced8ed56fd030aadc2ab9bbe2",
+   "rawLen": 66,
+   "rawHex": "0140635710ebda570c94ef2ed9c9ac255e599c14402994a527a1e633d215e7e5e30a07efae875ad8bed754475885b2ad48ef96884b4ced8ed56fd030aadc2ab9bbe2",
+   "witnessShape": {
+    "items": [
+     64
+    ],
+    "trailing": 0,
+    "sighash": "DEFAULT (64-byte Schnorr)"
+   }
+  }
+ }
+}

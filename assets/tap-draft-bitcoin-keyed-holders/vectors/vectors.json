@@ -1,0 +1,1265 @@
+{
+ "format": "tap-bitcoin-keyed-holders-vectors/1",
+ "about": "Test keys are derived from fixed strings and hold nothing. Hex is 0x-prefixed lowercase.",
+ "build": {
+  "solc": "0.8.28",
+  "evmVersion": "shanghai",
+  "optimizer": true,
+  "runs": 200,
+  "viaIR": true,
+  "bytecodeHash": "none",
+  "cborMetadata": false,
+  "creationCodeKeccak": "0x4bc9698ad9224fefccd7ba5d7205c1c0e8e9117eb53257873e64fae37f499c4f"
+ },
+ "factory": "0x4e59b44847b379578588920ca78fbf26c0b4956c",
+ "salt": "0x0000000000000000000000000000000000000000000000000000000000000000",
+ "holders": {
+  "p2tr": {
+   "bitcoinAddress": "bc1pdznq5ty2978g55m83a4uanyqw8mkvnjhl3ky7rp5ald95zhd697q258gca",
+   "scriptPubKey": "0x512068a60a2c8a2f8e8a53678f6bcecc8071f7664e57fc6c4f0c34efda5a0aedd17c",
+   "initCodeKeccak": "0x9148f237c0c864a80e3f46a64e6548e8c6b21fe3b9cfa03d35b05d7185c55b44",
+   "holder": "0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647"
+  },
+  "p2wpkh": {
+   "bitcoinAddress": "bc1qu357xdh0ps3wsc8dued9vupduqxky2ndpxw008",
+   "scriptPubKey": "0x0014e469e336ef0c22e860ede65a56702de00d622a6d",
+   "initCodeKeccak": "0xc45eedc65a07fd7b94c305247d490f9f21b6a24460637beab4386fa740c8d946",
+   "holder": "0xb73bee58fafd674831f355c17311d7849ccc2897"
+  },
+  "p2tr-other": {
+   "bitcoinAddress": "bc1psues0vzwjynu9lxq85en2re35mpeuv2437qy6rp0tgs28yr00e3qczx3g3",
+   "scriptPubKey": "0x5120873307b04e9127c2fcc03d33350f31a6c39e31558f804d0c2f5a20a3906f7e62",
+   "initCodeKeccak": "0xf82c9afa0a31bb4de3ac5cb516675a915b4de517fd8ab37e8307697676739175",
+   "holder": "0x9419156a4e5ac98f7586459e2f0870a4bbcaa5c6"
+  }
+ },
+ "tap11Delegation": {
+  "chainId": 56,
+  "hub": "0xe61a9c7213a6aa616c246a2b569e555b417b25ee",
+  "container": "0x00000000000000000000000000000000000c0b7a",
+  "signer": "0x000000000000000000000000000000000005197e",
+  "expires": 1790000000,
+  "digest": "0x6fc4c553d085542206416d9ec378a7ea96bc0d1b8f899a7defbf4d0f90fbe53f"
+ },
+ "signCases": [
+  {
+   "name": "p2tr-56",
+   "holder": "p2tr",
+   "chainId": 56,
+   "digest": "0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "message": "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 56 signs 0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "signature": "0x0140d7bccb9bb1b106f81bd59f1255d415cf86f45b6455c75e2d35ec8814fb483cae1724e47dbc8e6da247efac9a9bd136487d5aa3b43497fd1975f8168045fe2eb3",
+   "expect": true,
+   "note": "SIGHASH_DEFAULT"
+  },
+  {
+   "name": "p2wpkh-56",
+   "holder": "p2wpkh",
+   "chainId": 56,
+   "digest": "0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "message": "TapeOut Bitcoin-keyed holder 0xb73bee58fafd674831f355c17311d7849ccc2897 on chain 56 signs 0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "signature": "0x02483045022100c5f7882e3b15ca2e7833b61882d805b47106fd255ea7d70108150c730ba95b5b0220327969fd7bab0b145125fa8c8dd68a3b7718a8dc4d3071b3d6f67de7d8c61a240121039b5d771889106949b354d67e0b487ebf5a83a1151e7056198e16070d5f89cb7c",
+   "expect": true,
+   "note": "SIGHASH_ALL, strict DER, low s"
+  },
+  {
+   "name": "p2tr-sighash-all-56",
+   "holder": "p2tr",
+   "chainId": 56,
+   "digest": "0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "message": "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 56 signs 0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "signature": "0x01419513c92a7fff694861313fc43ea4f36fb029a5b7f64de9ef0c7101144616c98059648a907073737c61a357b74a45053d840af2d73232c7e9c55d79c0499d862c01",
+   "expect": true,
+   "note": "65-byte signature with SIGHASH_ALL, as Sparrow produces"
+  },
+  {
+   "name": "p2tr-8453",
+   "holder": "p2tr",
+   "chainId": 8453,
+   "digest": "0x9833c27212159afa8372879fc77a5c80619085965d4bcd547b234bf37fa3bea0",
+   "message": "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 8453 signs 0x9833c27212159afa8372879fc77a5c80619085965d4bcd547b234bf37fa3bea0",
+   "signature": "0x01400bebd8e1936162f020f375f1f0cd3bbfaef52ee9cdb6b202800245bf354b04d62bc3196340d35278cc3456177cab5e2f06e059bf8ce3d03b7e6a4e04bfd21058",
+   "expect": true,
+   "note": "SIGHASH_DEFAULT"
+  },
+  {
+   "name": "p2wpkh-8453",
+   "holder": "p2wpkh",
+   "chainId": 8453,
+   "digest": "0x9833c27212159afa8372879fc77a5c80619085965d4bcd547b234bf37fa3bea0",
+   "message": "TapeOut Bitcoin-keyed holder 0xb73bee58fafd674831f355c17311d7849ccc2897 on chain 8453 signs 0x9833c27212159afa8372879fc77a5c80619085965d4bcd547b234bf37fa3bea0",
+   "signature": "0x0247304402206e2880b4e8b4ec0217ebf7ea32c0f8ab1e0498f83ca2303628dc8e34194af29c02200dead848af83b320852d67e04ff2edcb6e354a3bd78bb6165bf6e1897e6027a50121039b5d771889106949b354d67e0b487ebf5a83a1151e7056198e16070d5f89cb7c",
+   "expect": true,
+   "note": "SIGHASH_ALL, strict DER, low s"
+  },
+  {
+   "name": "p2tr-sighash-all-8453",
+   "holder": "p2tr",
+   "chainId": 8453,
+   "digest": "0x9833c27212159afa8372879fc77a5c80619085965d4bcd547b234bf37fa3bea0",
+   "message": "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 8453 signs 0x9833c27212159afa8372879fc77a5c80619085965d4bcd547b234bf37fa3bea0",
+   "signature": "0x014134e2ce467cde329257d6ae8125522842b5472d0384ae74c74ad71b5bebf7f0bed3ddd1ba90e39cc1c5b9b78b43c5ed73b49b5ed0fe5a8b16bdf76a82ce29859b01",
+   "expect": true,
+   "note": "65-byte signature with SIGHASH_ALL, as Sparrow produces"
+  },
+  {
+   "name": "p2tr-196",
+   "holder": "p2tr",
+   "chainId": 196,
+   "digest": "0x00ce7904846187b808c57d17875ef15b709355d173f91d22e7937e3373aa41f3",
+   "message": "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 196 signs 0x00ce7904846187b808c57d17875ef15b709355d173f91d22e7937e3373aa41f3",
+   "signature": "0x0140e0c872841e389cd40241efaf183bebb9a20770d32bbb5dd8aee00f612f36f5c586da9f8fcda835ba5767b5ff38ef9340bb5800311edcd5b52c61033a3fd82860",
+   "expect": true,
+   "note": "SIGHASH_DEFAULT"
+  },
+  {
+   "name": "p2wpkh-196",
+   "holder": "p2wpkh",
+   "chainId": 196,
+   "digest": "0x00ce7904846187b808c57d17875ef15b709355d173f91d22e7937e3373aa41f3",
+   "message": "TapeOut Bitcoin-keyed holder 0xb73bee58fafd674831f355c17311d7849ccc2897 on chain 196 signs 0x00ce7904846187b808c57d17875ef15b709355d173f91d22e7937e3373aa41f3",
+   "signature": "0x02483045022100b358107d51ba8e4125ecacf74973027c3ef228051a61d2e7894fda1b3c531218022074a816460039f439f07152fa0f2adefce2677cabf853be399ade418369d231510121039b5d771889106949b354d67e0b487ebf5a83a1151e7056198e16070d5f89cb7c",
+   "expect": true,
+   "note": "SIGHASH_ALL, strict DER, low s"
+  },
+  {
+   "name": "p2tr-sighash-all-196",
+   "holder": "p2tr",
+   "chainId": 196,
+   "digest": "0x00ce7904846187b808c57d17875ef15b709355d173f91d22e7937e3373aa41f3",
+   "message": "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 196 signs 0x00ce7904846187b808c57d17875ef15b709355d173f91d22e7937e3373aa41f3",
+   "signature": "0x0141b586b4aa82e47bd57be9a404ce6b75843168fb93ed96a7929c644d3f377baa22bc0b218203411e1de1353c62f2d3d82a523cdfa8d46043b2943cd7e259dff4d801",
+   "expect": true,
+   "note": "65-byte signature with SIGHASH_ALL, as Sparrow produces"
+  },
+  {
+   "name": "tap11-delegation-p2tr",
+   "holder": "p2tr",
+   "chainId": 56,
+   "digest": "0x6fc4c553d085542206416d9ec378a7ea96bc0d1b8f899a7defbf4d0f90fbe53f",
+   "message": "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 56 signs 0x6fc4c553d085542206416d9ec378a7ea96bc0d1b8f899a7defbf4d0f90fbe53f",
+   "signature": "0x01403941760aebf71f94baffb5158c790f6b9f0c7725b41814527daa6bb67a7feaef48fdbb154a1c364c902c394856db9f1a6ce75ce317baaa3aaf306df518d61845",
+   "expect": true,
+   "note": "a TAP-11 \u00a74.1 Delegation digest (container, signer and expires in tap11Delegation)"
+  },
+  {
+   "name": "tap11-delegation-p2wpkh",
+   "holder": "p2wpkh",
+   "chainId": 56,
+   "digest": "0x6fc4c553d085542206416d9ec378a7ea96bc0d1b8f899a7defbf4d0f90fbe53f",
+   "message": "TapeOut Bitcoin-keyed holder 0xb73bee58fafd674831f355c17311d7849ccc2897 on chain 56 signs 0x6fc4c553d085542206416d9ec378a7ea96bc0d1b8f899a7defbf4d0f90fbe53f",
+   "signature": "0x0247304402205d21d6c3a95e5f66ac7cb305e7191574e5247dfc7d9dc075eb368147492dda0902207bd2b3f370d45860cb6958fa56f46780694d3b14b132d810a80277904b42996f0121039b5d771889106949b354d67e0b487ebf5a83a1151e7056198e16070d5f89cb7c",
+   "expect": true,
+   "note": "a TAP-11 \u00a74.1 Delegation digest (container, signer and expires in tap11Delegation)"
+  },
+  {
+   "name": "wrong-chain",
+   "holder": "p2tr",
+   "chainId": 8453,
+   "digest": "0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "message": "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 8453 signs 0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "signature": "0x0140d7bccb9bb1b106f81bd59f1255d415cf86f45b6455c75e2d35ec8814fb483cae1724e47dbc8e6da247efac9a9bd136487d5aa3b43497fd1975f8168045fe2eb3",
+   "expect": false,
+   "note": "signed for chain 56, checked on chain 8453"
+  },
+  {
+   "name": "other-holder",
+   "holder": "p2tr",
+   "chainId": 56,
+   "digest": "0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "message": "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 56 signs 0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "signature": "0x02483045022100c5f7882e3b15ca2e7833b61882d805b47106fd255ea7d70108150c730ba95b5b0220327969fd7bab0b145125fa8c8dd68a3b7718a8dc4d3071b3d6f67de7d8c61a240121039b5d771889106949b354d67e0b487ebf5a83a1151e7056198e16070d5f89cb7c",
+   "expect": false,
+   "note": "the P2WPKH holder's signature given to the P2TR holder"
+  },
+  {
+   "name": "other-digest",
+   "holder": "p2tr",
+   "chainId": 56,
+   "digest": "0xdaaebd40f7dd7896153851dabb09c36027a3a0e366a89f97d294fb2e5419f9fc",
+   "message": "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 56 signs 0xdaaebd40f7dd7896153851dabb09c36027a3a0e366a89f97d294fb2e5419f9fc",
+   "signature": "0x0140d7bccb9bb1b106f81bd59f1255d415cf86f45b6455c75e2d35ec8814fb483cae1724e47dbc8e6da247efac9a9bd136487d5aa3b43497fd1975f8168045fe2eb3",
+   "expect": false,
+   "note": "signature over another digest"
+  },
+  {
+   "name": "wrong-key",
+   "holder": "p2tr",
+   "chainId": 56,
+   "digest": "0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "message": "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 56 signs 0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "signature": "0x0140b7b7c1d64bbe29c05a22083e88dc5ec1fc6b68a769b99ab74f7b4081f8ddd91d3f5cde3cca2be2fc71cdf98663ea23c0d4cffa235a3ba89d9b3b6c5aef314291",
+   "expect": false,
+   "note": "the right message signed by another key"
+  },
+  {
+   "name": "raw-65-bytes",
+   "holder": "p2tr",
+   "chainId": 56,
+   "digest": "0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "message": "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 56 signs 0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "signature": "0xd7bccb9bb1b106f81bd59f1255d415cf86f45b6455c75e2d35ec8814fb483cae1724e47dbc8e6da247efac9a9bd136487d5aa3b43497fd1975f8168045fe2eb301",
+   "expect": false,
+   "note": "65 bytes: TAP-11 \u00a74.4 clients read this as ECDSA and never reach EIP-1271; the holder rejects it too"
+  },
+  {
+   "name": "hash-type-zero-explicit",
+   "holder": "p2tr",
+   "chainId": 56,
+   "digest": "0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "message": "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 56 signs 0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "signature": "0x0141d7bccb9bb1b106f81bd59f1255d415cf86f45b6455c75e2d35ec8814fb483cae1724e47dbc8e6da247efac9a9bd136487d5aa3b43497fd1975f8168045fe2eb300",
+   "expect": false,
+   "note": "SIGHASH_DEFAULT spelled as a 65-byte signature is invalid under BIP-341"
+  },
+  {
+   "name": "hash-type-none",
+   "holder": "p2tr",
+   "chainId": 56,
+   "digest": "0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "message": "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 56 signs 0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "signature": "0x0141d7bccb9bb1b106f81bd59f1255d415cf86f45b6455c75e2d35ec8814fb483cae1724e47dbc8e6da247efac9a9bd136487d5aa3b43497fd1975f8168045fe2eb302",
+   "expect": false,
+   "note": "SIGHASH_NONE is not accepted"
+  },
+  {
+   "name": "p2tr-two-items",
+   "holder": "p2tr",
+   "chainId": 56,
+   "digest": "0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "message": "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 56 signs 0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "signature": "0x0240d7bccb9bb1b106f81bd59f1255d415cf86f45b6455c75e2d35ec8814fb483cae1724e47dbc8e6da247efac9a9bd136487d5aa3b43497fd1975f8168045fe2eb3",
+   "expect": false,
+   "note": "witness that claims two stack items"
+  },
+  {
+   "name": "high-s",
+   "holder": "p2wpkh",
+   "chainId": 56,
+   "digest": "0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "message": "TapeOut Bitcoin-keyed holder 0xb73bee58fafd674831f355c17311d7849ccc2897 on chain 56 signs 0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "signature": "0x02493046022100c5f7882e3b15ca2e7833b61882d805b47106fd255ea7d70108150c730ba95b5b022100cd8696028454f4ebaeda0573722975c34396340a62182e87e8dbe0a4f770271d0121039b5d771889106949b354d67e0b487ebf5a83a1151e7056198e16070d5f89cb7c",
+   "expect": false,
+   "note": "the same signature with s replaced by n - s"
+  },
+  {
+   "name": "non-minimal-der",
+   "holder": "p2wpkh",
+   "chainId": 56,
+   "digest": "0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "message": "TapeOut Bitcoin-keyed holder 0xb73bee58fafd674831f355c17311d7849ccc2897 on chain 56 signs 0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "signature": "0x0249304602220000c5f7882e3b15ca2e7833b61882d805b47106fd255ea7d70108150c730ba95b5b0220327969fd7bab0b145125fa8c8dd68a3b7718a8dc4d3071b3d6f67de7d8c61a240121039b5d771889106949b354d67e0b487ebf5a83a1151e7056198e16070d5f89cb7c",
+   "expect": false,
+   "note": "r encoded with an unnecessary leading zero byte"
+  },
+  {
+   "name": "uncompressed-key",
+   "holder": "p2wpkh",
+   "chainId": 56,
+   "digest": "0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "message": "TapeOut Bitcoin-keyed holder 0xb73bee58fafd674831f355c17311d7849ccc2897 on chain 56 signs 0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "signature": "0x02483045022100c5f7882e3b15ca2e7833b61882d805b47106fd255ea7d70108150c730ba95b5b0220327969fd7bab0b145125fa8c8dd68a3b7718a8dc4d3071b3d6f67de7d8c61a240141049b5d771889106949b354d67e0b487ebf5a83a1151e7056198e16070d5f89cb7ce1a8c751e227906a7aabd72a41925b6e58edd63fcd222557914bb1cba2f1839d",
+   "expect": false,
+   "note": "an uncompressed key: wrong length and wrong hash160"
+  },
+  {
+   "name": "empty",
+   "holder": "p2tr",
+   "chainId": 56,
+   "digest": "0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "message": "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 56 signs 0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "signature": "0x",
+   "expect": false,
+   "note": "no signature"
+  },
+  {
+   "name": "p2wpkh-wrong-chain",
+   "holder": "p2wpkh",
+   "chainId": 8453,
+   "digest": "0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "message": "TapeOut Bitcoin-keyed holder 0xb73bee58fafd674831f355c17311d7849ccc2897 on chain 8453 signs 0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "signature": "0x02483045022100c5f7882e3b15ca2e7833b61882d805b47106fd255ea7d70108150c730ba95b5b0220327969fd7bab0b145125fa8c8dd68a3b7718a8dc4d3071b3d6f67de7d8c61a240121039b5d771889106949b354d67e0b487ebf5a83a1151e7056198e16070d5f89cb7c",
+   "expect": false,
+   "note": "signed for chain 56, checked on chain 8453"
+  },
+  {
+   "name": "p2wpkh-other-holder",
+   "holder": "p2wpkh",
+   "chainId": 56,
+   "digest": "0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "message": "TapeOut Bitcoin-keyed holder 0xb73bee58fafd674831f355c17311d7849ccc2897 on chain 56 signs 0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "signature": "0x0140d7bccb9bb1b106f81bd59f1255d415cf86f45b6455c75e2d35ec8814fb483cae1724e47dbc8e6da247efac9a9bd136487d5aa3b43497fd1975f8168045fe2eb3",
+   "expect": false,
+   "note": "the P2TR holder's signature given to the P2WPKH holder"
+  },
+  {
+   "name": "p2wpkh-other-digest",
+   "holder": "p2wpkh",
+   "chainId": 56,
+   "digest": "0xdaaebd40f7dd7896153851dabb09c36027a3a0e366a89f97d294fb2e5419f9fc",
+   "message": "TapeOut Bitcoin-keyed holder 0xb73bee58fafd674831f355c17311d7849ccc2897 on chain 56 signs 0xdaaebd40f7dd7896153851dabb09c36027a3a0e366a89f97d294fb2e5419f9fc",
+   "signature": "0x02483045022100c5f7882e3b15ca2e7833b61882d805b47106fd255ea7d70108150c730ba95b5b0220327969fd7bab0b145125fa8c8dd68a3b7718a8dc4d3071b3d6f67de7d8c61a240121039b5d771889106949b354d67e0b487ebf5a83a1151e7056198e16070d5f89cb7c",
+   "expect": false,
+   "note": "signature over another digest"
+  },
+  {
+   "name": "p2wpkh-wrong-key",
+   "holder": "p2wpkh",
+   "chainId": 56,
+   "digest": "0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "message": "TapeOut Bitcoin-keyed holder 0xb73bee58fafd674831f355c17311d7849ccc2897 on chain 56 signs 0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "signature": "0x0247304402203b312c346b18c07c98b3dc37327c64acb4c5d863a8cdb28c9a084f700083f0790220552e92d1e31031f7d1487ccfa7f0d96c2050a94ce8f77734cc71fe5d1e8a18c90121036ddd1da0890af401d0427a03264c85a81326d34f2e40f7b5427347bbd13e217f",
+   "expect": false,
+   "note": "the right message signed by another P2WPKH key: valid ECDSA, but its hash160 is not the holder's"
+  },
+  {
+   "name": "p2wpkh-hash-type-byte-2",
+   "holder": "p2wpkh",
+   "chainId": 56,
+   "digest": "0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "message": "TapeOut Bitcoin-keyed holder 0xb73bee58fafd674831f355c17311d7849ccc2897 on chain 56 signs 0x0339922221de50d86bd688aac3ac33ebbb042a711752c4bb1985c61eacc4ffb3",
+   "signature": "0x02483045022100c5f7882e3b15ca2e7833b61882d805b47106fd255ea7d70108150c730ba95b5b0220327969fd7bab0b145125fa8c8dd68a3b7718a8dc4d3071b3d6f67de7d8c61a240221039b5d771889106949b354d67e0b487ebf5a83a1151e7056198e16070d5f89cb7c",
+   "expect": false,
+   "note": "the valid DER signature with its hash type byte changed from 0x01 to 0x02"
+  }
+ ],
+ "callCases": [
+  {
+   "name": "transfer-p2tr",
+   "holder": "p2tr",
+   "chainId": 56,
+   "target": "0x00000000000000000000000000000000000000c1",
+   "value": 0,
+   "data": "0x42842e0e000000000000000000000000750d22d8b6dd3168c2a4a2efddd44a8bfe36264700000000000000000000000000000000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000001",
+   "gas": 100000,
+   "tip": 0,
+   "nonce": 0,
+   "deadline": 2000000000,
+   "message": "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 56 calls 0x00000000000000000000000000000000000000c1 with value 0 and data 0xcb756a7ba059624ae79c6fcf7896d07f3e5ccee5f7761b242961ec10d8ce9e0a, gas 100000, tip 0, nonce 0, valid until 2000000000",
+   "signature": "0x0140df09da50a3aacce99a24c9639c3e20a9bd0bb79225320db3a697fb203183401ca9e3dba85853f577fa384a45004178f222441edf43a5298ab5602547b7dc57e4"
+  },
+  {
+   "name": "transfer-p2wpkh",
+   "holder": "p2wpkh",
+   "chainId": 56,
+   "target": "0x00000000000000000000000000000000000000c1",
+   "value": 0,
+   "data": "0x42842e0e000000000000000000000000b73bee58fafd674831f355c17311d7849ccc289700000000000000000000000000000000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000001",
+   "gas": 100000,
+   "tip": 0,
+   "nonce": 0,
+   "deadline": 2000000000,
+   "message": "TapeOut Bitcoin-keyed holder 0xb73bee58fafd674831f355c17311d7849ccc2897 on chain 56 calls 0x00000000000000000000000000000000000000c1 with value 0 and data 0x38aed1747de7f3252d8dc61b6a14e535f262d01175378b9937f9cb65da85938d, gas 100000, tip 0, nonce 0, valid until 2000000000",
+   "signature": "0x02483045022100a69565be2e743fe917f524fb5ba0f2709fb0a40e2c9e58f37dcd9f6a69ea1751022040ce83eae32b30d975ef5adb25f68a918b69c27f99f63aa9d932f2dc078d82d30121039b5d771889106949b354d67e0b487ebf5a83a1151e7056198e16070d5f89cb7c"
+  },
+  {
+   "name": "value-transfer-p2tr",
+   "holder": "p2tr",
+   "chainId": 56,
+   "target": "0x00000000000000000000000000000000000000b0",
+   "value": 1000000000000000000,
+   "data": "0x",
+   "gas": 0,
+   "tip": 0,
+   "nonce": 1,
+   "deadline": 2000000000,
+   "message": "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 56 calls 0x00000000000000000000000000000000000000b0 with value 1000000000000000000 and data 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470, gas 0, tip 0, nonce 1, valid until 2000000000",
+   "signature": "0x0140d51138cdcc0eec2810a4511c7b296296000a7d850cffec82c813d42ce25790aad8d4d59588237d8cf336ea401f2127e4fa7f75ba9f62f25219c5406d26b0de80"
+  },
+  {
+   "name": "token-with-tip-p2wpkh",
+   "holder": "p2wpkh",
+   "chainId": 56,
+   "target": "0x00000000000000000000000000000000000000c1",
+   "value": 0,
+   "data": "0x42842e0e000000000000000000000000b73bee58fafd674831f355c17311d7849ccc289700000000000000000000000000000000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000007",
+   "gas": 100000,
+   "tip": 10000000000000000,
+   "nonce": 0,
+   "deadline": 2000000000,
+   "message": "TapeOut Bitcoin-keyed holder 0xb73bee58fafd674831f355c17311d7849ccc2897 on chain 56 calls 0x00000000000000000000000000000000000000c1 with value 0 and data 0xfa0fb740d3507305e86230c440039fe57cbdf6ebffe9485dff7ffde9e0d7beef, gas 100000, tip 10000000000000000, nonce 0, valid until 2000000000",
+   "signature": "0x02483045022100e4c803c22516dc2bdbfa5f942580f4cf672d17f6b5b8ae17396c9eef25f39de3022075450b1aab0f92d33e5ea534c2f2a7de9cc4c320eb35ceec4083ed3eead89bd20121039b5d771889106949b354d67e0b487ebf5a83a1151e7056198e16070d5f89cb7c"
+  }
+ ],
+ "constructorCases": [
+  {
+   "name": "p2tr-test-key",
+   "scriptPubKey": "0x512068a60a2c8a2f8e8a53678f6bcecc8071f7664e57fc6c4f0c34efda5a0aedd17c",
+   "expect": "accept"
+  },
+  {
+   "name": "p2wpkh-test-key",
+   "scriptPubKey": "0x0014e469e336ef0c22e860ede65a56702de00d622a6d",
+   "expect": "accept"
+  },
+  {
+   "name": "p2tr-x-1",
+   "scriptPubKey": "0x51200000000000000000000000000000000000000000000000000000000000000001",
+   "expect": "accept"
+  },
+  {
+   "name": "p2tr-x-0",
+   "scriptPubKey": "0x51200000000000000000000000000000000000000000000000000000000000000000",
+   "expect": "reject"
+  },
+  {
+   "name": "p2tr-x-5-not-on-curve",
+   "scriptPubKey": "0x51200000000000000000000000000000000000000000000000000000000000000005",
+   "expect": "reject"
+  },
+  {
+   "name": "p2tr-x-n-minus-1",
+   "scriptPubKey": "0x5120fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364140",
+   "expect": "reject"
+  },
+  {
+   "name": "p2tr-x-n",
+   "scriptPubKey": "0x5120fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141",
+   "expect": "reject"
+  },
+  {
+   "name": "p2tr-x-p-minus-1",
+   "scriptPubKey": "0x5120fffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2e",
+   "expect": "reject"
+  },
+  {
+   "name": "p2wsh",
+   "scriptPubKey": "0x00200000000000000000000000000000000000000000000000000000000000000000",
+   "expect": "reject"
+  },
+  {
+   "name": "p2tr-33-bytes",
+   "scriptPubKey": "0x512068a60a2c8a2f8e8a53678f6bcecc8071f7664e57fc6c4f0c34efda5a0aedd1",
+   "expect": "reject"
+  },
+  {
+   "name": "p2wpkh-21-bytes",
+   "scriptPubKey": "0x0014e469e336ef0c22e860ede65a56702de00d622a",
+   "expect": "reject"
+  },
+  {
+   "name": "wrong-prefix",
+   "scriptPubKey": "0x512168a60a2c8a2f8e8a53678f6bcecc8071f7664e57fc6c4f0c34efda5a0aedd17c",
+   "expect": "reject"
+  },
+  {
+   "name": "empty",
+   "scriptPubKey": "0x",
+   "expect": "reject"
+  }
+ ],
+ "hrpCases": [
+  {
+   "name": "p2wpkh-bc",
+   "address": "bc1qu357xdh0ps3wsc8dued9vupduqxky2ndpxw008",
+   "expect": "accept"
+  },
+  {
+   "name": "p2wpkh-tb",
+   "address": "tb1qu357xdh0ps3wsc8dued9vupduqxky2ndtq4u55",
+   "expect": "reject"
+  },
+  {
+   "name": "p2wpkh-bcrt",
+   "address": "bcrt1qu357xdh0ps3wsc8dued9vupduqxky2ndffv3ra",
+   "expect": "reject"
+  }
+ ],
+ "walletOutputs": [
+  {
+   "name": "plain-base64",
+   "input": "AUGVE8kqf/9pSGExP8Q+pPNvsCmlt/ZN6e8McQEURhbJgFlkipBwc3N8YaNXt0pFBT2ECvLXMjLH6cVdecBJnYYsAQ==",
+   "expect": "0x01419513c92a7fff694861313fc43ea4f36fb029a5b7f64de9ef0c7101144616c98059648a907073737c61a357b74a45053d840af2d73232c7e9c55d79c0499d862c01"
+  },
+  {
+   "name": "smp-marker",
+   "input": "smpAUGVE8kqf/9pSGExP8Q+pPNvsCmlt/ZN6e8McQEURhbJgFlkipBwc3N8YaNXt0pFBT2ECvLXMjLH6cVdecBJnYYsAQ==",
+   "expect": "0x01419513c92a7fff694861313fc43ea4f36fb029a5b7f64de9ef0c7101144616c98059648a907073737c61a357b74a45053d840af2d73232c7e9c55d79c0499d862c01"
+  },
+  {
+   "name": "surrounding-whitespace",
+   "input": " \tsmpAUGVE8kqf/9pSGExP8Q+pPNvsCmlt/ZN6e8McQEURhbJgFlkipBwc3N8YaNXt0pFBT2ECvLXMjLH6cVdecBJnYYsAQ==\r\n",
+   "expect": "0x01419513c92a7fff694861313fc43ea4f36fb029a5b7f64de9ef0c7101144616c98059648a907073737c61a357b74a45053d840af2d73232c7e9c55d79c0499d862c01"
+  },
+  {
+   "name": "interior-space",
+   "input": "AUGVE8kqf/ 9pSGExP8Q+pPNvsCmlt/ZN6e8McQEURhbJgFlkipBwc3N8YaNXt0pFBT2ECvLXMjLH6cVdecBJnYYsAQ==",
+   "expect": "reject"
+  },
+  {
+   "name": "full-signature",
+   "input": "fulAUGVE8kqf/9pSGExP8Q+pPNvsCmlt/ZN6e8McQEURhbJgFlkipBwc3N8YaNXt0pFBT2ECvLXMjLH6cVdecBJnYYsAQ==",
+   "expect": "reject"
+  },
+  {
+   "name": "proof-of-funds",
+   "input": "pofAUGVE8kqf/9pSGExP8Q+pPNvsCmlt/ZN6e8McQEURhbJgFlkipBwc3N8YaNXt0pFBT2ECvLXMjLH6cVdecBJnYYsAQ==",
+   "expect": "reject"
+  },
+  {
+   "name": "missing-padding",
+   "input": "AUGVE8kqf/9pSGExP8Q+pPNvsCmlt/ZN6e8McQEURhbJgFlkipBwc3N8YaNXt0pFBT2ECvLXMjLH6cVdecBJnYYsAQ",
+   "expect": "reject"
+  },
+  {
+   "name": "uppercase-marker",
+   "input": "SMPAUGVE8kqf/9pSGExP8Q+pPNvsCmlt/ZN6e8McQEURhbJgFlkipBwc3N8YaNXt0pFBT2ECvLXMjLH6cVdecBJnYYsAQ==",
+   "expect": "reject"
+  },
+  {
+   "name": "not-base64",
+   "input": "smpAUGVE8kqf/9pSGExP8Q+pPNvsCmlt/ZN6e8McQEURhbJgFlkipBwc3N8YaNXt0pFBT2ECvLXMjLH6cVdecBJnYYs!!!!",
+   "expect": "reject"
+  },
+  {
+   "name": "padding-in-the-middle",
+   "input": "AUGVE8kqf/9pSGExP8Q+=PNvsCmlt/ZN6e8McQEURhbJgFlkipBwc3N8YaNXt0pFBT2ECvLXMjLH6cVdecBJnYYsAQ==",
+   "expect": "reject"
+  },
+  {
+   "name": "extra-padding-character",
+   "input": "AUGVE8kqf/9pSGExP8Q+pPNvsCmlt/ZN6e8McQEURhbJgFlkipBwc3N8YaNXt0pFBT2ECvLXMjLH6cVdecBJnYYsAQ===",
+   "expect": "reject"
+  },
+  {
+   "name": "nonzero-trailing-bits",
+   "input": "AUGVE8kqf/9pSGExP8Q+pPNvsCmlt/ZN6e8McQEURhbJgFlkipBwc3N8YaNXt0pFBT2ECvLXMjLH6cVdecBJnYYsAR==",
+   "expect": "0x01419513c92a7fff694861313fc43ea4f36fb029a5b7f64de9ef0c7101144616c98059648a907073737c61a357b74a45053d840af2d73232c7e9c55d79c0499d862c01"
+  }
+ ],
+ "walletRawOutputs": [
+  {
+   "wallet": "xverse 2.9.3",
+   "kind": "p2tr",
+   "text": "5.1 message",
+   "chars": 156,
+   "scriptPubKey": "0x5120a60869f0dbcf1dc659c9cecbaf8050135ea9e8cdc487053f1dc6880949dc684c",
+   "message": "TapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+   "api": "JSON-RPC result.signature",
+   "apiResult": {
+    "jsonrpc": "2.0",
+    "result": {
+     "address": "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr",
+     "messageHash": "4faf071e8c52f7957d31d79d2d4c1a3485c3acb32c8216d4a35111f1a5d66b0d",
+     "signature": "AUDDV15UFrQRMWbs4aWG3T71NGSFE4xTNbqHsWRJT5ydzHp9eqK7heSzNFT+dS3Ar6Dc4FQpBH0oMYf+aKL0oFQ4",
+     "protocol": "BIP322"
+    },
+    "id": "IBzc3zGxX4MHnt_zExaYX"
+   },
+   "input": "AUDDV15UFrQRMWbs4aWG3T71NGSFE4xTNbqHsWRJT5ydzHp9eqK7heSzNFT+dS3Ar6Dc4FQpBH0oMYf+aKL0oFQ4",
+   "expect": "0x0140c3575e5416b4113166ece1a586dd3ef5346485138c5335ba87b164494f9c9dcc7a7d7aa2bb85e4b33454fe752dc0afa0dce05429047d283187fe68a2f4a05438",
+   "validSimpleSignature": true
+  },
+  {
+   "wallet": "xverse 2.9.3",
+   "kind": "p2tr",
+   "text": "4,000-character probe (not a TAP text)",
+   "chars": 4000,
+   "scriptPubKey": "0x5120a60869f0dbcf1dc659c9cecbaf8050135ea9e8cdc487053f1dc6880949dc684c",
+   "message": "0000 TapeOut wallet length probe, printable ASCII only, no line breaks; 0001 TapeOut wallet length probe, printable ASCII only, no line breaks; 0002 TapeOut wallet length probe, printable ASCII only, no line breaks; 0003 TapeOut wallet length probe, printable ASCII only, no line breaks; 0004 TapeOut wallet length probe, printable ASCII only, no line breaks; 0005 TapeOut wallet length probe, printable ASCII only, no line breaks; 0006 TapeOut wallet length probe, printable ASCII only, no line breaks; 0007 TapeOut wallet length probe, printable ASCII only, no line breaks; 0008 TapeOut wallet length probe, printable ASCII only, no line breaks; 0009 TapeOut wallet length probe, printable ASCII only, no line breaks; 0010 TapeOut wallet length probe, printable ASCII only, no line breaks; 0011 TapeOut wallet length probe, printable ASCII only, no line breaks; 0012 TapeOut wallet length probe, printable ASCII only, no line breaks; 0013 TapeOut wallet length probe, printable ASCII only, no line breaks; 0014 TapeOut wallet length probe, printable ASCII only, no line breaks; 0015 TapeOut wallet length probe, printable ASCII only, no line breaks; 0016 TapeOut wallet length probe, printable ASCII only, no line breaks; 0017 TapeOut wallet length probe, printable ASCII only, no line breaks; 0018 TapeOut wallet length probe, printable ASCII only, no line breaks; 0019 TapeOut wallet length probe, printable ASCII only, no line breaks; 0020 TapeOut wallet length probe, printable ASCII only, no line breaks; 0021 TapeOut wallet length probe, printable ASCII only, no line breaks; 0022 TapeOut wallet length probe, printable ASCII only, no line breaks; 0023 TapeOut wallet length probe, printable ASCII only, no line breaks; 0024 TapeOut wallet length probe, printable ASCII only, no line breaks; 0025 TapeOut wallet length probe, printable ASCII only, no line breaks; 0026 TapeOut wallet length probe, printable ASCII only, no line breaks; 0027 TapeOut wallet length probe, printable ASCII only, no line breaks; 0028 TapeOut wallet length probe, printable ASCII only, no line breaks; 0029 TapeOut wallet length probe, printable ASCII only, no line breaks; 0030 TapeOut wallet length probe, printable ASCII only, no line breaks; 0031 TapeOut wallet length probe, printable ASCII only, no line breaks; 0032 TapeOut wallet length probe, printable ASCII only, no line breaks; 0033 TapeOut wallet length probe, printable ASCII only, no line breaks; 0034 TapeOut wallet length probe, printable ASCII only, no line breaks; 0035 TapeOut wallet length probe, printable ASCII only, no line breaks; 0036 TapeOut wallet length probe, printable ASCII only, no line breaks; 0037 TapeOut wallet length probe, printable ASCII only, no line breaks; 0038 TapeOut wallet length probe, printable ASCII only, no line breaks; 0039 TapeOut wallet length probe, printable ASCII only, no line breaks; 0040 TapeOut wallet length probe, printable ASCII only, no line breaks; 0041 TapeOut wallet length probe, printable ASCII only, no line breaks; 0042 TapeOut wallet length probe, printable ASCII only, no line breaks; 0043 TapeOut wallet length probe, printable ASCII only, no line breaks; 0044 TapeOut wallet length probe, printable ASCII only, no line breaks; 0045 TapeOut wallet length probe, printable ASCII only, no line breaks; 0046 TapeOut wallet length probe, printable ASCII only, no line breaks; 0047 TapeOut wallet length probe, printable ASCII only, no line breaks; 0048 TapeOut wallet length probe, printable ASCII only, no line breaks; 0049 TapeOut wallet length probe, printable ASCII only, no line breaks; 0050 TapeOut wallet length probe, printable ASCII only, no line breaks; 0051 TapeOut wallet length probe, printable ASCII only, no line breaks; 0052 TapeOut wallet length probe, printable ASCII only, no line breaks; 0053 TapeOut wallet length probe, printable ASCII only, no line breaks; 0054 TapeOut wallet length probe, printable ASCII only, no line breaks; 0055 TapeOut wallet length probe, printa",
+   "api": "JSON-RPC result.signature",
+   "apiResult": {
+    "jsonrpc": "2.0",
+    "result": {
+     "address": "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr",
+     "messageHash": "863d9727b2906650a1d1c47a9937b878cf0198f107ae6087fa65a25e9f6b0f18",
+     "signature": "AUBjVxDr2lcMlO8u2cmsJV5ZnBRAKZSlJ6HmM9IV5+XjCgfvroda2L7XVEdYhbKtSO+WiEtM7Y7Vb9Awqtwqubvi",
+     "protocol": "BIP322"
+    },
+    "id": "DpcY8WUqNHkqt4r983mMi"
+   },
+   "input": "AUBjVxDr2lcMlO8u2cmsJV5ZnBRAKZSlJ6HmM9IV5+XjCgfvroda2L7XVEdYhbKtSO+WiEtM7Y7Vb9Awqtwqubvi",
+   "expect": "0x0140635710ebda570c94ef2ed9c9ac255e599c14402994a527a1e633d215e7e5e30a07efae875ad8bed754475885b2ad48ef96884b4ced8ed56fd030aadc2ab9bbe2",
+   "validSimpleSignature": true
+  },
+  {
+   "wallet": "xverse 2.9.3",
+   "kind": "p2wpkh",
+   "text": "5.1 message",
+   "chars": 156,
+   "scriptPubKey": "0x0014c0cebcd6c3d3ca8c75dc5ec62ebe55330ef910e2",
+   "message": "TapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+   "api": "JSON-RPC result.signature",
+   "apiResult": {
+    "jsonrpc": "2.0",
+    "result": {
+     "address": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu",
+     "messageHash": "393a54de7a4ae40a70519724f1e010ea2281caa0b46dd31d0b1f1a120064799f",
+     "signature": "AkcwRAIgL1lIs7xEnn5R5foR82pAj7gvzwssxmnmRm2fY7fZ0MsCIBlLGVPF06DewZgJl6FQqGeTiPpZ8Xbo9BXC5fjy0xT8ASEDMNVP0N1CCm5fjTYk9fNILK41D3nV8HU79b7vnC2Rrzw=",
+     "protocol": "BIP322"
+    },
+    "id": "8h5fAUFD8OhWJi2hGAAVJ"
+   },
+   "input": "AkcwRAIgL1lIs7xEnn5R5foR82pAj7gvzwssxmnmRm2fY7fZ0MsCIBlLGVPF06DewZgJl6FQqGeTiPpZ8Xbo9BXC5fjy0xT8ASEDMNVP0N1CCm5fjTYk9fNILK41D3nV8HU79b7vnC2Rrzw=",
+   "expect": "0x0247304402202f5948b3bc449e7e51e5fa11f36a408fb82fcf0b2cc669e6466d9f63b7d9d0cb0220194b1953c5d3a0dec1980997a150a8679388fa59f176e8f415c2e5f8f2d314fc01210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+   "validSimpleSignature": true
+  },
+  {
+   "wallet": "xverse 2.9.3",
+   "kind": "p2wpkh",
+   "text": "4,000-character probe (not a TAP text)",
+   "chars": 4000,
+   "scriptPubKey": "0x0014c0cebcd6c3d3ca8c75dc5ec62ebe55330ef910e2",
+   "message": "0000 TapeOut wallet length probe, printable ASCII only, no line breaks; 0001 TapeOut wallet length probe, printable ASCII only, no line breaks; 0002 TapeOut wallet length probe, printable ASCII only, no line breaks; 0003 TapeOut wallet length probe, printable ASCII only, no line breaks; 0004 TapeOut wallet length probe, printable ASCII only, no line breaks; 0005 TapeOut wallet length probe, printable ASCII only, no line breaks; 0006 TapeOut wallet length probe, printable ASCII only, no line breaks; 0007 TapeOut wallet length probe, printable ASCII only, no line breaks; 0008 TapeOut wallet length probe, printable ASCII only, no line breaks; 0009 TapeOut wallet length probe, printable ASCII only, no line breaks; 0010 TapeOut wallet length probe, printable ASCII only, no line breaks; 0011 TapeOut wallet length probe, printable ASCII only, no line breaks; 0012 TapeOut wallet length probe, printable ASCII only, no line breaks; 0013 TapeOut wallet length probe, printable ASCII only, no line breaks; 0014 TapeOut wallet length probe, printable ASCII only, no line breaks; 0015 TapeOut wallet length probe, printable ASCII only, no line breaks; 0016 TapeOut wallet length probe, printable ASCII only, no line breaks; 0017 TapeOut wallet length probe, printable ASCII only, no line breaks; 0018 TapeOut wallet length probe, printable ASCII only, no line breaks; 0019 TapeOut wallet length probe, printable ASCII only, no line breaks; 0020 TapeOut wallet length probe, printable ASCII only, no line breaks; 0021 TapeOut wallet length probe, printable ASCII only, no line breaks; 0022 TapeOut wallet length probe, printable ASCII only, no line breaks; 0023 TapeOut wallet length probe, printable ASCII only, no line breaks; 0024 TapeOut wallet length probe, printable ASCII only, no line breaks; 0025 TapeOut wallet length probe, printable ASCII only, no line breaks; 0026 TapeOut wallet length probe, printable ASCII only, no line breaks; 0027 TapeOut wallet length probe, printable ASCII only, no line breaks; 0028 TapeOut wallet length probe, printable ASCII only, no line breaks; 0029 TapeOut wallet length probe, printable ASCII only, no line breaks; 0030 TapeOut wallet length probe, printable ASCII only, no line breaks; 0031 TapeOut wallet length probe, printable ASCII only, no line breaks; 0032 TapeOut wallet length probe, printable ASCII only, no line breaks; 0033 TapeOut wallet length probe, printable ASCII only, no line breaks; 0034 TapeOut wallet length probe, printable ASCII only, no line breaks; 0035 TapeOut wallet length probe, printable ASCII only, no line breaks; 0036 TapeOut wallet length probe, printable ASCII only, no line breaks; 0037 TapeOut wallet length probe, printable ASCII only, no line breaks; 0038 TapeOut wallet length probe, printable ASCII only, no line breaks; 0039 TapeOut wallet length probe, printable ASCII only, no line breaks; 0040 TapeOut wallet length probe, printable ASCII only, no line breaks; 0041 TapeOut wallet length probe, printable ASCII only, no line breaks; 0042 TapeOut wallet length probe, printable ASCII only, no line breaks; 0043 TapeOut wallet length probe, printable ASCII only, no line breaks; 0044 TapeOut wallet length probe, printable ASCII only, no line breaks; 0045 TapeOut wallet length probe, printable ASCII only, no line breaks; 0046 TapeOut wallet length probe, printable ASCII only, no line breaks; 0047 TapeOut wallet length probe, printable ASCII only, no line breaks; 0048 TapeOut wallet length probe, printable ASCII only, no line breaks; 0049 TapeOut wallet length probe, printable ASCII only, no line breaks; 0050 TapeOut wallet length probe, printable ASCII only, no line breaks; 0051 TapeOut wallet length probe, printable ASCII only, no line breaks; 0052 TapeOut wallet length probe, printable ASCII only, no line breaks; 0053 TapeOut wallet length probe, printable ASCII only, no line breaks; 0054 TapeOut wallet length probe, printable ASCII only, no line breaks; 0055 TapeOut wallet length probe, printa",
+   "api": "JSON-RPC result.signature",
+   "apiResult": {
+    "jsonrpc": "2.0",
+    "result": {
+     "address": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu",
+     "messageHash": "863d9727b2906650a1d1c47a9937b878cf0198f107ae6087fa65a25e9f6b0f18",
+     "signature": "AkcwRAIgbGhVjjEzKwDOtQ3SxR5vbZMWOQhz2yuoyciXfa1/ILECIHzSVqnqbxWg8rZ1tMYY5Co76Et1Jb4aYpWuQd99NUa1ASEDMNVP0N1CCm5fjTYk9fNILK41D3nV8HU79b7vnC2Rrzw=",
+     "protocol": "BIP322"
+    },
+    "id": "5HaSijHgoDdKmuhAnhVwV"
+   },
+   "input": "AkcwRAIgbGhVjjEzKwDOtQ3SxR5vbZMWOQhz2yuoyciXfa1/ILECIHzSVqnqbxWg8rZ1tMYY5Co76Et1Jb4aYpWuQd99NUa1ASEDMNVP0N1CCm5fjTYk9fNILK41D3nV8HU79b7vnC2Rrzw=",
+   "expect": "0x0247304402206c68558e31332b00ceb50dd2c51e6f6d9316390873db2ba8c9c8977dad7f20b102207cd256a9ea6f15a0f2b675b4c618e42a3be84b7525be1a6295ae41df7d3546b501210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+   "validSimpleSignature": true
+  },
+  {
+   "wallet": "leather 6.114.0",
+   "kind": "p2tr",
+   "text": "5.1 message",
+   "chars": 156,
+   "scriptPubKey": "0x5120a60869f0dbcf1dc659c9cecbaf8050135ea9e8cdc487053f1dc6880949dc684c",
+   "message": "TapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+   "api": "JSON-RPC result.signature",
+   "apiResult": {
+    "jsonrpc": "2.0",
+    "id": "c5388eca-aeb9-48fe-b7c4-c0e6ad9354bf",
+    "result": {
+     "signature": "AUC9puFAyGifnDi5JV60UzqR/QRGFEqQKCWJ3Ken0S4wbUem8bt2K2zI9blRZ4olVhIOwViKz5U1BQUbiuy+lFzR",
+     "address": "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr",
+     "message": "TapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 signs 0xabababababababababababababababababababababababababababababababab"
+    }
+   },
+   "input": "AUC9puFAyGifnDi5JV60UzqR/QRGFEqQKCWJ3Ken0S4wbUem8bt2K2zI9blRZ4olVhIOwViKz5U1BQUbiuy+lFzR",
+   "expect": "0x0140bda6e140c8689f9c38b9255eb4533a91fd0446144a90282589dca7a7d12e306d47a6f1bb762b6cc8f5b951678a2556120ec1588acf953505051b8aecbe945cd1",
+   "validSimpleSignature": true
+  },
+  {
+   "wallet": "leather 6.114.0",
+   "kind": "p2tr",
+   "text": "4,000-character probe (not a TAP text)",
+   "chars": 4000,
+   "scriptPubKey": "0x5120a60869f0dbcf1dc659c9cecbaf8050135ea9e8cdc487053f1dc6880949dc684c",
+   "message": "0000 TapeOut wallet length probe, printable ASCII only, no line breaks; 0001 TapeOut wallet length probe, printable ASCII only, no line breaks; 0002 TapeOut wallet length probe, printable ASCII only, no line breaks; 0003 TapeOut wallet length probe, printable ASCII only, no line breaks; 0004 TapeOut wallet length probe, printable ASCII only, no line breaks; 0005 TapeOut wallet length probe, printable ASCII only, no line breaks; 0006 TapeOut wallet length probe, printable ASCII only, no line breaks; 0007 TapeOut wallet length probe, printable ASCII only, no line breaks; 0008 TapeOut wallet length probe, printable ASCII only, no line breaks; 0009 TapeOut wallet length probe, printable ASCII only, no line breaks; 0010 TapeOut wallet length probe, printable ASCII only, no line breaks; 0011 TapeOut wallet length probe, printable ASCII only, no line breaks; 0012 TapeOut wallet length probe, printable ASCII only, no line breaks; 0013 TapeOut wallet length probe, printable ASCII only, no line breaks; 0014 TapeOut wallet length probe, printable ASCII only, no line breaks; 0015 TapeOut wallet length probe, printable ASCII only, no line breaks; 0016 TapeOut wallet length probe, printable ASCII only, no line breaks; 0017 TapeOut wallet length probe, printable ASCII only, no line breaks; 0018 TapeOut wallet length probe, printable ASCII only, no line breaks; 0019 TapeOut wallet length probe, printable ASCII only, no line breaks; 0020 TapeOut wallet length probe, printable ASCII only, no line breaks; 0021 TapeOut wallet length probe, printable ASCII only, no line breaks; 0022 TapeOut wallet length probe, printable ASCII only, no line breaks; 0023 TapeOut wallet length probe, printable ASCII only, no line breaks; 0024 TapeOut wallet length probe, printable ASCII only, no line breaks; 0025 TapeOut wallet length probe, printable ASCII only, no line breaks; 0026 TapeOut wallet length probe, printable ASCII only, no line breaks; 0027 TapeOut wallet length probe, printable ASCII only, no line breaks; 0028 TapeOut wallet length probe, printable ASCII only, no line breaks; 0029 TapeOut wallet length probe, printable ASCII only, no line breaks; 0030 TapeOut wallet length probe, printable ASCII only, no line breaks; 0031 TapeOut wallet length probe, printable ASCII only, no line breaks; 0032 TapeOut wallet length probe, printable ASCII only, no line breaks; 0033 TapeOut wallet length probe, printable ASCII only, no line breaks; 0034 TapeOut wallet length probe, printable ASCII only, no line breaks; 0035 TapeOut wallet length probe, printable ASCII only, no line breaks; 0036 TapeOut wallet length probe, printable ASCII only, no line breaks; 0037 TapeOut wallet length probe, printable ASCII only, no line breaks; 0038 TapeOut wallet length probe, printable ASCII only, no line breaks; 0039 TapeOut wallet length probe, printable ASCII only, no line breaks; 0040 TapeOut wallet length probe, printable ASCII only, no line breaks; 0041 TapeOut wallet length probe, printable ASCII only, no line breaks; 0042 TapeOut wallet length probe, printable ASCII only, no line breaks; 0043 TapeOut wallet length probe, printable ASCII only, no line breaks; 0044 TapeOut wallet length probe, printable ASCII only, no line breaks; 0045 TapeOut wallet length probe, printable ASCII only, no line breaks; 0046 TapeOut wallet length probe, printable ASCII only, no line breaks; 0047 TapeOut wallet length probe, printable ASCII only, no line breaks; 0048 TapeOut wallet length probe, printable ASCII only, no line breaks; 0049 TapeOut wallet length probe, printable ASCII only, no line breaks; 0050 TapeOut wallet length probe, printable ASCII only, no line breaks; 0051 TapeOut wallet length probe, printable ASCII only, no line breaks; 0052 TapeOut wallet length probe, printable ASCII only, no line breaks; 0053 TapeOut wallet length probe, printable ASCII only, no line breaks; 0054 TapeOut wallet length probe, printable ASCII only, no line breaks; 0055 TapeOut wallet length probe, printa",
+   "api": "JSON-RPC result.signature",
+   "apiResult": {
+    "jsonrpc": "2.0",
+    "id": "4148e055-954a-484e-b86c-6a4445ea143a",
+    "result": {
+     "signature": "AUBOMaAuFWFKSg3OElB2rgM2bQT+ol3+j1xgkJe7jSJWm1Bfe4YqRkqQ5vYF6dXefsN1bb0ae3BdMNkdRfKMZeIX",
+     "address": "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr",
+     "message": "0000 TapeOut wallet length probe, printable ASCII only, no line breaks; 0001 TapeOut wallet length probe, printable ASCII only, no line breaks; 0002 TapeOut wallet length probe, printable ASCII only, no line breaks; 0003 TapeOut wallet length probe, printable ASCII only, no line breaks; 0004 TapeOut wallet length probe, printable ASCII only, no line breaks; 0005 TapeOut wallet length probe, printable ASCII only, no line breaks; 0006 TapeOut wallet length probe, printable ASCII only, no line breaks; 0007 TapeOut wallet length probe, printable ASCII only, no line breaks; 0008 TapeOut wallet length probe, printable ASCII only, no line breaks; 0009 TapeOut wallet length probe, printable ASCII only, no line breaks; 0010 TapeOut wallet length probe, printable ASCII only, no line breaks; 0011 TapeOut wallet length probe, printable ASCII only, no line breaks; 0012 TapeOut wallet length probe, printable ASCII only, no line breaks; 0013 TapeOut wallet length probe, printable ASCII only, no line breaks; 0014 TapeOut wallet length probe, printable ASCII only, no line breaks; 0015 TapeOut wallet length probe, printable ASCII only, no line breaks; 0016 TapeOut wallet length probe, printable ASCII only, no line breaks; 0017 TapeOut wallet length probe, printable ASCII only, no line breaks; 0018 TapeOut wallet length probe, printable ASCII only, no line breaks; 0019 TapeOut wallet length probe, printable ASCII only, no line breaks; 0020 TapeOut wallet length probe, printable ASCII only, no line breaks; 0021 TapeOut wallet length probe, printable ASCII only, no line breaks; 0022 TapeOut wallet length probe, printable ASCII only, no line breaks; 0023 TapeOut wallet length probe, printable ASCII only, no line breaks; 0024 TapeOut wallet length probe, printable ASCII only, no line breaks; 0025 TapeOut wallet length probe, printable ASCII only, no line breaks; 0026 TapeOut wallet length probe, printable ASCII only, no line breaks; 0027 TapeOut wallet length probe, printable ASCII only, no line breaks; 0028 TapeOut wallet length probe, printable ASCII only, no line breaks; 0029 TapeOut wallet length probe, printable ASCII only, no line breaks; 0030 TapeOut wallet length probe, printable ASCII only, no line breaks; 0031 TapeOut wallet length probe, printable ASCII only, no line breaks; 0032 TapeOut wallet length probe, printable ASCII only, no line breaks; 0033 TapeOut wallet length probe, printable ASCII only, no line breaks; 0034 TapeOut wallet length probe, printable ASCII only, no line breaks; 0035 TapeOut wallet length probe, printable ASCII only, no line breaks; 0036 TapeOut wallet length probe, printable ASCII only, no line breaks; 0037 TapeOut wallet length probe, printable ASCII only, no line breaks; 0038 TapeOut wallet length probe, printable ASCII only, no line breaks; 0039 TapeOut wallet length probe, printable ASCII only, no line breaks; 0040 TapeOut wallet length probe, printable ASCII only, no line breaks; 0041 TapeOut wallet length probe, printable ASCII only, no line breaks; 0042 TapeOut wallet length probe, printable ASCII only, no line breaks; 0043 TapeOut wallet length probe, printable ASCII only, no line breaks; 0044 TapeOut wallet length probe, printable ASCII only, no line breaks; 0045 TapeOut wallet length probe, printable ASCII only, no line breaks; 0046 TapeOut wallet length probe, printable ASCII only, no line breaks; 0047 TapeOut wallet length probe, printable ASCII only, no line breaks; 0048 TapeOut wallet length probe, printable ASCII only, no line breaks; 0049 TapeOut wallet length probe, printable ASCII only, no line breaks; 0050 TapeOut wallet length probe, printable ASCII only, no line breaks; 0051 TapeOut wallet length probe, printable ASCII only, no line breaks; 0052 TapeOut wallet length probe, printable ASCII only, no line breaks; 0053 TapeOut wallet length probe, printable ASCII only, no line breaks; 0054 TapeOut wallet length probe, printable ASCII only, no line breaks; 0055 TapeOut wallet length probe, printa"
+    }
+   },
+   "input": "AUBOMaAuFWFKSg3OElB2rgM2bQT+ol3+j1xgkJe7jSJWm1Bfe4YqRkqQ5vYF6dXefsN1bb0ae3BdMNkdRfKMZeIX",
+   "expect": "0x01404e31a02e15614a4a0dce125076ae03366d04fea25dfe8f5c609097bb8d22569b505f7b862a464a90e6f605e9d5de7ec3756dbd1a7b705d30d91d45f28c65e217",
+   "validSimpleSignature": true
+  },
+  {
+   "wallet": "leather 6.114.0",
+   "kind": "p2wpkh",
+   "text": "5.1 message",
+   "chars": 156,
+   "scriptPubKey": "0x0014c0cebcd6c3d3ca8c75dc5ec62ebe55330ef910e2",
+   "message": "TapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+   "api": "JSON-RPC result.signature",
+   "apiResult": {
+    "jsonrpc": "2.0",
+    "id": "60d5d433-8320-4bc8-a086-4e5fefdfd910",
+    "result": {
+     "signature": "AkcwRAIgL1lIs7xEnn5R5foR82pAj7gvzwssxmnmRm2fY7fZ0MsCIBlLGVPF06DewZgJl6FQqGeTiPpZ8Xbo9BXC5fjy0xT8ASEDMNVP0N1CCm5fjTYk9fNILK41D3nV8HU79b7vnC2Rrzw=",
+     "address": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu",
+     "message": "TapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab"
+    }
+   },
+   "input": "AkcwRAIgL1lIs7xEnn5R5foR82pAj7gvzwssxmnmRm2fY7fZ0MsCIBlLGVPF06DewZgJl6FQqGeTiPpZ8Xbo9BXC5fjy0xT8ASEDMNVP0N1CCm5fjTYk9fNILK41D3nV8HU79b7vnC2Rrzw=",
+   "expect": "0x0247304402202f5948b3bc449e7e51e5fa11f36a408fb82fcf0b2cc669e6466d9f63b7d9d0cb0220194b1953c5d3a0dec1980997a150a8679388fa59f176e8f415c2e5f8f2d314fc01210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+   "validSimpleSignature": true
+  },
+  {
+   "wallet": "leather 6.114.0",
+   "kind": "p2wpkh",
+   "text": "4,000-character probe (not a TAP text)",
+   "chars": 4000,
+   "scriptPubKey": "0x0014c0cebcd6c3d3ca8c75dc5ec62ebe55330ef910e2",
+   "message": "0000 TapeOut wallet length probe, printable ASCII only, no line breaks; 0001 TapeOut wallet length probe, printable ASCII only, no line breaks; 0002 TapeOut wallet length probe, printable ASCII only, no line breaks; 0003 TapeOut wallet length probe, printable ASCII only, no line breaks; 0004 TapeOut wallet length probe, printable ASCII only, no line breaks; 0005 TapeOut wallet length probe, printable ASCII only, no line breaks; 0006 TapeOut wallet length probe, printable ASCII only, no line breaks; 0007 TapeOut wallet length probe, printable ASCII only, no line breaks; 0008 TapeOut wallet length probe, printable ASCII only, no line breaks; 0009 TapeOut wallet length probe, printable ASCII only, no line breaks; 0010 TapeOut wallet length probe, printable ASCII only, no line breaks; 0011 TapeOut wallet length probe, printable ASCII only, no line breaks; 0012 TapeOut wallet length probe, printable ASCII only, no line breaks; 0013 TapeOut wallet length probe, printable ASCII only, no line breaks; 0014 TapeOut wallet length probe, printable ASCII only, no line breaks; 0015 TapeOut wallet length probe, printable ASCII only, no line breaks; 0016 TapeOut wallet length probe, printable ASCII only, no line breaks; 0017 TapeOut wallet length probe, printable ASCII only, no line breaks; 0018 TapeOut wallet length probe, printable ASCII only, no line breaks; 0019 TapeOut wallet length probe, printable ASCII only, no line breaks; 0020 TapeOut wallet length probe, printable ASCII only, no line breaks; 0021 TapeOut wallet length probe, printable ASCII only, no line breaks; 0022 TapeOut wallet length probe, printable ASCII only, no line breaks; 0023 TapeOut wallet length probe, printable ASCII only, no line breaks; 0024 TapeOut wallet length probe, printable ASCII only, no line breaks; 0025 TapeOut wallet length probe, printable ASCII only, no line breaks; 0026 TapeOut wallet length probe, printable ASCII only, no line breaks; 0027 TapeOut wallet length probe, printable ASCII only, no line breaks; 0028 TapeOut wallet length probe, printable ASCII only, no line breaks; 0029 TapeOut wallet length probe, printable ASCII only, no line breaks; 0030 TapeOut wallet length probe, printable ASCII only, no line breaks; 0031 TapeOut wallet length probe, printable ASCII only, no line breaks; 0032 TapeOut wallet length probe, printable ASCII only, no line breaks; 0033 TapeOut wallet length probe, printable ASCII only, no line breaks; 0034 TapeOut wallet length probe, printable ASCII only, no line breaks; 0035 TapeOut wallet length probe, printable ASCII only, no line breaks; 0036 TapeOut wallet length probe, printable ASCII only, no line breaks; 0037 TapeOut wallet length probe, printable ASCII only, no line breaks; 0038 TapeOut wallet length probe, printable ASCII only, no line breaks; 0039 TapeOut wallet length probe, printable ASCII only, no line breaks; 0040 TapeOut wallet length probe, printable ASCII only, no line breaks; 0041 TapeOut wallet length probe, printable ASCII only, no line breaks; 0042 TapeOut wallet length probe, printable ASCII only, no line breaks; 0043 TapeOut wallet length probe, printable ASCII only, no line breaks; 0044 TapeOut wallet length probe, printable ASCII only, no line breaks; 0045 TapeOut wallet length probe, printable ASCII only, no line breaks; 0046 TapeOut wallet length probe, printable ASCII only, no line breaks; 0047 TapeOut wallet length probe, printable ASCII only, no line breaks; 0048 TapeOut wallet length probe, printable ASCII only, no line breaks; 0049 TapeOut wallet length probe, printable ASCII only, no line breaks; 0050 TapeOut wallet length probe, printable ASCII only, no line breaks; 0051 TapeOut wallet length probe, printable ASCII only, no line breaks; 0052 TapeOut wallet length probe, printable ASCII only, no line breaks; 0053 TapeOut wallet length probe, printable ASCII only, no line breaks; 0054 TapeOut wallet length probe, printable ASCII only, no line breaks; 0055 TapeOut wallet length probe, printa",
+   "api": "JSON-RPC result.signature",
+   "apiResult": {
+    "jsonrpc": "2.0",
+    "id": "ea8286f8-4c45-46f5-b8a0-d640345c92f3",
+    "result": {
+     "signature": "AkcwRAIgbGhVjjEzKwDOtQ3SxR5vbZMWOQhz2yuoyciXfa1/ILECIHzSVqnqbxWg8rZ1tMYY5Co76Et1Jb4aYpWuQd99NUa1ASEDMNVP0N1CCm5fjTYk9fNILK41D3nV8HU79b7vnC2Rrzw=",
+     "address": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu",
+     "message": "0000 TapeOut wallet length probe, printable ASCII only, no line breaks; 0001 TapeOut wallet length probe, printable ASCII only, no line breaks; 0002 TapeOut wallet length probe, printable ASCII only, no line breaks; 0003 TapeOut wallet length probe, printable ASCII only, no line breaks; 0004 TapeOut wallet length probe, printable ASCII only, no line breaks; 0005 TapeOut wallet length probe, printable ASCII only, no line breaks; 0006 TapeOut wallet length probe, printable ASCII only, no line breaks; 0007 TapeOut wallet length probe, printable ASCII only, no line breaks; 0008 TapeOut wallet length probe, printable ASCII only, no line breaks; 0009 TapeOut wallet length probe, printable ASCII only, no line breaks; 0010 TapeOut wallet length probe, printable ASCII only, no line breaks; 0011 TapeOut wallet length probe, printable ASCII only, no line breaks; 0012 TapeOut wallet length probe, printable ASCII only, no line breaks; 0013 TapeOut wallet length probe, printable ASCII only, no line breaks; 0014 TapeOut wallet length probe, printable ASCII only, no line breaks; 0015 TapeOut wallet length probe, printable ASCII only, no line breaks; 0016 TapeOut wallet length probe, printable ASCII only, no line breaks; 0017 TapeOut wallet length probe, printable ASCII only, no line breaks; 0018 TapeOut wallet length probe, printable ASCII only, no line breaks; 0019 TapeOut wallet length probe, printable ASCII only, no line breaks; 0020 TapeOut wallet length probe, printable ASCII only, no line breaks; 0021 TapeOut wallet length probe, printable ASCII only, no line breaks; 0022 TapeOut wallet length probe, printable ASCII only, no line breaks; 0023 TapeOut wallet length probe, printable ASCII only, no line breaks; 0024 TapeOut wallet length probe, printable ASCII only, no line breaks; 0025 TapeOut wallet length probe, printable ASCII only, no line breaks; 0026 TapeOut wallet length probe, printable ASCII only, no line breaks; 0027 TapeOut wallet length probe, printable ASCII only, no line breaks; 0028 TapeOut wallet length probe, printable ASCII only, no line breaks; 0029 TapeOut wallet length probe, printable ASCII only, no line breaks; 0030 TapeOut wallet length probe, printable ASCII only, no line breaks; 0031 TapeOut wallet length probe, printable ASCII only, no line breaks; 0032 TapeOut wallet length probe, printable ASCII only, no line breaks; 0033 TapeOut wallet length probe, printable ASCII only, no line breaks; 0034 TapeOut wallet length probe, printable ASCII only, no line breaks; 0035 TapeOut wallet length probe, printable ASCII only, no line breaks; 0036 TapeOut wallet length probe, printable ASCII only, no line breaks; 0037 TapeOut wallet length probe, printable ASCII only, no line breaks; 0038 TapeOut wallet length probe, printable ASCII only, no line breaks; 0039 TapeOut wallet length probe, printable ASCII only, no line breaks; 0040 TapeOut wallet length probe, printable ASCII only, no line breaks; 0041 TapeOut wallet length probe, printable ASCII only, no line breaks; 0042 TapeOut wallet length probe, printable ASCII only, no line breaks; 0043 TapeOut wallet length probe, printable ASCII only, no line breaks; 0044 TapeOut wallet length probe, printable ASCII only, no line breaks; 0045 TapeOut wallet length probe, printable ASCII only, no line breaks; 0046 TapeOut wallet length probe, printable ASCII only, no line breaks; 0047 TapeOut wallet length probe, printable ASCII only, no line breaks; 0048 TapeOut wallet length probe, printable ASCII only, no line breaks; 0049 TapeOut wallet length probe, printable ASCII only, no line breaks; 0050 TapeOut wallet length probe, printable ASCII only, no line breaks; 0051 TapeOut wallet length probe, printable ASCII only, no line breaks; 0052 TapeOut wallet length probe, printable ASCII only, no line breaks; 0053 TapeOut wallet length probe, printable ASCII only, no line breaks; 0054 TapeOut wallet length probe, printable ASCII only, no line breaks; 0055 TapeOut wallet length probe, printa"
+    }
+   },
+   "input": "AkcwRAIgbGhVjjEzKwDOtQ3SxR5vbZMWOQhz2yuoyciXfa1/ILECIHzSVqnqbxWg8rZ1tMYY5Co76Et1Jb4aYpWuQd99NUa1ASEDMNVP0N1CCm5fjTYk9fNILK41D3nV8HU79b7vnC2Rrzw=",
+   "expect": "0x0247304402206c68558e31332b00ceb50dd2c51e6f6d9316390873db2ba8c9c8977dad7f20b102207cd256a9ea6f15a0f2b675b4c618e42a3be84b7525be1a6295ae41df7d3546b501210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+   "validSimpleSignature": true
+  },
+  {
+   "wallet": "okx 4.18.1",
+   "kind": "p2tr",
+   "text": "5.1 message",
+   "chars": 156,
+   "scriptPubKey": "0x5120a60869f0dbcf1dc659c9cecbaf8050135ea9e8cdc487053f1dc6880949dc684c",
+   "message": "TapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+   "api": "return value",
+   "apiResult": "AUAb3RseaFvW+tMrAe+VVJQOtEvpUi9SNe92DDHsjxAeVxcw0L8XmD3PpPzyfGWpcie3NOiLm+KN1EH5eHTJhEPL",
+   "input": "AUAb3RseaFvW+tMrAe+VVJQOtEvpUi9SNe92DDHsjxAeVxcw0L8XmD3PpPzyfGWpcie3NOiLm+KN1EH5eHTJhEPL",
+   "expect": "0x01401bdd1b1e685bd6fad32b01ef9554940eb44be9522f5235ef760c31ec8f101e571730d0bf17983dcfa4fcf27c65a97227b734e88b9be28dd441f97874c98443cb",
+   "validSimpleSignature": true
+  },
+  {
+   "wallet": "okx 4.18.1",
+   "kind": "p2tr",
+   "text": "4,000-character probe (not a TAP text)",
+   "chars": 4000,
+   "scriptPubKey": "0x5120a60869f0dbcf1dc659c9cecbaf8050135ea9e8cdc487053f1dc6880949dc684c",
+   "message": "0000 TapeOut wallet length probe, printable ASCII only, no line breaks; 0001 TapeOut wallet length probe, printable ASCII only, no line breaks; 0002 TapeOut wallet length probe, printable ASCII only, no line breaks; 0003 TapeOut wallet length probe, printable ASCII only, no line breaks; 0004 TapeOut wallet length probe, printable ASCII only, no line breaks; 0005 TapeOut wallet length probe, printable ASCII only, no line breaks; 0006 TapeOut wallet length probe, printable ASCII only, no line breaks; 0007 TapeOut wallet length probe, printable ASCII only, no line breaks; 0008 TapeOut wallet length probe, printable ASCII only, no line breaks; 0009 TapeOut wallet length probe, printable ASCII only, no line breaks; 0010 TapeOut wallet length probe, printable ASCII only, no line breaks; 0011 TapeOut wallet length probe, printable ASCII only, no line breaks; 0012 TapeOut wallet length probe, printable ASCII only, no line breaks; 0013 TapeOut wallet length probe, printable ASCII only, no line breaks; 0014 TapeOut wallet length probe, printable ASCII only, no line breaks; 0015 TapeOut wallet length probe, printable ASCII only, no line breaks; 0016 TapeOut wallet length probe, printable ASCII only, no line breaks; 0017 TapeOut wallet length probe, printable ASCII only, no line breaks; 0018 TapeOut wallet length probe, printable ASCII only, no line breaks; 0019 TapeOut wallet length probe, printable ASCII only, no line breaks; 0020 TapeOut wallet length probe, printable ASCII only, no line breaks; 0021 TapeOut wallet length probe, printable ASCII only, no line breaks; 0022 TapeOut wallet length probe, printable ASCII only, no line breaks; 0023 TapeOut wallet length probe, printable ASCII only, no line breaks; 0024 TapeOut wallet length probe, printable ASCII only, no line breaks; 0025 TapeOut wallet length probe, printable ASCII only, no line breaks; 0026 TapeOut wallet length probe, printable ASCII only, no line breaks; 0027 TapeOut wallet length probe, printable ASCII only, no line breaks; 0028 TapeOut wallet length probe, printable ASCII only, no line breaks; 0029 TapeOut wallet length probe, printable ASCII only, no line breaks; 0030 TapeOut wallet length probe, printable ASCII only, no line breaks; 0031 TapeOut wallet length probe, printable ASCII only, no line breaks; 0032 TapeOut wallet length probe, printable ASCII only, no line breaks; 0033 TapeOut wallet length probe, printable ASCII only, no line breaks; 0034 TapeOut wallet length probe, printable ASCII only, no line breaks; 0035 TapeOut wallet length probe, printable ASCII only, no line breaks; 0036 TapeOut wallet length probe, printable ASCII only, no line breaks; 0037 TapeOut wallet length probe, printable ASCII only, no line breaks; 0038 TapeOut wallet length probe, printable ASCII only, no line breaks; 0039 TapeOut wallet length probe, printable ASCII only, no line breaks; 0040 TapeOut wallet length probe, printable ASCII only, no line breaks; 0041 TapeOut wallet length probe, printable ASCII only, no line breaks; 0042 TapeOut wallet length probe, printable ASCII only, no line breaks; 0043 TapeOut wallet length probe, printable ASCII only, no line breaks; 0044 TapeOut wallet length probe, printable ASCII only, no line breaks; 0045 TapeOut wallet length probe, printable ASCII only, no line breaks; 0046 TapeOut wallet length probe, printable ASCII only, no line breaks; 0047 TapeOut wallet length probe, printable ASCII only, no line breaks; 0048 TapeOut wallet length probe, printable ASCII only, no line breaks; 0049 TapeOut wallet length probe, printable ASCII only, no line breaks; 0050 TapeOut wallet length probe, printable ASCII only, no line breaks; 0051 TapeOut wallet length probe, printable ASCII only, no line breaks; 0052 TapeOut wallet length probe, printable ASCII only, no line breaks; 0053 TapeOut wallet length probe, printable ASCII only, no line breaks; 0054 TapeOut wallet length probe, printable ASCII only, no line breaks; 0055 TapeOut wallet length probe, printa",
+   "api": "return value",
+   "apiResult": "AUCVcncNCo0CTbmpfsyzqs0v25kVh2eE0PBxBXo4PkwrSMej7NXRiMjneHSJh08PIXKWOzzYNcXw9QW/x9A1fzU2",
+   "input": "AUCVcncNCo0CTbmpfsyzqs0v25kVh2eE0PBxBXo4PkwrSMej7NXRiMjneHSJh08PIXKWOzzYNcXw9QW/x9A1fzU2",
+   "expect": "0x01409572770d0a8d024db9a97eccb3aacd2fdb9915876784d0f071057a383e4c2b48c7a3ecd5d188c8e7787489874f0f2172963b3cd835c5f0f505bfc7d0357f3536",
+   "validSimpleSignature": true
+  },
+  {
+   "wallet": "okx 4.18.1",
+   "kind": "p2wpkh",
+   "text": "5.1 message",
+   "chars": 156,
+   "scriptPubKey": "0x0014c0cebcd6c3d3ca8c75dc5ec62ebe55330ef910e2",
+   "message": "TapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+   "api": "return value",
+   "apiResult": "AkcwRAIgL1lIs7xEnn5R5foR82pAj7gvzwssxmnmRm2fY7fZ0MsCIBlLGVPF06DewZgJl6FQqGeTiPpZ8Xbo9BXC5fjy0xT8ASEDMNVP0N1CCm5fjTYk9fNILK41D3nV8HU79b7vnC2Rrzw=",
+   "input": "AkcwRAIgL1lIs7xEnn5R5foR82pAj7gvzwssxmnmRm2fY7fZ0MsCIBlLGVPF06DewZgJl6FQqGeTiPpZ8Xbo9BXC5fjy0xT8ASEDMNVP0N1CCm5fjTYk9fNILK41D3nV8HU79b7vnC2Rrzw=",
+   "expect": "0x0247304402202f5948b3bc449e7e51e5fa11f36a408fb82fcf0b2cc669e6466d9f63b7d9d0cb0220194b1953c5d3a0dec1980997a150a8679388fa59f176e8f415c2e5f8f2d314fc01210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+   "validSimpleSignature": true
+  },
+  {
+   "wallet": "okx 4.18.1",
+   "kind": "p2wpkh",
+   "text": "4,000-character probe (not a TAP text)",
+   "chars": 4000,
+   "scriptPubKey": "0x0014c0cebcd6c3d3ca8c75dc5ec62ebe55330ef910e2",
+   "message": "0000 TapeOut wallet length probe, printable ASCII only, no line breaks; 0001 TapeOut wallet length probe, printable ASCII only, no line breaks; 0002 TapeOut wallet length probe, printable ASCII only, no line breaks; 0003 TapeOut wallet length probe, printable ASCII only, no line breaks; 0004 TapeOut wallet length probe, printable ASCII only, no line breaks; 0005 TapeOut wallet length probe, printable ASCII only, no line breaks; 0006 TapeOut wallet length probe, printable ASCII only, no line breaks; 0007 TapeOut wallet length probe, printable ASCII only, no line breaks; 0008 TapeOut wallet length probe, printable ASCII only, no line breaks; 0009 TapeOut wallet length probe, printable ASCII only, no line breaks; 0010 TapeOut wallet length probe, printable ASCII only, no line breaks; 0011 TapeOut wallet length probe, printable ASCII only, no line breaks; 0012 TapeOut wallet length probe, printable ASCII only, no line breaks; 0013 TapeOut wallet length probe, printable ASCII only, no line breaks; 0014 TapeOut wallet length probe, printable ASCII only, no line breaks; 0015 TapeOut wallet length probe, printable ASCII only, no line breaks; 0016 TapeOut wallet length probe, printable ASCII only, no line breaks; 0017 TapeOut wallet length probe, printable ASCII only, no line breaks; 0018 TapeOut wallet length probe, printable ASCII only, no line breaks; 0019 TapeOut wallet length probe, printable ASCII only, no line breaks; 0020 TapeOut wallet length probe, printable ASCII only, no line breaks; 0021 TapeOut wallet length probe, printable ASCII only, no line breaks; 0022 TapeOut wallet length probe, printable ASCII only, no line breaks; 0023 TapeOut wallet length probe, printable ASCII only, no line breaks; 0024 TapeOut wallet length probe, printable ASCII only, no line breaks; 0025 TapeOut wallet length probe, printable ASCII only, no line breaks; 0026 TapeOut wallet length probe, printable ASCII only, no line breaks; 0027 TapeOut wallet length probe, printable ASCII only, no line breaks; 0028 TapeOut wallet length probe, printable ASCII only, no line breaks; 0029 TapeOut wallet length probe, printable ASCII only, no line breaks; 0030 TapeOut wallet length probe, printable ASCII only, no line breaks; 0031 TapeOut wallet length probe, printable ASCII only, no line breaks; 0032 TapeOut wallet length probe, printable ASCII only, no line breaks; 0033 TapeOut wallet length probe, printable ASCII only, no line breaks; 0034 TapeOut wallet length probe, printable ASCII only, no line breaks; 0035 TapeOut wallet length probe, printable ASCII only, no line breaks; 0036 TapeOut wallet length probe, printable ASCII only, no line breaks; 0037 TapeOut wallet length probe, printable ASCII only, no line breaks; 0038 TapeOut wallet length probe, printable ASCII only, no line breaks; 0039 TapeOut wallet length probe, printable ASCII only, no line breaks; 0040 TapeOut wallet length probe, printable ASCII only, no line breaks; 0041 TapeOut wallet length probe, printable ASCII only, no line breaks; 0042 TapeOut wallet length probe, printable ASCII only, no line breaks; 0043 TapeOut wallet length probe, printable ASCII only, no line breaks; 0044 TapeOut wallet length probe, printable ASCII only, no line breaks; 0045 TapeOut wallet length probe, printable ASCII only, no line breaks; 0046 TapeOut wallet length probe, printable ASCII only, no line breaks; 0047 TapeOut wallet length probe, printable ASCII only, no line breaks; 0048 TapeOut wallet length probe, printable ASCII only, no line breaks; 0049 TapeOut wallet length probe, printable ASCII only, no line breaks; 0050 TapeOut wallet length probe, printable ASCII only, no line breaks; 0051 TapeOut wallet length probe, printable ASCII only, no line breaks; 0052 TapeOut wallet length probe, printable ASCII only, no line breaks; 0053 TapeOut wallet length probe, printable ASCII only, no line breaks; 0054 TapeOut wallet length probe, printable ASCII only, no line breaks; 0055 TapeOut wallet length probe, printa",
+   "api": "return value",
+   "apiResult": "AkcwRAIgbGhVjjEzKwDOtQ3SxR5vbZMWOQhz2yuoyciXfa1/ILECIHzSVqnqbxWg8rZ1tMYY5Co76Et1Jb4aYpWuQd99NUa1ASEDMNVP0N1CCm5fjTYk9fNILK41D3nV8HU79b7vnC2Rrzw=",
+   "input": "AkcwRAIgbGhVjjEzKwDOtQ3SxR5vbZMWOQhz2yuoyciXfa1/ILECIHzSVqnqbxWg8rZ1tMYY5Co76Et1Jb4aYpWuQd99NUa1ASEDMNVP0N1CCm5fjTYk9fNILK41D3nV8HU79b7vnC2Rrzw=",
+   "expect": "0x0247304402206c68558e31332b00ceb50dd2c51e6f6d9316390873db2ba8c9c8977dad7f20b102207cd256a9ea6f15a0f2b675b4c618e42a3be84b7525be1a6295ae41df7d3546b501210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+   "validSimpleSignature": true
+  }
+ ],
+ "walletBip137Default": {
+  "wallet": "okx 4.18.1",
+  "kind": "p2wpkh",
+  "call": "okxwallet.bitcoin.signMessage(message) without a type (default 'ecdsa')",
+  "bitcoinAddress": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu",
+  "scriptPubKey": "0x0014c0cebcd6c3d3ca8c75dc5ec62ebe55330ef910e2",
+  "message": "TapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+  "input": "H8/Cqqpv6B56uvt/qY2sVhHiCelwjgxjgyBy4lDtioEVFkBCgNkckeifG5Klv6LQFSJrotJrsF5hjoSpr/tdJNo=",
+  "decoded": "0x1fcfc2aaaa6fe81e7abafb7fa98dac5611e209e9708e0c63832072e250ed8a811516404280d91c91e89f1b92a5bfa2d015226ba2d26bb05e618e84a9affb5d24da",
+  "decodedLength": 65,
+  "validSimpleSignature": false,
+  "note": "A BIP-137 compact signature: section 6.1 decodes it to 65 bytes, which is not a simple signature and is the length that TAP-11 clients read as ECDSA; a client should refuse it and ask for 'bip322-simple'."
+ },
+ "walletP2shOutput": {
+  "wallet": "xverse 2.9.3",
+  "kind": "p2sh-p2wpkh (unsupported, section 2)",
+  "bitcoinAddress": "37VucYSaXLCAsxYyAPfbSi9eh4iEcbShgf",
+  "message": "TapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+  "input": "AkcwRAIgKT3Q8TWFWab3nRuNJZeGw5NmuTGvcuvW/UQngGO/nu8CID0yCpORaQuKcbNUgMhmiNJNKD2eIPBPpFte6PWAw0zlASEDmztpS4/FteB/sGnHg8rHVPXTjD4IvtGWDjH9sd2jXCQ=",
+  "decoded": "0x024730440220293dd0f1358559a6f79d1b8d259786c39366b931af72ebd6fd44278063bf9eef02203d320a9391690b8a71b35480c86688d24d283d9e20f04fa45b5ee8f580c34ce50121039b3b694b8fc5b5e07fb069c783cac754f5d38c3e08bed1960e31fdb1dda35c24",
+  "decodedLength": 107,
+  "note": "A witness-only 'BIP322' signature for a P2SH address, which BIP-322 says needs the full format; the address kind is unsupported, so no holder exists for it."
+ },
+ "independentLibrary": [
+  {
+   "library": "bip322-js@4.0.0",
+   "address": "bc1pxseuyyrd5xs2fxartrsmga3fvg4sv7q56jt2wy3v70a5naqs9y9qd6rtrd",
+   "scriptPubKey": "0x51203433c2106da1a0a49ba358e1b47629622b067814d496a7122cf3fb49f410290a",
+   "kind": "\u00a75.1 sign-message",
+   "message": "TapeOut Bitcoin-keyed holder 0xef70ad99303dc1386d095c4fbab1878378a906fd on chain 56 signs 0x0000000000000000000000000000000000000000000000000000000000000000",
+   "signature": "AUH2TMn2yLJbAIbd+3zRsXPbWbbbL4I4VJYja2gbYFANxtMv5Np1dkqYwLicKxUHu8IMqQNVi1ExjrhtoR3hdDzFAQ==",
+   "witness": "0x0141f64cc9f6c8b25b0086ddfb7cd1b173db59b6db2f82385496236b681b60500dc6d32fe4da75764a98c0b89c2b1507bbc20ca903558b51318eb86da11de1743cc501",
+   "expect": true
+  },
+  {
+   "library": "bip322-js@4.0.0",
+   "address": "bc1pxseuyyrd5xs2fxartrsmga3fvg4sv7q56jt2wy3v70a5naqs9y9qd6rtrd",
+   "scriptPubKey": "0x51203433c2106da1a0a49ba358e1b47629622b067814d496a7122cf3fb49f410290a",
+   "kind": "\u00a75.1 sign-message",
+   "message": "TapeOut Bitcoin-keyed holder 0xef70ad99303dc1386d095c4fbab1878378a906fd on chain 56 signs 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "signature": "AUGlkxLInPtaMtKd3Hr+8UWL2dGcWvbm/HlDnw5cPFzxXlw6f0RdJXvIysX9oEyXbneC2oXMYt6/GwCoZ4ZGcCw+AQ==",
+   "witness": "0x0141a59312c89cfb5a32d29ddc7afef1458bd9d19c5af6e6fc79439f0e5c3c5cf15e5c3a7f445d257bc8cac5fda04c976e7782da85cc62debf1b00a8678646702c3e01",
+   "expect": true
+  },
+  {
+   "library": "bip322-js@4.0.0",
+   "address": "bc1pxseuyyrd5xs2fxartrsmga3fvg4sv7q56jt2wy3v70a5naqs9y9qd6rtrd",
+   "scriptPubKey": "0x51203433c2106da1a0a49ba358e1b47629622b067814d496a7122cf3fb49f410290a",
+   "kind": "\u00a75.1 sign-message",
+   "message": "TapeOut Bitcoin-keyed holder 0xef70ad99303dc1386d095c4fbab1878378a906fd on chain 56 signs 0x4e5cd7e31fb6883bf3e32371ed3d9d6fd3c54c4573e9edd0c93745f33a5e0a40",
+   "signature": "AUFbttlTmF7y3rDm6kq41a6rtMOWGK4Xl9saaCdVsLNIQ/JpoZCPbOaOTdm0MM0Mhya/5wMOumiBfdCkHyn7IMcKAQ==",
+   "witness": "0x01415bb6d953985ef2deb0e6ea4ab8d5aeabb4c39618ae1797db1a682755b0b34843f269a1908f6ce68e4dd9b430cd0c8726bfe7030eba68817dd0a41f29fb20c70a01",
+   "expect": true
+  },
+  {
+   "library": "bip322-js@4.0.0",
+   "address": "bc1pxseuyyrd5xs2fxartrsmga3fvg4sv7q56jt2wy3v70a5naqs9y9qd6rtrd",
+   "scriptPubKey": "0x51203433c2106da1a0a49ba358e1b47629622b067814d496a7122cf3fb49f410290a",
+   "kind": "\u00a75.1 sign-message (TAP-11 delegation digest)",
+   "message": "TapeOut Bitcoin-keyed holder 0xef70ad99303dc1386d095c4fbab1878378a906fd on chain 56 signs 0x893e371c5cf8510cc3386077d19b810ac525b5b864f39f2f8a8dc66df272fdb8",
+   "signature": "AUGytkA1Z9GcVPYJyaUN9GJFvlomK5ARCMeX6dUygWlt1IJIsx2iVY4IMUxEziPtQZw1xZpIo3cK4n7nAsPQEnDAAQ==",
+   "witness": "0x0141b2b6403567d19c54f609c9a50df46245be5a262b901108c797e9d53281696dd48248b31da2558e08314c44ce23ed419c35c59a48a3770ae27ee702c3d01270c001",
+   "expect": true
+  },
+  {
+   "library": "bip322-js@4.0.0",
+   "address": "bc1pxseuyyrd5xs2fxartrsmga3fvg4sv7q56jt2wy3v70a5naqs9y9qd6rtrd",
+   "scriptPubKey": "0x51203433c2106da1a0a49ba358e1b47629622b067814d496a7122cf3fb49f410290a",
+   "kind": "\u00a75.2 call-message (realistic long)",
+   "message": "TapeOut Bitcoin-keyed holder 0xef70ad99303dc1386d095c4fbab1878378a906fd on chain 56 calls 0x55d398326f99059ff775485246999027b3197955 with value 1500000000000000000 and data 0x3a83bdd8e25941828afbf6bf645c1af916c92d71e2a60f68b8d2efbffcf0de7f, gas 30000000, tip 2500000000000000, nonce 4294967295, valid until 4102444800",
+   "signature": "AUG33O3teYLl9rRemz1NOWINa0C7SVpMEDx1Y77foWnoPEcWrbe1HLyFr8pK8jWPbLlYwOaO+YW2knWoMMXWtwxnAQ==",
+   "witness": "0x0141b7dceded7982e5f6b45e9b3d4d39620d6b40bb495a4c103c7563bedfa169e83c4716adb7b51cbc85afca4af2358f6cb958c0e68ef985b69275a830c5d6b70c6701",
+   "expect": true
+  },
+  {
+   "library": "bip322-js@4.0.0",
+   "address": "bc1pxseuyyrd5xs2fxartrsmga3fvg4sv7q56jt2wy3v70a5naqs9y9qd6rtrd",
+   "scriptPubKey": "0x51203433c2106da1a0a49ba358e1b47629622b067814d496a7122cf3fb49f410290a",
+   "kind": "\u00a75.2 call-message (every number at its maximum)",
+   "message": "TapeOut Bitcoin-keyed holder 0xef70ad99303dc1386d095c4fbab1878378a906fd on chain 56 calls 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3a83bdd8e25941828afbf6bf645c1af916c92d71e2a60f68b8d2efbffcf0de7f, gas 115792089237316195423570985008687907853269984665640564039457584007913129639935, tip 115792089237316195423570985008687907853269984665640564039457584007913129639935, nonce 115792089237316195423570985008687907853269984665640564039457584007913129639935, valid until 18446744073709551615",
+   "signature": "AUFI9bf3BrT9Xide+1HTwfQTMEqu8JJX8rubQRLeQm06wWvzAo//JdvpvXyZOiib14evVmSooiN1eqzBL6UjCmIVAQ==",
+   "witness": "0x014148f5b7f706b4fd5e275efb51d3c1f413304aaef09257f2bb9b4112de426d3ac16bf3028fff25dbe9bd7c993a289bd787af5664a8a223757aacc12fa5230a621501",
+   "expect": true
+  },
+  {
+   "library": "bip322-js@4.0.0",
+   "address": "bc1qgpmndme78eezhwatthnsctumg360g3ly6rnzsf",
+   "scriptPubKey": "0x0014407736ef3e3e722bbbab5de70c2f9b4474f447e4",
+   "kind": "\u00a75.1 sign-message",
+   "message": "TapeOut Bitcoin-keyed holder 0x29591285417c94575bbc8c8308be48e8806d0f46 on chain 56 signs 0x0000000000000000000000000000000000000000000000000000000000000000",
+   "signature": "AkgwRQIhAM+T9cZaXpez2CJ43i1MGyjzLvZjjrv+qRCaetIwplYMAiAYcoyueAjismwwpe+mHIP7eCeuh1j52vxL+un0FRmBTgEhAoxq/cPu1Mn6qQUd/ucm23r/pZOZMlDZeWrNbvpkjdyh",
+   "witness": "0x02483045022100cf93f5c65a5e97b3d82278de2d4c1b28f32ef6638ebbfea9109a7ad230a6560c022018728cae7808e2b26c30a5efa61c83fb7827ae8758f9dafc4bfae9f41519814e0121028c6afdc3eed4c9faa9051dfee726db7affa593993250d9796acd6efa648ddca1",
+   "expect": true
+  },
+  {
+   "library": "bip322-js@4.0.0",
+   "address": "bc1qgpmndme78eezhwatthnsctumg360g3ly6rnzsf",
+   "scriptPubKey": "0x0014407736ef3e3e722bbbab5de70c2f9b4474f447e4",
+   "kind": "\u00a75.1 sign-message",
+   "message": "TapeOut Bitcoin-keyed holder 0x29591285417c94575bbc8c8308be48e8806d0f46 on chain 56 signs 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+   "signature": "AkcwRAIgGMLCFRmA+H0w0jf4giR25Mu/3tHUWiu567WxJ9AMys0CIEL2UH5kTmxzJmJfG61pI9jQXSroE4VjK0yGoc/YheLwASECjGr9w+7UyfqpBR3+5ybbev+lk5kyUNl5as1u+mSN3KE=",
+   "witness": "0x02473044022018c2c2151980f87d30d237f8822476e4cbbfded1d45a2bb9ebb5b127d00ccacd022042f6507e644e6c7326625f1bad6923d8d05d2ae81385632b4c86a1cfd885e2f00121028c6afdc3eed4c9faa9051dfee726db7affa593993250d9796acd6efa648ddca1",
+   "expect": true
+  },
+  {
+   "library": "bip322-js@4.0.0",
+   "address": "bc1qgpmndme78eezhwatthnsctumg360g3ly6rnzsf",
+   "scriptPubKey": "0x0014407736ef3e3e722bbbab5de70c2f9b4474f447e4",
+   "kind": "\u00a75.1 sign-message",
+   "message": "TapeOut Bitcoin-keyed holder 0x29591285417c94575bbc8c8308be48e8806d0f46 on chain 56 signs 0x4e5cd7e31fb6883bf3e32371ed3d9d6fd3c54c4573e9edd0c93745f33a5e0a40",
+   "signature": "AkgwRQIhAMQ8wwZ1X5Ae+kEpXVPQD6qmXXMWTk9RVkjpJ/dkTv33AiA8kCtkMfWQ+OOj/2DsmDBkMRGj7DMTbXFcYHZBWcjqWAEhAoxq/cPu1Mn6qQUd/ucm23r/pZOZMlDZeWrNbvpkjdyh",
+   "witness": "0x02483045022100c43cc306755f901efa41295d53d00faaa65d73164e4f515648e927f7644efdf702203c902b6431f590f8e3a3ff60ec9830643111a3ec33136d715c60764159c8ea580121028c6afdc3eed4c9faa9051dfee726db7affa593993250d9796acd6efa648ddca1",
+   "expect": true
+  },
+  {
+   "library": "bip322-js@4.0.0",
+   "address": "bc1qgpmndme78eezhwatthnsctumg360g3ly6rnzsf",
+   "scriptPubKey": "0x0014407736ef3e3e722bbbab5de70c2f9b4474f447e4",
+   "kind": "\u00a75.1 sign-message (TAP-11 delegation digest)",
+   "message": "TapeOut Bitcoin-keyed holder 0x29591285417c94575bbc8c8308be48e8806d0f46 on chain 56 signs 0x893e371c5cf8510cc3386077d19b810ac525b5b864f39f2f8a8dc66df272fdb8",
+   "signature": "AkgwRQIhAJl14S+G4dcb5DaQHRGEWb3PSKyN/qpsYS+xOW+LgjpsAiAN8ZBQQeOXrzRVAQS37/+ndSb/wkJbrD20pqDfkwzykgEhAoxq/cPu1Mn6qQUd/ucm23r/pZOZMlDZeWrNbvpkjdyh",
+   "witness": "0x024830450221009975e12f86e1d71be436901d118459bdcf48ac8dfeaa6c612fb1396f8b823a6c02200df1905041e397af34550104b7efffa77526ffc2425bac3db4a6a0df930cf2920121028c6afdc3eed4c9faa9051dfee726db7affa593993250d9796acd6efa648ddca1",
+   "expect": true
+  },
+  {
+   "library": "bip322-js@4.0.0",
+   "address": "bc1qgpmndme78eezhwatthnsctumg360g3ly6rnzsf",
+   "scriptPubKey": "0x0014407736ef3e3e722bbbab5de70c2f9b4474f447e4",
+   "kind": "\u00a75.2 call-message (realistic long)",
+   "message": "TapeOut Bitcoin-keyed holder 0x29591285417c94575bbc8c8308be48e8806d0f46 on chain 56 calls 0x55d398326f99059ff775485246999027b3197955 with value 1500000000000000000 and data 0x3a83bdd8e25941828afbf6bf645c1af916c92d71e2a60f68b8d2efbffcf0de7f, gas 30000000, tip 2500000000000000, nonce 4294967295, valid until 4102444800",
+   "signature": "AkcwRAIgLf37swn7LILV+bD2Mw5kaRpjmnFvZQ8T8RPuKRw9LesCIBA8K/6uWBSUuYZRbPPCXpFMpcIY93wA6EWZvATSs4P5ASECjGr9w+7UyfqpBR3+5ybbev+lk5kyUNl5as1u+mSN3KE=",
+   "witness": "0x0247304402202dfdfbb309fb2c82d5f9b0f6330e64691a639a716f650f13f113ee291c3d2deb0220103c2bfeae581494b986516cf3c25e914ca5c218f77c00e84599bc04d2b383f90121028c6afdc3eed4c9faa9051dfee726db7affa593993250d9796acd6efa648ddca1",
+   "expect": true
+  },
+  {
+   "library": "bip322-js@4.0.0",
+   "address": "bc1qgpmndme78eezhwatthnsctumg360g3ly6rnzsf",
+   "scriptPubKey": "0x0014407736ef3e3e722bbbab5de70c2f9b4474f447e4",
+   "kind": "\u00a75.2 call-message (every number at its maximum)",
+   "message": "TapeOut Bitcoin-keyed holder 0x29591285417c94575bbc8c8308be48e8806d0f46 on chain 56 calls 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3a83bdd8e25941828afbf6bf645c1af916c92d71e2a60f68b8d2efbffcf0de7f, gas 115792089237316195423570985008687907853269984665640564039457584007913129639935, tip 115792089237316195423570985008687907853269984665640564039457584007913129639935, nonce 115792089237316195423570985008687907853269984665640564039457584007913129639935, valid until 18446744073709551615",
+   "signature": "AkgwRQIhAJ/cQLI0PSVtluNXqmrXxbIBEEb+BF2voTnH1FaBsB5EAiBrcQa9IH32xn9uPKjxePvc1bH3B3kV4wslp+3rjfgQ5AEhAoxq/cPu1Mn6qQUd/ucm23r/pZOZMlDZeWrNbvpkjdyh",
+   "witness": "0x024830450221009fdc40b2343d256d96e357aa6ad7c5b2011046fe045dafa139c7d45681b01e4402206b7106bd207df6c67f6e3ca8f178fbdcd5b1f7077915e30b25a7edeb8df810e40121028c6afdc3eed4c9faa9051dfee726db7affa593993250d9796acd6efa648ddca1",
+   "expect": true
+  }
+ ],
+ "upstream": {
+  "bipsCommit": "927b6de9915c9262615a6399de51b200f81e5aa4",
+  "bip340": [
+   {
+    "index": 0,
+    "publicKey": "0xf9308a019258c31049344f85f89d5229b531c845836f99b08601f113bce036f9",
+    "message": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "signature": "0xe907831f80848d1069a5371b402410364bdf1c5f8307b0084c55f1ce2dca821525f66a4a85ea8b71e482a74f382d2ce5ebeee8fdb2172f477df4900d310536c0",
+    "expect": true
+   },
+   {
+    "index": 1,
+    "publicKey": "0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659",
+    "message": "0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89",
+    "signature": "0x6896bd60eeae296db48a229ff71dfe071bde413e6d43f917dc8dcf8c78de33418906d11ac976abccb20b091292bff4ea897efcb639ea871cfa95f6de339e4b0a",
+    "expect": true
+   },
+   {
+    "index": 2,
+    "publicKey": "0xdd308afec5777e13121fa72b9cc1b7cc0139715309b086c960e18fd969774eb8",
+    "message": "0x7e2d58d8b3bcdf1abadec7829054f90dda9805aab56c77333024b9d0a508b75c",
+    "signature": "0x5831aaeed7b44bb74e5eab94ba9d4294c49bcf2a60728d8b4c200f50dd313c1bab745879a5ad954a72c45a91c3a51d3c7adea98d82f8481e0e1e03674a6f3fb7",
+    "expect": true
+   },
+   {
+    "index": 3,
+    "publicKey": "0x25d1dff95105f5253c4022f628a996ad3a0d95fbf21d468a1b33f8c160d8f517",
+    "message": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "signature": "0x7eb0509757e246f19449885651611cb965ecc1a187dd51b64fda1edc9637d5ec97582b9cb13db3933705b32ba982af5af25fd78881ebb32771fc5922efc66ea3",
+    "expect": true
+   },
+   {
+    "index": 4,
+    "publicKey": "0xd69c3509bb99e412e68b0fe8544e72837dfa30746d8be2aa65975f29d22dc7b9",
+    "message": "0x4df3c3f68fcc83b27e9d42c90431a72499f17875c81a599b566c9889b9696703",
+    "signature": "0x00000000000000000000003b78ce563f89a0ed9414f5aa28ad0d96d6795f9c6376afb1548af603b3eb45c9f8207dee1060cb71c04e80f593060b07d28308d7f4",
+    "expect": true
+   },
+   {
+    "index": 5,
+    "publicKey": "0xeefdea4cdb677750a420fee807eacf21eb9898ae79b9768766e4faa04a2d4a34",
+    "message": "0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89",
+    "signature": "0x6cff5c3ba86c69ea4b7376f31a9bcb4f74c1976089b2d9963da2e5543e17776969e89b4c5564d00349106b8497785dd7d1d713a8ae82b32fa79d5f7fc407d39b",
+    "expect": false
+   },
+   {
+    "index": 6,
+    "publicKey": "0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659",
+    "message": "0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89",
+    "signature": "0xfff97bd5755eeea420453a14355235d382f6472f8568a18b2f057a14602975563cc27944640ac607cd107ae10923d9ef7a73c643e166be5ebeafa34b1ac553e2",
+    "expect": false
+   },
+   {
+    "index": 7,
+    "publicKey": "0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659",
+    "message": "0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89",
+    "signature": "0x1fa62e331edbc21c394792d2ab1100a7b432b013df3f6ff4f99fcb33e0e1515f28890b3edb6e7189b630448b515ce4f8622a954cfe545735aaea5134fccdb2bd",
+    "expect": false
+   },
+   {
+    "index": 8,
+    "publicKey": "0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659",
+    "message": "0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89",
+    "signature": "0x6cff5c3ba86c69ea4b7376f31a9bcb4f74c1976089b2d9963da2e5543e177769961764b3aa9b2ffcb6ef947b6887a226e8d7c93e00c5ed0c1834ff0d0c2e6da6",
+    "expect": false
+   },
+   {
+    "index": 9,
+    "publicKey": "0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659",
+    "message": "0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89",
+    "signature": "0x0000000000000000000000000000000000000000000000000000000000000000123dda8328af9c23a94c1feecfd123ba4fb73476f0d594dcb65c6425bd186051",
+    "expect": false
+   },
+   {
+    "index": 10,
+    "publicKey": "0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659",
+    "message": "0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89",
+    "signature": "0x00000000000000000000000000000000000000000000000000000000000000017615fbaf5ae28864013c099742deadb4dba87f11ac6754f93780d5a1837cf197",
+    "expect": false
+   },
+   {
+    "index": 11,
+    "publicKey": "0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659",
+    "message": "0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89",
+    "signature": "0x4a298dacae57395a15d0795ddbfd1dcb564da82b0f269bc70a74f8220429ba1d69e89b4c5564d00349106b8497785dd7d1d713a8ae82b32fa79d5f7fc407d39b",
+    "expect": false
+   },
+   {
+    "index": 12,
+    "publicKey": "0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659",
+    "message": "0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89",
+    "signature": "0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc2f69e89b4c5564d00349106b8497785dd7d1d713a8ae82b32fa79d5f7fc407d39b",
+    "expect": false
+   },
+   {
+    "index": 13,
+    "publicKey": "0xdff1d77f2a671c5f36183726db2341be58feae1da2deced843240f7b502ba659",
+    "message": "0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89",
+    "signature": "0x6cff5c3ba86c69ea4b7376f31a9bcb4f74c1976089b2d9963da2e5543e177769fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141",
+    "expect": false
+   },
+   {
+    "index": 14,
+    "publicKey": "0xfffffffffffffffffffffffffffffffffffffffffffffffffffffffefffffc30",
+    "message": "0x243f6a8885a308d313198a2e03707344a4093822299f31d0082efa98ec4e6c89",
+    "signature": "0x6cff5c3ba86c69ea4b7376f31a9bcb4f74c1976089b2d9963da2e5543e17776969e89b4c5564d00349106b8497785dd7d1d713a8ae82b32fa79d5f7fc407d39b",
+    "expect": false
+   },
+   {
+    "index": 15,
+    "publicKey": "0x778caa53b4393ac467774d09497a87224bf9fab6f6e68b23086497324d6fd117",
+    "message": "0x",
+    "signature": "0x71535db165ecd9fbbc046e5ffaea61186bb6ad436732fccc25291a55895464cf6069ce26bf03466228f19a3a62db8a649f2d560fac652827d1af0574e427ab63",
+    "expect": true
+   },
+   {
+    "index": 16,
+    "publicKey": "0x778caa53b4393ac467774d09497a87224bf9fab6f6e68b23086497324d6fd117",
+    "message": "0x11",
+    "signature": "0x08a20a0afef64124649232e0693c583ab1b9934ae63b4c3511f3ae1134c6a303ea3173bfea6683bd101fa5aa5dbc1996fe7cacfc5a577d33ec14564cec2bacbf",
+    "expect": true
+   },
+   {
+    "index": 17,
+    "publicKey": "0x778caa53b4393ac467774d09497a87224bf9fab6f6e68b23086497324d6fd117",
+    "message": "0x0102030405060708090a0b0c0d0e0f1011",
+    "signature": "0x5130f39a4059b43bc7cac09a19ece52b5d8699d1a71e3c52da9afdb6b50ac370c4a482b77bf960f8681540e25b6771ece1e5a37fd80e5a51897c5566a97ea5a5",
+    "expect": true
+   },
+   {
+    "index": 18,
+    "publicKey": "0x778caa53b4393ac467774d09497a87224bf9fab6f6e68b23086497324d6fd117",
+    "message": "0x99999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999",
+    "signature": "0x403b12b0d8555a344175ea7ec746566303321e5dbfa8be6f091635163eca79a8585ed3e3170807e7c03b720fc54c7b23897fcba0e9d0b4a06894cfd249f22367",
+    "expect": true
+   }
+  ],
+  "bip322Simple": [
+   {
+    "source": "basic-test-vectors.json",
+    "type": "p2wpkh",
+    "address": "bc1q9vza2e8x573nczrlzms0wvx3gsqjx7vavgkx0l",
+    "scriptPubKey": "0x00142b05d564e6a7a33c087f16e0f730d1440123799d",
+    "message": "",
+    "signature": "smpAkcwRAIgM2gBAQqvZX15ZiysmKmQpDrG83avLIT492QBzLnQIxYCIBaTpOaD20qRlEylyxFSeEA2ba9YOixpX8z46TSDtS40ASECx/EgAxlkQpQ9hYjgGu6EBCPMVPwVIVJqO4XCsMvViHI=",
+    "witness": "0x024730440220336801010aaf657d79662cac98a990a43ac6f376af2c84f8f76401ccb9d0231602201693a4e683db4a91944ca5cb11527840366daf583a2c695fccf8e93483b52e34012102c7f12003196442943d8588e01aee840423cc54fc1521526a3b85c2b0cbd58872",
+    "expect": true
+   },
+   {
+    "source": "basic-test-vectors.json",
+    "type": "p2wpkh",
+    "address": "bc1q9vza2e8x573nczrlzms0wvx3gsqjx7vavgkx0l",
+    "scriptPubKey": "0x00142b05d564e6a7a33c087f16e0f730d1440123799d",
+    "message": "",
+    "signature": "smpAkgwRQIhAPkJ1Q4oYS0htvyuSFHLxRQpFAY56b70UvE7Dxazen0ZAiAtZfFz1S6T6I23MWI2lK/pcNTWncuyL8UL+oMdydVgzAEhAsfxIAMZZEKUPYWI4BruhAQjzFT8FSFSajuFwrDL1Yhy",
+    "witness": "0x02483045022100f909d50e28612d21b6fcae4851cbc51429140639e9bef452f13b0f16b37a7d1902202d65f173d52e93e88db731623694afe970d4d69dcbb22fc50bfa831dc9d560cc012102c7f12003196442943d8588e01aee840423cc54fc1521526a3b85c2b0cbd58872",
+    "expect": true
+   },
+   {
+    "source": "basic-test-vectors.json",
+    "type": "p2wpkh",
+    "address": "bc1q9vza2e8x573nczrlzms0wvx3gsqjx7vavgkx0l",
+    "scriptPubKey": "0x00142b05d564e6a7a33c087f16e0f730d1440123799d",
+    "message": "Hello World",
+    "signature": "smpAkcwRAIgZRfIY3p7/DoVTty6YZbWS71bc5Vct9p9Fia83eRmw2QCICK/ENGfwLtptFluMGs2KsqoNSk89pO7F29zJLUx9a/sASECx/EgAxlkQpQ9hYjgGu6EBCPMVPwVIVJqO4XCsMvViHI=",
+    "witness": "0x0247304402206517c8637a7bfc3a154edcba6196d64bbd5b73955cb7da7d1626bcdde466c364022022bf10d19fc0bb69b4596e306b362acaa835293cf693bb176f7324b531f5afec012102c7f12003196442943d8588e01aee840423cc54fc1521526a3b85c2b0cbd58872",
+    "expect": true
+   },
+   {
+    "source": "basic-test-vectors.json",
+    "type": "p2wpkh",
+    "address": "bc1q9vza2e8x573nczrlzms0wvx3gsqjx7vavgkx0l",
+    "scriptPubKey": "0x00142b05d564e6a7a33c087f16e0f730d1440123799d",
+    "message": "Hello World",
+    "signature": "smpAkgwRQIhAOzyynlqt93lOKJr+wmmxIens//zPzl9tqIOua93wO6MAiBi5n5EyAcPScOjf1lAqIUIQtr3zKNeavYabHyR8eGhowEhAsfxIAMZZEKUPYWI4BruhAQjzFT8FSFSajuFwrDL1Yhy",
+    "witness": "0x02483045022100ecf2ca796ab7dde538a26bfb09a6c487a7b3fff33f397db6a20eb9af77c0ee8c022062e67e44c8070f49c3a37f5940a8850842daf7cca35e6af61a6c7c91f1e1a1a3012102c7f12003196442943d8588e01aee840423cc54fc1521526a3b85c2b0cbd58872",
+    "expect": true
+   },
+   {
+    "source": "basic-test-vectors.json",
+    "type": "p2tr",
+    "address": "bc1pss0zhytly75awhm6x2hhvd5lnzv3vssgrf9axfheq8ldyzn88ges79fler",
+    "scriptPubKey": "0x5120841e2b917f27a9d75f7a32af76369f98991642081a4bd326f901fed20a673a33",
+    "message": "No prefix fallback",
+    "signature": "AUCJYOwOjxYAvatTAGYaVlNXBVyFuc4MwNQkOuK2tl8xhfKDONd0NjfYyNSYcRqeCp8hsAnCEPHAVEkO9h6vbQ/R",
+    "witness": "0x01408960ec0e8f1600bdab5300661a565357055c85b9ce0cc0d4243ae2b6b65f3185f28338d7743637d8c8d498711a9e0a9f21b009c210f1c054490ef61eaf6d0fd1",
+    "expect": true
+   },
+   {
+    "source": "generated-test-vectors.json",
+    "type": "p2wpkh",
+    "address": "bc1qqthe0hz8klx90e7stf6shclhsvqd5ly96pn53v",
+    "scriptPubKey": "0x001402ef97dc47b7cc57e7d05a750be3f78300da7c85",
+    "message": "2V6TUTMSH4VQ3Z7WZWKYD7DFNH",
+    "signature": "smpAkgwRQIhALC6hdfxNy1n45d7UXSskRBdfZW0Al259E1kDMpipdYkAiAJPfZqb+WurZuf1apU5xeE6Igui9dvt5tihQLDvxlY1AEhAqbnruyo677ktQjio7XOchO3w51Dh9AbRVngha5jtNfT",
+    "witness": "0x02483045022100b0ba85d7f1372d67e3977b5174ac91105d7d95b4025db9f44d640cca62a5d6240220093df66a6fe5aead9b9fd5aa54e71784e8882e8bd76fb79b628502c3bf1958d4012102a6e7aeeca8ebbee4b508e2a3b5ce7213b7c39d4387d01b4559e085ae63b4d7d3",
+    "expect": true
+   },
+   {
+    "source": "generated-test-vectors.json",
+    "type": "p2tr",
+    "address": "bc1pcquvhrqv0q68t4m0hfq6tpn006qrskyc7yrqnp2uyrf2emg3wynsdjyk38",
+    "scriptPubKey": "0x5120c038cb8c0c783475d76fba41a5866f7e80385898f10609855c20d2aced117127",
+    "message": "PURVOQ544B6HUATVBJZN5EZJUU",
+    "signature": "smpAUB6B2Rbupzua8LTQIF06516wzl+cwKy1be8RgoiW0riyXdKwe6GTz/5Hnb37m67pJwIKCh+D5jDueG6KpvYpmu8",
+    "witness": "0x01407a07645bba9cee6bc2d3408174eb9d7ac3397e7302b2d5b7bc460a225b4ae2c9774ac1ee864f3ff91e76f7ee6ebba49c0828287e0f98c3b9e1ba2a9bd8a66bbc",
+    "expect": true
+   },
+   {
+    "source": "Sparrow drongo commit f47d5de / Bitcoin Core PR #24058 (P2TR, SIGHASH_ALL)",
+    "address": "bc1ppv609nr0vr25u07u95waq5lucwfm6tde4nydujnu8npg4q75mr5sxq8lt3",
+    "message": "Hello World",
+    "signature": "AUHd69PrJQEv+oKTfZ8l+WROBHuy9HKrbFCJu7U1iK2iiEy1vMU5EfMtjc+VSHM7aU0SDbak5IUZRVno2P5mjSafAQ==",
+    "scriptPubKey": "0x51200b34f2cc6f60d54e3fdc2d1dd053fcc393bd2db9acc8de4a7c3cc28a83d4d8e9",
+    "witness": "0x0141ddebd3eb25012ffa82937d9f25f9644e047bb2f472ab6c5089bbb53588ada2884cb5bcc53911f32d8dcf9548733b694d120db6a4e485194559e8d8fe668d269f01",
+    "expect": true,
+    "type": "p2tr"
+   }
+  ],
+  "bip322Errors": [
+   {
+    "source": "basic-test-vectors.json",
+    "description": "invalid base64 encoding",
+    "address": "bc1q9vza2e8x573nczrlzms0wvx3gsqjx7vavgkx0l",
+    "message": "",
+    "signature": "not-valid-base64!!!",
+    "expect": "reject-decoding"
+   },
+   {
+    "source": "basic-test-vectors.json",
+    "description": "empty signature",
+    "address": "bc1q9vza2e8x573nczrlzms0wvx3gsqjx7vavgkx0l",
+    "scriptPubKey": "0x00142b05d564e6a7a33c087f16e0f730d1440123799d",
+    "message": "",
+    "signature": "",
+    "witness": "0x",
+    "expect": "invalid"
+   },
+   {
+    "source": "basic-test-vectors.json",
+    "description": "wrong message for valid simple p2wpkh signature (empty message was signed)",
+    "address": "bc1q9vza2e8x573nczrlzms0wvx3gsqjx7vavgkx0l",
+    "scriptPubKey": "0x00142b05d564e6a7a33c087f16e0f730d1440123799d",
+    "message": "Wrong message that was not signed",
+    "signature": "smpAkcwRAIgM2gBAQqvZX15ZiysmKmQpDrG83avLIT492QBzLnQIxYCIBaTpOaD20qRlEylyxFSeEA2ba9YOixpX8z46TSDtS40ASECx/EgAxlkQpQ9hYjgGu6EBCPMVPwVIVJqO4XCsMvViHI=",
+    "witness": "0x024730440220336801010aaf657d79662cac98a990a43ac6f376af2c84f8f76401ccb9d0231602201693a4e683db4a91944ca5cb11527840366daf583a2c695fccf8e93483b52e34012102c7f12003196442943d8588e01aee840423cc54fc1521526a3b85c2b0cbd58872",
+    "expect": "invalid"
+   },
+   {
+    "source": "basic-test-vectors.json",
+    "description": "empty witness stack (single zero byte)",
+    "address": "bc1q9vza2e8x573nczrlzms0wvx3gsqjx7vavgkx0l",
+    "scriptPubKey": "0x00142b05d564e6a7a33c087f16e0f730d1440123799d",
+    "message": "",
+    "signature": "smpAA==",
+    "witness": "0x00",
+    "expect": "invalid"
+   },
+   {
+    "source": "basic-test-vectors.json",
+    "description": "invalid signature prefix",
+    "address": "bc1q9vza2e8x573nczrlzms0wvx3gsqjx7vavgkx0l",
+    "message": "",
+    "signature": "fooAA==",
+    "expect": "reject-decoding"
+   },
+   {
+    "source": "basic-test-vectors.json",
+    "description": "incorrect prefix type",
+    "address": "bc1pyrgrm6cu6n54jrvkdjd9rvyd3xfyu84s2623awu2srn6mxhscwpsm5644w",
+    "message": "incorrect prefix",
+    "signature": "fulAUDZwFXUp+adN+/UZj5dVrGAbB3zKs1Vcalz5fCF9srxS63eSWNGvH1NYbrBkPt1BJDUyWUz9zgUxfc63/QheT6M",
+    "expect": "reject-decoding"
+   },
+   {
+    "source": "generated-test-vectors.json",
+    "description": "wrong message for p2wpkh simple signature",
+    "address": "bc1qqthe0hz8klx90e7stf6shclhsvqd5ly96pn53v",
+    "scriptPubKey": "0x001402ef97dc47b7cc57e7d05a750be3f78300da7c85",
+    "message": "EFGJ4AZYXDV7NDUDSUDB3NCDUC",
+    "signature": "smpAkgwRQIhALC6hdfxNy1n45d7UXSskRBdfZW0Al259E1kDMpipdYkAiAJPfZqb+WurZuf1apU5xeE6Igui9dvt5tihQLDvxlY1AEhAqbnruyo677ktQjio7XOchO3w51Dh9AbRVngha5jtNfT",
+    "witness": "0x02483045022100b0ba85d7f1372d67e3977b5174ac91105d7d95b4025db9f44d640cca62a5d6240220093df66a6fe5aead9b9fd5aa54e71784e8882e8bd76fb79b628502c3bf1958d4012102a6e7aeeca8ebbee4b508e2a3b5ce7213b7c39d4387d01b4559e085ae63b4d7d3",
+    "expect": "invalid"
+   },
+   {
+    "source": "generated-test-vectors.json",
+    "description": "wrong signer for p2wpkh simple signature",
+    "address": "bc1qgg6lpr05az2l5kz402ddz5ez7fdu25kgmd40lf",
+    "scriptPubKey": "0x00144235f08df4e895fa58557a9ad15322f25bc552c8",
+    "message": "2V6TUTMSH4VQ3Z7WZWKYD7DFNH",
+    "signature": "smpAkgwRQIhALC6hdfxNy1n45d7UXSskRBdfZW0Al259E1kDMpipdYkAiAJPfZqb+WurZuf1apU5xeE6Igui9dvt5tihQLDvxlY1AEhAqbnruyo677ktQjio7XOchO3w51Dh9AbRVngha5jtNfT",
+    "witness": "0x02483045022100b0ba85d7f1372d67e3977b5174ac91105d7d95b4025db9f44d640cca62a5d6240220093df66a6fe5aead9b9fd5aa54e71784e8882e8bd76fb79b628502c3bf1958d4012102a6e7aeeca8ebbee4b508e2a3b5ce7213b7c39d4387d01b4559e085ae63b4d7d3",
+    "expect": "invalid"
+   },
+   {
+    "source": "generated-test-vectors.json",
+    "description": "wrong message for p2tr simple signature",
+    "address": "bc1pcquvhrqv0q68t4m0hfq6tpn006qrskyc7yrqnp2uyrf2emg3wynsdjyk38",
+    "scriptPubKey": "0x5120c038cb8c0c783475d76fba41a5866f7e80385898f10609855c20d2aced117127",
+    "message": "56VM6YK6Y76XTBXNPITF232EPX",
+    "signature": "smpAUB6B2Rbupzua8LTQIF06516wzl+cwKy1be8RgoiW0riyXdKwe6GTz/5Hnb37m67pJwIKCh+D5jDueG6KpvYpmu8",
+    "witness": "0x01407a07645bba9cee6bc2d3408174eb9d7ac3397e7302b2d5b7bc460a225b4ae2c9774ac1ee864f3ff91e76f7ee6ebba49c0828287e0f98c3b9e1ba2a9bd8a66bbc",
+    "expect": "invalid"
+   },
+   {
+    "source": "generated-test-vectors.json",
+    "description": "wrong signer for p2tr simple signature",
+    "address": "bc1pltvk000nd54v3hrrcn7lsffdra72hphpm40rhzf9hn8arqkgermq2p9029",
+    "scriptPubKey": "0x5120fad967bdf36d2ac8dc63c4fdf8252d1f7cab86e1dd5e3b8925bccfd182c8c8f6",
+    "message": "PURVOQ544B6HUATVBJZN5EZJUU",
+    "signature": "smpAUB6B2Rbupzua8LTQIF06516wzl+cwKy1be8RgoiW0riyXdKwe6GTz/5Hnb37m67pJwIKCh+D5jDueG6KpvYpmu8",
+    "witness": "0x01407a07645bba9cee6bc2d3408174eb9d7ac3397e7302b2d5b7bc460a225b4ae2c9774ac1ee864f3ff91e76f7ee6ebba49c0828287e0f98c3b9e1ba2a9bd8a66bbc",
+    "expect": "invalid"
+   },
+   {
+    "source": "generated-test-vectors.json",
+    "description": "wrong message for p2wpkh full signature",
+    "address": "bc1qrqtlzcq86850yzgsyq9sssawx2qxlx5yq3xpkd",
+    "message": "VENQMXVEGEJAAXJV5V24T6G5UU",
+    "signature": "fulAgAAAAABAUrfzHHOLAKmgCIFSTT3krp+cQxj1BDPBN4GBg3tRmFXAAAAAADgBwAAAQAAAAAAAAAAAWoCSDBFAiEAjYj85zyhQKa9DbMO0reDwdhkNwKJkF3q2qFcijXDgMUCIAaQ75s3fwqrCeYIUJugLvhxZFxQIVquGN90vIKCW3QLASEDMurnDzvc0zABUwVwCADfGXoDx/M3SQnYt7e3IHDoU3PgBwAA",
+    "expect": "reject-decoding"
+   },
+   {
+    "source": "generated-test-vectors.json",
+    "description": "wrong signer for p2wpkh full signature",
+    "address": "bc1q55chmwm4x8aeye0h9c0mryra2ly8k8fh3scqgj",
+    "message": "KLE5MMJBTNF4AVZXIO3GIL5UWF",
+    "signature": "fulAgAAAAABAUrfzHHOLAKmgCIFSTT3krp+cQxj1BDPBN4GBg3tRmFXAAAAAADgBwAAAQAAAAAAAAAAAWoCSDBFAiEAjYj85zyhQKa9DbMO0reDwdhkNwKJkF3q2qFcijXDgMUCIAaQ75s3fwqrCeYIUJugLvhxZFxQIVquGN90vIKCW3QLASEDMurnDzvc0zABUwVwCADfGXoDx/M3SQnYt7e3IHDoU3PgBwAA",
+    "expect": "reject-decoding"
+   },
+   {
+    "source": "generated-test-vectors.json",
+    "description": "wrong message for p2tr full signature",
+    "address": "bc1pve87s3l2levjmhetzr2f9xvep3y266xty0hnefmyv8tkxc3e4qssll2kdu",
+    "message": "P2RQWD264CW7Z5ZSSSDRW2JEDB",
+    "signature": "fulAgAAAAABAROFPNY6Zt8hFK0YQq5Wb6wk/CnUYEPtQ0HTHDyzNROrAAAAAADgBwAAAQAAAAAAAAAAAWoBQNRdLOo5XZY0SBqAsLZNr/z3Bqrmo3OxVn7e4tD/OOD4H9U/L1unq5Nmdz+S1w7SHtt46bFwnd8xnRVan8BofFfgBwAA",
+    "expect": "reject-decoding"
+   },
+   {
+    "source": "generated-test-vectors.json",
+    "description": "wrong signer for p2tr full signature",
+    "address": "bc1py2f3exluva2yqa877qnsj3vk4lm8yatw0up4fhrx04hf8ns87weswck94p",
+    "message": "XQMVC3YR6AOGZIHLSUQ2NSSBI2",
+    "signature": "fulAgAAAAABAROFPNY6Zt8hFK0YQq5Wb6wk/CnUYEPtQ0HTHDyzNROrAAAAAADgBwAAAQAAAAAAAAAAAWoBQNRdLOo5XZY0SBqAsLZNr/z3Bqrmo3OxVn7e4tD/OOD4H9U/L1unq5Nmdz+S1w7SHtt46bFwnd8xnRVan8BofFfgBwAA",
+    "expect": "reject-decoding"
+   },
+   {
+    "source": "generated-test-vectors.json",
+    "description": "wrong message for p2tr-time-lock full signature",
+    "address": "bc1p6vffkx7vcyezrjq7pg9qqdjv7vmtanfhk8ukwsn4syejwmarmhxqp0rw5x",
+    "message": "ATGH7VC42BMKAAJAMBG3KNGQGR",
+    "signature": "fulAgAAAAABAaza7/ukfX9ZdxCUvK7CPJgADDdPdF7ikXVKWctd5EHrAAAAAADgBwAAAQAAAAAAAAAAAWoEQPvuT0enYGwsab2lsPZU0U3OcRkGng+o/PAt4QU2lc8hG7lTUmflkt0To+eoipv2vptf0TlGOBCsKU5xE3kXKcMAS2MgrYfXhOkh0CvwuJpB+O3tal2ECfO0v7k1/A4PTlGcQiBnAuAHsnUgJjLn4tl5ytgC8CNTyITXmg4rx9ctxPedwRMPEBvfoUBorCHBJjLn4tl5ytgC8CNTyITXmg4rx9ctxPedwRMPEBvfoUDgBwAA",
+    "expect": "reject-decoding"
+   },
+   {
+    "source": "generated-test-vectors.json",
+    "description": "wrong signer for p2tr-time-lock full signature",
+    "address": "bc1pfncmfyycsv5zpnrzy3hj7qna989kymm2ekps7ph2mwwyftjy3d6s2esen0",
+    "message": "AY2VOQOXYI5CN2EHZKLOX7ZI37",
+    "signature": "fulAgAAAAABAaza7/ukfX9ZdxCUvK7CPJgADDdPdF7ikXVKWctd5EHrAAAAAADgBwAAAQAAAAAAAAAAAWoEQPvuT0enYGwsab2lsPZU0U3OcRkGng+o/PAt4QU2lc8hG7lTUmflkt0To+eoipv2vptf0TlGOBCsKU5xE3kXKcMAS2MgrYfXhOkh0CvwuJpB+O3tal2ECfO0v7k1/A4PTlGcQiBnAuAHsnUgJjLn4tl5ytgC8CNTyITXmg4rx9ctxPedwRMPEBvfoUBorCHBJjLn4tl5ytgC8CNTyITXmg4rx9ctxPedwRMPEBvfoUDgBwAA",
+    "expect": "reject-decoding"
+   }
+  ]
+ }
+}

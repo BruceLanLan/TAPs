@@ -1,0 +1,500 @@
+{
+ "wallet": "okx",
+ "atype": "p2wpkh",
+ "ext": "4.18.1",
+ "address": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu",
+ "scriptPubKey": "0x0014c0cebcd6c3d3ca8c75dc5ec62ebe55330ef910e2",
+ "holder": "0xfec7dc76058dc82996aca46d30c153e3c24ccb0b",
+ "cases": {
+  "transfers-8": {
+   "chainId": "56",
+   "tip": "0",
+   "nonce": "0",
+   "deadline": "2000000000",
+   "message": "TapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 makes 8 calls: (1) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x678bd5da25aaef8ad069cf62b6eba81c751321fe15a95f745307096873e78205, gas 100000; (2) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x7bb235abde544ecbe0aed9b0b62633d30545d6924a2363c8b2664fa68f8d4895, gas 100000; (3) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x3d6fcbb47188e47112bd9812dd900d786b97ce78bfacbdb1f20f87c41ce05868, gas 100000; (4) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x11079b093d42b2e60e85f16f5d1e36df9688586327a366d1e04d9ee5de7274d2, gas 100000; (5) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xfa9df78ace13097ae879920aa06a28b6e8266c8a2685980f2cdb4d1517421bf8, gas 100000; (6) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xecbce1fbde1301c7c2d425e5ae08fbdcf0aba5dc4b95df6403b46c9e3416aae7, gas 100000; (7) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xd9abcb537ad822f4cfd310755675482a7a57300bfc4be2bf88d0a1364643fd54, gas 100000; (8) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x7aa8684a3340e0f6f6b64610fd2483d50a77f0eb12a3f157d4253a7de2e7c93d, gas 100000; tip 0, nonce 0, valid until 2000000000",
+   "chars": 1329,
+   "calls": [
+    {
+     "target": "0x00000000000000000000000000000000000000c1",
+     "value": "0",
+     "data": "0x42842e0e000000000000000000000000fec7dc76058dc82996aca46d30c153e3c24ccb0b00000000000000000000000000000000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000001",
+     "callGas": "100000"
+    },
+    {
+     "target": "0x00000000000000000000000000000000000000c1",
+     "value": "0",
+     "data": "0x42842e0e000000000000000000000000fec7dc76058dc82996aca46d30c153e3c24ccb0b00000000000000000000000000000000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000002",
+     "callGas": "100000"
+    },
+    {
+     "target": "0x00000000000000000000000000000000000000c1",
+     "value": "0",
+     "data": "0x42842e0e000000000000000000000000fec7dc76058dc82996aca46d30c153e3c24ccb0b00000000000000000000000000000000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000003",
+     "callGas": "100000"
+    },
+    {
+     "target": "0x00000000000000000000000000000000000000c1",
+     "value": "0",
+     "data": "0x42842e0e000000000000000000000000fec7dc76058dc82996aca46d30c153e3c24ccb0b00000000000000000000000000000000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000004",
+     "callGas": "100000"
+    },
+    {
+     "target": "0x00000000000000000000000000000000000000c1",
+     "value": "0",
+     "data": "0x42842e0e000000000000000000000000fec7dc76058dc82996aca46d30c153e3c24ccb0b00000000000000000000000000000000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000005",
+     "callGas": "100000"
+    },
+    {
+     "target": "0x00000000000000000000000000000000000000c1",
+     "value": "0",
+     "data": "0x42842e0e000000000000000000000000fec7dc76058dc82996aca46d30c153e3c24ccb0b00000000000000000000000000000000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000006",
+     "callGas": "100000"
+    },
+    {
+     "target": "0x00000000000000000000000000000000000000c1",
+     "value": "0",
+     "data": "0x42842e0e000000000000000000000000fec7dc76058dc82996aca46d30c153e3c24ccb0b00000000000000000000000000000000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000007",
+     "callGas": "100000"
+    },
+    {
+     "target": "0x00000000000000000000000000000000000000c1",
+     "value": "0",
+     "data": "0x42842e0e000000000000000000000000fec7dc76058dc82996aca46d30c153e3c24ccb0b00000000000000000000000000000000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000008",
+     "callGas": "100000"
+    }
+   ],
+   "popupText": "Confirm Signature request\nblank\n127.0.0.1:18791\nWallet used\nbc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu\n钱包B - 钱包\nData\nReject\nConfirm",
+   "popupContainsFullText": false,
+   "popupLayout": [],
+   "popupViewport": {
+    "width": 360,
+    "height": 720
+   },
+   "expanded": {
+    "popupText": "Confirm Signature request\nblank\n127.0.0.1:18791\nWallet used\nbc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu\n钱包B - 钱包\nData\nReject\nConfirm\nData\nTapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 makes 8 calls: (1) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x678bd5da25aaef8ad069cf62b6eba81c751321fe15a95f745307096873e78205, gas 100000; (2) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x7bb235abde544ecbe0aed9b0b62633d30545d6924a2363c8b2664fa68f8d4895, gas 100000; (3) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x3d6fcbb47188e47112bd9812dd900d786b97ce78bfacbdb1f20f87c41ce05868, gas 100000; (4) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x11079b093d42b2e60e85f16f5d1e36df9688586327a366d1e04d9ee5de7274d2, gas 100000; (5) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xfa9df78ace13097ae879920aa06a28b6e8266c8a2685980f2cdb4d1517421bf8, gas 100000; (6) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xecbce1fbde1301c7c2d425e5ae08fbdcf0aba5dc4b95df6403b46c9e3416aae7, gas 100000; (7) 0x00000000000000000000000000000000000000c1 with value 0 and data 0xd9abcb537ad822f4cfd310755675482a7a57300bfc4be2bf88d0a1364643fd54, gas 100000; (8) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x7aa8684a3340e0f6f6b64610fd2483d50a77f0eb12a3f157d4253a7de2e7c93d, gas 100000; tip 0, nonce 0, valid until 2000000000",
+    "popupContainsFullText": true,
+    "popupLayout": [
+     {
+      "tag": "DIV",
+      "visible": true,
+      "textLen": 1329,
+      "equalsMessage": true,
+      "containsTail": true,
+      "clientHeight": 576,
+      "scrollHeight": 576,
+      "overflowY": "visible",
+      "textOverflow": "clip",
+      "lineClamp": "none",
+      "whiteSpace": "pre-wrap",
+      "wordBreak": "normal",
+      "rect": [
+       16,
+       192,
+       328,
+       576
+      ],
+      "clippingAncestors": [
+       {
+        "tag": "DIV",
+        "overflowY": "auto",
+        "maxHeight": "none",
+        "clientHeight": 576,
+        "scrollHeight": 576
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "auto",
+        "maxHeight": "none",
+        "clientHeight": 612,
+        "scrollHeight": 612
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "auto",
+        "maxHeight": "none",
+        "clientHeight": 548,
+        "scrollHeight": 612
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "visible",
+        "maxHeight": "calc(100% - 120px)",
+        "clientHeight": 600,
+        "scrollHeight": 600
+       }
+      ]
+     }
+    ],
+    "popupViewport": {
+     "width": 360,
+     "height": 720
+    }
+   },
+   "raw": "AkcwRAIgfxU/+6iNGUzDpIvr4S39OuRei2vaqKw3VlucFcdiFAECICKqOgBIrydBSVrzqv/RvmX0/WBVRQhjbjFBQ5f5+umOASEDMNVP0N1CCm5fjTYk9fNILK41D3nV8HU79b7vnC2Rrzw=",
+   "result": {
+    "ok": "AkcwRAIgfxU/+6iNGUzDpIvr4S39OuRei2vaqKw3VlucFcdiFAECICKqOgBIrydBSVrzqv/RvmX0/WBVRQhjbjFBQ5f5+umOASEDMNVP0N1CCm5fjTYk9fNILK41D3nV8HU79b7vnC2Rrzw="
+   },
+   "cliVerify": "valid",
+   "cliWitness": "0x0247304402207f153ffba88d194cc3a48bebe12dfd3ae45e8b6bdaa8ac37565b9c15c7621401022022aa3a0048af2741495af3aaffd1be65f4fd60554508636e31414397f9fae98e01210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+   "rawLen": 107,
+   "rawHex": "0247304402207f153ffba88d194cc3a48bebe12dfd3ae45e8b6bdaa8ac37565b9c15c7621401022022aa3a0048af2741495af3aaffd1be65f4fd60554508636e31414397f9fae98e01210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+   "witnessShape": {
+    "items": [
+     71,
+     33
+    ],
+    "trailing": 0,
+    "sighash": "0x01",
+    "derLen": 70,
+    "lowS": true
+   }
+  },
+  "mixed-3": {
+   "chainId": "56",
+   "tip": "10000000000000000",
+   "nonce": "0",
+   "deadline": "2000000000",
+   "message": "TapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 makes 3 calls: (1) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x678bd5da25aaef8ad069cf62b6eba81c751321fe15a95f745307096873e78205, gas 100000; (2) 0x00000000000000000000000000000000000000b0 with value 1000000000000000 and data 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470, gas 0; (3) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x7bb235abde544ecbe0aed9b0b62633d30545d6924a2363c8b2664fa68f8d4895, gas 100000; tip 10000000000000000, nonce 0, valid until 2000000000",
+   "chars": 610,
+   "calls": [
+    {
+     "target": "0x00000000000000000000000000000000000000c1",
+     "value": "0",
+     "data": "0x42842e0e000000000000000000000000fec7dc76058dc82996aca46d30c153e3c24ccb0b00000000000000000000000000000000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000001",
+     "callGas": "100000"
+    },
+    {
+     "target": "0x00000000000000000000000000000000000000b0",
+     "value": "1000000000000000",
+     "data": "0x",
+     "callGas": "0"
+    },
+    {
+     "target": "0x00000000000000000000000000000000000000c1",
+     "value": "0",
+     "data": "0x42842e0e000000000000000000000000fec7dc76058dc82996aca46d30c153e3c24ccb0b00000000000000000000000000000000000000000000000000000000000000b00000000000000000000000000000000000000000000000000000000000000002",
+     "callGas": "100000"
+    }
+   ],
+   "popupText": "Confirm Signature request\nblank\n127.0.0.1:18791\nWallet used\nbc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu\n钱包B - 钱包\nData\nReject\nConfirm",
+   "popupContainsFullText": false,
+   "popupLayout": [],
+   "popupViewport": {
+    "width": 360,
+    "height": 720
+   },
+   "expanded": {
+    "popupText": "Confirm Signature request\nblank\n127.0.0.1:18791\nWallet used\nbc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu\n钱包B - 钱包\nData\nReject\nConfirm\nData\nTapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 makes 3 calls: (1) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x678bd5da25aaef8ad069cf62b6eba81c751321fe15a95f745307096873e78205, gas 100000; (2) 0x00000000000000000000000000000000000000b0 with value 1000000000000000 and data 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470, gas 0; (3) 0x00000000000000000000000000000000000000c1 with value 0 and data 0x7bb235abde544ecbe0aed9b0b62633d30545d6924a2363c8b2664fa68f8d4895, gas 100000; tip 10000000000000000, nonce 0, valid until 2000000000",
+    "popupContainsFullText": true,
+    "popupLayout": [
+     {
+      "tag": "DIV",
+      "visible": true,
+      "textLen": 610,
+      "equalsMessage": true,
+      "containsTail": true,
+      "clientHeight": 272,
+      "scrollHeight": 272,
+      "overflowY": "visible",
+      "textOverflow": "clip",
+      "lineClamp": "none",
+      "whiteSpace": "pre-wrap",
+      "wordBreak": "normal",
+      "rect": [
+       16,
+       432,
+       328,
+       272
+      ],
+      "clippingAncestors": [
+       {
+        "tag": "DIV",
+        "overflowY": "auto",
+        "maxHeight": "none",
+        "clientHeight": 272,
+        "scrollHeight": 272
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "auto",
+        "maxHeight": "none",
+        "clientHeight": 308,
+        "scrollHeight": 308
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "auto",
+        "maxHeight": "none",
+        "clientHeight": 308,
+        "scrollHeight": 308
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "visible",
+        "maxHeight": "calc(100% - 120px)",
+        "clientHeight": 360,
+        "scrollHeight": 360
+       }
+      ]
+     }
+    ],
+    "popupViewport": {
+     "width": 360,
+     "height": 720
+    }
+   },
+   "raw": "AkgwRQIhAIMnncfyeOB6b2562zzZJRH66w7YGOKQPcR9BqqvHzX2AiA2b6NsR5ftdlrSX7chV+qzDpb9G7fsYPkGCpvk8/6K+QEhAzDVT9DdQgpuX402JPXzSCyuNQ951fB1O/W+75wtka88",
+   "result": {
+    "ok": "AkgwRQIhAIMnncfyeOB6b2562zzZJRH66w7YGOKQPcR9BqqvHzX2AiA2b6NsR5ftdlrSX7chV+qzDpb9G7fsYPkGCpvk8/6K+QEhAzDVT9DdQgpuX402JPXzSCyuNQ951fB1O/W+75wtka88"
+   },
+   "cliVerify": "valid",
+   "cliWitness": "0x0248304502210083279dc7f278e07a6f6e7adb3cd92511faeb0ed818e2903dc47d06aaaf1f35f60220366fa36c4797ed765ad25fb72157eab30e96fd1bb7ec60f9060a9be4f3fe8af901210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+   "rawLen": 108,
+   "rawHex": "0248304502210083279dc7f278e07a6f6e7adb3cd92511faeb0ed818e2903dc47d06aaaf1f35f60220366fa36c4797ed765ad25fb72157eab30e96fd1bb7ec60f9060a9be4f3fe8af901210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+   "witnessShape": {
+    "items": [
+     72,
+     33
+    ],
+    "trailing": 0,
+    "sighash": "0x01",
+    "derLen": 71,
+    "lowS": true
+   }
+  },
+  "longest": {
+   "chainId": "18446744073709551615",
+   "tip": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+   "nonce": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+   "deadline": "18446744073709551615",
+   "message": "TapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 18446744073709551615 makes 8 calls: (1) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (2) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (3) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (4) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (5) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (6) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (7) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (8) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; tip 115792089237316195423570985008687907853269984665640564039457584007913129639935, nonce 115792089237316195423570985008687907853269984665640564039457584007913129639935, valid until 18446744073709551615",
+   "chars": 2239,
+   "calls": [
+    {
+     "target": "0xffffffffffffffffffffffffffffffffffffffff",
+     "value": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+     "data": "0x78787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878",
+     "callGas": "18446744073709551615"
+    },
+    {
+     "target": "0xffffffffffffffffffffffffffffffffffffffff",
+     "value": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+     "data": "0x78787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878",
+     "callGas": "18446744073709551615"
+    },
+    {
+     "target": "0xffffffffffffffffffffffffffffffffffffffff",
+     "value": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+     "data": "0x78787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878",
+     "callGas": "18446744073709551615"
+    },
+    {
+     "target": "0xffffffffffffffffffffffffffffffffffffffff",
+     "value": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+     "data": "0x78787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878",
+     "callGas": "18446744073709551615"
+    },
+    {
+     "target": "0xffffffffffffffffffffffffffffffffffffffff",
+     "value": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+     "data": "0x78787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878",
+     "callGas": "18446744073709551615"
+    },
+    {
+     "target": "0xffffffffffffffffffffffffffffffffffffffff",
+     "value": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+     "data": "0x78787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878",
+     "callGas": "18446744073709551615"
+    },
+    {
+     "target": "0xffffffffffffffffffffffffffffffffffffffff",
+     "value": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+     "data": "0x78787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878",
+     "callGas": "18446744073709551615"
+    },
+    {
+     "target": "0xffffffffffffffffffffffffffffffffffffffff",
+     "value": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+     "data": "0x78787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878787878",
+     "callGas": "18446744073709551615"
+    }
+   ],
+   "popupText": "Confirm Signature request\nblank\n127.0.0.1:18791\nWallet used\nbc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu\n钱包B - 钱包\nData\nReject\nConfirm",
+   "popupContainsFullText": false,
+   "popupLayout": [],
+   "popupViewport": {
+    "width": 360,
+    "height": 720
+   },
+   "expanded": {
+    "popupText": "Confirm Signature request\nblank\n127.0.0.1:18791\nWallet used\nbc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu\n钱包B - 钱包\nData\nReject\nConfirm\nData\nTapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 18446744073709551615 makes 8 calls: (1) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (2) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (3) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (4) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (5) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (6) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (7) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; (8) 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3ef99674a61dcf00ad1194047eaeb0c0f4f3adfc7cefaf87c7dfe4ccfb0f4263, gas 18446744073709551615; tip 115792089237316195423570985008687907853269984665640564039457584007913129639935, nonce 115792089237316195423570985008687907853269984665640564039457584007913129639935, valid until 18446744073709551615",
+    "popupContainsFullText": true,
+    "popupLayout": [
+     {
+      "tag": "DIV",
+      "visible": true,
+      "textLen": 2239,
+      "equalsMessage": true,
+      "containsTail": true,
+      "clientHeight": 1040,
+      "scrollHeight": 1040,
+      "overflowY": "visible",
+      "textOverflow": "clip",
+      "lineClamp": "none",
+      "whiteSpace": "pre-wrap",
+      "wordBreak": "normal",
+      "rect": [
+       16,
+       192,
+       328,
+       1040
+      ],
+      "clippingAncestors": [
+       {
+        "tag": "DIV",
+        "overflowY": "auto",
+        "maxHeight": "none",
+        "clientHeight": 1040,
+        "scrollHeight": 1040
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "auto",
+        "maxHeight": "none",
+        "clientHeight": 1076,
+        "scrollHeight": 1076
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "auto",
+        "maxHeight": "none",
+        "clientHeight": 548,
+        "scrollHeight": 1076
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "visible",
+        "maxHeight": "calc(100% - 120px)",
+        "clientHeight": 600,
+        "scrollHeight": 600
+       }
+      ]
+     }
+    ],
+    "popupViewport": {
+     "width": 360,
+     "height": 720
+    }
+   },
+   "raw": "AkgwRQIhALg2LHzg48oGbZDsuwjfjD670mSY0QRqIoXkw7BdugZSAiAMkhUVk5KEMUewG4zrNpeY9RC/LCfQRLvDtPdWl26v1wEhAzDVT9DdQgpuX402JPXzSCyuNQ951fB1O/W+75wtka88",
+   "result": {
+    "ok": "AkgwRQIhALg2LHzg48oGbZDsuwjfjD670mSY0QRqIoXkw7BdugZSAiAMkhUVk5KEMUewG4zrNpeY9RC/LCfQRLvDtPdWl26v1wEhAzDVT9DdQgpuX402JPXzSCyuNQ951fB1O/W+75wtka88"
+   },
+   "cliVerify": "valid",
+   "cliWitness": "0x02483045022100b8362c7ce0e3ca066d90ecbb08df8c3ebbd26498d1046a2285e4c3b05dba065202200c9215159392843147b01b8ceb369798f510bf2c27d044bbc3b4f756976eafd701210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+   "rawLen": 108,
+   "rawHex": "02483045022100b8362c7ce0e3ca066d90ecbb08df8c3ebbd26498d1046a2285e4c3b05dba065202200c9215159392843147b01b8ceb369798f510bf2c27d044bbc3b4f756976eafd701210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+   "witnessShape": {
+    "items": [
+     72,
+     33
+    ],
+    "trailing": 0,
+    "sighash": "0x01",
+    "derLen": 71,
+    "lowS": true
+   }
+  }
+ },
+ "probes": {
+  "long4000": {
+   "message": "0000 TapeOut wallet length probe, printable ASCII only, no line breaks; 0001 TapeOut wallet length probe, printable ASCII only, no line breaks; 0002 TapeOut wallet length probe, printable ASCII only, no line breaks; 0003 TapeOut wallet length probe, printable ASCII only, no line breaks; 0004 TapeOut wallet length probe, printable ASCII only, no line breaks; 0005 TapeOut wallet length probe, printable ASCII only, no line breaks; 0006 TapeOut wallet length probe, printable ASCII only, no line breaks; 0007 TapeOut wallet length probe, printable ASCII only, no line breaks; 0008 TapeOut wallet length probe, printable ASCII only, no line breaks; 0009 TapeOut wallet length probe, printable ASCII only, no line breaks; 0010 TapeOut wallet length probe, printable ASCII only, no line breaks; 0011 TapeOut wallet length probe, printable ASCII only, no line breaks; 0012 TapeOut wallet length probe, printable ASCII only, no line breaks; 0013 TapeOut wallet length probe, printable ASCII only, no line breaks; 0014 TapeOut wallet length probe, printable ASCII only, no line breaks; 0015 TapeOut wallet length probe, printable ASCII only, no line breaks; 0016 TapeOut wallet length probe, printable ASCII only, no line breaks; 0017 TapeOut wallet length probe, printable ASCII only, no line breaks; 0018 TapeOut wallet length probe, printable ASCII only, no line breaks; 0019 TapeOut wallet length probe, printable ASCII only, no line breaks; 0020 TapeOut wallet length probe, printable ASCII only, no line breaks; 0021 TapeOut wallet length probe, printable ASCII only, no line breaks; 0022 TapeOut wallet length probe, printable ASCII only, no line breaks; 0023 TapeOut wallet length probe, printable ASCII only, no line breaks; 0024 TapeOut wallet length probe, printable ASCII only, no line breaks; 0025 TapeOut wallet length probe, printable ASCII only, no line breaks; 0026 TapeOut wallet length probe, printable ASCII only, no line breaks; 0027 TapeOut wallet length probe, printable ASCII only, no line breaks; 0028 TapeOut wallet length probe, printable ASCII only, no line breaks; 0029 TapeOut wallet length probe, printable ASCII only, no line breaks; 0030 TapeOut wallet length probe, printable ASCII only, no line breaks; 0031 TapeOut wallet length probe, printable ASCII only, no line breaks; 0032 TapeOut wallet length probe, printable ASCII only, no line breaks; 0033 TapeOut wallet length probe, printable ASCII only, no line breaks; 0034 TapeOut wallet length probe, printable ASCII only, no line breaks; 0035 TapeOut wallet length probe, printable ASCII only, no line breaks; 0036 TapeOut wallet length probe, printable ASCII only, no line breaks; 0037 TapeOut wallet length probe, printable ASCII only, no line breaks; 0038 TapeOut wallet length probe, printable ASCII only, no line breaks; 0039 TapeOut wallet length probe, printable ASCII only, no line breaks; 0040 TapeOut wallet length probe, printable ASCII only, no line breaks; 0041 TapeOut wallet length probe, printable ASCII only, no line breaks; 0042 TapeOut wallet length probe, printable ASCII only, no line breaks; 0043 TapeOut wallet length probe, printable ASCII only, no line breaks; 0044 TapeOut wallet length probe, printable ASCII only, no line breaks; 0045 TapeOut wallet length probe, printable ASCII only, no line breaks; 0046 TapeOut wallet length probe, printable ASCII only, no line breaks; 0047 TapeOut wallet length probe, printable ASCII only, no line breaks; 0048 TapeOut wallet length probe, printable ASCII only, no line breaks; 0049 TapeOut wallet length probe, printable ASCII only, no line breaks; 0050 TapeOut wallet length probe, printable ASCII only, no line breaks; 0051 TapeOut wallet length probe, printable ASCII only, no line breaks; 0052 TapeOut wallet length probe, printable ASCII only, no line breaks; 0053 TapeOut wallet length probe, printable ASCII only, no line breaks; 0054 TapeOut wallet length probe, printable ASCII only, no line breaks; 0055 TapeOut wallet length probe, printa",
+   "chars": 4000,
+   "popupText": "Confirm Signature request\nblank\n127.0.0.1:18791\nWallet used\nbc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu\n钱包B - 钱包\nData\nReject\nConfirm",
+   "popupContainsFullText": false,
+   "popupLayout": [],
+   "popupViewport": {
+    "width": 360,
+    "height": 720
+   },
+   "expanded": {
+    "popupText": "Confirm Signature request\nblank\n127.0.0.1:18791\nWallet used\nbc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu\n钱包B - 钱包\nData\nReject\nConfirm\nData\n0000 TapeOut wallet length probe, printable ASCII only, no line breaks; 0001 TapeOut wallet length probe, printable ASCII only, no line breaks; 0002 TapeOut wallet length probe, printable ASCII only, no line breaks; 0003 TapeOut wallet length probe, printable ASCII only, no line breaks; 0004 TapeOut wallet length probe, printable ASCII only, no line breaks; 0005 TapeOut wallet length probe, printable ASCII only, no line breaks; 0006 TapeOut wallet length probe, printable ASCII only, no line breaks; 0007 TapeOut wallet length probe, printable ASCII only, no line breaks; 0008 TapeOut wallet length probe, printable ASCII only, no line breaks; 0009 TapeOut wallet length probe, printable ASCII only, no line breaks; 0010 TapeOut wallet length probe, printable ASCII only, no line breaks; 0011 TapeOut wallet length probe, printable ASCII only, no line breaks; 0012 TapeOut wallet length probe, printable ASCII only, no line breaks; 0013 TapeOut wallet length probe, printable ASCII only, no line breaks; 0014 TapeOut wallet length probe, printable ASCII only, no line breaks; 0015 TapeOut wallet length probe, printable ASCII only, no line breaks; 0016 TapeOut wallet length probe, printable ASCII only, no line breaks; 0017 TapeOut wallet length probe, printable ASCII only, no line breaks; 0018 TapeOut wallet length probe, printable ASCII only, no line breaks; 0019 TapeOut wallet length probe, printable ASCII only, no line breaks; 0020 TapeOut wallet length probe, printable ASCII only, no line breaks; 0021 TapeOut wallet length probe, printable ASCII only, no line breaks; 0022 TapeOut wallet length probe, printable ASCII only, no line breaks; 0023 TapeOut wallet length probe, printable ASCII only, no line breaks; 0024 TapeOut wallet length probe, printable ASCII only, no line breaks; 0025 TapeOut wallet length probe, printable ASCII only, no line breaks; 0026 TapeOut wallet length probe, printable ASCII only, no line breaks; 0027 TapeOut wallet length probe, printable ASCII only, no line breaks; 0028 TapeOut wallet length probe, printable ASCII only, no line breaks; 0029 TapeOut wallet length probe, printable ASCII only, no line breaks; 0030 TapeOut wallet length probe, printable ASCII only, no line breaks; 0031 TapeOut wallet length probe, printable ASCII only, no line breaks; 0032 TapeOut wallet length probe, printable ASCII only, no line breaks; 0033 TapeOut wallet length probe, printable ASCII only, no line breaks; 0034 TapeOut wallet length probe, printable ASCII only, no line breaks; 0035 TapeOut wallet length probe, printable ASCII only, no line breaks; 0036 TapeOut wallet length probe, printable ASCII only, no line breaks; 0037 TapeOut wallet length probe, printable ASCII only, no line breaks; 0038 TapeOut wallet length probe, printable ASCII only, no line breaks; 0039 TapeOut wallet length probe, printable ASCII only, no line breaks; 0040 TapeOut wallet length probe, printable ASCII only, no line breaks; 0041 TapeOut wallet length probe, printable ASCII only, no line breaks; 0042 TapeOut wallet length probe, printable ASCII only, no line breaks; 0043 TapeOut wallet length probe, printable ASCII only, no line breaks; 0044 TapeOut wallet length probe, printable ASCII only, no line breaks; 0045 TapeOut wallet length probe, printable ASCII only, no line breaks; 0046 TapeOut wallet length probe, printable ASCII only, no line breaks; 0047 TapeOut wallet length probe, printable ASCII only, no line breaks; 0048 TapeOut wallet length probe, printable ASCII only, no line breaks; 0049 TapeOut wallet length probe, printable ASCII only, no line breaks; 0050 TapeOut wallet length probe, printable ASCII only, no line breaks; 0051 TapeOut wallet length probe, printable ASCII only, no line breaks; 0052 TapeOut wallet length probe, printable ASCII only, no line breaks; 0053 TapeOut wallet length probe, printable ASCII only, no line breaks; 0054 TapeOut wallet length probe, printable ASCII only, no line breaks; 0055 TapeOut wallet length probe, printa",
+    "popupContainsFullText": true,
+    "popupLayout": [
+     {
+      "tag": "DIV",
+      "visible": true,
+      "textLen": 4000,
+      "equalsMessage": true,
+      "containsTail": true,
+      "clientHeight": 1280,
+      "scrollHeight": 1280,
+      "overflowY": "visible",
+      "textOverflow": "clip",
+      "lineClamp": "none",
+      "whiteSpace": "pre-wrap",
+      "wordBreak": "normal",
+      "rect": [
+       16,
+       192,
+       328,
+       1280
+      ],
+      "clippingAncestors": [
+       {
+        "tag": "DIV",
+        "overflowY": "auto",
+        "maxHeight": "none",
+        "clientHeight": 1280,
+        "scrollHeight": 1280
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "auto",
+        "maxHeight": "none",
+        "clientHeight": 1316,
+        "scrollHeight": 1316
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "auto",
+        "maxHeight": "none",
+        "clientHeight": 548,
+        "scrollHeight": 1316
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "visible",
+        "maxHeight": "calc(100% - 120px)",
+        "clientHeight": 600,
+        "scrollHeight": 600
+       }
+      ]
+     }
+    ],
+    "popupViewport": {
+     "width": 360,
+     "height": 720
+    }
+   },
+   "raw": "AkcwRAIgbGhVjjEzKwDOtQ3SxR5vbZMWOQhz2yuoyciXfa1/ILECIHzSVqnqbxWg8rZ1tMYY5Co76Et1Jb4aYpWuQd99NUa1ASEDMNVP0N1CCm5fjTYk9fNILK41D3nV8HU79b7vnC2Rrzw=",
+   "result": {
+    "ok": "AkcwRAIgbGhVjjEzKwDOtQ3SxR5vbZMWOQhz2yuoyciXfa1/ILECIHzSVqnqbxWg8rZ1tMYY5Co76Et1Jb4aYpWuQd99NUa1ASEDMNVP0N1CCm5fjTYk9fNILK41D3nV8HU79b7vnC2Rrzw="
+   },
+   "cliVerify": "valid",
+   "cliWitness": "0x0247304402206c68558e31332b00ceb50dd2c51e6f6d9316390873db2ba8c9c8977dad7f20b102207cd256a9ea6f15a0f2b675b4c618e42a3be84b7525be1a6295ae41df7d3546b501210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+   "rawLen": 107,
+   "rawHex": "0247304402206c68558e31332b00ceb50dd2c51e6f6d9316390873db2ba8c9c8977dad7f20b102207cd256a9ea6f15a0f2b675b4c618e42a3be84b7525be1a6295ae41df7d3546b501210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+   "witnessShape": {
+    "items": [
+     71,
+     33
+    ],
+    "trailing": 0,
+    "sighash": "0x01",
+    "derLen": 70,
+    "lowS": true
+   }
+  }
+ }
+}

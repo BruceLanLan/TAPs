@@ -1,0 +1,22 @@
+# forge test --match-contract DifferentialTest --fuzz-runs 200000 (after commit e880e99)
+Sat 10 Oct 2026 13:28:11 CST
+Ran 16 tests for test/diff/Differential.t.sol:DifferentialTest
+[PASS] testFuzz_diff_constructor(uint8,bytes32,bytes,uint8) (runs: 200000, μ: 240176, ~: 150734)
+[PASS] testFuzz_diff_execute(uint256,uint256,uint256,uint256,bytes) (runs: 200000, μ: 846156, ~: 819088)
+[PASS] testFuzz_diff_isValid_p2tr_signed(uint256,bytes32,uint64,bool,uint256,uint256,uint256) (runs: 200000, μ: 555880, ~: 559158)
+[PASS] testFuzz_diff_isValid_p2wpkh_encodings(uint256,bytes32,uint8,uint8,bool) (runs: 200000, μ: 474707, ~: 465795)
+[PASS] testFuzz_diff_isValid_p2wpkh_signed(uint256,bytes32,uint64,uint256,uint256,uint256) (runs: 200000, μ: 502912, ~: 503471)
+[PASS] testFuzz_diff_isValid_structured(uint8,bytes32,bytes32,uint8,bytes,bool,uint256) (runs: 200000, μ: 309422, ~: 314920)
+[PASS] testFuzz_diff_isValid_vector_mutated(uint256,uint256,uint256,uint256,bytes32) (runs: 200000, μ: 349193, ~: 349694)
+[PASS] testFuzz_diff_library_random_messages(uint256,bytes,bool,bool,uint256,uint256,uint256) (runs: 200000, μ: 74628, ~: 68488)
+[PASS] testFuzz_diff_messages(address,uint64,bytes32,address,uint256,bytes,uint256,uint256,uint256,uint64,bool) (runs: 200000, μ: 434804, ~: 435741)
+[PASS] testFuzz_diff_raw_calldata(uint8,bytes,bool,bool,bytes4) (runs: 200000, μ: 303938, ~: 317513)
+[PASS] test_diff_execute_callGas_near_outer_gas() (gas: 886926)
+[PASS] test_diff_vector_bip322_upstream() (gas: 733236)
+[PASS] test_diff_vector_call_cases() (gas: 3521469)
+[PASS] test_diff_vector_ctor_cases() (gas: 3032241)
+[PASS] test_diff_vector_lib_cases() (gas: 4132943)
+[PASS] test_diff_vector_sign_cases() (gas: 13499591)
+Suite result: ok. 16 passed; 0 failed; 0 skipped; finished in 193.27s (1628.13s CPU time)
+Ran 1 test suite in 193.27s (193.27s CPU time): 16 tests passed, 0 failed, 0 skipped (16 total tests)
+Sat 10 Oct 2026 13:31:24 CST

@@ -1,0 +1,240 @@
+{
+ "forkUrl": "https://bsc-mainnet.public.blastapi.io",
+ "wallets": {
+  "xverse-2.9.3": {
+   "p2tr": {
+    "address": "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr",
+    "holder": "0xc692affbbfae51c87535f0757cf45b106d7bdd64",
+    "holderCodeBytes": 7092,
+    "transfers-8": {
+     "ok": true,
+     "gasUsed": 284792,
+     "tokensMoved": 8,
+     "replayRejected": true
+    },
+    "mixed-3": {
+     "ok": true,
+     "gasUsed": 196238,
+     "tokensMoved": 2,
+     "replayRejected": true
+    },
+    "isValidSignature": {
+     "walletOutput": "0x1626ba7e",
+     "lastByteAltered": "0xffffffff",
+     "otherDigest": "0xffffffff"
+    },
+    "execute": {
+     "nft": "0x1f5cb4aeae1807bf60c3b9c0d8adbcc14e91f12c",
+     "tokenId": 920,
+     "ownerBefore": "0xc692affbbfae51c87535f0757cf45b106d7bdd64",
+     "ok": true,
+     "gasUsed": 115808,
+     "ownerAfter": "0x00000000000000000000000000000000000c0b7a",
+     "expected": "0x00000000000000000000000000000000000c0b7a",
+     "replayRejected": true
+    },
+    "emptyCallNonce1": {
+     "ok": true,
+     "gasUsed": 56270,
+     "nonceAfter": "2",
+     "replayRejected": true
+    }
+   },
+   "p2wpkh": {
+    "address": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu",
+    "holder": "0xfec7dc76058dc82996aca46d30c153e3c24ccb0b",
+    "holderCodeBytes": 7092,
+    "transfers-8": {
+     "ok": true,
+     "gasUsed": 290665,
+     "tokensMoved": 8,
+     "replayRejected": true
+    },
+    "mixed-3": {
+     "ok": true,
+     "gasUsed": 202245,
+     "tokensMoved": 2,
+     "replayRejected": true
+    },
+    "isValidSignature": {
+     "walletOutput": "0x1626ba7e",
+     "lastByteAltered": "0xffffffff",
+     "otherDigest": "0xffffffff"
+    },
+    "execute": {
+     "nft": "0x1f5cb4aeae1807bf60c3b9c0d8adbcc14e91f12c",
+     "tokenId": 920,
+     "ownerBefore": "0xfec7dc76058dc82996aca46d30c153e3c24ccb0b",
+     "ok": true,
+     "gasUsed": 118462,
+     "ownerAfter": "0x00000000000000000000000000000000000c0b7a",
+     "expected": "0x00000000000000000000000000000000000c0b7a",
+     "replayRejected": true
+    },
+    "emptyCallNonce1": {
+     "ok": true,
+     "gasUsed": 58980,
+     "nonceAfter": "2",
+     "replayRejected": true
+    }
+   }
+  },
+  "leather-6.114.0": {
+   "p2tr": {
+    "address": "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr",
+    "holder": "0xc692affbbfae51c87535f0757cf45b106d7bdd64",
+    "holderCodeBytes": 7092,
+    "transfers-8": {
+     "ok": true,
+     "gasUsed": 284753,
+     "tokensMoved": 8,
+     "replayRejected": true
+    },
+    "mixed-3": {
+     "ok": true,
+     "gasUsed": 196265,
+     "tokensMoved": 2,
+     "replayRejected": true
+    },
+    "isValidSignature": {
+     "walletOutput": "0x1626ba7e",
+     "lastByteAltered": "0xffffffff",
+     "otherDigest": "0xffffffff"
+    },
+    "execute": {
+     "nft": "0x1f5cb4aeae1807bf60c3b9c0d8adbcc14e91f12c",
+     "tokenId": 920,
+     "ownerBefore": "0xc692affbbfae51c87535f0757cf45b106d7bdd64",
+     "ok": true,
+     "gasUsed": 115835,
+     "ownerAfter": "0x00000000000000000000000000000000000c0b7a",
+     "expected": "0x00000000000000000000000000000000000c0b7a",
+     "replayRejected": true
+    },
+    "emptyCallNonce1": {
+     "ok": true,
+     "gasUsed": 56243,
+     "nonceAfter": "2",
+     "replayRejected": true
+    }
+   },
+   "p2wpkh": {
+    "address": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu",
+    "holder": "0xfec7dc76058dc82996aca46d30c153e3c24ccb0b",
+    "holderCodeBytes": 7092,
+    "transfers-8": {
+     "ok": true,
+     "gasUsed": 290665,
+     "tokensMoved": 8,
+     "replayRejected": true
+    },
+    "mixed-3": {
+     "ok": true,
+     "gasUsed": 202245,
+     "tokensMoved": 2,
+     "replayRejected": true
+    },
+    "isValidSignature": {
+     "walletOutput": "0x1626ba7e",
+     "lastByteAltered": "0xffffffff",
+     "otherDigest": "0xffffffff"
+    },
+    "execute": {
+     "nft": "0x1f5cb4aeae1807bf60c3b9c0d8adbcc14e91f12c",
+     "tokenId": 920,
+     "ownerBefore": "0xfec7dc76058dc82996aca46d30c153e3c24ccb0b",
+     "ok": true,
+     "gasUsed": 121803,
+     "ownerAfter": "0x00000000000000000000000000000000000c0b7a",
+     "expected": "0x00000000000000000000000000000000000c0b7a",
+     "replayRejected": true
+    },
+    "emptyCallNonce1": {
+     "ok": true,
+     "gasUsed": 62238,
+     "nonceAfter": "2",
+     "replayRejected": true
+    }
+   }
+  },
+  "okx-4.18.1": {
+   "p2tr": {
+    "address": "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr",
+    "holder": "0xc692affbbfae51c87535f0757cf45b106d7bdd64",
+    "holderCodeBytes": 7092,
+    "transfers-8": {
+     "ok": true,
+     "gasUsed": 284765,
+     "tokensMoved": 8,
+     "replayRejected": true
+    },
+    "mixed-3": {
+     "ok": true,
+     "gasUsed": 196265,
+     "tokensMoved": 2,
+     "replayRejected": true
+    },
+    "isValidSignature": {
+     "walletOutput": "0x1626ba7e",
+     "lastByteAltered": "0xffffffff",
+     "otherDigest": "0xffffffff"
+    },
+    "execute": {
+     "nft": "0x1f5cb4aeae1807bf60c3b9c0d8adbcc14e91f12c",
+     "tokenId": 920,
+     "ownerBefore": "0xc692affbbfae51c87535f0757cf45b106d7bdd64",
+     "ok": true,
+     "gasUsed": 115835,
+     "ownerAfter": "0x00000000000000000000000000000000000c0b7a",
+     "expected": "0x00000000000000000000000000000000000c0b7a",
+     "replayRejected": true
+    },
+    "emptyCallNonce1": {
+     "ok": true,
+     "gasUsed": 56243,
+     "nonceAfter": "2",
+     "replayRejected": true
+    }
+   },
+   "p2wpkh": {
+    "address": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu",
+    "holder": "0xfec7dc76058dc82996aca46d30c153e3c24ccb0b",
+    "holderCodeBytes": 7092,
+    "transfers-8": {
+     "ok": true,
+     "gasUsed": 290665,
+     "tokensMoved": 8,
+     "replayRejected": true
+    },
+    "mixed-3": {
+     "ok": true,
+     "gasUsed": 202245,
+     "tokensMoved": 2,
+     "replayRejected": true
+    },
+    "isValidSignature": {
+     "walletOutput": "0x1626ba7e",
+     "lastByteAltered": "0xffffffff",
+     "otherDigest": "0xffffffff"
+    },
+    "execute": {
+     "nft": "0x1f5cb4aeae1807bf60c3b9c0d8adbcc14e91f12c",
+     "tokenId": 920,
+     "ownerBefore": "0xfec7dc76058dc82996aca46d30c153e3c24ccb0b",
+     "ok": true,
+     "gasUsed": 121708,
+     "ownerAfter": "0x00000000000000000000000000000000000c0b7a",
+     "expected": "0x00000000000000000000000000000000000c0b7a",
+     "replayRejected": true
+    },
+    "emptyCallNonce1": {
+     "ok": true,
+     "gasUsed": 62143,
+     "nonceAfter": "2",
+     "replayRejected": true
+    }
+   }
+  }
+ },
+ "forkBlock": "126957655"
+}

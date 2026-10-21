@@ -1,0 +1,47 @@
+{
+ "downloadedOn": "2026-10-11",
+ "updateEndpoint": "https://clients2.google.com/service/update2/crx?response=redirect&prodversion=156.0.8078.4&acceptformat=crx2,crx3&x=id%3D<ID>%26uc",
+ "browser": "Playwright Chromium (Google Chrome for Testing 156.0.8078.4), headless, --load-extension",
+ "extensions": {
+  "xverse": {
+   "storeId": "idnnbdplmphpflfnlkomgpfbpcgelopg",
+   "idSource": "https://www.xverse.app/download (links to chromewebstore.google.com/detail/xverse-bitcoin-crypto-wal/idnnbdplmphpflfnlkomgpfbpcgelopg)",
+   "version": "2.9.3",
+   "crxFormat": 3,
+   "crxBytes": 23771717,
+   "crxSha256": "2d337049dca0225bc8a0cb48f51248b5314716535c332f8f9f6241151b1b7a7a"
+  },
+  "leather": {
+   "storeId": "ldinpeekobnhjjdofggfgjlcehhmanlj",
+   "idSource": "https://leather.io/install-extension (links to chrome.google.com/webstore/detail/hiro-wallet/ldinpeekobnhjjdofggfgjlcehhmanlj)",
+   "version": "6.114.0",
+   "crxFormat": 3,
+   "crxBytes": 17290786,
+   "crxSha256": "65ad2acb2721e11e259a4e88213c1bb16c947ba3f0b56860720953fc3d2fc8fc"
+  },
+  "okx": {
+   "storeId": "mcohilncbfahbmgdjkbpemcciiolgcge",
+   "idSource": "https://chromewebstore.google.com/detail/okx-wallet/mcohilncbfahbmgdjkbpemcciiolgcge (store page: offered by okx.com; the vendor download page is rendered by script and shows no static link)",
+   "version": "4.18.1",
+   "crxFormat": 3,
+   "crxBytes": 33075598,
+   "crxSha256": "be971b027c71d038e1c565fe02fa09aa5918bdf7a2e4d33142370625fbaa0c51"
+  },
+  "phantom": {
+   "storeId": "bfnaelmomeimhlpmgjnjophhpkkoljpa",
+   "idSource": "https://chromewebstore.google.com/detail/phantom/bfnaelmomeimhlpmgjnjophhpkkoljpa (store page, links phantom.com)",
+   "version": "26.32.0",
+   "crxFormat": 3,
+   "crxBytes": 17808535,
+   "crxSha256": "1c35597854773123da841248626c8964ad8d68e59d766e27603183681256baf2"
+  },
+  "magiceden": {
+   "storeId": "mkpegjkblkkefacfnmkajcjmabijhclg",
+   "idSource": "https://chromewebstore.google.com/detail/magic-eden-wallet/mkpegjkblkkefacfnmkajcjmabijhclg (store page, links magiceden.io; store \"Updated April 2, 2026\")",
+   "version": "3.3.1",
+   "crxFormat": 3,
+   "crxBytes": 8575215,
+   "crxSha256": "a78c40480dcf91375c7351878ebbcef217d3dfbfb836749b5c6e1e9932f2e000"
+  }
+ }
+}

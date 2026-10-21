@@ -1,0 +1,54 @@
+{
+ "atype": "Taproot (P2TR)",
+ "ext": "1.7.22",
+ "accounts": [
+  "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr"
+ ],
+ "publicKey": "03cc8a4bc64d897bddc5fbc2f670f7a8ba0b386779106cf1223c6fc5d7cd6fc115",
+ "network": "livenet",
+ "exec": {
+  "holder": "0xc692affbbfae51c87535f0757cf45b106d7bdd64",
+  "nft": "0x1f5cb4aeae1807bf60c3b9c0d8adbcc14e91f12c",
+  "recipient": "0x00000000000000000000000000000000000c0b7a",
+  "tokenId": 920,
+  "data": "0x23b872dd000000000000000000000000c692affbbfae51c87535f0757cf45b106d7bdd6400000000000000000000000000000000000000000000000000000000000c0b7a0000000000000000000000000000000000000000000000000000000000000398",
+  "callGas": 150000,
+  "tip": 0,
+  "deadline": 1794208208
+ },
+ "signs": {
+  "exec": {
+   "message": "TapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 calls 0x1f5cb4aeae1807bf60c3b9c0d8adbcc14e91f12c with value 0 and data 0x1a7b75dc5350c657842d2e5f787b5bcc9557550170f63358f3c944afba4598c3, gas 150000, tip 0, nonce 0, valid until 1794208208",
+   "popup": "http://127.0.0.1:8765\nSignature request\nOnly sign this message if you fully understand the content and trust the requesting site.\nYou are signing:\nTapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 calls 0x1f5cb4aeae1807bf60c3b9c0d8adbcc14e91f12c with value 0 and data 0x1a7b75dc5350c657842d2e5f787b5bcc9557550170f63358f3c944afba4598c3, gas 150000, tip 0, nonce 0, valid until 1794208208\nReject\nSign",
+   "result": {
+    "ok": "AUCKkWB2X/gPkDlTj3YX2JfxYm3NtDbD1tpSamVtg3PQMdMdQNaD+9A2OkHFUKxL7GnjU+mx5SdCCHqoCvYVW/ve"
+   },
+   "rawLen": 66,
+   "rawHex": "01408a9160765ff80f9039538f7617d897f1626dcdb436c3d6da526a656d8373d031d31d40d683fbd0363a41c550ac4bec69e353e9b1e52742087aa80af6155bfbde",
+   "cliVerify": "valid",
+   "cliWitness": "0x01408a9160765ff80f9039538f7617d897f1626dcdb436c3d6da526a656d8373d031d31d40d683fbd0363a41c550ac4bec69e353e9b1e52742087aa80af6155bfbde"
+  },
+  "sign": {
+   "message": "TapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+   "popup": "http://127.0.0.1:8765\nSignature request\nOnly sign this message if you fully understand the content and trust the requesting site.\nYou are signing:\nTapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 signs 0xabababababababababababababababababababababababababababababababab\nReject\nSign",
+   "result": {
+    "ok": "AUB891rc/9F/l/pBUOdm+KK4/AgYS+8jHzB4SnNCZnEnuRGA7leEOQItRKcVfCIUJrK1gkTtszLjS65K3hnshnpJ"
+   },
+   "rawLen": 66,
+   "rawHex": "01407cf75adcffd17f97fa4150e766f8a2b8fc08184bef231f30784a7342667127b91180ee578439022d44a7157c221426b2b58244edb332e34bae4ade19ec867a49",
+   "cliVerify": "valid",
+   "cliWitness": "0x01407cf75adcffd17f97fa4150e766f8a2b8fc08184bef231f30784a7342667127b91180ee578439022d44a7157c221426b2b58244edb332e34bae4ade19ec867a49"
+  },
+  "call": {
+   "message": "TapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 calls 0x00000000000000000000000000000000000000aa with value 0 and data 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470, gas 0, tip 0, nonce 1, valid until 1794208208",
+   "popup": "http://127.0.0.1:8765\nSignature request\nOnly sign this message if you fully understand the content and trust the requesting site.\nYou are signing:\nTapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 calls 0x00000000000000000000000000000000000000aa with value 0 and data 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470, gas 0, tip 0, nonce 1, valid until 1794208208\nReject\nSign",
+   "result": {
+    "ok": "AUCDMvvp+Kh+6N98ZpNq7HS8wxPgh9g8psjz2QzCv+IlSanrQnw6lj2JrsLWQAXxmAdNsVlf/GOUJUGcvRk67BQm"
+   },
+   "rawLen": 66,
+   "rawHex": "01408332fbe9f8a87ee8df7c66936aec74bcc313e087d83ca6c8f3d90cc2bfe22549a9eb427c3a963d89aec2d64005f198074db1595ffc639425419cbd193aec1426",
+   "cliVerify": "valid",
+   "cliWitness": "0x01408332fbe9f8a87ee8df7c66936aec74bcc313e087d83ca6c8f3d90cc2bfe22549a9eb427c3a963d89aec2d64005f198074db1595ffc639425419cbd193aec1426"
+  }
+ }
+}

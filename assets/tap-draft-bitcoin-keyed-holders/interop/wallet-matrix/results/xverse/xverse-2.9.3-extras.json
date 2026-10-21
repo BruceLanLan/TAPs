@@ -1,0 +1,833 @@
+{
+ "p2wpkh-no-protocol": {
+  "address": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu",
+  "protocol": "(none)",
+  "message": "TapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+  "popupText": "Account 1\nPrivate\nSign Message\n\nMessage\n\nTapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab\n\nTapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab\n\nMessage Hash\n\n2iRbYQQmN73LNBg5PBXo7TMX4tJGMORN3HneHLRmJXw=\n\n2iRbYQQmN73LNBg5PBXo7TMX4tJGMORN3HneHLRmJXw=\n\nSigning with address\n\nYour Bitcoin payment address\n\nbc1qcr...306fyu\n\nNo transactions will be broadcast and no fees will be applied.\n\nBy signing this message, you prove that you are the owner of an account without broadcasting any on chain transactions. This signature cannot be used to send transactions on your behalf. You should only sign messages you trust.\nCancel\nSign",
+  "popupContainsFullText": true,
+  "popupLayout": [
+   {
+    "tag": "P",
+    "visible": true,
+    "textLen": 156,
+    "equalsMessage": true,
+    "containsTail": true,
+    "clientHeight": 18,
+    "scrollHeight": 18,
+    "overflowY": "hidden",
+    "textOverflow": "ellipsis",
+    "lineClamp": "none",
+    "whiteSpace": "nowrap",
+    "wordBreak": "normal",
+    "rect": [
+     33,
+     157,
+     260,
+     18
+    ],
+    "clippingAncestors": [
+     {
+      "tag": "P",
+      "overflowY": "hidden",
+      "maxHeight": "none",
+      "clientHeight": 18,
+      "scrollHeight": 18
+     },
+     {
+      "tag": "DIV",
+      "overflowY": "scroll",
+      "maxHeight": "none",
+      "clientHeight": 490,
+      "scrollHeight": 609
+     },
+     {
+      "tag": "DIV",
+      "overflowY": "hidden",
+      "maxHeight": "none",
+      "clientHeight": 490,
+      "scrollHeight": 490
+     },
+     {
+      "tag": "DIV",
+      "overflowY": "hidden",
+      "maxHeight": "none",
+      "clientHeight": 600,
+      "scrollHeight": 600
+     }
+    ]
+   },
+   {
+    "tag": "P",
+    "visible": true,
+    "textLen": 156,
+    "equalsMessage": true,
+    "containsTail": true,
+    "clientHeight": 90,
+    "scrollHeight": 90,
+    "overflowY": "visible",
+    "textOverflow": "clip",
+    "lineClamp": "none",
+    "whiteSpace": "normal",
+    "wordBreak": "normal",
+    "rect": [
+     33,
+     187,
+     309,
+     90
+    ],
+    "clippingAncestors": [
+     {
+      "tag": "DIV",
+      "overflowY": "hidden",
+      "maxHeight": "none",
+      "clientHeight": 0,
+      "scrollHeight": 90
+     },
+     {
+      "tag": "DIV",
+      "overflowY": "scroll",
+      "maxHeight": "none",
+      "clientHeight": 490,
+      "scrollHeight": 609
+     },
+     {
+      "tag": "DIV",
+      "overflowY": "hidden",
+      "maxHeight": "none",
+      "clientHeight": 490,
+      "scrollHeight": 490
+     },
+     {
+      "tag": "DIV",
+      "overflowY": "hidden",
+      "maxHeight": "none",
+      "clientHeight": 600,
+      "scrollHeight": 600
+     }
+    ]
+   }
+  ],
+  "popupViewport": {
+   "width": 375,
+   "height": 600
+  },
+  "expanded": {
+   "popupText": "Account 1\nPrivate\nSign Message\n\nMessage\n\nTapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab\n\nMessage Hash\n\n2iRbYQQmN73LNBg5PBXo7TMX4tJGMORN3HneHLRmJXw=\n\n2iRbYQQmN73LNBg5PBXo7TMX4tJGMORN3HneHLRmJXw=\n\nSigning with address\n\nYour Bitcoin payment address\n\nbc1qcr...306fyu\n\nNo transactions will be broadcast and no fees will be applied.\n\nBy signing this message, you prove that you are the owner of an account without broadcasting any on chain transactions. This signature cannot be used to send transactions on your behalf. You should only sign messages you trust.\nCancel\nSign",
+   "popupContainsFullText": true,
+   "popupLayout": [
+    {
+     "tag": "P",
+     "visible": true,
+     "textLen": 156,
+     "equalsMessage": true,
+     "containsTail": true,
+     "clientHeight": 90,
+     "scrollHeight": 90,
+     "overflowY": "visible",
+     "textOverflow": "clip",
+     "lineClamp": "none",
+     "whiteSpace": "normal",
+     "wordBreak": "normal",
+     "rect": [
+      33,
+      161,
+      309,
+      90
+     ],
+     "clippingAncestors": [
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 90,
+       "scrollHeight": 90
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "scroll",
+       "maxHeight": "none",
+       "clientHeight": 490,
+       "scrollHeight": 673
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 490,
+       "scrollHeight": 490
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 600,
+       "scrollHeight": 600
+      }
+     ]
+    }
+   ],
+   "popupViewport": {
+    "width": 375,
+    "height": 600
+   }
+  },
+  "raw": {
+   "jsonrpc": "2.0",
+   "result": {
+    "address": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu",
+    "messageHash": "2iRbYQQmN73LNBg5PBXo7TMX4tJGMORN3HneHLRmJXw=",
+    "signature": "AkcwRAIgL1lIs7xEnn5R5foR82pAj7gvzwssxmnmRm2fY7fZ0MsCIBlLGVPF06DewZgJl6FQqGeTiPpZ8Xbo9BXC5fjy0xT8ASEDMNVP0N1CCm5fjTYk9fNILK41D3nV8HU79b7vnC2Rrzw=",
+    "protocol": "BIP322"
+   },
+   "id": "E6h4s9qZGIe0duvQc3of6"
+  },
+  "output": "AkcwRAIgL1lIs7xEnn5R5foR82pAj7gvzwssxmnmRm2fY7fZ0MsCIBlLGVPF06DewZgJl6FQqGeTiPpZ8Xbo9BXC5fjy0xT8ASEDMNVP0N1CCm5fjTYk9fNILK41D3nV8HU79b7vnC2Rrzw=",
+  "cliVerify": "valid",
+  "cliWitness": "0x0247304402202f5948b3bc449e7e51e5fa11f36a408fb82fcf0b2cc669e6466d9f63b7d9d0cb0220194b1953c5d3a0dec1980997a150a8679388fa59f176e8f415c2e5f8f2d314fc01210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+  "rawLen": 107,
+  "rawHex": "0247304402202f5948b3bc449e7e51e5fa11f36a408fb82fcf0b2cc669e6466d9f63b7d9d0cb0220194b1953c5d3a0dec1980997a150a8679388fa59f176e8f415c2e5f8f2d314fc01210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+  "witnessShape": {
+   "items": [
+    71,
+    33
+   ],
+   "trailing": 0,
+   "sighash": "0x01",
+   "derLen": 70,
+   "lowS": true
+  }
+ },
+ "p2tr-no-protocol": {
+  "address": "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr",
+  "protocol": "(none)",
+  "message": "TapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+  "popupText": "Account 1\nPrivate\nSign Message\n\nMessage\n\nTapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 signs 0xabababababababababababababababababababababababababababababababab\n\nTapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 signs 0xabababababababababababababababababababababababababababababababab\n\nMessage Hash\n\n4faf071e8c52f7957d31d79d2d4c1a3485c3acb32c8216d4a35111f1a5d66b0d\n\n4faf071e8c52f7957d31d79d2d4c1a3485c3acb32c8216d4a35111f1a5d66b0d\n\nSigning with address\n\nYour Ordinals address\n\nbc1p5c...kedrcr\n\nNo transactions will be broadcast and no fees will be applied.\n\nBy signing this message, you prove that you are the owner of an account without broadcasting any on chain transactions. This signature cannot be used to send transactions on your behalf. You should only sign messages you trust.\nCancel\nSign",
+  "popupContainsFullText": true,
+  "popupLayout": [
+   {
+    "tag": "P",
+    "visible": true,
+    "textLen": 156,
+    "equalsMessage": true,
+    "containsTail": true,
+    "clientHeight": 18,
+    "scrollHeight": 18,
+    "overflowY": "hidden",
+    "textOverflow": "ellipsis",
+    "lineClamp": "none",
+    "whiteSpace": "nowrap",
+    "wordBreak": "normal",
+    "rect": [
+     33,
+     157,
+     260,
+     18
+    ],
+    "clippingAncestors": [
+     {
+      "tag": "P",
+      "overflowY": "hidden",
+      "maxHeight": "none",
+      "clientHeight": 18,
+      "scrollHeight": 18
+     },
+     {
+      "tag": "DIV",
+      "overflowY": "scroll",
+      "maxHeight": "none",
+      "clientHeight": 490,
+      "scrollHeight": 609
+     },
+     {
+      "tag": "DIV",
+      "overflowY": "hidden",
+      "maxHeight": "none",
+      "clientHeight": 490,
+      "scrollHeight": 490
+     },
+     {
+      "tag": "DIV",
+      "overflowY": "hidden",
+      "maxHeight": "none",
+      "clientHeight": 600,
+      "scrollHeight": 600
+     }
+    ]
+   },
+   {
+    "tag": "P",
+    "visible": true,
+    "textLen": 156,
+    "equalsMessage": true,
+    "containsTail": true,
+    "clientHeight": 90,
+    "scrollHeight": 90,
+    "overflowY": "visible",
+    "textOverflow": "clip",
+    "lineClamp": "none",
+    "whiteSpace": "normal",
+    "wordBreak": "normal",
+    "rect": [
+     33,
+     187,
+     309,
+     90
+    ],
+    "clippingAncestors": [
+     {
+      "tag": "DIV",
+      "overflowY": "hidden",
+      "maxHeight": "none",
+      "clientHeight": 0,
+      "scrollHeight": 90
+     },
+     {
+      "tag": "DIV",
+      "overflowY": "scroll",
+      "maxHeight": "none",
+      "clientHeight": 490,
+      "scrollHeight": 609
+     },
+     {
+      "tag": "DIV",
+      "overflowY": "hidden",
+      "maxHeight": "none",
+      "clientHeight": 490,
+      "scrollHeight": 490
+     },
+     {
+      "tag": "DIV",
+      "overflowY": "hidden",
+      "maxHeight": "none",
+      "clientHeight": 600,
+      "scrollHeight": 600
+     }
+    ]
+   }
+  ],
+  "popupViewport": {
+   "width": 375,
+   "height": 600
+  },
+  "expanded": {
+   "popupText": "Account 1\nPrivate\nSign Message\n\nMessage\n\nTapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 signs 0xabababababababababababababababababababababababababababababababab\n\nMessage Hash\n\n4faf071e8c52f7957d31d79d2d4c1a3485c3acb32c8216d4a35111f1a5d66b0d\n\n4faf071e8c52f7957d31d79d2d4c1a3485c3acb32c8216d4a35111f1a5d66b0d\n\nSigning with address\n\nYour Ordinals address\n\nbc1p5c...kedrcr\n\nNo transactions will be broadcast and no fees will be applied.\n\nBy signing this message, you prove that you are the owner of an account without broadcasting any on chain transactions. This signature cannot be used to send transactions on your behalf. You should only sign messages you trust.\nCancel\nSign",
+   "popupContainsFullText": true,
+   "popupLayout": [
+    {
+     "tag": "P",
+     "visible": true,
+     "textLen": 156,
+     "equalsMessage": true,
+     "containsTail": true,
+     "clientHeight": 90,
+     "scrollHeight": 90,
+     "overflowY": "visible",
+     "textOverflow": "clip",
+     "lineClamp": "none",
+     "whiteSpace": "normal",
+     "wordBreak": "normal",
+     "rect": [
+      33,
+      161,
+      309,
+      90
+     ],
+     "clippingAncestors": [
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 90,
+       "scrollHeight": 90
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "scroll",
+       "maxHeight": "none",
+       "clientHeight": 490,
+       "scrollHeight": 673
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 490,
+       "scrollHeight": 490
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 600,
+       "scrollHeight": 600
+      }
+     ]
+    }
+   ],
+   "popupViewport": {
+    "width": 375,
+    "height": 600
+   }
+  },
+  "raw": {
+   "jsonrpc": "2.0",
+   "result": {
+    "address": "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr",
+    "messageHash": "sSnE18M2rZhS4xXa0bu34CbCrmxpF5jTOa5kv6GMi1Q=",
+    "signature": "AUAkgldTKbZ/oaZUEy5j/nouBGSb8NJXtY12DoThleNGF54mOGfyijhpsOpi2g4czXaWG87OqHcax4N+IH2GUd9m",
+    "protocol": "BIP322"
+   },
+   "id": "47iAVjkJjwL3nn9LVjCUZ"
+  },
+  "output": "AUAkgldTKbZ/oaZUEy5j/nouBGSb8NJXtY12DoThleNGF54mOGfyijhpsOpi2g4czXaWG87OqHcax4N+IH2GUd9m",
+  "cliVerify": "valid",
+  "cliWitness": "0x01402482575329b67fa1a654132e63fe7a2e04649bf0d257b58d760e84e195e346179e263867f28a3869b0ea62da0e1ccd76961bcecea8771ac7837e207d8651df66",
+  "rawLen": 66,
+  "rawHex": "01402482575329b67fa1a654132e63fe7a2e04649bf0d257b58d760e84e195e346179e263867f28a3869b0ea62da0e1ccd76961bcecea8771ac7837e207d8651df66",
+  "witnessShape": {
+   "items": [
+    64
+   ],
+   "trailing": 0,
+   "sighash": "DEFAULT (64-byte Schnorr)"
+  }
+ },
+ "getAddressesNested": {
+  "ok": {
+   "jsonrpc": "2.0",
+   "result": {
+    "addresses": [
+     {
+      "address": "37VucYSaXLCAsxYyAPfbSi9eh4iEcbShgf",
+      "publicKey": "039b3b694b8fc5b5e07fb069c783cac754f5d38c3e08bed1960e31fdb1dda35c24",
+      "purpose": "payment",
+      "addressType": "p2sh",
+      "walletType": "software"
+     },
+     {
+      "address": "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr",
+      "publicKey": "cc8a4bc64d897bddc5fbc2f670f7a8ba0b386779106cf1223c6fc5d7cd6fc115",
+      "purpose": "ordinals",
+      "addressType": "p2tr",
+      "walletType": "software"
+     }
+    ],
+    "network": {
+     "bitcoin": {
+      "name": "Mainnet"
+     },
+     "stacks": {
+      "name": "mainnet"
+     },
+     "spark": {
+      "name": "mainnet"
+     }
+    }
+   },
+   "id": "k_5Na-kURek2l9Kj-8oJ3"
+  }
+ },
+ "p2sh-bip322": {
+  "address": "37VucYSaXLCAsxYyAPfbSi9eh4iEcbShgf",
+  "protocol": "BIP322",
+  "message": "TapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+  "popupText": "Account 1\nPrivate\nSign Message\n\nMessage\n\nTapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab\n\nTapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab\n\nMessage Hash\n\n393a54de7a4ae40a70519724f1e010ea2281caa0b46dd31d0b1f1a120064799f\n\n393a54de7a4ae40a70519724f1e010ea2281caa0b46dd31d0b1f1a120064799f\n\nSigning with address\n\nYour Bitcoin payment address\n\n37VucY...cbShgf\n\nNo transactions will be broadcast and no fees will be applied.\n\nBy signing this message, you prove that you are the owner of an account without broadcasting any on chain transactions. This signature cannot be used to send transactions on your behalf. You should only sign messages you trust.\nCancel\nSign",
+  "popupContainsFullText": true,
+  "popupLayout": [
+   {
+    "tag": "P",
+    "visible": true,
+    "textLen": 156,
+    "equalsMessage": true,
+    "containsTail": true,
+    "clientHeight": 18,
+    "scrollHeight": 18,
+    "overflowY": "hidden",
+    "textOverflow": "ellipsis",
+    "lineClamp": "none",
+    "whiteSpace": "nowrap",
+    "wordBreak": "normal",
+    "rect": [
+     33,
+     157,
+     260,
+     18
+    ],
+    "clippingAncestors": [
+     {
+      "tag": "P",
+      "overflowY": "hidden",
+      "maxHeight": "none",
+      "clientHeight": 18,
+      "scrollHeight": 18
+     },
+     {
+      "tag": "DIV",
+      "overflowY": "scroll",
+      "maxHeight": "none",
+      "clientHeight": 490,
+      "scrollHeight": 609
+     },
+     {
+      "tag": "DIV",
+      "overflowY": "hidden",
+      "maxHeight": "none",
+      "clientHeight": 490,
+      "scrollHeight": 490
+     },
+     {
+      "tag": "DIV",
+      "overflowY": "hidden",
+      "maxHeight": "none",
+      "clientHeight": 600,
+      "scrollHeight": 600
+     }
+    ]
+   },
+   {
+    "tag": "P",
+    "visible": true,
+    "textLen": 156,
+    "equalsMessage": true,
+    "containsTail": true,
+    "clientHeight": 90,
+    "scrollHeight": 90,
+    "overflowY": "visible",
+    "textOverflow": "clip",
+    "lineClamp": "none",
+    "whiteSpace": "normal",
+    "wordBreak": "normal",
+    "rect": [
+     33,
+     187,
+     309,
+     90
+    ],
+    "clippingAncestors": [
+     {
+      "tag": "DIV",
+      "overflowY": "hidden",
+      "maxHeight": "none",
+      "clientHeight": 0,
+      "scrollHeight": 90
+     },
+     {
+      "tag": "DIV",
+      "overflowY": "scroll",
+      "maxHeight": "none",
+      "clientHeight": 490,
+      "scrollHeight": 609
+     },
+     {
+      "tag": "DIV",
+      "overflowY": "hidden",
+      "maxHeight": "none",
+      "clientHeight": 490,
+      "scrollHeight": 490
+     },
+     {
+      "tag": "DIV",
+      "overflowY": "hidden",
+      "maxHeight": "none",
+      "clientHeight": 600,
+      "scrollHeight": 600
+     }
+    ]
+   }
+  ],
+  "popupViewport": {
+   "width": 375,
+   "height": 600
+  },
+  "expanded": {
+   "popupText": "Account 1\nPrivate\nSign Message\n\nMessage\n\nTapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab\n\nMessage Hash\n\n393a54de7a4ae40a70519724f1e010ea2281caa0b46dd31d0b1f1a120064799f\n\n393a54de7a4ae40a70519724f1e010ea2281caa0b46dd31d0b1f1a120064799f\n\nSigning with address\n\nYour Bitcoin payment address\n\n37VucY...cbShgf\n\nNo transactions will be broadcast and no fees will be applied.\n\nBy signing this message, you prove that you are the owner of an account without broadcasting any on chain transactions. This signature cannot be used to send transactions on your behalf. You should only sign messages you trust.\nCancel\nSign",
+   "popupContainsFullText": true,
+   "popupLayout": [
+    {
+     "tag": "P",
+     "visible": true,
+     "textLen": 156,
+     "equalsMessage": true,
+     "containsTail": true,
+     "clientHeight": 90,
+     "scrollHeight": 90,
+     "overflowY": "visible",
+     "textOverflow": "clip",
+     "lineClamp": "none",
+     "whiteSpace": "normal",
+     "wordBreak": "normal",
+     "rect": [
+      33,
+      161,
+      309,
+      90
+     ],
+     "clippingAncestors": [
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 90,
+       "scrollHeight": 90
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "scroll",
+       "maxHeight": "none",
+       "clientHeight": 490,
+       "scrollHeight": 673
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 490,
+       "scrollHeight": 490
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 600,
+       "scrollHeight": 600
+      }
+     ]
+    }
+   ],
+   "popupViewport": {
+    "width": 375,
+    "height": 600
+   }
+  },
+  "raw": {
+   "jsonrpc": "2.0",
+   "result": {
+    "address": "37VucYSaXLCAsxYyAPfbSi9eh4iEcbShgf",
+    "messageHash": "393a54de7a4ae40a70519724f1e010ea2281caa0b46dd31d0b1f1a120064799f",
+    "signature": "AkcwRAIgKT3Q8TWFWab3nRuNJZeGw5NmuTGvcuvW/UQngGO/nu8CID0yCpORaQuKcbNUgMhmiNJNKD2eIPBPpFte6PWAw0zlASEDmztpS4/FteB/sGnHg8rHVPXTjD4IvtGWDjH9sd2jXCQ=",
+    "protocol": "BIP322"
+   },
+   "id": "7lEIZkmv44FfiqHS47FHH"
+  },
+  "output": "AkcwRAIgKT3Q8TWFWab3nRuNJZeGw5NmuTGvcuvW/UQngGO/nu8CID0yCpORaQuKcbNUgMhmiNJNKD2eIPBPpFte6PWAw0zlASEDmztpS4/FteB/sGnHg8rHVPXTjD4IvtGWDjH9sd2jXCQ=",
+  "cliVerify": "ERR error: unsupported address type: only native SegWit bc1q... (P2WPKH) and Taproot bc1p... (P2TR) addresses work; P2PKH and P2SH-wrapped addresses cannot sign BIP-322 'simple' messages",
+  "cliWitness": "0x024730440220293dd0f1358559a6f79d1b8d259786c39366b931af72ebd6fd44278063bf9eef02203d320a9391690b8a71b35480c86688d24d283d9e20f04fa45b5ee8f580c34ce50121039b3b694b8fc5b5e07fb069c783cac754f5d38c3e08bed1960e31fdb1dda35c24",
+  "rawLen": 107,
+  "rawHex": "024730440220293dd0f1358559a6f79d1b8d259786c39366b931af72ebd6fd44278063bf9eef02203d320a9391690b8a71b35480c86688d24d283d9e20f04fa45b5ee8f580c34ce50121039b3b694b8fc5b5e07fb069c783cac754f5d38c3e08bed1960e31fdb1dda35c24",
+  "witnessShape": {
+   "items": [
+    71,
+    33
+   ],
+   "trailing": 0,
+   "sighash": "0x01",
+   "derLen": 70,
+   "lowS": true
+  }
+ },
+ "p2sh-no-protocol": {
+  "address": "37VucYSaXLCAsxYyAPfbSi9eh4iEcbShgf",
+  "protocol": "(none)",
+  "message": "TapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+  "popupText": "Account 1\nPrivate\nSign Message\n\nMessage\n\nTapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab\n\nTapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab\n\nMessage Hash\n\n2iRbYQQmN73LNBg5PBXo7TMX4tJGMORN3HneHLRmJXw=\n\n2iRbYQQmN73LNBg5PBXo7TMX4tJGMORN3HneHLRmJXw=\n\nSigning with address\n\nYour Bitcoin payment address\n\n37VucY...cbShgf\n\nNo transactions will be broadcast and no fees will be applied.\n\nBy signing this message, you prove that you are the owner of an account without broadcasting any on chain transactions. This signature cannot be used to send transactions on your behalf. You should only sign messages you trust.\nCancel\nSign",
+  "popupContainsFullText": true,
+  "popupLayout": [
+   {
+    "tag": "P",
+    "visible": true,
+    "textLen": 156,
+    "equalsMessage": true,
+    "containsTail": true,
+    "clientHeight": 18,
+    "scrollHeight": 18,
+    "overflowY": "hidden",
+    "textOverflow": "ellipsis",
+    "lineClamp": "none",
+    "whiteSpace": "nowrap",
+    "wordBreak": "normal",
+    "rect": [
+     33,
+     157,
+     260,
+     18
+    ],
+    "clippingAncestors": [
+     {
+      "tag": "P",
+      "overflowY": "hidden",
+      "maxHeight": "none",
+      "clientHeight": 18,
+      "scrollHeight": 18
+     },
+     {
+      "tag": "DIV",
+      "overflowY": "scroll",
+      "maxHeight": "none",
+      "clientHeight": 490,
+      "scrollHeight": 609
+     },
+     {
+      "tag": "DIV",
+      "overflowY": "hidden",
+      "maxHeight": "none",
+      "clientHeight": 490,
+      "scrollHeight": 490
+     },
+     {
+      "tag": "DIV",
+      "overflowY": "hidden",
+      "maxHeight": "none",
+      "clientHeight": 600,
+      "scrollHeight": 600
+     }
+    ]
+   },
+   {
+    "tag": "P",
+    "visible": true,
+    "textLen": 156,
+    "equalsMessage": true,
+    "containsTail": true,
+    "clientHeight": 90,
+    "scrollHeight": 90,
+    "overflowY": "visible",
+    "textOverflow": "clip",
+    "lineClamp": "none",
+    "whiteSpace": "normal",
+    "wordBreak": "normal",
+    "rect": [
+     33,
+     187,
+     309,
+     90
+    ],
+    "clippingAncestors": [
+     {
+      "tag": "DIV",
+      "overflowY": "hidden",
+      "maxHeight": "none",
+      "clientHeight": 0,
+      "scrollHeight": 90
+     },
+     {
+      "tag": "DIV",
+      "overflowY": "scroll",
+      "maxHeight": "none",
+      "clientHeight": 490,
+      "scrollHeight": 609
+     },
+     {
+      "tag": "DIV",
+      "overflowY": "hidden",
+      "maxHeight": "none",
+      "clientHeight": 490,
+      "scrollHeight": 490
+     },
+     {
+      "tag": "DIV",
+      "overflowY": "hidden",
+      "maxHeight": "none",
+      "clientHeight": 600,
+      "scrollHeight": 600
+     }
+    ]
+   }
+  ],
+  "popupViewport": {
+   "width": 375,
+   "height": 600
+  },
+  "expanded": {
+   "popupText": "Account 1\nPrivate\nSign Message\n\nMessage\n\nTapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab\n\nMessage Hash\n\n2iRbYQQmN73LNBg5PBXo7TMX4tJGMORN3HneHLRmJXw=\n\n2iRbYQQmN73LNBg5PBXo7TMX4tJGMORN3HneHLRmJXw=\n\nSigning with address\n\nYour Bitcoin payment address\n\n37VucY...cbShgf\n\nNo transactions will be broadcast and no fees will be applied.\n\nBy signing this message, you prove that you are the owner of an account without broadcasting any on chain transactions. This signature cannot be used to send transactions on your behalf. You should only sign messages you trust.\nCancel\nSign",
+   "popupContainsFullText": true,
+   "popupLayout": [
+    {
+     "tag": "P",
+     "visible": true,
+     "textLen": 156,
+     "equalsMessage": true,
+     "containsTail": true,
+     "clientHeight": 90,
+     "scrollHeight": 90,
+     "overflowY": "visible",
+     "textOverflow": "clip",
+     "lineClamp": "none",
+     "whiteSpace": "normal",
+     "wordBreak": "normal",
+     "rect": [
+      33,
+      161,
+      309,
+      90
+     ],
+     "clippingAncestors": [
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 90,
+       "scrollHeight": 90
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "scroll",
+       "maxHeight": "none",
+       "clientHeight": 490,
+       "scrollHeight": 673
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 490,
+       "scrollHeight": 490
+      },
+      {
+       "tag": "DIV",
+       "overflowY": "hidden",
+       "maxHeight": "none",
+       "clientHeight": 600,
+       "scrollHeight": 600
+      }
+     ]
+    }
+   ],
+   "popupViewport": {
+    "width": 375,
+    "height": 600
+   }
+  },
+  "raw": {
+   "jsonrpc": "2.0",
+   "result": {
+    "address": "37VucYSaXLCAsxYyAPfbSi9eh4iEcbShgf",
+    "messageHash": "2iRbYQQmN73LNBg5PBXo7TMX4tJGMORN3HneHLRmJXw=",
+    "signature": "AkcwRAIgKT3Q8TWFWab3nRuNJZeGw5NmuTGvcuvW/UQngGO/nu8CID0yCpORaQuKcbNUgMhmiNJNKD2eIPBPpFte6PWAw0zlASEDmztpS4/FteB/sGnHg8rHVPXTjD4IvtGWDjH9sd2jXCQ=",
+    "protocol": "BIP322"
+   },
+   "id": "ljgGWPVcwiANdo7OKhutw"
+  },
+  "output": "AkcwRAIgKT3Q8TWFWab3nRuNJZeGw5NmuTGvcuvW/UQngGO/nu8CID0yCpORaQuKcbNUgMhmiNJNKD2eIPBPpFte6PWAw0zlASEDmztpS4/FteB/sGnHg8rHVPXTjD4IvtGWDjH9sd2jXCQ=",
+  "cliVerify": "ERR error: unsupported address type: only native SegWit bc1q... (P2WPKH) and Taproot bc1p... (P2TR) addresses work; P2PKH and P2SH-wrapped addresses cannot sign BIP-322 'simple' messages",
+  "cliWitness": "0x024730440220293dd0f1358559a6f79d1b8d259786c39366b931af72ebd6fd44278063bf9eef02203d320a9391690b8a71b35480c86688d24d283d9e20f04fa45b5ee8f580c34ce50121039b3b694b8fc5b5e07fb069c783cac754f5d38c3e08bed1960e31fdb1dda35c24",
+  "rawLen": 107,
+  "rawHex": "024730440220293dd0f1358559a6f79d1b8d259786c39366b931af72ebd6fd44278063bf9eef02203d320a9391690b8a71b35480c86688d24d283d9e20f04fa45b5ee8f580c34ce50121039b3b694b8fc5b5e07fb069c783cac754f5d38c3e08bed1960e31fdb1dda35c24",
+  "witnessShape": {
+   "items": [
+    71,
+    33
+   ],
+   "trailing": 0,
+   "sighash": "0x01",
+   "derLen": 70,
+   "lowS": true
+  }
+ },
+ "p2shAddress": {
+  "address": "37VucYSaXLCAsxYyAPfbSi9eh4iEcbShgf",
+  "publicKey": "039b3b694b8fc5b5e07fb069c783cac754f5d38c3e08bed1960e31fdb1dda35c24",
+  "purpose": "payment",
+  "addressType": "p2sh",
+  "walletType": "software"
+ }
+}

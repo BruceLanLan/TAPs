@@ -1,0 +1,279 @@
+{
+ "wallet": "okx",
+ "atype": "p2tr",
+ "ext": "4.18.1",
+ "accounts": [
+  "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr"
+ ],
+ "publicKey": "03cc8a4bc64d897bddc5fbc2f670f7a8ba0b386779106cf1223c6fc5d7cd6fc115",
+ "exec": {
+  "holder": "0xc692affbbfae51c87535f0757cf45b106d7bdd64",
+  "nft": "0x1f5cb4aeae1807bf60c3b9c0d8adbcc14e91f12c",
+  "recipient": "0x00000000000000000000000000000000000c0b7a",
+  "tokenId": 920,
+  "data": "0x23b872dd000000000000000000000000c692affbbfae51c87535f0757cf45b106d7bdd6400000000000000000000000000000000000000000000000000000000000c0b7a0000000000000000000000000000000000000000000000000000000000000398",
+  "callGas": 150000,
+  "tip": 0,
+  "deadline": 1794285341
+ },
+ "signs": {
+  "sign": {
+   "message": "TapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+   "chars": 156,
+   "popupText": "Confirm Signature request\nblank\n127.0.0.1:18791\nWallet used\nbc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr\n钱包B - 钱包\nData\nReject\nConfirm",
+   "popupContainsFullText": false,
+   "popupLayout": [],
+   "popupViewport": {
+    "width": 360,
+    "height": 720
+   },
+   "expanded": {
+    "popupText": "Confirm Signature request\nblank\n127.0.0.1:18791\nWallet used\nbc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr\n钱包B - 钱包\nData\nReject\nConfirm\nData\nTapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+    "popupContainsFullText": true,
+    "popupLayout": [
+     {
+      "tag": "DIV",
+      "visible": true,
+      "textLen": 156,
+      "equalsMessage": true,
+      "containsTail": true,
+      "clientHeight": 80,
+      "scrollHeight": 80,
+      "overflowY": "visible",
+      "textOverflow": "clip",
+      "lineClamp": "none",
+      "whiteSpace": "pre-wrap",
+      "wordBreak": "normal",
+      "rect": [
+       16,
+       624,
+       328,
+       80
+      ],
+      "clippingAncestors": [
+       {
+        "tag": "DIV",
+        "overflowY": "auto",
+        "maxHeight": "none",
+        "clientHeight": 80,
+        "scrollHeight": 80
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "auto",
+        "maxHeight": "none",
+        "clientHeight": 116,
+        "scrollHeight": 116
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "auto",
+        "maxHeight": "none",
+        "clientHeight": 116,
+        "scrollHeight": 116
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "visible",
+        "maxHeight": "calc(100% - 120px)",
+        "clientHeight": 168,
+        "scrollHeight": 168
+       }
+      ]
+     }
+    ],
+    "popupViewport": {
+     "width": 360,
+     "height": 720
+    }
+   },
+   "raw": "AUAb3RseaFvW+tMrAe+VVJQOtEvpUi9SNe92DDHsjxAeVxcw0L8XmD3PpPzyfGWpcie3NOiLm+KN1EH5eHTJhEPL",
+   "result": {
+    "ok": "AUAb3RseaFvW+tMrAe+VVJQOtEvpUi9SNe92DDHsjxAeVxcw0L8XmD3PpPzyfGWpcie3NOiLm+KN1EH5eHTJhEPL"
+   },
+   "cliVerify": "valid",
+   "cliWitness": "0x01401bdd1b1e685bd6fad32b01ef9554940eb44be9522f5235ef760c31ec8f101e571730d0bf17983dcfa4fcf27c65a97227b734e88b9be28dd441f97874c98443cb",
+   "rawLen": 66,
+   "rawHex": "01401bdd1b1e685bd6fad32b01ef9554940eb44be9522f5235ef760c31ec8f101e571730d0bf17983dcfa4fcf27c65a97227b734e88b9be28dd441f97874c98443cb",
+   "witnessShape": {
+    "items": [
+     64
+    ],
+    "trailing": 0,
+    "sighash": "DEFAULT (64-byte Schnorr)"
+   }
+  },
+  "exec": {
+   "message": "TapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 calls 0x1f5cb4aeae1807bf60c3b9c0d8adbcc14e91f12c with value 0 and data 0x1a7b75dc5350c657842d2e5f787b5bcc9557550170f63358f3c944afba4598c3, gas 150000, tip 0, nonce 0, valid until 1794285341",
+   "chars": 273,
+   "popupText": "Confirm Signature request\nblank\n127.0.0.1:18791\nWallet used\nbc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr\n钱包B - 钱包\nData\nReject\nConfirm",
+   "popupContainsFullText": false,
+   "popupLayout": [],
+   "popupViewport": {
+    "width": 360,
+    "height": 720
+   },
+   "expanded": {
+    "popupText": "Confirm Signature request\nblank\n127.0.0.1:18791\nWallet used\nbc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr\n钱包B - 钱包\nData\nReject\nConfirm\nData\nTapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 calls 0x1f5cb4aeae1807bf60c3b9c0d8adbcc14e91f12c with value 0 and data 0x1a7b75dc5350c657842d2e5f787b5bcc9557550170f63358f3c944afba4598c3, gas 150000, tip 0, nonce 0, valid until 1794285341",
+    "popupContainsFullText": true,
+    "popupLayout": [
+     {
+      "tag": "DIV",
+      "visible": true,
+      "textLen": 273,
+      "equalsMessage": true,
+      "containsTail": true,
+      "clientHeight": 128,
+      "scrollHeight": 128,
+      "overflowY": "visible",
+      "textOverflow": "clip",
+      "lineClamp": "none",
+      "whiteSpace": "pre-wrap",
+      "wordBreak": "normal",
+      "rect": [
+       16,
+       576,
+       328,
+       128
+      ],
+      "clippingAncestors": [
+       {
+        "tag": "DIV",
+        "overflowY": "auto",
+        "maxHeight": "none",
+        "clientHeight": 128,
+        "scrollHeight": 128
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "auto",
+        "maxHeight": "none",
+        "clientHeight": 164,
+        "scrollHeight": 164
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "auto",
+        "maxHeight": "none",
+        "clientHeight": 164,
+        "scrollHeight": 164
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "visible",
+        "maxHeight": "calc(100% - 120px)",
+        "clientHeight": 216,
+        "scrollHeight": 216
+       }
+      ]
+     }
+    ],
+    "popupViewport": {
+     "width": 360,
+     "height": 720
+    }
+   },
+   "raw": "AUCL97P2RM7r9MNUt1e5DxxEXMYuZswUTqXrOBrCkc1kL5s4RUH16ps6A9G7T0xisRw940h3viH4WZy/Vi691hd+",
+   "result": {
+    "ok": "AUCL97P2RM7r9MNUt1e5DxxEXMYuZswUTqXrOBrCkc1kL5s4RUH16ps6A9G7T0xisRw940h3viH4WZy/Vi691hd+"
+   },
+   "cliVerify": "valid",
+   "cliWitness": "0x01408bf7b3f644ceebf4c354b757b90f1c445cc62e66cc144ea5eb381ac291cd642f9b384541f5ea9b3a03d1bb4f4c62b11c3de34877be21f8599cbf562ebdd6177e",
+   "rawLen": 66,
+   "rawHex": "01408bf7b3f644ceebf4c354b757b90f1c445cc62e66cc144ea5eb381ac291cd642f9b384541f5ea9b3a03d1bb4f4c62b11c3de34877be21f8599cbf562ebdd6177e",
+   "witnessShape": {
+    "items": [
+     64
+    ],
+    "trailing": 0,
+    "sighash": "DEFAULT (64-byte Schnorr)"
+   }
+  },
+  "call": {
+   "message": "TapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 calls 0x00000000000000000000000000000000000000aa with value 0 and data 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470, gas 0, tip 0, nonce 1, valid until 1794285341",
+   "chars": 268,
+   "popupText": "Confirm Signature request\nblank\n127.0.0.1:18791\nWallet used\nbc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr\n钱包B - 钱包\nData\nReject\nConfirm",
+   "popupContainsFullText": false,
+   "popupLayout": [],
+   "popupViewport": {
+    "width": 360,
+    "height": 720
+   },
+   "expanded": {
+    "popupText": "Confirm Signature request\nblank\n127.0.0.1:18791\nWallet used\nbc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr\n钱包B - 钱包\nData\nReject\nConfirm\nData\nTapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 calls 0x00000000000000000000000000000000000000aa with value 0 and data 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470, gas 0, tip 0, nonce 1, valid until 1794285341",
+    "popupContainsFullText": true,
+    "popupLayout": [
+     {
+      "tag": "DIV",
+      "visible": true,
+      "textLen": 268,
+      "equalsMessage": true,
+      "containsTail": true,
+      "clientHeight": 128,
+      "scrollHeight": 128,
+      "overflowY": "visible",
+      "textOverflow": "clip",
+      "lineClamp": "none",
+      "whiteSpace": "pre-wrap",
+      "wordBreak": "normal",
+      "rect": [
+       16,
+       576,
+       328,
+       128
+      ],
+      "clippingAncestors": [
+       {
+        "tag": "DIV",
+        "overflowY": "auto",
+        "maxHeight": "none",
+        "clientHeight": 128,
+        "scrollHeight": 128
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "auto",
+        "maxHeight": "none",
+        "clientHeight": 164,
+        "scrollHeight": 164
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "auto",
+        "maxHeight": "none",
+        "clientHeight": 164,
+        "scrollHeight": 164
+       },
+       {
+        "tag": "DIV",
+        "overflowY": "visible",
+        "maxHeight": "calc(100% - 120px)",
+        "clientHeight": 216,
+        "scrollHeight": 216
+       }
+      ]
+     }
+    ],
+    "popupViewport": {
+     "width": 360,
+     "height": 720
+    }
+   },
+   "raw": "AUAS3MXqD26B0lAOv5by3JPx1z52GaiMnDoaRy7OfquKvY2YINM8PD9Z4b0usshH2vJOFd9T3wTFczxiECo1klN/",
+   "result": {
+    "ok": "AUAS3MXqD26B0lAOv5by3JPx1z52GaiMnDoaRy7OfquKvY2YINM8PD9Z4b0usshH2vJOFd9T3wTFczxiECo1klN/"
+   },
+   "cliVerify": "valid",
+   "cliWitness": "0x014012dcc5ea0f6e81d2500ebf96f2dc93f1d73e7619a88c9c3a1a472ece7eab8abd8d9820d33c3c3f59e1bd2eb2c847daf24e15df53df04c5733c62102a3592537f",
+   "rawLen": 66,
+   "rawHex": "014012dcc5ea0f6e81d2500ebf96f2dc93f1d73e7619a88c9c3a1a472ece7eab8abd8d9820d33c3c3f59e1bd2eb2c847daf24e15df53df04c5733c62102a3592537f",
+   "witnessShape": {
+    "items": [
+     64
+    ],
+    "trailing": 0,
+    "sighash": "DEFAULT (64-byte Schnorr)"
+   }
+  }
+ }
+}

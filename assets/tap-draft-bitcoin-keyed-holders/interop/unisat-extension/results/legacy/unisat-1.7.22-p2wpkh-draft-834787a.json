@@ -1,0 +1,54 @@
+{
+ "atype": "Native Segwit (P2WPKH)",
+ "ext": "1.7.22",
+ "accounts": [
+  "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu"
+ ],
+ "publicKey": "0330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+ "network": "livenet",
+ "exec": {
+  "holder": "0x844d2e8f076501fcebaae5299ff87cede9b2f1bd",
+  "nft": "0x1f5cb4aeae1807bf60c3b9c0d8adbcc14e91f12c",
+  "recipient": "0x00000000000000000000000000000000000c0b7a",
+  "tokenId": 920,
+  "data": "0x23b872dd000000000000000000000000844d2e8f076501fcebaae5299ff87cede9b2f1bd00000000000000000000000000000000000000000000000000000000000c0b7a0000000000000000000000000000000000000000000000000000000000000398",
+  "callGas": 150000,
+  "tip": 0,
+  "deadline": 1794073785
+ },
+ "signs": {
+  "exec": {
+   "message": "TapeOut Bitcoin-keyed holder 0x844d2e8f076501fcebaae5299ff87cede9b2f1bd on chain 56 calls 0x1f5cb4aeae1807bf60c3b9c0d8adbcc14e91f12c with value 0 and data 0x682f3bd5a893649489f2074947e9826c57acab9e7cdc5b46721cca889048cf66, gas 150000, tip 0, nonce 0, valid until 1794073785",
+   "popup": "http://127.0.0.1:8765\nSignature request\nOnly sign this message if you fully understand the content and trust the requesting site.\nYou are signing:\nTapeOut Bitcoin-keyed holder 0x844d2e8f076501fcebaae5299ff87cede9b2f1bd on chain 56 calls 0x1f5cb4aeae1807bf60c3b9c0d8adbcc14e91f12c with value 0 and data 0x682f3bd5a893649489f2074947e9826c57acab9e7cdc5b46721cca889048cf66, gas 150000, tip 0, nonce 0, valid until 1794073785\nReject\nSign",
+   "result": {
+    "ok": "AkgwRQIhAMlSyQ4Y+vBfNKlKBU2oy3sMwJAWNzZ9u26rOXmVO43cAiBt4MayqE9P8G2IlMN7Oxh9EC+ab4gM/44jhh+mPZYtTwEhAzDVT9DdQgpuX402JPXzSCyuNQ951fB1O/W+75wtka88"
+   },
+   "rawLen": 108,
+   "rawHex": "02483045022100c952c90e18faf05f34a94a054da8cb7b0cc0901637367dbb6eab3979953b8ddc02206de0c6b2a84f4ff06d8894c37b3b187d102f9a6f880cff8e23861fa63d962d4f01210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+   "cliVerify": "valid",
+   "cliWitness": "0x02483045022100c952c90e18faf05f34a94a054da8cb7b0cc0901637367dbb6eab3979953b8ddc02206de0c6b2a84f4ff06d8894c37b3b187d102f9a6f880cff8e23861fa63d962d4f01210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c"
+  },
+  "sign": {
+   "message": "TapeOut Bitcoin-keyed holder 0x844d2e8f076501fcebaae5299ff87cede9b2f1bd on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+   "popup": "http://127.0.0.1:8765\nSignature request\nOnly sign this message if you fully understand the content and trust the requesting site.\nYou are signing:\nTapeOut Bitcoin-keyed holder 0x844d2e8f076501fcebaae5299ff87cede9b2f1bd on chain 56 signs 0xabababababababababababababababababababababababababababababababab\nReject\nSign",
+   "result": {
+    "ok": "AkgwRQIhAN2jIsapglMT29rwC/MaROZAMxSPRQ/mcwx4Icc+aWGPAiBnvQvP+HFGfYjI6vfrYFbkQbfvvHSRjnwS6z7MPs0hTQEhAzDVT9DdQgpuX402JPXzSCyuNQ951fB1O/W+75wtka88"
+   },
+   "rawLen": 108,
+   "rawHex": "02483045022100dda322c6a9825313dbdaf00bf31a44e64033148f450fe6730c7821c73e69618f022067bd0bcff871467d88c8eaf7eb6056e441b7efbc74918e7c12eb3ecc3ecd214d01210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+   "cliVerify": "valid",
+   "cliWitness": "0x02483045022100dda322c6a9825313dbdaf00bf31a44e64033148f450fe6730c7821c73e69618f022067bd0bcff871467d88c8eaf7eb6056e441b7efbc74918e7c12eb3ecc3ecd214d01210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c"
+  },
+  "call": {
+   "message": "TapeOut Bitcoin-keyed holder 0x844d2e8f076501fcebaae5299ff87cede9b2f1bd on chain 56 calls 0x00000000000000000000000000000000000000aa with value 0 and data 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470, gas 0, tip 0, nonce 1, valid until 1794073785",
+   "popup": "http://127.0.0.1:8765\nSignature request\nOnly sign this message if you fully understand the content and trust the requesting site.\nYou are signing:\nTapeOut Bitcoin-keyed holder 0x844d2e8f076501fcebaae5299ff87cede9b2f1bd on chain 56 calls 0x00000000000000000000000000000000000000aa with value 0 and data 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470, gas 0, tip 0, nonce 1, valid until 1794073785\nReject\nSign",
+   "result": {
+    "ok": "AkgwRQIhAIzOh2NIcEPSnxrV3MePAHcwhxq0HkPIzOY/6qD9Un0lAiAqtlXRqX0oxTuSWNeF9BCW72uEEtXVGvejkdx3dc2yNgEhAzDVT9DdQgpuX402JPXzSCyuNQ951fB1O/W+75wtka88"
+   },
+   "rawLen": 108,
+   "rawHex": "024830450221008cce8763487043d29f1ad5dcc78f007730871ab41e43c8cce63feaa0fd527d2502202ab655d1a97d28c53b9258d785f41096ef6b8412d5d51af7a391dc7775cdb23601210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+   "cliVerify": "valid",
+   "cliWitness": "0x024830450221008cce8763487043d29f1ad5dcc78f007730871ab41e43c8cce63feaa0fd527d2502202ab655d1a97d28c53b9258d785f41096ef6b8412d5d51af7a391dc7775cdb23601210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c"
+  }
+ }
+}

@@ -1,0 +1,71 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: MIT -->
+<!-- Local helper that asks a browser wallet for a BIP-322 signature of one message.
+     Serve it over http (wallet extensions do not inject into file:// pages):
+       cd tools && python3 -m http.server 8322   then open http://localhost:8322/sign.html
+     Wallet calls follow each wallet's documentation and are untested; Sparrow's
+     Tools → Sign/Verify Message is the reference path. Nothing is sent anywhere. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BIP-322 signing helper</title>
+<style>
+  :root { --bg: #fff; --fg: #1a1a1a; --muted: #666; --line: #ccc; --accent: #2b59c3; }
+  @media (prefers-color-scheme: dark) { :root { --bg: #161616; --fg: #eee; --muted: #aaa; --line: #444; --accent: #7aa2ff; } }
+  body { background: var(--bg); color: var(--fg); font: 15px/1.5 system-ui, sans-serif; max-width: 760px; margin: 24px auto; padding: 0 16px; }
+  textarea, input { width: 100%; box-sizing: border-box; font: 13px ui-monospace, monospace; background: var(--bg); color: var(--fg); border: 1px solid var(--line); padding: 8px; }
+  button { margin: 6px 6px 6px 0; padding: 6px 12px; border: 1px solid var(--accent); background: transparent; color: var(--accent); cursor: pointer; }
+  .muted { color: var(--muted); font-size: 13px; }
+  pre { white-space: pre-wrap; word-break: break-all; border: 1px solid var(--line); padding: 8px; }
+</style>
+</head>
+<body>
+<h1>BIP-322 signing helper</h1>
+<p class="muted">Paste the exact message you were given. Use a Taproot (bc1p…) address: in Xverse that is the Ordinals address, not the Payment address.</p>
+<label>Message (exactly, one line)</label>
+<textarea id="msg" rows="4" spellcheck="false"></textarea>
+<div>
+  <button id="xverse">Sign with Xverse</button>
+  <button id="unisat">Sign with UniSat</button>
+  <button id="leather">Sign with Leather</button>
+</div>
+<label>Result</label>
+<pre id="out">(nothing yet)</pre>
+<script>
+const out = (o) => { document.getElementById("out").textContent = typeof o === "string" ? o : JSON.stringify(o, null, 2); };
+const message = () => document.getElementById("msg").value.trim();
+const unwrap = (r) => (r && r.result) ? r.result : r;
+
+document.getElementById("xverse").onclick = async () => {
+  try {
+    const p = window.XverseProviders && window.XverseProviders.BitcoinProvider;
+    if (!p) return out("Xverse extension not found on this page.");
+    let acc = unwrap(await p.request("wallet_connect", { addresses: ["ordinals"] }).catch(() => null));
+    let addrs = (acc && acc.addresses) || unwrap(await p.request("getAccounts", { purposes: ["ordinals"] }));
+    const a = (addrs || []).find((x) => (x.address || "").startsWith("bc1p"));
+    if (!a) return out({ error: "no bc1p address returned", addrs });
+    const r = unwrap(await p.request("signMessage", { address: a.address, message: message(), protocol: "BIP322" }));
+    out({ wallet: "Xverse", address: a.address, signature: r.signature, raw: r });
+  } catch (e) { out("Xverse error: " + (e && e.message ? e.message : JSON.stringify(e))); }
+};
+
+document.getElementById("unisat").onclick = async () => {
+  try {
+    if (!window.unisat) return out("UniSat extension not found on this page.");
+    const [address] = await window.unisat.requestAccounts();
+    const signature = await window.unisat.signMessage(message(), "bip322-simple");
+    out({ wallet: "UniSat", address, signature });
+  } catch (e) { out("UniSat error: " + (e && e.message ? e.message : JSON.stringify(e))); }
+};
+
+document.getElementById("leather").onclick = async () => {
+  try {
+    if (!window.LeatherProvider) return out("Leather extension not found on this page.");
+    const r = unwrap(await window.LeatherProvider.request("signMessage", { message: message(), paymentType: "p2tr" }));
+    out({ wallet: "Leather", address: r.address, signature: r.signature, raw: r });
+  } catch (e) { out("Leather error: " + (e && e.message ? e.message : JSON.stringify(e))); }
+};
+</script>
+</body>
+</html>

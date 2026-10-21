@@ -1,0 +1,27 @@
+== fork of chain 8453 at block 52412990 (https://mainnet.base.org)
+proxy code: 69 bytes
+== 1. test Bitcoin address bc1pdznq5ty2978g55m83a4uanyqw8mkvnjhl3ky7rp5ald95zhd697q258gca -> holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647
+deployed, runtime 7092 bytes, scriptPubKey 0x512068a60a2c8a2f8e8a53678f6bcecc8071f7664e57fc6c4f0c34efda5a0aedd17c
+== 2. token 0x839bdd6fa7a66416a609a735e11de5411b98574e #1 ("TEST"), owner 0xa2E4592EbbD0A08CF49DC306358b064587ab3362
+ownerOf now: 0x750D22d8B6dd3168c2a4a2EFDDD44A8BfE362647
+== 3. TAP-11 delegation signed by the Bitcoin key
+message: TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 8453 signs 0x8490a67c7724f45e7c1ddf53923ba983bf2dda0afa2c17f6d65b504a09531728
+isValidSignature (right key):  0x1626ba7e
+isValidSignature (other key):  0xffffffff
+eth_estimateGas of the check:  38035
+== 4. move the token back with a Bitcoin-signed call, paying the relayer a signed tip
+message: TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 8453 calls 0x839bdd6fa7a66416a609a735e11de5411b98574e with value 0 and data 0x09dd00fe42d26b80285690f8fed17b1af860abc003eff1c2a7f2d940139b36c5, gas 150000, tip 1000000000000000, nonce 0, valid until 1791618938
+  relayer balance before 10000000000000000000000, after 10000000999407281018824, gas cost 591380048000, holder balance now 99000000000000000
+relayer balance change + gas cost = 999998661066824 (the signed tip is 1000000000000000)
+ownerOf now: 0xa2E4592EbbD0A08CF49DC306358b064587ab3362   holder nonce: 1
+replay of the same signed call: rejected
+== 5. one signature, two calls (executeBatch): move the token out again and send coin, all or nothing
+token back in the holder: ownerOf 0x750D22d8B6dd3168c2a4a2EFDDD44A8BfE362647
+message: TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 8453 makes 2 calls: (1) 0x839bdd6fa7a66416a609a735e11de5411b98574e with value 0 and data 0x09dd00fe42d26b80285690f8fed17b1af860abc003eff1c2a7f2d940139b36c5, gas 150000; (2) 0x90f79bf6eb2c4f870365e785982e1f101e93b906 with value 200000000000000 and data 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470, gas 0; tip 1000000000000000, nonce 1, valid until 1791618938
+the holder's batchMessage(...) equals the text
+gasUsed 113966, Called events: 2
+relayer balance change + gas cost = 999998364723275 (the signed tip is 1000000000000000)
+payee received 200000000000000 (signed value 200000000000000)
+ownerOf now: 0xa2E4592EbbD0A08CF49DC306358b064587ab3362   holder nonce: 2
+replay of the same signed batch: rejected
+== done

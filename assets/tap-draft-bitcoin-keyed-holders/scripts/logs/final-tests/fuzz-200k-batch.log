@@ -1,0 +1,16 @@
+# forge test --match-contract 'DifferentialTest|BatchInvariantsTest|BatchVsExecuteTest|BatchLabDiffTest' --fuzz-runs 200000
+# Batch suites of this run (code and batch tests as committed in e880e99). DifferentialTest failed in this run
+# (counterexample at run 134,668: 15M outer gas not generous for callGas 14,625,579, a test weakness); it was
+# fixed in the test and re-run in full: fuzz-200k-differential.log.
+Sat 10 Oct 2026 13:17:44 CST
+Ran 1 test for test/batch/BatchVsExecute.t.sol:BatchVsExecuteTest
+[PASS] testFuzz_batch_of_one_vs_execute(uint256,bytes) (runs: 200000, μ: 805240, ~: 733228)
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 340.97s (340.97s CPU time)
+Ran 1 test for test/batch/BatchInvariants.t.sol:BatchInvariantsTest
+[PASS] testFuzz_batch_invariants(uint256,bytes) (runs: 200000, μ: 709796, ~: 699344)
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 348.29s (348.29s CPU time)
+Ran 2 tests for test/batchlab/BatchLabDiff.t.sol:BatchLabDiffTest
+[PASS] testFuzz_lab_batchMessage(uint256,uint64,uint256,uint256,uint64) (runs: 200000, μ: 725285, ~: 695175)
+[PASS] testFuzz_lab_executeBatch(uint256,bytes) (runs: 200000, μ: 1380121, ~: 1273396)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 348.51s (697.02s CPU time)
+Sat 10 Oct 2026 13:23:32 CST

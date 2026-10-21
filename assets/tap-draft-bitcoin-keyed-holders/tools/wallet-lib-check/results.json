@@ -1,0 +1,1407 @@
+{
+  "generatedAt": "2026-10-10T06:43:05.594Z",
+  "node": "v25.3.0",
+  "libs": [
+    "bip322-js@4.0.0",
+    "bip322-js@3.0.0"
+  ],
+  "upstream": {
+    "bip322-js@4.0.0": {
+      "tx_hashes": [
+        {
+          "message": "",
+          "message_hash": true,
+          "to_spend": true,
+          "to_sign": true
+        },
+        {
+          "message": "Hello World",
+          "message_hash": true,
+          "to_spend": true,
+          "to_sign": true
+        },
+        {
+          "message": "UTF-8 support: öäüéàè 测试文本 😄",
+          "message_hash": true,
+          "to_spend": true,
+          "to_sign": true
+        }
+      ],
+      "simple": [
+        {
+          "type": "p2wpkh",
+          "message": "",
+          "verify": [
+            {
+              "asGiven": "throws: buffer too small",
+              "smpStripped": "valid"
+            },
+            {
+              "asGiven": "throws: buffer too small",
+              "smpStripped": "valid"
+            }
+          ],
+          "ownSignature": "AkgwRQIhAPkJ1Q4oYS0htvyuSFHLxRQpFAY56b70UvE7Dxazen0ZAiAtZfFz1S6T6I23MWI2lK/pcNTWncuyL8UL+oMdydVgzAEhAsfxIAMZZEKUPYWI4BruhAQjzFT8FSFSajuFwrDL1Yhy",
+          "ownSignatureFormat": {
+            "smpPrefix": false,
+            "witnessBytes": 108,
+            "stackItems": 2,
+            "itemLengths": [
+              72,
+              33
+            ],
+            "p2wpkhSighash": "0x01"
+          },
+          "ownMatchesAVector": true,
+          "ownSelfVerify": "valid",
+          "ownCliVerify": "valid"
+        },
+        {
+          "type": "p2wpkh",
+          "message": "Hello World",
+          "verify": [
+            {
+              "asGiven": "throws: buffer too small",
+              "smpStripped": "valid"
+            },
+            {
+              "asGiven": "throws: buffer too small",
+              "smpStripped": "valid"
+            }
+          ],
+          "ownSignature": "AkgwRQIhAOzyynlqt93lOKJr+wmmxIens//zPzl9tqIOua93wO6MAiBi5n5EyAcPScOjf1lAqIUIQtr3zKNeavYabHyR8eGhowEhAsfxIAMZZEKUPYWI4BruhAQjzFT8FSFSajuFwrDL1Yhy",
+          "ownSignatureFormat": {
+            "smpPrefix": false,
+            "witnessBytes": 108,
+            "stackItems": 2,
+            "itemLengths": [
+              72,
+              33
+            ],
+            "p2wpkhSighash": "0x01"
+          },
+          "ownMatchesAVector": true,
+          "ownSelfVerify": "valid",
+          "ownCliVerify": "valid"
+        },
+        {
+          "type": "p2wsh-multisig-3of3",
+          "message": "This will be a p2wsh 3-of-3 multisig BIP 322 signed message",
+          "verify": [
+            {
+              "asGiven": "throws: buffer too small",
+              "smpStripped": "throws: Only P2WPKH, P2SH-P2WPKH, and single-key-spend P2TR BIP-322 verification is supported. Unsupported address is provided."
+            }
+          ]
+        },
+        {
+          "type": "p2tr",
+          "message": "No prefix fallback",
+          "verify": [
+            {
+              "asGiven": "valid",
+              "smpStripped": "valid"
+            }
+          ],
+          "ownSignature": "AUGdc+tmbkgQ+zfSjuZsCMABEU4RAdG6Jll/Q+twK97Ihfy0JArsjpa7E+iyuUhBAJmlp4iQ5PUK5fSQQfdrJED+AQ==",
+          "ownSignatureFormat": {
+            "smpPrefix": false,
+            "witnessBytes": 67,
+            "stackItems": 1,
+            "itemLengths": [
+              65
+            ],
+            "p2trSighash": "0x01 (65-byte sig)"
+          },
+          "ownMatchesAVector": false,
+          "ownSelfVerify": "valid",
+          "ownCliVerify": "valid"
+        }
+      ],
+      "error": [
+        {
+          "description": "invalid base64 encoding",
+          "smpStripped": "throws: buffer too small"
+        },
+        {
+          "description": "empty signature",
+          "smpStripped": "throws: buffer too small"
+        },
+        {
+          "description": "wrong message for valid simple p2wpkh signature (empty message was signed)",
+          "smpStripped": "invalid"
+        },
+        {
+          "description": "wrong address for valid simple p2wpkh signature (signed for different address)",
+          "smpStripped": "throws: Invalid length: Expected 20 but received 32"
+        },
+        {
+          "description": "empty witness stack (single zero byte)",
+          "smpStripped": "throws: Only P2WPKH, P2SH-P2WPKH, and single-key-spend P2TR BIP-322 verification is supported. Unsupported address is provided."
+        },
+        {
+          "description": "wrong message for valid simple p2wsh 3-of-3 multisig signature",
+          "smpStripped": "throws: Only P2WPKH, P2SH-P2WPKH, and single-key-spend P2TR BIP-322 verification is supported. Unsupported address is provided."
+        },
+        {
+          "description": "invalid signature prefix",
+          "smpStripped": "throws: buffer too small"
+        },
+        {
+          "description": "incorrect prefix type",
+          "smpStripped": "throws: buffer too small"
+        }
+      ]
+    },
+    "bip322-js@3.0.0": {
+      "tx_hashes": [
+        {
+          "message": "",
+          "message_hash": true,
+          "to_spend": true,
+          "to_sign": true
+        },
+        {
+          "message": "Hello World",
+          "message_hash": true,
+          "to_spend": true,
+          "to_sign": true
+        },
+        {
+          "message": "UTF-8 support: öäüéàè 测试文本 😄",
+          "message_hash": true,
+          "to_spend": true,
+          "to_sign": true
+        }
+      ],
+      "simple": [
+        {
+          "type": "p2wpkh",
+          "message": "",
+          "verify": [
+            {
+              "asGiven": "throws: The value of \"offset\" is out of range. It must be >= 0 and <= 108. Received 137",
+              "smpStripped": "valid"
+            },
+            {
+              "asGiven": "throws: The value of \"offset\" is out of range. It must be >= 0 and <= 109. Received 207",
+              "smpStripped": "valid"
+            }
+          ],
+          "ownSignature": "AkgwRQIhAPkJ1Q4oYS0htvyuSFHLxRQpFAY56b70UvE7Dxazen0ZAiAtZfFz1S6T6I23MWI2lK/pcNTWncuyL8UL+oMdydVgzAEhAsfxIAMZZEKUPYWI4BruhAQjzFT8FSFSajuFwrDL1Yhy",
+          "ownSignatureFormat": {
+            "smpPrefix": false,
+            "witnessBytes": 108,
+            "stackItems": 2,
+            "itemLengths": [
+              72,
+              33
+            ],
+            "p2wpkhSighash": "0x01"
+          },
+          "ownMatchesAVector": true,
+          "ownSelfVerify": "valid",
+          "ownCliVerify": "valid"
+        },
+        {
+          "type": "p2wpkh",
+          "message": "Hello World",
+          "verify": [
+            {
+              "asGiven": "throws: The value of \"offset\" is out of range. It must be >= 0 and <= 108. Received 137",
+              "smpStripped": "valid"
+            },
+            {
+              "asGiven": "throws: The value of \"offset\" is out of range. It must be >= 0 and <= 109. Received 207",
+              "smpStripped": "valid"
+            }
+          ],
+          "ownSignature": "AkgwRQIhAOzyynlqt93lOKJr+wmmxIens//zPzl9tqIOua93wO6MAiBi5n5EyAcPScOjf1lAqIUIQtr3zKNeavYabHyR8eGhowEhAsfxIAMZZEKUPYWI4BruhAQjzFT8FSFSajuFwrDL1Yhy",
+          "ownSignatureFormat": {
+            "smpPrefix": false,
+            "witnessBytes": 108,
+            "stackItems": 2,
+            "itemLengths": [
+              72,
+              33
+            ],
+            "p2wpkhSighash": "0x01"
+          },
+          "ownMatchesAVector": true,
+          "ownSelfVerify": "valid",
+          "ownCliVerify": "valid"
+        },
+        {
+          "type": "p2wsh-multisig-3of3",
+          "message": "This will be a p2wsh 3-of-3 multisig BIP 322 signed message",
+          "verify": [
+            {
+              "asGiven": "throws: The value of \"offset\" is out of range. It must be >= 0 and <= 327. Received 459",
+              "smpStripped": "throws: Only P2WPKH, P2SH-P2WPKH, and single-key-spend P2TR BIP-322 verification is supported. Unsupported address is provided."
+            }
+          ]
+        },
+        {
+          "type": "p2tr",
+          "message": "No prefix fallback",
+          "verify": [
+            {
+              "asGiven": "valid",
+              "smpStripped": "valid"
+            }
+          ],
+          "ownSignature": "AUHKUzAM3iP0GXbjQ06W4nuA1fmV++AuiVvxw0YVrPV582yG8rAsHJe/DzWDo+8KT/xBg767BNYsw5WsVuTZAZYXAQ==",
+          "ownSignatureFormat": {
+            "smpPrefix": false,
+            "witnessBytes": 67,
+            "stackItems": 1,
+            "itemLengths": [
+              65
+            ],
+            "p2trSighash": "0x01 (65-byte sig)"
+          },
+          "ownMatchesAVector": false,
+          "ownSelfVerify": "valid",
+          "ownCliVerify": "valid"
+        }
+      ],
+      "error": [
+        {
+          "description": "invalid base64 encoding",
+          "smpStripped": "throws: The value of \"offset\" is out of range. It must be >= 0 and <= 11. Received 141"
+        },
+        {
+          "description": "empty signature",
+          "smpStripped": "throws: Attempt to access memory outside buffer bounds"
+        },
+        {
+          "description": "wrong message for valid simple p2wpkh signature (empty message was signed)",
+          "smpStripped": "invalid"
+        },
+        {
+          "description": "wrong address for valid simple p2wpkh signature (signed for different address)",
+          "smpStripped": "throws: Expected property \"hash\" of type Buffer(Length: 20), got Buffer(Length: 32)"
+        },
+        {
+          "description": "empty witness stack (single zero byte)",
+          "smpStripped": "throws: Only P2WPKH, P2SH-P2WPKH, and single-key-spend P2TR BIP-322 verification is supported. Unsupported address is provided."
+        },
+        {
+          "description": "wrong message for valid simple p2wsh 3-of-3 multisig signature",
+          "smpStripped": "throws: Only P2WPKH, P2SH-P2WPKH, and single-key-spend P2TR BIP-322 verification is supported. Unsupported address is provided."
+        },
+        {
+          "description": "invalid signature prefix",
+          "smpStripped": "throws: The value of \"offset\" is out of range. It must be >= 0 and <= 2. Received 140"
+        },
+        {
+          "description": "incorrect prefix type",
+          "smpStripped": "throws: The value of \"offset\" is out of range. It must be >= 0 and <= 67. Received 235"
+        }
+      ]
+    }
+  },
+  "tap": {
+    "keys": [
+      {
+        "kind": "p2tr (BIP-86)",
+        "wif": "L3pHH9EF3YReZAAv6Xyu2Bwoqh338KSznpTYNV8Wdii5mRsQfAxm",
+        "internalKey": "bf8121977ea6f8c1bf4de8de9307850ecc43928ee4e4a8768601ce4484f6f986",
+        "address": "bc1pxseuyyrd5xs2fxartrsmga3fvg4sv7q56jt2wy3v70a5naqs9y9qd6rtrd",
+        "cliAddress": [
+          "scriptPubKey: 0x51203433c2106da1a0a49ba358e1b47629622b067814d496a7122cf3fb49f410290a",
+          "holder:       0xef70ad99303dc1386d095c4fbab1878378a906fd",
+          "init code keccak: 0xc390909049d7fd5446be70c71b6ce1fbce36220a619d75f05a1068e271da7207"
+        ]
+      },
+      {
+        "kind": "p2wpkh",
+        "wif": "KxTiih17aGkQ85eb4jtdLgNPW2tz73DTTKPA7HD4oCFLzL1Tu6XB",
+        "pubkey": "028c6afdc3eed4c9faa9051dfee726db7affa593993250d9796acd6efa648ddca1",
+        "address": "bc1qgpmndme78eezhwatthnsctumg360g3ly6rnzsf",
+        "cliAddress": [
+          "scriptPubKey: 0x0014407736ef3e3e722bbbab5de70c2f9b4474f447e4",
+          "holder:       0x29591285417c94575bbc8c8308be48e8806d0f46",
+          "init code keccak: 0x400c9c64fe04107af5833ee120a0c5dcf6a94fe1dd3c7fcf052b5be7d9c63fbf"
+        ]
+      },
+      {
+        "kind": "p2tr other (wrong-address control)",
+        "wif": "KyYT8KAh2GW15nzX4azQVor1Qx9e4vHNzeAQcn8axzZqt8odqP95",
+        "address": "bc1pc3t7h9nxdx0sk2w825ngdkxa9e4sna8n0jrp2lxslufmuca7dkrqkaguye"
+      },
+      {
+        "kind": "p2sh-p2wpkh (same key as p2wpkh)",
+        "wif": "KxTiih17aGkQ85eb4jtdLgNPW2tz73DTTKPA7HD4oCFLzL1Tu6XB",
+        "address": "3FwprYiE41X1b1Ct9pSeMpEWSz84npzu2M"
+      }
+    ],
+    "p2trOutputKeyIsTweaked": true,
+    "cases": [
+      {
+        "lib": "bip322-js@4.0.0",
+        "addressKind": "p2tr",
+        "address": "bc1pxseuyyrd5xs2fxartrsmga3fvg4sv7q56jt2wy3v70a5naqs9y9qd6rtrd",
+        "messageKind": "§5.1 sign-message",
+        "chars": 156,
+        "message": "TapeOut Bitcoin-keyed holder 0xef70ad99303dc1386d095c4fbab1878378a906fd on chain 56 signs 0x0000000000000000000000000000000000000000000000000000000000000000",
+        "signature": "AUH2TMn2yLJbAIbd+3zRsXPbWbbbL4I4VJYja2gbYFANxtMv5Np1dkqYwLicKxUHu8IMqQNVi1ExjrhtoR3hdDzFAQ==",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 67,
+          "stackItems": 1,
+          "itemLengths": [
+            65
+          ],
+          "p2trSighash": "0x01 (65-byte sig)"
+        },
+        "cliVerify": "valid",
+        "cliVerifySmpPrefixed": "valid",
+        "cliVerifyHexWitness": "valid",
+        "libSelfVerify": "valid",
+        "negative": {
+          "flippedChar": "INVALID(exit=1 INVALID)",
+          "wrongMessage": "INVALID(exit=1 INVALID)",
+          "wrongAddress": "INVALID(exit=1 INVALID)"
+        }
+      },
+      {
+        "lib": "bip322-js@3.0.0",
+        "addressKind": "p2tr",
+        "address": "bc1pxseuyyrd5xs2fxartrsmga3fvg4sv7q56jt2wy3v70a5naqs9y9qd6rtrd",
+        "messageKind": "§5.1 sign-message",
+        "chars": 156,
+        "message": "TapeOut Bitcoin-keyed holder 0xef70ad99303dc1386d095c4fbab1878378a906fd on chain 56 signs 0x0000000000000000000000000000000000000000000000000000000000000000",
+        "signature": "AUEULautGkZBfPLgIp7Rc8K5wGuv21g5yJXeh/4Sttn2DIwnH2ngP5ZTO2Eu+3wDyzYOw/GXee5egi/2hTglEw3CAQ==",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 67,
+          "stackItems": 1,
+          "itemLengths": [
+            65
+          ],
+          "p2trSighash": "0x01 (65-byte sig)"
+        },
+        "cliVerify": "valid",
+        "cliVerifySmpPrefixed": "valid",
+        "cliVerifyHexWitness": "valid",
+        "libSelfVerify": "valid",
+        "negative": {
+          "flippedChar": "INVALID(exit=1 INVALID)",
+          "wrongMessage": "INVALID(exit=1 INVALID)",
+          "wrongAddress": "INVALID(exit=1 INVALID)"
+        }
+      },
+      {
+        "lib": "bip322-js@4.0.0",
+        "addressKind": "p2tr",
+        "address": "bc1pxseuyyrd5xs2fxartrsmga3fvg4sv7q56jt2wy3v70a5naqs9y9qd6rtrd",
+        "messageKind": "§5.1 sign-message",
+        "chars": 156,
+        "message": "TapeOut Bitcoin-keyed holder 0xef70ad99303dc1386d095c4fbab1878378a906fd on chain 56 signs 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "signature": "AUGlkxLInPtaMtKd3Hr+8UWL2dGcWvbm/HlDnw5cPFzxXlw6f0RdJXvIysX9oEyXbneC2oXMYt6/GwCoZ4ZGcCw+AQ==",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 67,
+          "stackItems": 1,
+          "itemLengths": [
+            65
+          ],
+          "p2trSighash": "0x01 (65-byte sig)"
+        },
+        "cliVerify": "valid",
+        "cliVerifySmpPrefixed": "valid",
+        "cliVerifyHexWitness": "valid",
+        "libSelfVerify": "valid",
+        "negative": {
+          "flippedChar": "INVALID(exit=1 INVALID)",
+          "wrongMessage": "INVALID(exit=1 INVALID)",
+          "wrongAddress": "INVALID(exit=1 INVALID)"
+        }
+      },
+      {
+        "lib": "bip322-js@3.0.0",
+        "addressKind": "p2tr",
+        "address": "bc1pxseuyyrd5xs2fxartrsmga3fvg4sv7q56jt2wy3v70a5naqs9y9qd6rtrd",
+        "messageKind": "§5.1 sign-message",
+        "chars": 156,
+        "message": "TapeOut Bitcoin-keyed holder 0xef70ad99303dc1386d095c4fbab1878378a906fd on chain 56 signs 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "signature": "AUG5hV6FEEXr/Naow+9REoPHO1jCHmOQ9dJ3Gzaf+W3Y9eCEedv1BGNu2bUOxP68sEVbwRPzEm6GdbDwAubLVtctAQ==",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 67,
+          "stackItems": 1,
+          "itemLengths": [
+            65
+          ],
+          "p2trSighash": "0x01 (65-byte sig)"
+        },
+        "cliVerify": "valid",
+        "cliVerifySmpPrefixed": "valid",
+        "cliVerifyHexWitness": "valid",
+        "libSelfVerify": "valid",
+        "negative": {
+          "flippedChar": "INVALID(exit=1 INVALID)",
+          "wrongMessage": "INVALID(exit=1 INVALID)",
+          "wrongAddress": "INVALID(exit=1 INVALID)"
+        }
+      },
+      {
+        "lib": "bip322-js@4.0.0",
+        "addressKind": "p2tr",
+        "address": "bc1pxseuyyrd5xs2fxartrsmga3fvg4sv7q56jt2wy3v70a5naqs9y9qd6rtrd",
+        "messageKind": "§5.1 sign-message",
+        "chars": 156,
+        "message": "TapeOut Bitcoin-keyed holder 0xef70ad99303dc1386d095c4fbab1878378a906fd on chain 56 signs 0x4e5cd7e31fb6883bf3e32371ed3d9d6fd3c54c4573e9edd0c93745f33a5e0a40",
+        "signature": "AUFbttlTmF7y3rDm6kq41a6rtMOWGK4Xl9saaCdVsLNIQ/JpoZCPbOaOTdm0MM0Mhya/5wMOumiBfdCkHyn7IMcKAQ==",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 67,
+          "stackItems": 1,
+          "itemLengths": [
+            65
+          ],
+          "p2trSighash": "0x01 (65-byte sig)"
+        },
+        "cliVerify": "valid",
+        "cliVerifySmpPrefixed": "valid",
+        "cliVerifyHexWitness": "valid",
+        "libSelfVerify": "valid",
+        "negative": {
+          "flippedChar": "INVALID(exit=1 INVALID)",
+          "wrongMessage": "INVALID(exit=1 INVALID)",
+          "wrongAddress": "INVALID(exit=1 INVALID)"
+        }
+      },
+      {
+        "lib": "bip322-js@3.0.0",
+        "addressKind": "p2tr",
+        "address": "bc1pxseuyyrd5xs2fxartrsmga3fvg4sv7q56jt2wy3v70a5naqs9y9qd6rtrd",
+        "messageKind": "§5.1 sign-message",
+        "chars": 156,
+        "message": "TapeOut Bitcoin-keyed holder 0xef70ad99303dc1386d095c4fbab1878378a906fd on chain 56 signs 0x4e5cd7e31fb6883bf3e32371ed3d9d6fd3c54c4573e9edd0c93745f33a5e0a40",
+        "signature": "AUHThFMqn4uEElU967hluPIj4jU1RZ7IpBRvjbNXA+cpA5iF3UdzKu1g77FsCQiyG/3NSWvOfAzHBPcDS7v4l/xiAQ==",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 67,
+          "stackItems": 1,
+          "itemLengths": [
+            65
+          ],
+          "p2trSighash": "0x01 (65-byte sig)"
+        },
+        "cliVerify": "valid",
+        "cliVerifySmpPrefixed": "valid",
+        "cliVerifyHexWitness": "valid",
+        "libSelfVerify": "valid",
+        "negative": {
+          "flippedChar": "INVALID(exit=1 INVALID)",
+          "wrongMessage": "INVALID(exit=1 INVALID)",
+          "wrongAddress": "INVALID(exit=1 INVALID)"
+        }
+      },
+      {
+        "lib": "bip322-js@4.0.0",
+        "addressKind": "p2tr",
+        "address": "bc1pxseuyyrd5xs2fxartrsmga3fvg4sv7q56jt2wy3v70a5naqs9y9qd6rtrd",
+        "messageKind": "§5.1 sign-message (TAP-11 delegation digest)",
+        "chars": 156,
+        "message": "TapeOut Bitcoin-keyed holder 0xef70ad99303dc1386d095c4fbab1878378a906fd on chain 56 signs 0x893e371c5cf8510cc3386077d19b810ac525b5b864f39f2f8a8dc66df272fdb8",
+        "signature": "AUGytkA1Z9GcVPYJyaUN9GJFvlomK5ARCMeX6dUygWlt1IJIsx2iVY4IMUxEziPtQZw1xZpIo3cK4n7nAsPQEnDAAQ==",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 67,
+          "stackItems": 1,
+          "itemLengths": [
+            65
+          ],
+          "p2trSighash": "0x01 (65-byte sig)"
+        },
+        "cliVerify": "valid",
+        "cliVerifySmpPrefixed": "valid",
+        "cliVerifyHexWitness": "valid",
+        "libSelfVerify": "valid",
+        "negative": {
+          "flippedChar": "INVALID(exit=1 INVALID)",
+          "wrongMessage": "INVALID(exit=1 INVALID)",
+          "wrongAddress": "INVALID(exit=1 INVALID)"
+        }
+      },
+      {
+        "lib": "bip322-js@3.0.0",
+        "addressKind": "p2tr",
+        "address": "bc1pxseuyyrd5xs2fxartrsmga3fvg4sv7q56jt2wy3v70a5naqs9y9qd6rtrd",
+        "messageKind": "§5.1 sign-message (TAP-11 delegation digest)",
+        "chars": 156,
+        "message": "TapeOut Bitcoin-keyed holder 0xef70ad99303dc1386d095c4fbab1878378a906fd on chain 56 signs 0x893e371c5cf8510cc3386077d19b810ac525b5b864f39f2f8a8dc66df272fdb8",
+        "signature": "AUEvebanwRfmxW5AilNYA6t/GkRPJg6CWSnhEz27K5C1uex3KbbshOCGRZUYxvJmPIZg7hkjaKrxVVKEk7C3GYDpAQ==",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 67,
+          "stackItems": 1,
+          "itemLengths": [
+            65
+          ],
+          "p2trSighash": "0x01 (65-byte sig)"
+        },
+        "cliVerify": "valid",
+        "cliVerifySmpPrefixed": "valid",
+        "cliVerifyHexWitness": "valid",
+        "libSelfVerify": "valid",
+        "negative": {
+          "flippedChar": "INVALID(exit=1 INVALID)",
+          "wrongMessage": "INVALID(exit=1 INVALID)",
+          "wrongAddress": "INVALID(exit=1 INVALID)"
+        }
+      },
+      {
+        "lib": "bip322-js@4.0.0",
+        "addressKind": "p2tr",
+        "address": "bc1pxseuyyrd5xs2fxartrsmga3fvg4sv7q56jt2wy3v70a5naqs9y9qd6rtrd",
+        "messageKind": "§5.2 call-message (realistic long)",
+        "chars": 317,
+        "message": "TapeOut Bitcoin-keyed holder 0xef70ad99303dc1386d095c4fbab1878378a906fd on chain 56 calls 0x55d398326f99059ff775485246999027b3197955 with value 1500000000000000000 and data 0x3a83bdd8e25941828afbf6bf645c1af916c92d71e2a60f68b8d2efbffcf0de7f, gas 30000000, tip 2500000000000000, nonce 4294967295, valid until 4102444800",
+        "signature": "AUG33O3teYLl9rRemz1NOWINa0C7SVpMEDx1Y77foWnoPEcWrbe1HLyFr8pK8jWPbLlYwOaO+YW2knWoMMXWtwxnAQ==",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 67,
+          "stackItems": 1,
+          "itemLengths": [
+            65
+          ],
+          "p2trSighash": "0x01 (65-byte sig)"
+        },
+        "cliVerify": "valid",
+        "cliVerifySmpPrefixed": "valid",
+        "cliVerifyHexWitness": "valid",
+        "libSelfVerify": "valid",
+        "negative": {
+          "flippedChar": "INVALID(exit=1 INVALID)",
+          "wrongMessage": "INVALID(exit=1 INVALID)",
+          "wrongAddress": "INVALID(exit=1 INVALID)"
+        }
+      },
+      {
+        "lib": "bip322-js@3.0.0",
+        "addressKind": "p2tr",
+        "address": "bc1pxseuyyrd5xs2fxartrsmga3fvg4sv7q56jt2wy3v70a5naqs9y9qd6rtrd",
+        "messageKind": "§5.2 call-message (realistic long)",
+        "chars": 317,
+        "message": "TapeOut Bitcoin-keyed holder 0xef70ad99303dc1386d095c4fbab1878378a906fd on chain 56 calls 0x55d398326f99059ff775485246999027b3197955 with value 1500000000000000000 and data 0x3a83bdd8e25941828afbf6bf645c1af916c92d71e2a60f68b8d2efbffcf0de7f, gas 30000000, tip 2500000000000000, nonce 4294967295, valid until 4102444800",
+        "signature": "AUGHXcrdSeZ0IgaHA5g1ewbreY9S7xU0T3HnZvN4b3R8YMGLZctaHiEPunYeiw4Wbl0RUIFAmANjyWvz/PooswA0AQ==",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 67,
+          "stackItems": 1,
+          "itemLengths": [
+            65
+          ],
+          "p2trSighash": "0x01 (65-byte sig)"
+        },
+        "cliVerify": "valid",
+        "cliVerifySmpPrefixed": "valid",
+        "cliVerifyHexWitness": "valid",
+        "libSelfVerify": "valid",
+        "negative": {
+          "flippedChar": "INVALID(exit=1 INVALID)",
+          "wrongMessage": "INVALID(exit=1 INVALID)",
+          "wrongAddress": "INVALID(exit=1 INVALID)"
+        }
+      },
+      {
+        "lib": "bip322-js@4.0.0",
+        "addressKind": "p2tr",
+        "address": "bc1pxseuyyrd5xs2fxartrsmga3fvg4sv7q56jt2wy3v70a5naqs9y9qd6rtrd",
+        "messageKind": "§5.2 call-message (every number at its maximum)",
+        "chars": 586,
+        "message": "TapeOut Bitcoin-keyed holder 0xef70ad99303dc1386d095c4fbab1878378a906fd on chain 56 calls 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3a83bdd8e25941828afbf6bf645c1af916c92d71e2a60f68b8d2efbffcf0de7f, gas 115792089237316195423570985008687907853269984665640564039457584007913129639935, tip 115792089237316195423570985008687907853269984665640564039457584007913129639935, nonce 115792089237316195423570985008687907853269984665640564039457584007913129639935, valid until 18446744073709551615",
+        "signature": "AUFI9bf3BrT9Xide+1HTwfQTMEqu8JJX8rubQRLeQm06wWvzAo//JdvpvXyZOiib14evVmSooiN1eqzBL6UjCmIVAQ==",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 67,
+          "stackItems": 1,
+          "itemLengths": [
+            65
+          ],
+          "p2trSighash": "0x01 (65-byte sig)"
+        },
+        "cliVerify": "valid",
+        "cliVerifySmpPrefixed": "valid",
+        "cliVerifyHexWitness": "valid",
+        "libSelfVerify": "valid",
+        "negative": {
+          "flippedChar": "INVALID(exit=1 INVALID)",
+          "wrongMessage": "INVALID(exit=1 INVALID)",
+          "wrongAddress": "INVALID(exit=1 INVALID)"
+        }
+      },
+      {
+        "lib": "bip322-js@3.0.0",
+        "addressKind": "p2tr",
+        "address": "bc1pxseuyyrd5xs2fxartrsmga3fvg4sv7q56jt2wy3v70a5naqs9y9qd6rtrd",
+        "messageKind": "§5.2 call-message (every number at its maximum)",
+        "chars": 586,
+        "message": "TapeOut Bitcoin-keyed holder 0xef70ad99303dc1386d095c4fbab1878378a906fd on chain 56 calls 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3a83bdd8e25941828afbf6bf645c1af916c92d71e2a60f68b8d2efbffcf0de7f, gas 115792089237316195423570985008687907853269984665640564039457584007913129639935, tip 115792089237316195423570985008687907853269984665640564039457584007913129639935, nonce 115792089237316195423570985008687907853269984665640564039457584007913129639935, valid until 18446744073709551615",
+        "signature": "AUFjakUsACqf5cWKyikJ3FrGYzffGylhKbeW+w/REvtcvualMjH+Myg6bjJlN3Qx5UMOAOiP3tF5QyhyzkgBYSnRAQ==",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 67,
+          "stackItems": 1,
+          "itemLengths": [
+            65
+          ],
+          "p2trSighash": "0x01 (65-byte sig)"
+        },
+        "cliVerify": "valid",
+        "cliVerifySmpPrefixed": "valid",
+        "cliVerifyHexWitness": "valid",
+        "libSelfVerify": "valid",
+        "negative": {
+          "flippedChar": "INVALID(exit=1 INVALID)",
+          "wrongMessage": "INVALID(exit=1 INVALID)",
+          "wrongAddress": "INVALID(exit=1 INVALID)"
+        }
+      },
+      {
+        "lib": "bip322-js@4.0.0",
+        "addressKind": "p2wpkh",
+        "address": "bc1qgpmndme78eezhwatthnsctumg360g3ly6rnzsf",
+        "messageKind": "§5.1 sign-message",
+        "chars": 156,
+        "message": "TapeOut Bitcoin-keyed holder 0x29591285417c94575bbc8c8308be48e8806d0f46 on chain 56 signs 0x0000000000000000000000000000000000000000000000000000000000000000",
+        "signature": "AkgwRQIhAM+T9cZaXpez2CJ43i1MGyjzLvZjjrv+qRCaetIwplYMAiAYcoyueAjismwwpe+mHIP7eCeuh1j52vxL+un0FRmBTgEhAoxq/cPu1Mn6qQUd/ucm23r/pZOZMlDZeWrNbvpkjdyh",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 108,
+          "stackItems": 2,
+          "itemLengths": [
+            72,
+            33
+          ],
+          "p2wpkhSighash": "0x01"
+        },
+        "cliVerify": "valid",
+        "cliVerifySmpPrefixed": "valid",
+        "cliVerifyHexWitness": "valid",
+        "libSelfVerify": "valid",
+        "negative": {
+          "flippedChar": "INVALID(exit=1 INVALID)",
+          "wrongMessage": "INVALID(exit=1 INVALID)",
+          "wrongAddress": "INVALID(exit=1 INVALID)"
+        }
+      },
+      {
+        "lib": "bip322-js@3.0.0",
+        "addressKind": "p2wpkh",
+        "address": "bc1qgpmndme78eezhwatthnsctumg360g3ly6rnzsf",
+        "messageKind": "§5.1 sign-message",
+        "chars": 156,
+        "message": "TapeOut Bitcoin-keyed holder 0x29591285417c94575bbc8c8308be48e8806d0f46 on chain 56 signs 0x0000000000000000000000000000000000000000000000000000000000000000",
+        "signature": "AkgwRQIhAM+T9cZaXpez2CJ43i1MGyjzLvZjjrv+qRCaetIwplYMAiAYcoyueAjismwwpe+mHIP7eCeuh1j52vxL+un0FRmBTgEhAoxq/cPu1Mn6qQUd/ucm23r/pZOZMlDZeWrNbvpkjdyh",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 108,
+          "stackItems": 2,
+          "itemLengths": [
+            72,
+            33
+          ],
+          "p2wpkhSighash": "0x01"
+        },
+        "cliVerify": "valid",
+        "cliVerifySmpPrefixed": "valid",
+        "cliVerifyHexWitness": "valid",
+        "libSelfVerify": "valid",
+        "negative": {
+          "flippedChar": "INVALID(exit=1 INVALID)",
+          "wrongMessage": "INVALID(exit=1 INVALID)",
+          "wrongAddress": "INVALID(exit=1 INVALID)"
+        }
+      },
+      {
+        "lib": "bip322-js@4.0.0",
+        "addressKind": "p2wpkh",
+        "address": "bc1qgpmndme78eezhwatthnsctumg360g3ly6rnzsf",
+        "messageKind": "§5.1 sign-message",
+        "chars": 156,
+        "message": "TapeOut Bitcoin-keyed holder 0x29591285417c94575bbc8c8308be48e8806d0f46 on chain 56 signs 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "signature": "AkcwRAIgGMLCFRmA+H0w0jf4giR25Mu/3tHUWiu567WxJ9AMys0CIEL2UH5kTmxzJmJfG61pI9jQXSroE4VjK0yGoc/YheLwASECjGr9w+7UyfqpBR3+5ybbev+lk5kyUNl5as1u+mSN3KE=",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 107,
+          "stackItems": 2,
+          "itemLengths": [
+            71,
+            33
+          ],
+          "p2wpkhSighash": "0x01"
+        },
+        "cliVerify": "valid",
+        "cliVerifySmpPrefixed": "valid",
+        "cliVerifyHexWitness": "valid",
+        "libSelfVerify": "valid",
+        "negative": {
+          "flippedChar": "INVALID(exit=1 INVALID)",
+          "wrongMessage": "INVALID(exit=1 INVALID)",
+          "wrongAddress": "INVALID(exit=1 INVALID)"
+        }
+      },
+      {
+        "lib": "bip322-js@3.0.0",
+        "addressKind": "p2wpkh",
+        "address": "bc1qgpmndme78eezhwatthnsctumg360g3ly6rnzsf",
+        "messageKind": "§5.1 sign-message",
+        "chars": 156,
+        "message": "TapeOut Bitcoin-keyed holder 0x29591285417c94575bbc8c8308be48e8806d0f46 on chain 56 signs 0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+        "signature": "AkcwRAIgGMLCFRmA+H0w0jf4giR25Mu/3tHUWiu567WxJ9AMys0CIEL2UH5kTmxzJmJfG61pI9jQXSroE4VjK0yGoc/YheLwASECjGr9w+7UyfqpBR3+5ybbev+lk5kyUNl5as1u+mSN3KE=",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 107,
+          "stackItems": 2,
+          "itemLengths": [
+            71,
+            33
+          ],
+          "p2wpkhSighash": "0x01"
+        },
+        "cliVerify": "valid",
+        "cliVerifySmpPrefixed": "valid",
+        "cliVerifyHexWitness": "valid",
+        "libSelfVerify": "valid",
+        "negative": {
+          "flippedChar": "INVALID(exit=1 INVALID)",
+          "wrongMessage": "INVALID(exit=1 INVALID)",
+          "wrongAddress": "INVALID(exit=1 INVALID)"
+        }
+      },
+      {
+        "lib": "bip322-js@4.0.0",
+        "addressKind": "p2wpkh",
+        "address": "bc1qgpmndme78eezhwatthnsctumg360g3ly6rnzsf",
+        "messageKind": "§5.1 sign-message",
+        "chars": 156,
+        "message": "TapeOut Bitcoin-keyed holder 0x29591285417c94575bbc8c8308be48e8806d0f46 on chain 56 signs 0x4e5cd7e31fb6883bf3e32371ed3d9d6fd3c54c4573e9edd0c93745f33a5e0a40",
+        "signature": "AkgwRQIhAMQ8wwZ1X5Ae+kEpXVPQD6qmXXMWTk9RVkjpJ/dkTv33AiA8kCtkMfWQ+OOj/2DsmDBkMRGj7DMTbXFcYHZBWcjqWAEhAoxq/cPu1Mn6qQUd/ucm23r/pZOZMlDZeWrNbvpkjdyh",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 108,
+          "stackItems": 2,
+          "itemLengths": [
+            72,
+            33
+          ],
+          "p2wpkhSighash": "0x01"
+        },
+        "cliVerify": "valid",
+        "cliVerifySmpPrefixed": "valid",
+        "cliVerifyHexWitness": "valid",
+        "libSelfVerify": "valid",
+        "negative": {
+          "flippedChar": "INVALID(exit=1 INVALID)",
+          "wrongMessage": "INVALID(exit=1 INVALID)",
+          "wrongAddress": "INVALID(exit=1 INVALID)"
+        }
+      },
+      {
+        "lib": "bip322-js@3.0.0",
+        "addressKind": "p2wpkh",
+        "address": "bc1qgpmndme78eezhwatthnsctumg360g3ly6rnzsf",
+        "messageKind": "§5.1 sign-message",
+        "chars": 156,
+        "message": "TapeOut Bitcoin-keyed holder 0x29591285417c94575bbc8c8308be48e8806d0f46 on chain 56 signs 0x4e5cd7e31fb6883bf3e32371ed3d9d6fd3c54c4573e9edd0c93745f33a5e0a40",
+        "signature": "AkgwRQIhAMQ8wwZ1X5Ae+kEpXVPQD6qmXXMWTk9RVkjpJ/dkTv33AiA8kCtkMfWQ+OOj/2DsmDBkMRGj7DMTbXFcYHZBWcjqWAEhAoxq/cPu1Mn6qQUd/ucm23r/pZOZMlDZeWrNbvpkjdyh",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 108,
+          "stackItems": 2,
+          "itemLengths": [
+            72,
+            33
+          ],
+          "p2wpkhSighash": "0x01"
+        },
+        "cliVerify": "valid",
+        "cliVerifySmpPrefixed": "valid",
+        "cliVerifyHexWitness": "valid",
+        "libSelfVerify": "valid",
+        "negative": {
+          "flippedChar": "INVALID(exit=1 INVALID)",
+          "wrongMessage": "INVALID(exit=1 INVALID)",
+          "wrongAddress": "INVALID(exit=1 INVALID)"
+        }
+      },
+      {
+        "lib": "bip322-js@4.0.0",
+        "addressKind": "p2wpkh",
+        "address": "bc1qgpmndme78eezhwatthnsctumg360g3ly6rnzsf",
+        "messageKind": "§5.1 sign-message (TAP-11 delegation digest)",
+        "chars": 156,
+        "message": "TapeOut Bitcoin-keyed holder 0x29591285417c94575bbc8c8308be48e8806d0f46 on chain 56 signs 0x893e371c5cf8510cc3386077d19b810ac525b5b864f39f2f8a8dc66df272fdb8",
+        "signature": "AkgwRQIhAJl14S+G4dcb5DaQHRGEWb3PSKyN/qpsYS+xOW+LgjpsAiAN8ZBQQeOXrzRVAQS37/+ndSb/wkJbrD20pqDfkwzykgEhAoxq/cPu1Mn6qQUd/ucm23r/pZOZMlDZeWrNbvpkjdyh",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 108,
+          "stackItems": 2,
+          "itemLengths": [
+            72,
+            33
+          ],
+          "p2wpkhSighash": "0x01"
+        },
+        "cliVerify": "valid",
+        "cliVerifySmpPrefixed": "valid",
+        "cliVerifyHexWitness": "valid",
+        "libSelfVerify": "valid",
+        "negative": {
+          "flippedChar": "INVALID(exit=1 INVALID)",
+          "wrongMessage": "INVALID(exit=1 INVALID)",
+          "wrongAddress": "INVALID(exit=1 INVALID)"
+        }
+      },
+      {
+        "lib": "bip322-js@3.0.0",
+        "addressKind": "p2wpkh",
+        "address": "bc1qgpmndme78eezhwatthnsctumg360g3ly6rnzsf",
+        "messageKind": "§5.1 sign-message (TAP-11 delegation digest)",
+        "chars": 156,
+        "message": "TapeOut Bitcoin-keyed holder 0x29591285417c94575bbc8c8308be48e8806d0f46 on chain 56 signs 0x893e371c5cf8510cc3386077d19b810ac525b5b864f39f2f8a8dc66df272fdb8",
+        "signature": "AkgwRQIhAJl14S+G4dcb5DaQHRGEWb3PSKyN/qpsYS+xOW+LgjpsAiAN8ZBQQeOXrzRVAQS37/+ndSb/wkJbrD20pqDfkwzykgEhAoxq/cPu1Mn6qQUd/ucm23r/pZOZMlDZeWrNbvpkjdyh",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 108,
+          "stackItems": 2,
+          "itemLengths": [
+            72,
+            33
+          ],
+          "p2wpkhSighash": "0x01"
+        },
+        "cliVerify": "valid",
+        "cliVerifySmpPrefixed": "valid",
+        "cliVerifyHexWitness": "valid",
+        "libSelfVerify": "valid",
+        "negative": {
+          "flippedChar": "INVALID(exit=1 INVALID)",
+          "wrongMessage": "INVALID(exit=1 INVALID)",
+          "wrongAddress": "INVALID(exit=1 INVALID)"
+        }
+      },
+      {
+        "lib": "bip322-js@4.0.0",
+        "addressKind": "p2wpkh",
+        "address": "bc1qgpmndme78eezhwatthnsctumg360g3ly6rnzsf",
+        "messageKind": "§5.2 call-message (realistic long)",
+        "chars": 317,
+        "message": "TapeOut Bitcoin-keyed holder 0x29591285417c94575bbc8c8308be48e8806d0f46 on chain 56 calls 0x55d398326f99059ff775485246999027b3197955 with value 1500000000000000000 and data 0x3a83bdd8e25941828afbf6bf645c1af916c92d71e2a60f68b8d2efbffcf0de7f, gas 30000000, tip 2500000000000000, nonce 4294967295, valid until 4102444800",
+        "signature": "AkcwRAIgLf37swn7LILV+bD2Mw5kaRpjmnFvZQ8T8RPuKRw9LesCIBA8K/6uWBSUuYZRbPPCXpFMpcIY93wA6EWZvATSs4P5ASECjGr9w+7UyfqpBR3+5ybbev+lk5kyUNl5as1u+mSN3KE=",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 107,
+          "stackItems": 2,
+          "itemLengths": [
+            71,
+            33
+          ],
+          "p2wpkhSighash": "0x01"
+        },
+        "cliVerify": "valid",
+        "cliVerifySmpPrefixed": "valid",
+        "cliVerifyHexWitness": "valid",
+        "libSelfVerify": "valid",
+        "negative": {
+          "flippedChar": "INVALID(exit=1 INVALID)",
+          "wrongMessage": "INVALID(exit=1 INVALID)",
+          "wrongAddress": "INVALID(exit=1 INVALID)"
+        }
+      },
+      {
+        "lib": "bip322-js@3.0.0",
+        "addressKind": "p2wpkh",
+        "address": "bc1qgpmndme78eezhwatthnsctumg360g3ly6rnzsf",
+        "messageKind": "§5.2 call-message (realistic long)",
+        "chars": 317,
+        "message": "TapeOut Bitcoin-keyed holder 0x29591285417c94575bbc8c8308be48e8806d0f46 on chain 56 calls 0x55d398326f99059ff775485246999027b3197955 with value 1500000000000000000 and data 0x3a83bdd8e25941828afbf6bf645c1af916c92d71e2a60f68b8d2efbffcf0de7f, gas 30000000, tip 2500000000000000, nonce 4294967295, valid until 4102444800",
+        "signature": "AkcwRAIgLf37swn7LILV+bD2Mw5kaRpjmnFvZQ8T8RPuKRw9LesCIBA8K/6uWBSUuYZRbPPCXpFMpcIY93wA6EWZvATSs4P5ASECjGr9w+7UyfqpBR3+5ybbev+lk5kyUNl5as1u+mSN3KE=",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 107,
+          "stackItems": 2,
+          "itemLengths": [
+            71,
+            33
+          ],
+          "p2wpkhSighash": "0x01"
+        },
+        "cliVerify": "valid",
+        "cliVerifySmpPrefixed": "valid",
+        "cliVerifyHexWitness": "valid",
+        "libSelfVerify": "valid",
+        "negative": {
+          "flippedChar": "INVALID(exit=1 INVALID)",
+          "wrongMessage": "INVALID(exit=1 INVALID)",
+          "wrongAddress": "INVALID(exit=1 INVALID)"
+        }
+      },
+      {
+        "lib": "bip322-js@4.0.0",
+        "addressKind": "p2wpkh",
+        "address": "bc1qgpmndme78eezhwatthnsctumg360g3ly6rnzsf",
+        "messageKind": "§5.2 call-message (every number at its maximum)",
+        "chars": 586,
+        "message": "TapeOut Bitcoin-keyed holder 0x29591285417c94575bbc8c8308be48e8806d0f46 on chain 56 calls 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3a83bdd8e25941828afbf6bf645c1af916c92d71e2a60f68b8d2efbffcf0de7f, gas 115792089237316195423570985008687907853269984665640564039457584007913129639935, tip 115792089237316195423570985008687907853269984665640564039457584007913129639935, nonce 115792089237316195423570985008687907853269984665640564039457584007913129639935, valid until 18446744073709551615",
+        "signature": "AkgwRQIhAJ/cQLI0PSVtluNXqmrXxbIBEEb+BF2voTnH1FaBsB5EAiBrcQa9IH32xn9uPKjxePvc1bH3B3kV4wslp+3rjfgQ5AEhAoxq/cPu1Mn6qQUd/ucm23r/pZOZMlDZeWrNbvpkjdyh",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 108,
+          "stackItems": 2,
+          "itemLengths": [
+            72,
+            33
+          ],
+          "p2wpkhSighash": "0x01"
+        },
+        "cliVerify": "valid",
+        "cliVerifySmpPrefixed": "valid",
+        "cliVerifyHexWitness": "valid",
+        "libSelfVerify": "valid",
+        "negative": {
+          "flippedChar": "INVALID(exit=1 INVALID)",
+          "wrongMessage": "INVALID(exit=1 INVALID)",
+          "wrongAddress": "INVALID(exit=1 INVALID)"
+        }
+      },
+      {
+        "lib": "bip322-js@3.0.0",
+        "addressKind": "p2wpkh",
+        "address": "bc1qgpmndme78eezhwatthnsctumg360g3ly6rnzsf",
+        "messageKind": "§5.2 call-message (every number at its maximum)",
+        "chars": 586,
+        "message": "TapeOut Bitcoin-keyed holder 0x29591285417c94575bbc8c8308be48e8806d0f46 on chain 56 calls 0xffffffffffffffffffffffffffffffffffffffff with value 115792089237316195423570985008687907853269984665640564039457584007913129639935 and data 0x3a83bdd8e25941828afbf6bf645c1af916c92d71e2a60f68b8d2efbffcf0de7f, gas 115792089237316195423570985008687907853269984665640564039457584007913129639935, tip 115792089237316195423570985008687907853269984665640564039457584007913129639935, nonce 115792089237316195423570985008687907853269984665640564039457584007913129639935, valid until 18446744073709551615",
+        "signature": "AkgwRQIhAJ/cQLI0PSVtluNXqmrXxbIBEEb+BF2voTnH1FaBsB5EAiBrcQa9IH32xn9uPKjxePvc1bH3B3kV4wslp+3rjfgQ5AEhAoxq/cPu1Mn6qQUd/ucm23r/pZOZMlDZeWrNbvpkjdyh",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 108,
+          "stackItems": 2,
+          "itemLengths": [
+            72,
+            33
+          ],
+          "p2wpkhSighash": "0x01"
+        },
+        "cliVerify": "valid",
+        "cliVerifySmpPrefixed": "valid",
+        "cliVerifyHexWitness": "valid",
+        "libSelfVerify": "valid",
+        "negative": {
+          "flippedChar": "INVALID(exit=1 INVALID)",
+          "wrongMessage": "INVALID(exit=1 INVALID)",
+          "wrongAddress": "INVALID(exit=1 INVALID)"
+        }
+      }
+    ],
+    "p2sh": {
+      "bip322-js@4.0.0": {
+        "address": "3FwprYiE41X1b1Ct9pSeMpEWSz84npzu2M",
+        "signature": "AkgwRQIhAOViREWFl64NZlih26G2Y9Tvf7euYh2FPf2j5qhd8iXxAiAptjDswZru6ErlRrLXId8eF1ypdUk+BRMsWbB9nYjTLQEhAoxq/cPu1Mn6qQUd/ucm23r/pZOZMlDZeWrNbvpkjdyh",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 108,
+          "stackItems": 2,
+          "itemLengths": [
+            72,
+            33
+          ],
+          "p2wpkhSighash": "0x01"
+        },
+        "libSelfVerify": "valid",
+        "cliVerifyAgainstP2SH": "INVALID(exit=1 error: unsupported address type: only native SegWit bc1q... (P2WPKH) and Taproot bc1p... (P2TR) addresses work; P2PKH and P2SH-wrapped addresses cannot sign BIP-322 'simple' messages)",
+        "cliAddress": {
+          "exit": 1,
+          "out": "",
+          "err": "error: unsupported address type: only native SegWit bc1q... (P2WPKH) and Taproot bc1p... (P2TR) addresses work; P2PKH and P2SH-wrapped addresses cannot sign BIP-322 'simple' messages"
+        },
+        "note": "witness-only output; BIP-322 simple requires an empty scriptSig so P2SH-P2WPKH needs the full format"
+      },
+      "bip322-js@3.0.0": {
+        "address": "3FwprYiE41X1b1Ct9pSeMpEWSz84npzu2M",
+        "signature": "AkgwRQIhAOViREWFl64NZlih26G2Y9Tvf7euYh2FPf2j5qhd8iXxAiAptjDswZru6ErlRrLXId8eF1ypdUk+BRMsWbB9nYjTLQEhAoxq/cPu1Mn6qQUd/ucm23r/pZOZMlDZeWrNbvpkjdyh",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 108,
+          "stackItems": 2,
+          "itemLengths": [
+            72,
+            33
+          ],
+          "p2wpkhSighash": "0x01"
+        },
+        "libSelfVerify": "valid",
+        "cliVerifyAgainstP2SH": "INVALID(exit=1 error: unsupported address type: only native SegWit bc1q... (P2WPKH) and Taproot bc1p... (P2TR) addresses work; P2PKH and P2SH-wrapped addresses cannot sign BIP-322 'simple' messages)",
+        "cliAddress": {
+          "exit": 1,
+          "out": "",
+          "err": "error: unsupported address type: only native SegWit bc1q... (P2WPKH) and Taproot bc1p... (P2TR) addresses work; P2PKH and P2SH-wrapped addresses cannot sign BIP-322 'simple' messages"
+        },
+        "note": "witness-only output; BIP-322 simple requires an empty scriptSig so P2SH-P2WPKH needs the full format"
+      }
+    },
+    "xversePort": [
+      {
+        "lib": "xverse-core signMessageBip322 port (@scure/btc-signer 2.4.1)",
+        "addressKind": "p2tr",
+        "messageKind": "§5.1 sign-message",
+        "chars": 156,
+        "signature": "AUBzvpcXlTNjYSsvHnXgAP4LVPS+gKup1pGSocQuhlP65fp0yOj02m6riINfiDTLOuiyLzN5U5uPfWzrkyB5iplh",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 66,
+          "stackItems": 1,
+          "itemLengths": [
+            64
+          ],
+          "p2trSighash": "SIGHASH_DEFAULT (64-byte sig)"
+        },
+        "cliVerify": "valid",
+        "bip322jsVerify": "valid",
+        "negativeWrongMessage": "INVALID(exit=1 INVALID)"
+      },
+      {
+        "lib": "xverse-core signMessageBip322 port (@scure/btc-signer 2.4.1)",
+        "addressKind": "p2tr",
+        "messageKind": "§5.1 sign-message",
+        "chars": 156,
+        "signature": "AUDYbiSOp+VyOrTVO67b25q3jnDnOoVLsxmL+W0S83gemW/4rK775Lq0+E8ER5mfZPLRz0PLfFh/SEGMmaGb1gxn",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 66,
+          "stackItems": 1,
+          "itemLengths": [
+            64
+          ],
+          "p2trSighash": "SIGHASH_DEFAULT (64-byte sig)"
+        },
+        "cliVerify": "valid",
+        "bip322jsVerify": "valid",
+        "negativeWrongMessage": "INVALID(exit=1 INVALID)"
+      },
+      {
+        "lib": "xverse-core signMessageBip322 port (@scure/btc-signer 2.4.1)",
+        "addressKind": "p2tr",
+        "messageKind": "§5.1 sign-message",
+        "chars": 156,
+        "signature": "AUBhZunccUS2Nnx7WRLVe7J3zGV4M5TJsWzKFFw8qHhwJHNx27liOwSs/tZ3R/Fi6KkzDFEdfZIADBSYuzcpWPqZ",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 66,
+          "stackItems": 1,
+          "itemLengths": [
+            64
+          ],
+          "p2trSighash": "SIGHASH_DEFAULT (64-byte sig)"
+        },
+        "cliVerify": "valid",
+        "bip322jsVerify": "valid",
+        "negativeWrongMessage": "INVALID(exit=1 INVALID)"
+      },
+      {
+        "lib": "xverse-core signMessageBip322 port (@scure/btc-signer 2.4.1)",
+        "addressKind": "p2tr",
+        "messageKind": "§5.1 sign-message (TAP-11 delegation digest)",
+        "chars": 156,
+        "signature": "AUBNXZah9xWfwr9n7w9xyRwVDc1VFIrfCXy2Qr2jymzsM3ArxFtNhMvY16LthGobWNUgfmraEyBnFIfz+gT5InYc",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 66,
+          "stackItems": 1,
+          "itemLengths": [
+            64
+          ],
+          "p2trSighash": "SIGHASH_DEFAULT (64-byte sig)"
+        },
+        "cliVerify": "valid",
+        "bip322jsVerify": "valid",
+        "negativeWrongMessage": "INVALID(exit=1 INVALID)"
+      },
+      {
+        "lib": "xverse-core signMessageBip322 port (@scure/btc-signer 2.4.1)",
+        "addressKind": "p2tr",
+        "messageKind": "§5.2 call-message (realistic long)",
+        "chars": 317,
+        "signature": "AUBogEKFQgK477p8ksSqHlr4715Jx+3gtLTjxPuX+Do0ohmi2ojrhcINZZYk6Tou07GesxXIxuXPbO8sA1liw3sz",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 66,
+          "stackItems": 1,
+          "itemLengths": [
+            64
+          ],
+          "p2trSighash": "SIGHASH_DEFAULT (64-byte sig)"
+        },
+        "cliVerify": "valid",
+        "bip322jsVerify": "valid",
+        "negativeWrongMessage": "INVALID(exit=1 INVALID)"
+      },
+      {
+        "lib": "xverse-core signMessageBip322 port (@scure/btc-signer 2.4.1)",
+        "addressKind": "p2tr",
+        "messageKind": "§5.2 call-message (every number at its maximum)",
+        "chars": 586,
+        "signature": "AUDBG4otwZaaBmiguWxdF1SWb38+1+e0BhMY/wtKwvd4HTdU94pWzkmgTZHDR9hAUHyonjFUk3G1FLUWZ4V5EKv9",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 66,
+          "stackItems": 1,
+          "itemLengths": [
+            64
+          ],
+          "p2trSighash": "SIGHASH_DEFAULT (64-byte sig)"
+        },
+        "cliVerify": "valid",
+        "bip322jsVerify": "valid",
+        "negativeWrongMessage": "INVALID(exit=1 INVALID)"
+      },
+      {
+        "lib": "xverse-core signMessageBip322 port (@scure/btc-signer 2.4.1)",
+        "addressKind": "p2wpkh",
+        "messageKind": "§5.1 sign-message",
+        "chars": 156,
+        "signature": "AkgwRQIhAM+T9cZaXpez2CJ43i1MGyjzLvZjjrv+qRCaetIwplYMAiAYcoyueAjismwwpe+mHIP7eCeuh1j52vxL+un0FRmBTgEhAoxq/cPu1Mn6qQUd/ucm23r/pZOZMlDZeWrNbvpkjdyh",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 108,
+          "stackItems": 2,
+          "itemLengths": [
+            72,
+            33
+          ],
+          "p2wpkhSighash": "0x01"
+        },
+        "cliVerify": "valid",
+        "bip322jsVerify": "valid",
+        "negativeWrongMessage": "INVALID(exit=1 INVALID)"
+      },
+      {
+        "lib": "xverse-core signMessageBip322 port (@scure/btc-signer 2.4.1)",
+        "addressKind": "p2wpkh",
+        "messageKind": "§5.1 sign-message",
+        "chars": 156,
+        "signature": "AkcwRAIgGMLCFRmA+H0w0jf4giR25Mu/3tHUWiu567WxJ9AMys0CIEL2UH5kTmxzJmJfG61pI9jQXSroE4VjK0yGoc/YheLwASECjGr9w+7UyfqpBR3+5ybbev+lk5kyUNl5as1u+mSN3KE=",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 107,
+          "stackItems": 2,
+          "itemLengths": [
+            71,
+            33
+          ],
+          "p2wpkhSighash": "0x01"
+        },
+        "cliVerify": "valid",
+        "bip322jsVerify": "valid",
+        "negativeWrongMessage": "INVALID(exit=1 INVALID)"
+      },
+      {
+        "lib": "xverse-core signMessageBip322 port (@scure/btc-signer 2.4.1)",
+        "addressKind": "p2wpkh",
+        "messageKind": "§5.1 sign-message",
+        "chars": 156,
+        "signature": "AkgwRQIhAMQ8wwZ1X5Ae+kEpXVPQD6qmXXMWTk9RVkjpJ/dkTv33AiA8kCtkMfWQ+OOj/2DsmDBkMRGj7DMTbXFcYHZBWcjqWAEhAoxq/cPu1Mn6qQUd/ucm23r/pZOZMlDZeWrNbvpkjdyh",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 108,
+          "stackItems": 2,
+          "itemLengths": [
+            72,
+            33
+          ],
+          "p2wpkhSighash": "0x01"
+        },
+        "cliVerify": "valid",
+        "bip322jsVerify": "valid",
+        "negativeWrongMessage": "INVALID(exit=1 INVALID)"
+      },
+      {
+        "lib": "xverse-core signMessageBip322 port (@scure/btc-signer 2.4.1)",
+        "addressKind": "p2wpkh",
+        "messageKind": "§5.1 sign-message (TAP-11 delegation digest)",
+        "chars": 156,
+        "signature": "AkgwRQIhAJl14S+G4dcb5DaQHRGEWb3PSKyN/qpsYS+xOW+LgjpsAiAN8ZBQQeOXrzRVAQS37/+ndSb/wkJbrD20pqDfkwzykgEhAoxq/cPu1Mn6qQUd/ucm23r/pZOZMlDZeWrNbvpkjdyh",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 108,
+          "stackItems": 2,
+          "itemLengths": [
+            72,
+            33
+          ],
+          "p2wpkhSighash": "0x01"
+        },
+        "cliVerify": "valid",
+        "bip322jsVerify": "valid",
+        "negativeWrongMessage": "INVALID(exit=1 INVALID)"
+      },
+      {
+        "lib": "xverse-core signMessageBip322 port (@scure/btc-signer 2.4.1)",
+        "addressKind": "p2wpkh",
+        "messageKind": "§5.2 call-message (realistic long)",
+        "chars": 317,
+        "signature": "AkcwRAIgLf37swn7LILV+bD2Mw5kaRpjmnFvZQ8T8RPuKRw9LesCIBA8K/6uWBSUuYZRbPPCXpFMpcIY93wA6EWZvATSs4P5ASECjGr9w+7UyfqpBR3+5ybbev+lk5kyUNl5as1u+mSN3KE=",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 107,
+          "stackItems": 2,
+          "itemLengths": [
+            71,
+            33
+          ],
+          "p2wpkhSighash": "0x01"
+        },
+        "cliVerify": "valid",
+        "bip322jsVerify": "valid",
+        "negativeWrongMessage": "INVALID(exit=1 INVALID)"
+      },
+      {
+        "lib": "xverse-core signMessageBip322 port (@scure/btc-signer 2.4.1)",
+        "addressKind": "p2wpkh",
+        "messageKind": "§5.2 call-message (every number at its maximum)",
+        "chars": 586,
+        "signature": "AkgwRQIhAJ/cQLI0PSVtluNXqmrXxbIBEEb+BF2voTnH1FaBsB5EAiBrcQa9IH32xn9uPKjxePvc1bH3B3kV4wslp+3rjfgQ5AEhAoxq/cPu1Mn6qQUd/ucm23r/pZOZMlDZeWrNbvpkjdyh",
+        "format": {
+          "smpPrefix": false,
+          "witnessBytes": 108,
+          "stackItems": 2,
+          "itemLengths": [
+            72,
+            33
+          ],
+          "p2wpkhSighash": "0x01"
+        },
+        "cliVerify": "valid",
+        "bip322jsVerify": "valid",
+        "negativeWrongMessage": "INVALID(exit=1 INVALID)"
+      }
+    ],
+    "xversePortP2sh": {
+      "address": "3FwprYiE41X1b1Ct9pSeMpEWSz84npzu2M",
+      "signature": "AkgwRQIhAOViREWFl64NZlih26G2Y9Tvf7euYh2FPf2j5qhd8iXxAiAptjDswZru6ErlRrLXId8eF1ypdUk+BRMsWbB9nYjTLQEhAoxq/cPu1Mn6qQUd/ucm23r/pZOZMlDZeWrNbvpkjdyh",
+      "format": {
+        "smpPrefix": false,
+        "witnessBytes": 108,
+        "stackItems": 2,
+        "itemLengths": [
+          72,
+          33
+        ],
+        "p2wpkhSighash": "0x01"
+      },
+      "sameAsBip322js": true,
+      "bip322jsVerify": "valid"
+    }
+  },
+  "published": [
+    {
+      "source": "unisat-wallet/wallet-sdk test/message/message.test.ts (LocalWallet P2TR bip322-simple, \"signature_old\")",
+      "address": "bc1ppv609nr0vr25u07u95waq5lucwfm6tde4nydujnu8npg4q75mr5sxq8lt3",
+      "message": "hello",
+      "signature": "AUCNuph9ZfpmxxVZozX4jVUYDXU3rR481/id9sQRUYTwdYWiLUE1cftTK2chYJENB0eYCLPykIC4Zi+U4DQ9zqew",
+      "format": {
+        "smpPrefix": false,
+        "witnessBytes": 66,
+        "stackItems": 1,
+        "itemLengths": [
+          64
+        ],
+        "p2trSighash": "SIGHASH_DEFAULT (64-byte sig)"
+      },
+      "cliVerify": "valid",
+      "bip322jsVerify": "valid"
+    },
+    {
+      "source": "leather-io/mono packages/bitcoin/src/bip322/sign-message-bip322.spec.ts (taproot, empty message)",
+      "address": "bc1ppv609nr0vr25u07u95waq5lucwfm6tde4nydujnu8npg4q75mr5sxq8lt3",
+      "message": "",
+      "signature": "AUD4DxC7li8RxVkoC/H27LIZnaBD/ZCyZOjjVTzyQf7wa1kYMuyv1uX7XshysTXVR05HbexLSChXuGSoZcqJl6zF",
+      "format": {
+        "smpPrefix": false,
+        "witnessBytes": 66,
+        "stackItems": 1,
+        "itemLengths": [
+          64
+        ],
+        "p2trSighash": "SIGHASH_DEFAULT (64-byte sig)"
+      },
+      "cliVerify": "valid",
+      "bip322jsVerify": "valid"
+    },
+    {
+      "source": "leather-io/mono sign-message-bip322.spec.ts (taproot, \"WearLeather\")",
+      "address": "bc1ppv609nr0vr25u07u95waq5lucwfm6tde4nydujnu8npg4q75mr5sxq8lt3",
+      "message": "WearLeather",
+      "signature": "AUDjK8SJX34boek3m3EKXI94AMBZynJUmdqgO7i4z6JKG6gkUgp+brkWl0ylzWb+8enM4s4B4TWel0iCmcQrKNWS",
+      "format": {
+        "smpPrefix": false,
+        "witnessBytes": 66,
+        "stackItems": 1,
+        "itemLengths": [
+          64
+        ],
+        "p2trSighash": "SIGHASH_DEFAULT (64-byte sig)"
+      },
+      "cliVerify": "valid",
+      "bip322jsVerify": "valid"
+    },
+    {
+      "source": "sparrowwallet/drongo@3779317 Bip322Test.java signMessageBip322Taproot (smp + SIGHASH_ALL)",
+      "address": "bc1ppv609nr0vr25u07u95waq5lucwfm6tde4nydujnu8npg4q75mr5sxq8lt3",
+      "message": "Hello World",
+      "signature": "smpAUHd69PrJQEv+oKTfZ8l+WROBHuy9HKrbFCJu7U1iK2iiEy1vMU5EfMtjc+VSHM7aU0SDbak5IUZRVno2P5mjSafAQ==",
+      "format": {
+        "smpPrefix": true,
+        "witnessBytes": 67,
+        "stackItems": 1,
+        "itemLengths": [
+          65
+        ],
+        "p2trSighash": "0x01 (65-byte sig)"
+      },
+      "cliVerify": "valid",
+      "bip322jsVerify": "throws: buffer too small"
+    },
+    {
+      "source": "leather-io/mono sign-message-bip322.spec.ts (native segwit, empty message)",
+      "address": "bc1q9vza2e8x573nczrlzms0wvx3gsqjx7vavgkx0l",
+      "message": "",
+      "signature": "AkgwRQIhAPkJ1Q4oYS0htvyuSFHLxRQpFAY56b70UvE7Dxazen0ZAiAtZfFz1S6T6I23MWI2lK/pcNTWncuyL8UL+oMdydVgzAEhAsfxIAMZZEKUPYWI4BruhAQjzFT8FSFSajuFwrDL1Yhy",
+      "format": {
+        "smpPrefix": false,
+        "witnessBytes": 108,
+        "stackItems": 2,
+        "itemLengths": [
+          72,
+          33
+        ],
+        "p2wpkhSighash": "0x01"
+      },
+      "cliVerify": "valid",
+      "bip322jsVerify": "valid"
+    },
+    {
+      "source": "unisat-wallet/wallet-sdk message.test.ts (P2WPKH, \"Hello World\")",
+      "address": "bc1q9vza2e8x573nczrlzms0wvx3gsqjx7vavgkx0l",
+      "message": "Hello World",
+      "signature": "AkcwRAIgZRfIY3p7/DoVTty6YZbWS71bc5Vct9p9Fia83eRmw2QCICK/ENGfwLtptFluMGs2KsqoNSk89pO7F29zJLUx9a/sASECx/EgAxlkQpQ9hYjgGu6EBCPMVPwVIVJqO4XCsMvViHI=",
+      "format": {
+        "smpPrefix": false,
+        "witnessBytes": 107,
+        "stackItems": 2,
+        "itemLengths": [
+          71,
+          33
+        ],
+        "p2wpkhSighash": "0x01"
+      },
+      "cliVerify": "valid",
+      "bip322jsVerify": "valid"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+# forge test --match-contract 'DifferentialTest|BatchInvariantsTest|BatchVsExecuteTest|BatchLabDiffTest' --fuzz-runs 200000 (commit 187749d, after the audit fixes)
+Sat 10 Oct 2026 14:47:20 CST
+Ran 1 test for test/batch/BatchInvariants.t.sol:BatchInvariantsTest
+[PASS] testFuzz_batch_invariants(uint256,bytes) (runs: 200000, μ: 708462, ~: 697766)
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 491.03s (491.03s CPU time)
+Ran 1 test for test/batch/BatchVsExecute.t.sol:BatchVsExecuteTest
+[PASS] testFuzz_batch_of_one_vs_execute(uint256,bytes) (runs: 200000, μ: 802011, ~: 732211)
+Suite result: ok. 1 passed; 0 failed; 0 skipped; finished in 491.03s (491.03s CPU time)
+Ran 16 tests for test/diff/Differential.t.sol:DifferentialTest
+[PASS] testFuzz_diff_constructor(uint8,bytes32,bytes,uint8) (runs: 200000, μ: 238922, ~: 150212)
+[PASS] testFuzz_diff_execute(uint256,uint256,uint256,uint256,bytes) (runs: 200000, μ: 845364, ~: 818614)
+[PASS] testFuzz_diff_isValid_p2tr_signed(uint256,bytes32,uint64,bool,uint256,uint256,uint256) (runs: 200000, μ: 554793, ~: 558029)
+[PASS] testFuzz_diff_isValid_p2wpkh_encodings(uint256,bytes32,uint8,uint8,bool) (runs: 200000, μ: 473327, ~: 464528)
+[PASS] testFuzz_diff_isValid_p2wpkh_signed(uint256,bytes32,uint64,uint256,uint256,uint256) (runs: 200000, μ: 501960, ~: 502546)
+[PASS] testFuzz_diff_isValid_structured(uint8,bytes32,bytes32,uint8,bytes,bool,uint256) (runs: 200000, μ: 308512, ~: 313926)
+[PASS] testFuzz_diff_isValid_vector_mutated(uint256,uint256,uint256,uint256,bytes32) (runs: 200000, μ: 348146, ~: 348701)
+[PASS] testFuzz_diff_library_random_messages(uint256,bytes,bool,bool,uint256,uint256,uint256) (runs: 200000, μ: 74709, ~: 68504)
+[PASS] testFuzz_diff_messages(address,uint64,bytes32,address,uint256,bytes,uint256,uint256,uint256,uint64,bool) (runs: 200000, μ: 432746, ~: 433197)
+[PASS] testFuzz_diff_raw_calldata(uint8,bytes,bool,bool,bytes4) (runs: 200000, μ: 303135, ~: 316519)
+[PASS] test_diff_execute_callGas_near_outer_gas() (gas: 885867)
+[PASS] test_diff_vector_bip322_upstream() (gas: 733236)
+[PASS] test_diff_vector_call_cases() (gas: 3512828)
+[PASS] test_diff_vector_ctor_cases() (gas: 3016118)
+[PASS] test_diff_vector_lib_cases() (gas: 4118927)
+[PASS] test_diff_vector_sign_cases() (gas: 13428025)
+Suite result: ok. 16 passed; 0 failed; 0 skipped; finished in 491.04s (2381.92s CPU time)
+Ran 2 tests for test/batchlab/BatchLabDiff.t.sol:BatchLabDiffTest
+[PASS] testFuzz_lab_batchMessage(uint256,uint64,uint256,uint256,uint64) (runs: 200000, μ: 723727, ~: 689844)
+[PASS] testFuzz_lab_executeBatch(uint256,bytes) (runs: 200000, μ: 1387175, ~: 1279637)
+Suite result: ok. 2 passed; 0 failed; 0 skipped; finished in 491.05s (982.09s CPU time)
+Ran 4 test suites in 491.05s (1964.15s CPU time): 20 tests passed, 0 failed, 0 skipped (20 total tests)
+Sat 10 Oct 2026 14:55:31 CST

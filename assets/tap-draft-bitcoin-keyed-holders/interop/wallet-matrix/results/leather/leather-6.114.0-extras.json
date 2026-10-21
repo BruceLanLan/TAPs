@@ -1,0 +1,149 @@
+{
+ "no-paymentType": {
+  "paymentType": "(none)",
+  "message": "TapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+  "popupText": "1\nAccount 1\nWallet 1\n0.00 BTC\nSIGN MESSAGE\nRequested by http://127.0.0.1:18791 (127.0.0.1). This message is signed by bc1qc…06fyu\nTapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab\nNo fees are incurred\nMainnet\nCancel\nSign\nBy signing this message, you prove that you own this address",
+  "popupContainsFullText": true,
+  "popupLayout": [
+   {
+    "tag": "SPAN",
+    "visible": true,
+    "textLen": 156,
+    "equalsMessage": true,
+    "containsTail": true,
+    "clientHeight": 96,
+    "scrollHeight": 96,
+    "overflowY": "visible",
+    "textOverflow": "clip",
+    "lineClamp": "none",
+    "whiteSpace": "normal",
+    "wordBreak": "normal",
+    "rect": [
+     50,
+     249,
+     290,
+     96
+    ],
+    "clippingAncestors": [
+     {
+      "tag": "DIV",
+      "overflowY": "auto",
+      "maxHeight": "none",
+      "clientHeight": 144,
+      "scrollHeight": 144
+     }
+    ]
+   }
+  ],
+  "popupViewport": {
+   "width": 390,
+   "height": 756
+  },
+  "raw": {
+   "jsonrpc": "2.0",
+   "id": "55680120-30ba-4827-9446-43bcd010ac52",
+   "result": {
+    "signature": "AkcwRAIgL1lIs7xEnn5R5foR82pAj7gvzwssxmnmRm2fY7fZ0MsCIBlLGVPF06DewZgJl6FQqGeTiPpZ8Xbo9BXC5fjy0xT8ASEDMNVP0N1CCm5fjTYk9fNILK41D3nV8HU79b7vnC2Rrzw=",
+    "address": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu",
+    "message": "TapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab"
+   }
+  },
+  "output": "AkcwRAIgL1lIs7xEnn5R5foR82pAj7gvzwssxmnmRm2fY7fZ0MsCIBlLGVPF06DewZgJl6FQqGeTiPpZ8Xbo9BXC5fjy0xT8ASEDMNVP0N1CCm5fjTYk9fNILK41D3nV8HU79b7vnC2Rrzw=",
+  "signedBy": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu",
+  "messageEcho": "TapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+  "cliVerify": "valid",
+  "cliWitness": "0x0247304402202f5948b3bc449e7e51e5fa11f36a408fb82fcf0b2cc669e6466d9f63b7d9d0cb0220194b1953c5d3a0dec1980997a150a8679388fa59f176e8f415c2e5f8f2d314fc01210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+  "rawLen": 107,
+  "rawHex": "0247304402202f5948b3bc449e7e51e5fa11f36a408fb82fcf0b2cc669e6466d9f63b7d9d0cb0220194b1953c5d3a0dec1980997a150a8679388fa59f176e8f415c2e5f8f2d314fc01210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+  "witnessShape": {
+   "items": [
+    71,
+    33
+   ],
+   "trailing": 0,
+   "sighash": "0x01",
+   "derLen": 70,
+   "lowS": true
+  }
+ },
+ "paymentType-p2sh": {
+  "paymentType": "p2sh",
+  "message": "TapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+  "popupError": "no popup matching /popup\\.html#\\/sign-bip322-message/",
+  "err": {
+   "jsonrpc": "2.0",
+   "id": "6dd4f68f-1c21-4844-b24d-dbcbc70ae79d",
+   "error": {
+    "code": -32602,
+    "message": "Validation error: Invalid option: expected one of \"p2tr\"|\"p2wpkh\" at \"paymentType\""
+   }
+  }
+ },
+ "url-special-chars": {
+  "paymentType": "p2wpkh",
+  "message": "a+b=c&d=%41 #frag",
+  "popupText": "1\nAccount 1\nWallet 1\n0.00 BTC\nSIGN MESSAGE\nRequested by http://127.0.0.1:18791 (127.0.0.1). This message is signed by bc1qc…06fyu\na+b=c&d=%41 #frag\nNo fees are incurred\nMainnet\nCancel\nSign\nBy signing this message, you prove that you own this address",
+  "popupContainsFullText": true,
+  "popupLayout": [
+   {
+    "tag": "SPAN",
+    "visible": true,
+    "textLen": 17,
+    "equalsMessage": true,
+    "containsTail": true,
+    "clientHeight": 24,
+    "scrollHeight": 24,
+    "overflowY": "visible",
+    "textOverflow": "clip",
+    "lineClamp": "none",
+    "whiteSpace": "normal",
+    "wordBreak": "normal",
+    "rect": [
+     50,
+     249,
+     290,
+     24
+    ],
+    "clippingAncestors": [
+     {
+      "tag": "DIV",
+      "overflowY": "auto",
+      "maxHeight": "none",
+      "clientHeight": 72,
+      "scrollHeight": 72
+     }
+    ]
+   }
+  ],
+  "popupViewport": {
+   "width": 390,
+   "height": 756
+  },
+  "raw": {
+   "jsonrpc": "2.0",
+   "id": "b4458660-d2eb-4824-9163-1bc1793483df",
+   "result": {
+    "signature": "AkgwRQIhALKtxGTbstgsVkoIkvinpAKkG2+8yZROLtzKNwYWuaXCAiA9IWdhHzBJkoXhZnNVNGcPx/ULQKPgm6kIp3y5f+j+aAEhAzDVT9DdQgpuX402JPXzSCyuNQ951fB1O/W+75wtka88",
+    "address": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu",
+    "message": "a+b=c&d=%41 #frag"
+   }
+  },
+  "output": "AkgwRQIhALKtxGTbstgsVkoIkvinpAKkG2+8yZROLtzKNwYWuaXCAiA9IWdhHzBJkoXhZnNVNGcPx/ULQKPgm6kIp3y5f+j+aAEhAzDVT9DdQgpuX402JPXzSCyuNQ951fB1O/W+75wtka88",
+  "signedBy": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu",
+  "messageEcho": "a+b=c&d=%41 #frag",
+  "cliVerify": "valid",
+  "cliWitness": "0x02483045022100b2adc464dbb2d82c564a0892f8a7a402a41b6fbcc9944e2edcca370616b9a5c202203d2167611f30499285e166735534670fc7f50b40a3e09ba908a77cb97fe8fe6801210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+  "rawLen": 108,
+  "rawHex": "02483045022100b2adc464dbb2d82c564a0892f8a7a402a41b6fbcc9944e2edcca370616b9a5c202203d2167611f30499285e166735534670fc7f50b40a3e09ba908a77cb97fe8fe6801210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+  "witnessShape": {
+   "items": [
+    72,
+    33
+   ],
+   "trailing": 0,
+   "sighash": "0x01",
+   "derLen": 71,
+   "lowS": true
+  }
+ }
+}

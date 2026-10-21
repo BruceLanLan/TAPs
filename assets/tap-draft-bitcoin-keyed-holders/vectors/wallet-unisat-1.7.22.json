@@ -1,0 +1,80 @@
+{
+ "format": "tap-bitcoin-keyed-holders-wallet-vectors/2",
+ "wallet": "UniSat browser extension 1.7.22 (Chrome Web Store), run on 2026-10-10",
+ "note": "Signatures made by the wallet's own signMessage(msg, 'bip322-simple') for the public BIP-39 test mnemonic 'abandon ... about'; never fund these addresses.",
+ "creationCodeKeccak": "0x4bc9698ad9224fefccd7ba5d7205c1c0e8e9117eb53257873e64fae37f499c4f",
+ "cases": [
+  {
+   "kind": "p2tr",
+   "bitcoinAddress": "bc1p5cyxnuxmeuwuvkwfem96lqzszd02n6xdcjrs20cac6yqjjwudpxqkedrcr",
+   "scriptPubKey": "0x5120a60869f0dbcf1dc659c9cecbaf8050135ea9e8cdc487053f1dc6880949dc684c",
+   "holder": "0xc692affbbfae51c87535f0757cf45b106d7bdd64",
+   "chainId": 56,
+   "signDigest": "0xabababababababababababababababababababababababababababababababab",
+   "signMessage": "TapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+   "signWitness": "0x01407cf75adcffd17f97fa4150e766f8a2b8fc08184bef231f30784a7342667127b91180ee578439022d44a7157c221426b2b58244edb332e34bae4ade19ec867a49",
+   "signWalletOutput": "AUB891rc/9F/l/pBUOdm+KK4/AgYS+8jHzB4SnNCZnEnuRGA7leEOQItRKcVfCIUJrK1gkTtszLjS65K3hnshnpJ",
+   "exec": {
+    "target": "0x1f5cb4aeae1807bf60c3b9c0d8adbcc14e91f12c",
+    "tokenId": 920,
+    "recipient": "0x00000000000000000000000000000000000c0b7a",
+    "data": "0x23b872dd000000000000000000000000c692affbbfae51c87535f0757cf45b106d7bdd6400000000000000000000000000000000000000000000000000000000000c0b7a0000000000000000000000000000000000000000000000000000000000000398",
+    "callGas": 150000,
+    "tip": 0,
+    "nonce": 0,
+    "deadline": 1794208208,
+    "message": "TapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 calls 0x1f5cb4aeae1807bf60c3b9c0d8adbcc14e91f12c with value 0 and data 0x1a7b75dc5350c657842d2e5f787b5bcc9557550170f63358f3c944afba4598c3, gas 150000, tip 0, nonce 0, valid until 1794208208",
+    "witness": "0x01408a9160765ff80f9039538f7617d897f1626dcdb436c3d6da526a656d8373d031d31d40d683fbd0363a41c550ac4bec69e353e9b1e52742087aa80af6155bfbde",
+    "walletOutput": "AUCKkWB2X/gPkDlTj3YX2JfxYm3NtDbD1tpSamVtg3PQMdMdQNaD+9A2OkHFUKxL7GnjU+mx5SdCCHqoCvYVW/ve"
+   },
+   "call": {
+    "target": "0x00000000000000000000000000000000000000aa",
+    "value": 0,
+    "data": "0x",
+    "callGas": 0,
+    "tip": 0,
+    "nonce": 1,
+    "deadline": 1794208208,
+    "message": "TapeOut Bitcoin-keyed holder 0xc692affbbfae51c87535f0757cf45b106d7bdd64 on chain 56 calls 0x00000000000000000000000000000000000000aa with value 0 and data 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470, gas 0, tip 0, nonce 1, valid until 1794208208",
+    "witness": "0x01408332fbe9f8a87ee8df7c66936aec74bcc313e087d83ca6c8f3d90cc2bfe22549a9eb427c3a963d89aec2d64005f198074db1595ffc639425419cbd193aec1426",
+    "walletOutput": "AUCDMvvp+Kh+6N98ZpNq7HS8wxPgh9g8psjz2QzCv+IlSanrQnw6lj2JrsLWQAXxmAdNsVlf/GOUJUGcvRk67BQm"
+   }
+  },
+  {
+   "kind": "p2wpkh",
+   "bitcoinAddress": "bc1qcr8te4kr609gcawutmrza0j4xv80jy8z306fyu",
+   "scriptPubKey": "0x0014c0cebcd6c3d3ca8c75dc5ec62ebe55330ef910e2",
+   "holder": "0xfec7dc76058dc82996aca46d30c153e3c24ccb0b",
+   "chainId": 56,
+   "signDigest": "0xabababababababababababababababababababababababababababababababab",
+   "signMessage": "TapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 signs 0xabababababababababababababababababababababababababababababababab",
+   "signWitness": "0x0247304402202f5948b3bc449e7e51e5fa11f36a408fb82fcf0b2cc669e6466d9f63b7d9d0cb0220194b1953c5d3a0dec1980997a150a8679388fa59f176e8f415c2e5f8f2d314fc01210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+   "signWalletOutput": "AkcwRAIgL1lIs7xEnn5R5foR82pAj7gvzwssxmnmRm2fY7fZ0MsCIBlLGVPF06DewZgJl6FQqGeTiPpZ8Xbo9BXC5fjy0xT8ASEDMNVP0N1CCm5fjTYk9fNILK41D3nV8HU79b7vnC2Rrzw=",
+   "exec": {
+    "target": "0x1f5cb4aeae1807bf60c3b9c0d8adbcc14e91f12c",
+    "tokenId": 920,
+    "recipient": "0x00000000000000000000000000000000000c0b7a",
+    "data": "0x23b872dd000000000000000000000000fec7dc76058dc82996aca46d30c153e3c24ccb0b00000000000000000000000000000000000000000000000000000000000c0b7a0000000000000000000000000000000000000000000000000000000000000398",
+    "callGas": 150000,
+    "tip": 0,
+    "nonce": 0,
+    "deadline": 1794208050,
+    "message": "TapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 calls 0x1f5cb4aeae1807bf60c3b9c0d8adbcc14e91f12c with value 0 and data 0x09099350873521ead52156c08e00dc8349086af85b1ee6b4778e4e3b0f7547f5, gas 150000, tip 0, nonce 0, valid until 1794208050",
+    "witness": "0x02473044022064ca7a9a314facb19d4823626ead13bb3c2f64ee49bb7bc5fa018a7a12a0ec53022001adf7d2d94fde20cbc7f850c3ac199f779ec12806cd3fa44ffa1a234c02f5bd01210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+    "walletOutput": "AkcwRAIgZMp6mjFPrLGdSCNibq0TuzwvZO5Ju3vF+gGKehKg7FMCIAGt99LZT94gy8f4UMOsGZ93nsEoBs0/pE/6GiNMAvW9ASEDMNVP0N1CCm5fjTYk9fNILK41D3nV8HU79b7vnC2Rrzw="
+   },
+   "call": {
+    "target": "0x00000000000000000000000000000000000000aa",
+    "value": 0,
+    "data": "0x",
+    "callGas": 0,
+    "tip": 0,
+    "nonce": 1,
+    "deadline": 1794208050,
+    "message": "TapeOut Bitcoin-keyed holder 0xfec7dc76058dc82996aca46d30c153e3c24ccb0b on chain 56 calls 0x00000000000000000000000000000000000000aa with value 0 and data 0xc5d2460186f7233c927e7db2dcc703c0e500b653ca82273b7bfad8045d85a470, gas 0, tip 0, nonce 1, valid until 1794208050",
+    "witness": "0x02483045022100e7f42d6c30132f8c23ddac9ffae4c184b21fa24c34ec1d7a571b6bf7f63de33c02206274d424806041079da02f99b8aa7b39ef3340f8c81ff4d53d477fc90e34b60301210330d54fd0dd420a6e5f8d3624f5f3482cae350f79d5f0753bf5beef9c2d91af3c",
+    "walletOutput": "AkgwRQIhAOf0LWwwEy+MI92sn/rkwYSyH6JMNOwdelcba/f2PeM8AiBidNQkgGBBB52gL5m4qns57zNA+Mgf9NU9R3/JDjS2AwEhAzDVT9DdQgpuX402JPXzSCyuNQ951fB1O/W+75wtka88"
+   }
+  }
+ ]
+}

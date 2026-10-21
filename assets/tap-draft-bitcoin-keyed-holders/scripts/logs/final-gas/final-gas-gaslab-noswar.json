@@ -1,0 +1,148 @@
+{
+ "label": "gaslab-noswar",
+ "chainId": 56,
+ "creationCodeBytes": 6118,
+ "creationCodeKeccak": "0xf0498c66f424d55c7f9d2e49ac8460fb48105005f4ed603bebe39ac5a6d86598",
+ "callGas": 100000,
+ "tip": 10000000000000000,
+ "kinds": {
+  "p2tr": {
+   "holder": "0x140683a246435cca1d78139fa12d7e9a21c0c912",
+   "deploy": 1224338,
+   "runtimeBytes": 5341,
+   "isValidSignature": [
+    {
+     "gas": 37850,
+     "ecrecover": null
+    },
+    {
+     "gas": 37838,
+     "ecrecover": null
+    },
+    {
+     "gas": 37838,
+     "ecrecover": null
+    },
+    {
+     "gas": 37850,
+     "ecrecover": null
+    },
+    {
+     "gas": 37838,
+     "ecrecover": null
+    },
+    {
+     "gas": 37850,
+     "ecrecover": null
+    },
+    {
+     "gas": 37850,
+     "ecrecover": null
+    },
+    {
+     "gas": 37877,
+     "ecrecover": null
+    }
+   ],
+   "execute": {
+    "gas": 95013,
+    "ecrecover": null
+   },
+   "executeNext": {
+    "gas": 77913,
+    "ecrecover": null
+   },
+   "executeTip": {
+    "gas": 103225,
+    "ecrecover": null
+   },
+   "separate": {
+    "1": {
+     "gas": 95013,
+     "txs": 1
+    },
+    "2": {
+     "gas": 172926,
+     "txs": 2
+    },
+    "4": {
+     "gas": 328725,
+     "txs": 4
+    },
+    "8": {
+     "gas": 635463,
+     "txs": 8
+    }
+   }
+  },
+  "p2wpkh": {
+   "holder": "0xcae74a9f8c833c562ebbc1c029526731e10a5e93",
+   "deploy": 1222082,
+   "runtimeBytes": 5341,
+   "isValidSignature": [
+    {
+     "gas": 40504,
+     "ecrecover": 1
+    },
+    {
+     "gas": 40575,
+     "ecrecover": 1
+    },
+    {
+     "gas": 43750,
+     "ecrecover": 2
+    },
+    {
+     "gas": 43845,
+     "ecrecover": 2
+    },
+    {
+     "gas": 43845,
+     "ecrecover": 2
+    },
+    {
+     "gas": 43762,
+     "ecrecover": 2
+    },
+    {
+     "gas": 40504,
+     "ecrecover": 1
+    },
+    {
+     "gas": 40587,
+     "ecrecover": 1
+    }
+   ],
+   "execute": {
+    "gas": 97640,
+    "ecrecover": 1
+   },
+   "executeNext": {
+    "gas": 80623,
+    "ecrecover": 1
+   },
+   "executeTip": {
+    "gas": 105962,
+    "ecrecover": 1
+   },
+   "separate": {
+    "1": {
+     "gas": 97640,
+     "txs": 1
+    },
+    "2": {
+     "gas": 178263,
+     "txs": 2
+    },
+    "4": {
+     "gas": 345918,
+     "txs": 4
+    },
+    "8": {
+     "gas": 669960,
+     "txs": 8
+    }
+   }
+  }
+ }
+}

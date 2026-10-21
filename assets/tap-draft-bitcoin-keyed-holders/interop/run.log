@@ -1,0 +1,91 @@
+r8-interop run 2026-10-10T07:26:23Z
+tapeapi: 4a1ac4f TapeAPI 1.8.1: optional TAPI-26/27 v2 labels for private channels and groups
+v25.3.0
+anvil Version: 1.8.3
+
+### 0. local anvil fork of BNB Smart Chain (latest block)
+fork-url: https://bsc-dataseed.bnbchain.org
+chainId=56 forkBlock=126787538
+
+### 1. the circuit: 12.1013.tape as it is on chain (control)
+circuits=0xe02c26c7432A7121168AA9B610DE24eCf9a1a414 tokenId=12 container=0x9cD838625251576c199B2DeF7A17e50266843185 holder(ownerOf)=0x086bFB1908B1DF8C0c4412f28E4DD22Bdd52d715 ownerCode=0xef0100e6cae83bde06e4c305530e199d7217f42808555b
+live manifest:      902 bytes, signer 0x3cF7fb12C72653ba8415515387dBa9eF0353a0DD
+{"ok":true,"mode":"default resolve()","target":"12.1013.tape","ms":508,"holder":"0x086bFB1908B1DF8C0c4412f28E4DD22Bdd52d715","delegation":true,"signer":"0x3cF7fb12C72653ba8415515387dBa9eF0353a0DD","expires":1798219806,"sigBytes":65,"container":"0x9cD838625251576c199B2DeF7A17e50266843185","circuits":"0xe02c26c7432a7121168aa9b610de24ecf9a1a414","tokenId":"12","pinnedBlock":null,"conform":null,"sentinel":"match","fileSha256":{"size":901,"sha256Hash":"0x593116a7fde831acc782a33dacc74406ec52e94fc91a7d3d9d2fab677afdfa9b","updatedAt":"1790444142"},"warnings":[]}
+{"ok":true,"mode":"conform:tap10 (TAP-11 §2.2)","target":"12.1013.tape","ms":1143,"holder":"0x086bFB1908B1DF8C0c4412f28E4DD22Bdd52d715","delegation":true,"signer":"0x3cF7fb12C72653ba8415515387dBa9eF0353a0DD","expires":1798219806,"sigBytes":65,"container":"0x9cD838625251576c199B2DeF7A17e50266843185","circuits":"0xe02c26c7432a7121168aa9b610de24ecf9a1a414","tokenId":"12","pinnedBlock":126787536,"conform":{"status":"resolved","site":"ok","holder":"0x086bFB1908B1DF8C0c4412f28E4DD22Bdd52d715","opened":true,"pinned":126787536},"sentinel":"match","fileSha256":{"size":901,"sha256Hash":"0x593116a7fde831acc782a33dacc74406ec52e94fc91a7d3d9d2fab677afdfa9b","updatedAt":"1790444142"},"warnings":[]}
+  -> as expected (ok)
+
+### 2. test keys, holder addresses, TAP-11 §4.1 digest, BIP-322 signatures (python, tools/ read-only)
+{
+ "chainId": 56,
+ "hub": "0xe61a9c7213a6aa616c246a2b569e555b417b25ee",
+ "container": "0x9cd838625251576c199b2def7a17e50266843185",
+ "circuits": "0xe02c26c7432a7121168aa9b610de24ecf9a1a414",
+ "tokenId": "12",
+ "signer": "0xe48a3a54d1c658aac3295d6b4e86158c664952c1",
+ "expires": 1817537191,
+ "digest": "0x2b27fcbbf9f646042eb6118221342b36c8f44b28e1da4b7a7553d16c1a1d0448",
+ "messageP2TR": "TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 56 signs 0x2b27fcbbf9f646042eb6118221342b36c8f44b28e1da4b7a7553d16c1a1d0448",
+ "sigGood": "0x01408e5bf06fdb82ead07c6188eef41eb497088623b3e361e3f87a070a09dc079dcb731cdfd932b5e4f12bc90a90336bc600d1dc04b3b1bad7292f3e78a3c9883537",
+ "sigWrongKey": "0x0140d121b251b507c849945fd70d765e7461af0d2689b02dd695da139644d508e82c7963f0facd1ad5246bf2747ad7ee1a97c02f6f27f655d5ebbfb1d3dfd0493b95",
+ "messageP2WPKH": "TapeOut Bitcoin-keyed holder 0xb73bee58fafd674831f355c17311d7849ccc2897 on chain 56 signs 0x2b27fcbbf9f646042eb6118221342b36c8f44b28e1da4b7a7553d16c1a1d0448",
+ "sigP2WPKH": "0x024730440220308f086f2e91b33ba08c0e2672b47bc0797f2c2e67458d94a61686ed4bb4625402200f488f0323992d0a0d81934c70266551b7e9e89d2ed0f90c587f8c67b5d073c90121039b5d771889106949b354d67e0b487ebf5a83a1151e7056198e16070d5f89cb7c",
+ "creationCodeKeccak": "0x4bc9698ad9224fefccd7ba5d7205c1c0e8e9117eb53257873e64fae37f499c4f"
+}
+p2tr bc1pdznq5ty2978g55m83a4uanyqw8mkvnjhl3ky7rp5ald95zhd697q258gca holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 initCodeKeccak 0x9148f237c0c864a80e3f46a64e6548e8c6b21fe3b9cfa03d35b05d7185c55b44
+p2wpkh bc1qu357xdh0ps3wsc8dued9vupduqxky2ndpxw008 holder 0xb73bee58fafd674831f355c17311d7849ccc2897 initCodeKeccak 0xc45eedc65a07fd7b94c305247d490f9f21b6a24460637beab4386fa740c8d946
+p2tr-other bc1psues0vzwjynu9lxq85en2re35mpeuv2437qy6rp0tgs28yr00e3qczx3g3 holder 0x9419156a4e5ac98f7586459e2f0870a4bbcaa5c6 initCodeKeccak 0xf82c9afa0a31bb4de3ac5cb516675a915b4de517fd8ab37e8307697676739175
+p2tr holder (undeployed yet): code=0x nonce=0
+
+### 3. the current holder writes the new manifest (delegation.sig = 66-byte BIP-322 witness by the P2TR test key)
+   [local-only bypass: anvil_impersonateAccount of the real holder 0x086bFB1908B1DF8C0c4412f28E4DD22Bdd52d715; it still holds #12 at this point]
+gasUsed 344608 status 1 (success) transactionHash 0x0da8600ebf4b3c7f5148e38aad6d07bb58ea206ab0ad4e9eaa4db04cfad1fa85 
+fileInfo: 903 "application/json" 0xfbd1d728b4da9987eaaae76d9b222ad5cbc452384ae6f810bc02d126a61aea5c 1791617196 [1.791e9] 1 
+control: holder is still the EOA 0x086bFB1908B1DF8C0c4412f28E4DD22Bdd52d715, so a 66-byte sig must fail (not ECDSA; its EIP-7702 code does not answer EIP-1271)
+{"ok":false,"mode":"default resolve()","target":"12.1013.tape","ms":225,"code":"DELEGATION_INVALID","status":null,"message":"holder 0x086bFB1908B1DF8C0c4412f28E4DD22Bdd52d715 does not accept this delegation signature under EIP-1271","warnings":[]}
+{"ok":false,"mode":"conform:tap10 (TAP-11 §2.2)","target":"12.1013.tape","ms":972,"code":"DELEGATION_INVALID","status":"delegation-invalid","message":"holder 0x086bFB1908B1DF8C0c4412f28E4DD22Bdd52d715 does not accept this delegation signature under EIP-1271","warnings":[]}
+  -> as expected (DELEGATION_INVALID)
+
+### 4. transfer circuit #12 into the Bitcoin-keyed holder address BEFORE it is deployed
+gasUsed 70363 status 1 (success) transactionHash 0x8bb8c20428ea9eddddc1295a7361cfece871e905e305d6c4cb663f31f99aedc4 
+ownerOf(12)=0x750D22d8B6dd3168c2a4a2EFDDD44A8BfE362647 holderCode=0x
+NEGATIVE 2: holder has no code -> TAP-11 §4.4 item 2 requires code
+{"ok":false,"mode":"default resolve()","target":"12.1013.tape","ms":40,"code":"DELEGATION_INVALID","status":null,"message":"holder 0x750D22d8B6dd3168c2a4a2EFDDD44A8BfE362647 does not accept this delegation signature under EIP-1271","warnings":[]}
+{"ok":false,"mode":"conform:tap10 (TAP-11 §2.2)","target":"12.1013.tape","ms":45,"code":"DELEGATION_INVALID","status":"delegation-invalid","message":"holder 0x750D22d8B6dd3168c2a4a2EFDDD44A8BfE362647 does not accept this delegation signature under EIP-1271","warnings":[]}
+  -> as expected (DELEGATION_INVALID)
+
+### 5. deploy the P2TR holder through the deterministic deployment proxy
+proxy 0x4e59b44847b379578588920cA78FbF26c0B4956C present on the fork, codehash 0x2fa86add0aed31f33a762c9d88e807c475bd51d0f52bd0955754b2608f7e4989 (expected 0x2fa86add0aed31f33a762c9d88e807c475bd51d0f52bd0955754b2608f7e4989)
+creation code keccak 0x4bc9698ad9224fefccd7ba5d7205c1c0e8e9117eb53257873e64fae37f499c4f, init code keccak 0x9148f237c0c864a80e3f46a64e6548e8c6b21fe3b9cfa03d35b05d7185c55b44, salt 0
+proxy eth_call returns 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647
+gasUsed 1607114 status 1 (success) transactionHash 0x0b4a8e3186bdd655cd593eed124d20e4a514ab73235e0d3eb98a7be10da6c048 
+holder code bytes: 7092 runtime keccak: 0x1579e3fe06bd5165ab244d062e513e437afa62972a4b6a7d02ba920fade4f4b8
+scriptPubKey()=0x512068a60a2c8a2f8e8a53678f6bcecc8071f7664e57fc6c4f0c34efda5a0aedd17c nonce()=0
+isValidSignature(digest, sigGood)=0x1626ba7e  isValidSignature(digest, sigWrongKey)=0xffffffff
+POSITIVE: unmodified tapeapi client, delegation signed by the Bitcoin key
+{"ok":true,"mode":"default resolve()","target":"12.1013.tape","ms":40,"holder":"0x750D22d8B6dd3168c2a4a2EFDDD44A8BfE362647","delegation":true,"signer":"0xe48a3a54d1c658aac3295d6b4e86158c664952c1","expires":1817537191,"sigBytes":66,"container":"0x9cD838625251576c199B2DeF7A17e50266843185","circuits":"0xe02c26c7432a7121168aa9b610de24ecf9a1a414","tokenId":"12","pinnedBlock":null,"conform":null,"sentinel":"match","fileSha256":{"size":903,"sha256Hash":"0xfbd1d728b4da9987eaaae76d9b222ad5cbc452384ae6f810bc02d126a61aea5c","updatedAt":"1791617196"},"warnings":[]}
+{"ok":true,"mode":"conform:tap10 (TAP-11 §2.2)","target":"12.1013.tape","ms":45,"holder":"0x750D22d8B6dd3168c2a4a2EFDDD44A8BfE362647","delegation":true,"signer":"0xe48a3a54d1c658aac3295d6b4e86158c664952c1","expires":1817537191,"sigBytes":66,"container":"0x9cD838625251576c199B2DeF7A17e50266843185","circuits":"0xe02c26c7432a7121168aa9b610de24ecf9a1a414","tokenId":"12","pinnedBlock":126787554,"conform":{"status":"resolved","site":"ok","holder":"0x750D22d8B6dd3168c2a4a2EFDDD44A8BfE362647","opened":true,"pinned":126787554},"sentinel":"match","fileSha256":{"size":903,"sha256Hash":"0xfbd1d728b4da9987eaaae76d9b222ad5cbc452384ae6f810bc02d126a61aea5c","updatedAt":"1791617196"},"warnings":[]}
+  -> as expected (ok)
+
+### 6. NEGATIVE 1: the same message signed by ANOTHER Bitcoin key; written by the holder itself via execute() (§5.2 call message)
+call message: TapeOut Bitcoin-keyed holder 0x750d22d8b6dd3168c2a4a2efddd44a8bfe362647 on chain 56 calls 0xd006ffdd5ae313b17729621a00999cd3c71ce5e6 with value 0 and data 0x75d2fb47d572c3a3b8f2556a7f82ac2240f8967940a02e56e8a0f92ce9c47034, gas 3000000, tip 0, nonce 0, valid until 2000000000
+gasUsed 398415 status 1 (success) transactionHash 0x98b0db7d448d0359ba08b7062f670877f4817253350b7a2deb3c0237bc012723 
+manifest signer now 0xe48a3a54d1c658aac3295d6b4e86158c664952c1 0x0140d121b251b507c8...
+{"ok":false,"mode":"default resolve()","target":"12.1013.tape","ms":44,"code":"DELEGATION_INVALID","status":null,"message":"holder 0x750D22d8B6dd3168c2a4a2EFDDD44A8BfE362647 does not accept this delegation signature under EIP-1271","warnings":[]}
+{"ok":false,"mode":"conform:tap10 (TAP-11 §2.2)","target":"12.1013.tape","ms":45,"code":"DELEGATION_INVALID","status":"delegation-invalid","message":"holder 0x750D22d8B6dd3168c2a4a2EFDDD44A8BfE362647 does not accept this delegation signature under EIP-1271","warnings":[]}
+  -> as expected (DELEGATION_INVALID)
+
+### 7. the holder puts the good manifest back via execute() (nonce 1) -> resolved again
+gasUsed 381315 status 1 (success) transactionHash 0xde431b7d72db9df202be4d92fcda9d379ce587d1020ba83280aa66654ab429d0 
+replay of the same execute() must fail:
+custom error 0x5cd5d233, data: "0x5cd5d233": BadSignature
+{"ok":true,"mode":"default resolve()","target":"12.1013.tape","ms":40,"holder":"0x750D22d8B6dd3168c2a4a2EFDDD44A8BfE362647","delegation":true,"signer":"0xe48a3a54d1c658aac3295d6b4e86158c664952c1","expires":1817537191,"sigBytes":66,"container":"0x9cD838625251576c199B2DeF7A17e50266843185","circuits":"0xe02c26c7432a7121168aa9b610de24ecf9a1a414","tokenId":"12","pinnedBlock":null,"conform":null,"sentinel":"match","fileSha256":{"size":903,"sha256Hash":"0xfbd1d728b4da9987eaaae76d9b222ad5cbc452384ae6f810bc02d126a61aea5c","updatedAt":"1791617208"},"warnings":[]}
+{"ok":true,"mode":"conform:tap10 (TAP-11 §2.2)","target":"12.1013.tape","ms":46,"holder":"0x750D22d8B6dd3168c2a4a2EFDDD44A8BfE362647","delegation":true,"signer":"0xe48a3a54d1c658aac3295d6b4e86158c664952c1","expires":1817537191,"sigBytes":66,"container":"0x9cD838625251576c199B2DeF7A17e50266843185","circuits":"0xe02c26c7432a7121168aa9b610de24ecf9a1a414","tokenId":"12","pinnedBlock":126787566,"conform":{"status":"resolved","site":"ok","holder":"0x750D22d8B6dd3168c2a4a2EFDDD44A8BfE362647","opened":true,"pinned":126787566},"sentinel":"match","fileSha256":{"size":903,"sha256Hash":"0xfbd1d728b4da9987eaaae76d9b222ad5cbc452384ae6f810bc02d126a61aea5c","updatedAt":"1791617208"},"warnings":[]}
+  -> as expected (ok)
+
+### 8. P2WPKH holder: deploy through the proxy and check isValidSignature on the same TAP-11 digest
+gasUsed 1602160 status 1 (success) transactionHash 0x7c1d0bc844dfa909e9901426cc3cc178a82c77d80233651d1eaa4a833ccb6f9f 
+holder 0xb73bee58fafd674831f355c17311d7849ccc2897 code bytes: 7092 scriptPubKey()=0x0014e469e336ef0c22e860ede65a56702de00d622a6d
+isValidSignature(digest, sigP2WPKH)=0x1626ba7e  with the P2TR sig=0xffffffff
+
+### done: all expectations held
+anvil 45909 stopped
