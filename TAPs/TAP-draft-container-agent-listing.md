@@ -7,6 +7,7 @@ discussions-to: https://github.com/TapeOutProtocol/TAPs/issues/41
 status: Draft
 type: Application
 created: 2026-10-05
+updated: 2026-10-21
 requires: TAP-10, TAP-11
 license: CC0-1.0
 ---
@@ -74,7 +75,7 @@ Any other `mode` makes the pricing invalid under this TAP; other modes are reser
 - **A format, not prices.** TAP-01 §7.3 keeps prices out of TAPs. Amounts are integers in the smallest unit so that no client rounds. The 78-digit bound follows the asset attachments of TAP-10 §16.1, which bound `amount` the same way, by form and not by range.
 - **A description, not discovery.** How a client finds manifests (directories, indexes, search) is outside this TAP. The member only makes what an agent states comparable.
 - **Words without a registry.** Capability words, task kinds and units are compared as strings. Their meaning is agreed between the parties or by a later TAP; two agents that use the same word may mean different things.
-- **Mandates by reference.** The mandates that `accepts` refers to are proposed in pull request #47 of the TAPs repository; when that draft is numbered, this text will cite it. This TAP depends on no mandate format: `accepts` is a statement, and `"none"` is the only enforcement it defines.
+- **Mandates by reference.** The mandates that `accepts` refers to are proposed in pull request #47 of the TAPs repository; when that draft is numbered, this text will cite it. This TAP depends on no mandate format: `accepts` is a statement, and `"none"` is the only enforcement it defines. Pull request #60 of the TAPs repository (not merged) proposes one of the later TAPs that rule 3 reserves strings for: it gives `"escrow-channel"` a meaning. This text does not depend on it.
 - **Separate from the task protocol.** A listing is useful to an agent that does not implement the task protocol, and the protocol does not need a listing.
 - **Invalid member, valid manifest.** The member is advisory; a manifest that resolves under TAP-11 should not stop resolving because its listing is wrong.
 - **`free` refuses an amount, `quote` ignores one.** A `free` task that names a token or amount contradicts itself about payment. Under `quote` no amount is stated, so a stray `amount` is treated like any unknown member.
