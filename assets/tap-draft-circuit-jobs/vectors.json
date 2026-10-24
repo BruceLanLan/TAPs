@@ -1,0 +1,3122 @@
+{
+ "format": "tap-circuit-jobs-vectors/1",
+ "note": "Synthetic vectors for TAP-draft-circuit-jobs. Addresses are placeholders except the two kernel proxies. maxSettlementSeconds is an arbitrary input chosen for the vectors, never recomputed here.",
+ "constants": {
+  "now": 1800000000,
+  "margin": 21600,
+  "minRemainingWindow": 21600,
+  "maxSettlementSeconds": 1368992,
+  "MIN_MARGIN": 21600,
+  "MIN_MIN_REMAINING_WINDOW": 21600,
+  "MAX_EXTERNAL_STATIC_CALLS": 3,
+  "ACCEPT_GAS_CAP": 200000,
+  "jobStatus": {
+   "Open": 0,
+   "Funded": 1,
+   "Submitted": 2,
+   "Completed": 3,
+   "Rejected": 4,
+   "Expired": 5
+  },
+  "claimStatus": {
+   "none": 0,
+   "open": 1,
+   "rejected": 2,
+   "accepted": 3,
+   "abandoned": 4
+  },
+  "decision": {
+   "pending": 0,
+   "complete": 1,
+   "reject": 2
+  }
+ },
+ "interfaces": {
+  "note": "a selector depends on argument types only: claimSummary(uint256) is 0x58d08546 with 8 and with 9 return values, and the single-function ERC-165 id of ITapClaimSummary is the same for both views; a caller tells them apart by the 288-byte return data (Specification 1.1)",
+  "interfaces": {
+   "ITapClaimSummary": {
+    "id": "0x58d08546",
+    "selectors": {
+     "claimSummary(uint256)": "0x58d08546"
+    }
+   },
+   "ITapSettlementBound": {
+    "id": "0xfcd8e94e",
+    "selectors": {
+     "maxSettlementSeconds()": "0xfcd8e94e"
+    }
+   },
+   "ITapInputProvider": {
+    "id": "0xecef2c34",
+    "selectors": {
+     "inputProvider()": "0xecef2c34"
+    }
+   },
+   "IACPHook": {
+    "id": "0x7ff6bc9e",
+    "selectors": {
+     "beforeAction(uint256,bytes4,bytes)": "0xdc08fb1d",
+     "afterAction(uint256,bytes4,bytes)": "0xa3fe4783"
+    }
+   },
+   "ITapCircuitJob": {
+    "id": "0x0b2be2a6",
+    "selectors": {
+     "bindJob(uint256,(address,bytes32,bytes32,uint64,uint64,uint256,uint64,address))": "0x9349e872",
+     "specOf(uint256)": "0x20f20d9c",
+     "specHashOf(uint256)": "0xa2334b66",
+     "claimIdOf(uint256)": "0x0db32f94",
+     "check(uint256)": "0x5f72f450",
+     "settle(uint256)": "0x8df82800",
+     "kernel()": "0xd4aae0c4",
+     "game()": "0xc3fe3e28",
+     "margin()": "0x8f76691a",
+     "minRemainingWindow()": "0x5db8081c"
+    }
+   },
+   "game.accept": {
+    "accept(uint256)": "0x19b05f49"
+   }
+  },
+  "kernel": {
+   "chains": {
+    "56": "0xea4daa3100a767e86fded867729ae7446476eba6",
+    "97": "0xa206c0517b6371c6638cd9e4a42cc9f02a33b0de"
+   },
+   "functions": {
+    "createJob": {
+     "signature": "createJob(address,address,uint256,string,address)",
+     "selector": "0x41528812"
+    },
+    "setProvider": {
+     "signature": "setProvider(uint256,address,bytes)",
+     "selector": "0xc9a84bb9"
+    },
+    "setBudget": {
+     "signature": "setBudget(uint256,uint256,bytes)",
+     "selector": "0xdd4ae9d4"
+    },
+    "fund": {
+     "signature": "fund(uint256,uint256,bytes)",
+     "selector": "0xd2e13f50"
+    },
+    "submit": {
+     "signature": "submit(uint256,bytes32,bytes)",
+     "selector": "0x9e63798d"
+    },
+    "complete": {
+     "signature": "complete(uint256,bytes32,bytes)",
+     "selector": "0xd75bbdf3"
+    },
+    "reject": {
+     "signature": "reject(uint256,bytes32,bytes)",
+     "selector": "0x41dd26f5"
+    },
+    "claimRefund": {
+     "signature": "claimRefund(uint256)",
+     "selector": "0x5b7baf64"
+    },
+    "getJob": {
+     "signature": "getJob(uint256)",
+     "selector": "0xbf22c457"
+    },
+    "HOOK_GAS_LIMIT": {
+     "signature": "HOOK_GAS_LIMIT()",
+     "selector": "0xff54740f"
+    },
+    "MAX_EXPIRY_DURATION": {
+     "signature": "MAX_EXPIRY_DURATION()",
+     "selector": "0x4fe11c8b"
+    }
+   },
+   "errors": {
+    "HookRequired()": "0x55c45de1",
+    "HookMissingInterface()": "0x1a5d3d5f",
+    "HookCallFailed()": "0xa9e35b2f",
+    "WrongStatus()": "0x8e78f0cb",
+    "BudgetMismatch()": "0x99b0fc87",
+    "ExpiryTooShort()": "0xf7a0748c",
+    "ExpiryTooLong()": "0xb40b2a0e",
+    "ZeroBudget()": "0xff97b861",
+    "ReentrancyGuardReentrantCall()": "0x3ee5aeb5",
+    "EnforcedPause()": "0xd93c0665"
+   },
+   "HOOK_GAS_LIMIT": 1000000,
+   "MAX_EXPIRY_DURATION": 31536000,
+   "MIN_EXPIRY_LEAD": 300,
+   "forkBlock": 129352831,
+   "implementations": {
+    "56": "0xe8d47866e2cc3dcaa50f0ad980355695b2f1d533",
+    "97": "0x55c3826b39a0f671b2c3e5d0f1372cad0b911421"
+   }
+  },
+  "events": {
+   "JobBound(uint256,bytes32,address)": "0x8f10d78358e0154120276a073f1c45b9b667db41afbc9e35d9c6fbc1dbb2c5f9",
+   "ClaimBound(uint256,uint256)": "0x09a2ed7232bea4a6109245c3d1f884061089711ff948061da87d0211ec2d1d3c",
+   "JobSettled(uint256,uint8,bytes32)": "0xe10ffad29e82712b6218c98cdad0d687c09fa0335d77d069979ec24027896cdf"
+  },
+  "errors": {
+   "NotKernel()": "0xd544ff96",
+   "NotClient()": "0x20dbc874",
+   "NotOpen()": "0xddafad98",
+   "NotEvaluator()": "0xc91959ac",
+   "AlreadyBound()": "0x682a9065",
+   "NotBound()": "0x179435b3",
+   "BadGame()": "0xd49807fd",
+   "BadInputProvider()": "0xd463fc8c",
+   "BadSpec()": "0xbc6a309f",
+   "ExpiryMismatch()": "0x8a0fcebb",
+   "ExpiryTooSoon(uint256)": "0xef855aef",
+   "BudgetMismatch()": "0x99b0fc87",
+   "NotSubmitted()": "0x448ad723",
+   "BadDeliverable()": "0x9c5827d0",
+   "ClaimMismatch()": "0x827768e8",
+   "ClaimNotOpen()": "0x6b687806",
+   "WindowTooShort(uint256)": "0xfe84fc4a",
+   "NoClaim()": "0x9b0e91e1",
+   "NotDecided()": "0x17be5b7b",
+   "AlreadySettled()": "0x560ff900"
+  },
+  "jobSpecTuple": "(address,bytes32,bytes32,uint64,uint64,uint256,uint64,address)"
+ },
+ "spec": [
+  {
+   "name": "mlp_case_a",
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "T": 92,
+    "K": 8,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "inputProvider": "0x0000000000000000000000000000000000000000"
+   },
+   "encoded": "0x00000000000000000000000000000000000000000000000000000000000000d111111111111111111111111111111111111111111111111111111111111111112222222222222222222222222222222222222222222222222222222222222222000000000000000000000000000000000000000000000000000000000000005c000000000000000000000000000000000000000000000000000000000000000800000000000000000000000000000000000000000000000000000000004c4b40000000000000000000000000000000000000000000000000000000006b605b800000000000000000000000000000000000000000000000000000000000000000",
+   "encodedLength": 256,
+   "specHash": "0x5f7ecc2cc26519461dfbcd2aa5e39f029b15d0331ac19150cd387860cd33764d"
+  },
+  {
+   "name": "case_b_input_provider",
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "T": 1024,
+    "K": 16,
+    "budget": 1,
+    "expiredAt": 1801476992,
+    "inputProvider": "0x00000000000000000000000000000000000000a1"
+   },
+   "encoded": "0x00000000000000000000000000000000000000000000000000000000000000d111111111111111111111111111111111111111111111111111111111111111112222222222222222222222222222222222222222222222222222222222222222000000000000000000000000000000000000000000000000000000000000040000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000006b605b8000000000000000000000000000000000000000000000000000000000000000a1",
+   "encodedLength": 256,
+   "specHash": "0x719ed13c42fa56e1c5def4d0dcd9cc7653c3a9426856bd60a0c4597140f97d8a"
+  },
+  {
+   "name": "minimal",
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "netlistHash2": "0x0000000000000000000000000000000000000000000000000000000000000001",
+    "inputRoot": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "T": 1,
+    "K": 1,
+    "budget": 1,
+    "expiredAt": 1801390592,
+    "inputProvider": "0x0000000000000000000000000000000000000000"
+   },
+   "encoded": "0x00000000000000000000000000000000000000000000000000000000000000d100000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000001000000000000000000000000000000000000000000000000000000006b5f0a000000000000000000000000000000000000000000000000000000000000000000",
+   "encodedLength": 256,
+   "specHash": "0x3bea758934aed18dfbe8ad32f539508523fc620649be04e08590639e6f369697"
+  },
+  {
+   "name": "max_fields",
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "netlistHash2": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "inputRoot": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "T": 18446744073709551615,
+    "K": 18446744073709551615,
+    "budget": 115792089237316195423570985008687907853269984665640564039457584007913129639935,
+    "expiredAt": 18446744073709551615,
+    "inputProvider": "0x0000000000000000000000000000000000000000"
+   },
+   "encoded": "0x00000000000000000000000000000000000000000000000000000000000000d1ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000000000000000000000000000000000000000000000ffffffffffffffff000000000000000000000000000000000000000000000000ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff000000000000000000000000000000000000000000000000ffffffffffffffff0000000000000000000000000000000000000000000000000000000000000000",
+   "encodedLength": 256,
+   "specHash": "0xb262c3fc920a022c107fae11be23079f485d2f50f1c60d634f6fb5c74b68d753"
+  }
+ ],
+ "deliverable": {
+  "deliverable": [
+   {
+    "claimId": "0",
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "decodes": "0"
+   },
+   {
+    "claimId": "1",
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000001",
+    "decodes": "1"
+   },
+   {
+    "claimId": "7",
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007",
+    "decodes": "7"
+   },
+   {
+    "claimId": "255",
+    "deliverable": "0x00000000000000000000000000000000000000000000000000000000000000ff",
+    "decodes": "255"
+   },
+   {
+    "claimId": "18446744073709551616",
+    "deliverable": "0x0000000000000000000000000000000000000000000000010000000000000000",
+    "decodes": "18446744073709551616"
+   },
+   {
+    "claimId": "115792089237316195423570985008687907853269984665640564039457584007913129639935",
+    "deliverable": "0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+    "decodes": "115792089237316195423570985008687907853269984665640564039457584007913129639935"
+   }
+  ],
+  "reason": [
+   {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "claimId": "7",
+    "status": 3,
+    "reason": "0x49a91c7fae25893cc1da766811f9d59c0f0c648ffcb143dac675922dd6692da8"
+   },
+   {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "claimId": "7",
+    "status": 2,
+    "reason": "0x8d3cd87d9fd538a417e6dec345357e2f7aac6adfbb04f747c97daa9eae71fffe"
+   },
+   {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "claimId": "0",
+    "status": 3,
+    "reason": "0xd07a73784b00411938922ca43f6f7d01fa9e6c3f9f0ed77ba1b6ee597465b6cd"
+   },
+   {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "claimId": "7",
+    "status": 1,
+    "reason": "0x9c792c03adefd61d3baa9dd654ab5fcd74f79f20f047c0272aa8914fc4718539"
+   }
+  ]
+ },
+ "decision": [
+  {
+   "claimStatus": 0,
+   "claimStatusName": "none",
+   "revert": "NoClaim"
+  },
+  {
+   "claimStatus": 1,
+   "claimStatusName": "open",
+   "check": 0,
+   "decision": "pending"
+  },
+  {
+   "claimStatus": 2,
+   "claimStatusName": "rejected",
+   "check": 2,
+   "decision": "reject"
+  },
+  {
+   "claimStatus": 3,
+   "claimStatusName": "accepted",
+   "check": 1,
+   "decision": "complete"
+  },
+  {
+   "claimStatus": 4,
+   "claimStatusName": "abandoned",
+   "check": 0,
+   "decision": "pending"
+  },
+  {
+   "claimStatus": 5,
+   "claimStatusName": null,
+   "revert": "BadGame"
+  }
+ ],
+ "stateTable": [
+  {
+   "jobStatus": 0,
+   "jobStatusName": "Open",
+   "bound": false,
+   "claimStatus": null,
+   "claimStatusName": null,
+   "row": {
+    "bindJob": "allowed",
+    "fund": "NotBound",
+    "check": "NotBound",
+    "settle": "NotBound",
+    "endsBy": "kernel: client reject / expiry"
+   }
+  },
+  {
+   "jobStatus": 0,
+   "jobStatusName": "Open",
+   "bound": true,
+   "claimStatus": null,
+   "claimStatusName": null,
+   "row": {
+    "bindJob": "AlreadyBound",
+    "fund": "allowed",
+    "check": "NoClaim",
+    "settle": "NoClaim",
+    "endsBy": "kernel: client reject / expiry"
+   }
+  },
+  {
+   "jobStatus": 1,
+   "jobStatusName": "Funded",
+   "bound": false,
+   "claimStatus": null,
+   "claimStatusName": null,
+   "row": {
+    "bindJob": "NotOpen",
+    "submit": "NotBound",
+    "check": "NotBound",
+    "settle": "NotBound",
+    "endsBy": "kernel: claimRefund after expiredAt"
+   }
+  },
+  {
+   "jobStatus": 1,
+   "jobStatusName": "Funded",
+   "bound": true,
+   "claimStatus": null,
+   "claimStatusName": null,
+   "row": {
+    "bindJob": "NotOpen",
+    "submit": "checked by afterAction(submit)",
+    "check": "NoClaim",
+    "settle": "NoClaim",
+    "endsBy": "kernel: claimRefund after expiredAt"
+   }
+  },
+  {
+   "jobStatus": 2,
+   "jobStatusName": "Submitted",
+   "bound": true,
+   "claimStatus": 1,
+   "claimStatusName": "open",
+   "row": {
+    "bindJob": "NotOpen",
+    "check": "pending",
+    "settle": "NotDecided",
+    "endsBy": "game decides, then settle; or kernel: claimRefund after expiredAt"
+   }
+  },
+  {
+   "jobStatus": 2,
+   "jobStatusName": "Submitted",
+   "bound": true,
+   "claimStatus": 2,
+   "claimStatusName": "rejected",
+   "row": {
+    "bindJob": "NotOpen",
+    "check": "reject",
+    "settle": "kernel.reject -> Rejected, budget to client",
+    "endsBy": "settle"
+   }
+  },
+  {
+   "jobStatus": 2,
+   "jobStatusName": "Submitted",
+   "bound": true,
+   "claimStatus": 3,
+   "claimStatusName": "accepted",
+   "row": {
+    "bindJob": "NotOpen",
+    "check": "complete",
+    "settle": "kernel.complete -> Completed, budget to provider",
+    "endsBy": "settle"
+   }
+  },
+  {
+   "jobStatus": 2,
+   "jobStatusName": "Submitted",
+   "bound": true,
+   "claimStatus": 4,
+   "claimStatusName": "abandoned",
+   "row": {
+    "bindJob": "NotOpen",
+    "check": "pending",
+    "settle": "NotDecided",
+    "endsBy": "game decides, then settle; or kernel: claimRefund after expiredAt"
+   }
+  },
+  {
+   "jobStatus": 3,
+   "jobStatusName": "Completed",
+   "bound": true,
+   "claimStatus": 3,
+   "claimStatusName": "accepted",
+   "row": {
+    "bindJob": "NotOpen",
+    "check": "complete",
+    "settle": "AlreadySettled",
+    "endsBy": "terminal"
+   }
+  },
+  {
+   "jobStatus": 4,
+   "jobStatusName": "Rejected",
+   "bound": true,
+   "claimStatus": 2,
+   "claimStatusName": "rejected",
+   "row": {
+    "bindJob": "NotOpen",
+    "check": "reject",
+    "settle": "AlreadySettled",
+    "endsBy": "terminal"
+   }
+  },
+  {
+   "jobStatus": 5,
+   "jobStatusName": "Expired",
+   "bound": true,
+   "claimStatus": 1,
+   "claimStatusName": "open",
+   "row": {
+    "bindJob": "NotOpen",
+    "check": "pending",
+    "settle": "NotSubmitted",
+    "endsBy": "terminal"
+   }
+  },
+  {
+   "jobStatus": 5,
+   "jobStatusName": "Expired",
+   "bound": true,
+   "claimStatus": 3,
+   "claimStatusName": "accepted",
+   "row": {
+    "bindJob": "NotOpen",
+    "check": "complete",
+    "settle": "NotSubmitted",
+    "endsBy": "terminal"
+   }
+  }
+ ],
+ "bind": [
+  {
+   "name": "valid",
+   "now": 1800000000,
+   "sender": "0x00000000000000000000000000000000000000c1",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 0,
+    "budget": 0,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "T": 92,
+    "K": 8,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "inputProvider": "0x0000000000000000000000000000000000000000"
+   },
+   "alreadyBound": false,
+   "evaluator": {
+    "address": "0x00000000000000000000000000000000000000e1",
+    "game": "0x00000000000000000000000000000000000000d1",
+    "inputProvider": "0x0000000000000000000000000000000000000000",
+    "margin": 21600,
+    "maxSettlementSeconds": 1368992
+   },
+   "requiredExpiry": 1801390592,
+   "result": "ok"
+  },
+  {
+   "name": "valid_case_b",
+   "now": 1800000000,
+   "sender": "0x00000000000000000000000000000000000000c1",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 0,
+    "budget": 0,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "T": 92,
+    "K": 8,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "inputProvider": "0x00000000000000000000000000000000000000a1"
+   },
+   "alreadyBound": false,
+   "evaluator": {
+    "address": "0x00000000000000000000000000000000000000e1",
+    "game": "0x00000000000000000000000000000000000000d1",
+    "inputProvider": "0x00000000000000000000000000000000000000a1",
+    "margin": 21600,
+    "maxSettlementSeconds": 1368992
+   },
+   "requiredExpiry": 1801390592,
+   "result": "ok"
+  },
+  {
+   "name": "valid_expiry_exact",
+   "now": 1800000000,
+   "sender": "0x00000000000000000000000000000000000000c1",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 0,
+    "budget": 0,
+    "expiredAt": 1801390592,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "T": 92,
+    "K": 8,
+    "budget": 5000000,
+    "expiredAt": 1801390592,
+    "inputProvider": "0x0000000000000000000000000000000000000000"
+   },
+   "alreadyBound": false,
+   "evaluator": {
+    "address": "0x00000000000000000000000000000000000000e1",
+    "game": "0x00000000000000000000000000000000000000d1",
+    "inputProvider": "0x0000000000000000000000000000000000000000",
+    "margin": 21600,
+    "maxSettlementSeconds": 1368992
+   },
+   "requiredExpiry": 1801390592,
+   "result": "ok"
+  },
+  {
+   "name": "J1_not_client",
+   "now": 1800000000,
+   "sender": "0x00000000000000000000000000000000000000b1",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 0,
+    "budget": 0,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "T": 92,
+    "K": 8,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "inputProvider": "0x0000000000000000000000000000000000000000"
+   },
+   "alreadyBound": false,
+   "evaluator": {
+    "address": "0x00000000000000000000000000000000000000e1",
+    "game": "0x00000000000000000000000000000000000000d1",
+    "inputProvider": "0x0000000000000000000000000000000000000000",
+    "margin": 21600,
+    "maxSettlementSeconds": 1368992
+   },
+   "requiredExpiry": 1801390592,
+   "result": "NotClient"
+  },
+  {
+   "name": "J1_not_client_stranger",
+   "now": 1800000000,
+   "sender": "0x00000000000000000000000000000000000000f1",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 0,
+    "budget": 0,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "T": 92,
+    "K": 8,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "inputProvider": "0x0000000000000000000000000000000000000000"
+   },
+   "alreadyBound": false,
+   "evaluator": {
+    "address": "0x00000000000000000000000000000000000000e1",
+    "game": "0x00000000000000000000000000000000000000d1",
+    "inputProvider": "0x0000000000000000000000000000000000000000",
+    "margin": 21600,
+    "maxSettlementSeconds": 1368992
+   },
+   "requiredExpiry": 1801390592,
+   "result": "NotClient"
+  },
+  {
+   "name": "J1_not_open_funded",
+   "now": 1800000000,
+   "sender": "0x00000000000000000000000000000000000000c1",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 1,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "T": 92,
+    "K": 8,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "inputProvider": "0x0000000000000000000000000000000000000000"
+   },
+   "alreadyBound": false,
+   "evaluator": {
+    "address": "0x00000000000000000000000000000000000000e1",
+    "game": "0x00000000000000000000000000000000000000d1",
+    "inputProvider": "0x0000000000000000000000000000000000000000",
+    "margin": 21600,
+    "maxSettlementSeconds": 1368992
+   },
+   "requiredExpiry": 1801390592,
+   "result": "NotOpen"
+  },
+  {
+   "name": "J1_not_open_submitted",
+   "now": 1800000000,
+   "sender": "0x00000000000000000000000000000000000000c1",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 2,
+    "budget": 0,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "T": 92,
+    "K": 8,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "inputProvider": "0x0000000000000000000000000000000000000000"
+   },
+   "alreadyBound": false,
+   "evaluator": {
+    "address": "0x00000000000000000000000000000000000000e1",
+    "game": "0x00000000000000000000000000000000000000d1",
+    "inputProvider": "0x0000000000000000000000000000000000000000",
+    "margin": 21600,
+    "maxSettlementSeconds": 1368992
+   },
+   "requiredExpiry": 1801390592,
+   "result": "NotOpen"
+  },
+  {
+   "name": "J1_evaluator_differs",
+   "now": 1800000000,
+   "sender": "0x00000000000000000000000000000000000000c1",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000f1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 0,
+    "budget": 0,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "T": 92,
+    "K": 8,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "inputProvider": "0x0000000000000000000000000000000000000000"
+   },
+   "alreadyBound": false,
+   "evaluator": {
+    "address": "0x00000000000000000000000000000000000000e1",
+    "game": "0x00000000000000000000000000000000000000d1",
+    "inputProvider": "0x0000000000000000000000000000000000000000",
+    "margin": 21600,
+    "maxSettlementSeconds": 1368992
+   },
+   "requiredExpiry": 1801390592,
+   "result": "NotEvaluator"
+  },
+  {
+   "name": "J1_hook_differs",
+   "now": 1800000000,
+   "sender": "0x00000000000000000000000000000000000000c1",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000f2",
+    "status": 0,
+    "budget": 0,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "T": 92,
+    "K": 8,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "inputProvider": "0x0000000000000000000000000000000000000000"
+   },
+   "alreadyBound": false,
+   "evaluator": {
+    "address": "0x00000000000000000000000000000000000000e1",
+    "game": "0x00000000000000000000000000000000000000d1",
+    "inputProvider": "0x0000000000000000000000000000000000000000",
+    "margin": 21600,
+    "maxSettlementSeconds": 1368992
+   },
+   "requiredExpiry": 1801390592,
+   "result": "NotEvaluator"
+  },
+  {
+   "name": "J1_already_bound",
+   "now": 1800000000,
+   "sender": "0x00000000000000000000000000000000000000c1",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 0,
+    "budget": 0,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "T": 92,
+    "K": 8,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "inputProvider": "0x0000000000000000000000000000000000000000"
+   },
+   "alreadyBound": true,
+   "evaluator": {
+    "address": "0x00000000000000000000000000000000000000e1",
+    "game": "0x00000000000000000000000000000000000000d1",
+    "inputProvider": "0x0000000000000000000000000000000000000000",
+    "margin": 21600,
+    "maxSettlementSeconds": 1368992
+   },
+   "requiredExpiry": 1801390592,
+   "result": "AlreadyBound"
+  },
+  {
+   "name": "J1_other_game",
+   "now": 1800000000,
+   "sender": "0x00000000000000000000000000000000000000c1",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 0,
+    "budget": 0,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d2",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "T": 92,
+    "K": 8,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "inputProvider": "0x0000000000000000000000000000000000000000"
+   },
+   "alreadyBound": false,
+   "evaluator": {
+    "address": "0x00000000000000000000000000000000000000e1",
+    "game": "0x00000000000000000000000000000000000000d1",
+    "inputProvider": "0x0000000000000000000000000000000000000000",
+    "margin": 21600,
+    "maxSettlementSeconds": 1368992
+   },
+   "requiredExpiry": 1801390592,
+   "result": "BadGame"
+  },
+  {
+   "name": "J1_input_provider_mismatch",
+   "now": 1800000000,
+   "sender": "0x00000000000000000000000000000000000000c1",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 0,
+    "budget": 0,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "T": 92,
+    "K": 8,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "inputProvider": "0x00000000000000000000000000000000000000a1"
+   },
+   "alreadyBound": false,
+   "evaluator": {
+    "address": "0x00000000000000000000000000000000000000e1",
+    "game": "0x00000000000000000000000000000000000000d1",
+    "inputProvider": "0x0000000000000000000000000000000000000000",
+    "margin": 21600,
+    "maxSettlementSeconds": 1368992
+   },
+   "requiredExpiry": 1801390592,
+   "result": "BadInputProvider"
+  },
+  {
+   "name": "J1_input_provider_missing",
+   "now": 1800000000,
+   "sender": "0x00000000000000000000000000000000000000c1",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 0,
+    "budget": 0,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "T": 92,
+    "K": 8,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "inputProvider": "0x0000000000000000000000000000000000000000"
+   },
+   "alreadyBound": false,
+   "evaluator": {
+    "address": "0x00000000000000000000000000000000000000e1",
+    "game": "0x00000000000000000000000000000000000000d1",
+    "inputProvider": "0x00000000000000000000000000000000000000a1",
+    "margin": 21600,
+    "maxSettlementSeconds": 1368992
+   },
+   "requiredExpiry": 1801390592,
+   "result": "BadInputProvider"
+  },
+  {
+   "name": "J1_input_provider_is_provider",
+   "now": 1800000000,
+   "sender": "0x00000000000000000000000000000000000000c1",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000a1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 0,
+    "budget": 0,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "T": 92,
+    "K": 8,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "inputProvider": "0x00000000000000000000000000000000000000a1"
+   },
+   "alreadyBound": false,
+   "evaluator": {
+    "address": "0x00000000000000000000000000000000000000e1",
+    "game": "0x00000000000000000000000000000000000000d1",
+    "inputProvider": "0x00000000000000000000000000000000000000a1",
+    "margin": 21600,
+    "maxSettlementSeconds": 1368992
+   },
+   "requiredExpiry": 1801390592,
+   "result": "BadInputProvider"
+  },
+  {
+   "name": "J1_T_zero",
+   "now": 1800000000,
+   "sender": "0x00000000000000000000000000000000000000c1",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 0,
+    "budget": 0,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "T": 0,
+    "K": 8,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "inputProvider": "0x0000000000000000000000000000000000000000"
+   },
+   "alreadyBound": false,
+   "evaluator": {
+    "address": "0x00000000000000000000000000000000000000e1",
+    "game": "0x00000000000000000000000000000000000000d1",
+    "inputProvider": "0x0000000000000000000000000000000000000000",
+    "margin": 21600,
+    "maxSettlementSeconds": 1368992
+   },
+   "requiredExpiry": 1801390592,
+   "result": "BadSpec"
+  },
+  {
+   "name": "J1_K_zero",
+   "now": 1800000000,
+   "sender": "0x00000000000000000000000000000000000000c1",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 0,
+    "budget": 0,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "T": 92,
+    "K": 0,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "inputProvider": "0x0000000000000000000000000000000000000000"
+   },
+   "alreadyBound": false,
+   "evaluator": {
+    "address": "0x00000000000000000000000000000000000000e1",
+    "game": "0x00000000000000000000000000000000000000d1",
+    "inputProvider": "0x0000000000000000000000000000000000000000",
+    "margin": 21600,
+    "maxSettlementSeconds": 1368992
+   },
+   "requiredExpiry": 1801390592,
+   "result": "BadSpec"
+  },
+  {
+   "name": "J1_budget_zero",
+   "now": 1800000000,
+   "sender": "0x00000000000000000000000000000000000000c1",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 0,
+    "budget": 0,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "T": 92,
+    "K": 8,
+    "budget": 0,
+    "expiredAt": 1801476992,
+    "inputProvider": "0x0000000000000000000000000000000000000000"
+   },
+   "alreadyBound": false,
+   "evaluator": {
+    "address": "0x00000000000000000000000000000000000000e1",
+    "game": "0x00000000000000000000000000000000000000d1",
+    "inputProvider": "0x0000000000000000000000000000000000000000",
+    "margin": 21600,
+    "maxSettlementSeconds": 1368992
+   },
+   "requiredExpiry": 1801390592,
+   "result": "BadSpec"
+  },
+  {
+   "name": "J1_netlist_zero",
+   "now": 1800000000,
+   "sender": "0x00000000000000000000000000000000000000c1",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 0,
+    "budget": 0,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "netlistHash2": "0x0000000000000000000000000000000000000000000000000000000000000000",
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "T": 92,
+    "K": 8,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "inputProvider": "0x0000000000000000000000000000000000000000"
+   },
+   "alreadyBound": false,
+   "evaluator": {
+    "address": "0x00000000000000000000000000000000000000e1",
+    "game": "0x00000000000000000000000000000000000000d1",
+    "inputProvider": "0x0000000000000000000000000000000000000000",
+    "margin": 21600,
+    "maxSettlementSeconds": 1368992
+   },
+   "requiredExpiry": 1801390592,
+   "result": "BadSpec"
+  },
+  {
+   "name": "J1_expiry_mismatch",
+   "now": 1800000000,
+   "sender": "0x00000000000000000000000000000000000000c1",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 0,
+    "budget": 0,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "T": 92,
+    "K": 8,
+    "budget": 5000000,
+    "expiredAt": 1801390592,
+    "inputProvider": "0x0000000000000000000000000000000000000000"
+   },
+   "alreadyBound": false,
+   "evaluator": {
+    "address": "0x00000000000000000000000000000000000000e1",
+    "game": "0x00000000000000000000000000000000000000d1",
+    "inputProvider": "0x0000000000000000000000000000000000000000",
+    "margin": 21600,
+    "maxSettlementSeconds": 1368992
+   },
+   "requiredExpiry": 1801390592,
+   "result": "ExpiryMismatch"
+  },
+  {
+   "name": "J2_expiry_one_second_short",
+   "now": 1800000000,
+   "sender": "0x00000000000000000000000000000000000000c1",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 0,
+    "budget": 0,
+    "expiredAt": 1801390591,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "T": 92,
+    "K": 8,
+    "budget": 5000000,
+    "expiredAt": 1801390591,
+    "inputProvider": "0x0000000000000000000000000000000000000000"
+   },
+   "alreadyBound": false,
+   "evaluator": {
+    "address": "0x00000000000000000000000000000000000000e1",
+    "game": "0x00000000000000000000000000000000000000d1",
+    "inputProvider": "0x0000000000000000000000000000000000000000",
+    "margin": 21600,
+    "maxSettlementSeconds": 1368992
+   },
+   "requiredExpiry": 1801390592,
+   "result": "ExpiryTooSoon"
+  },
+  {
+   "name": "J2_expiry_far_short",
+   "now": 1800000000,
+   "sender": "0x00000000000000000000000000000000000000c1",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 0,
+    "budget": 0,
+    "expiredAt": 1800003600,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "spec": {
+    "game": "0x00000000000000000000000000000000000000d1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "T": 92,
+    "K": 8,
+    "budget": 5000000,
+    "expiredAt": 1800003600,
+    "inputProvider": "0x0000000000000000000000000000000000000000"
+   },
+   "alreadyBound": false,
+   "evaluator": {
+    "address": "0x00000000000000000000000000000000000000e1",
+    "game": "0x00000000000000000000000000000000000000d1",
+    "inputProvider": "0x0000000000000000000000000000000000000000",
+    "margin": 21600,
+    "maxSettlementSeconds": 1368992
+   },
+   "requiredExpiry": 1801390592,
+   "result": "ExpiryTooSoon"
+  }
+ ],
+ "fund": [
+  {
+   "name": "valid",
+   "sender": "0xea4daa3100a767e86fded867729ae7446476eba6",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 0,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "bound": true,
+   "result": "ok"
+  },
+  {
+   "name": "J10_not_kernel",
+   "sender": "0x00000000000000000000000000000000000000c1",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 0,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "bound": true,
+   "result": "NotKernel"
+  },
+  {
+   "name": "J1_not_bound",
+   "sender": "0xea4daa3100a767e86fded867729ae7446476eba6",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 0,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "bound": false,
+   "result": "NotBound"
+  },
+  {
+   "name": "budget_changed_after_bind",
+   "sender": "0xea4daa3100a767e86fded867729ae7446476eba6",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 0,
+    "budget": 4999999,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "bound": true,
+   "result": "BudgetMismatch"
+  },
+  {
+   "name": "budget_zero",
+   "sender": "0xea4daa3100a767e86fded867729ae7446476eba6",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 0,
+    "budget": 0,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "bound": true,
+   "result": "BudgetMismatch"
+  }
+ ],
+ "submit": [
+  {
+   "name": "valid",
+   "now": 1800000000,
+   "sender": "0xea4daa3100a767e86fded867729ae7446476eba6",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 2,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "bound": true,
+   "claimId": "7",
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000b1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "T": 92,
+    "K": 8,
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 1,
+    "windowEnd": 1800108000
+   },
+   "claimAlreadyBound": false,
+   "requiredWindowEnd": 1800021600,
+   "requiredExpiry": 1801390592,
+   "result": "ok"
+  },
+  {
+   "name": "valid_window_exact",
+   "now": 1800000000,
+   "sender": "0xea4daa3100a767e86fded867729ae7446476eba6",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 2,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "bound": true,
+   "claimId": "7",
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000b1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "T": 92,
+    "K": 8,
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 1,
+    "windowEnd": 1800021600
+   },
+   "claimAlreadyBound": false,
+   "requiredWindowEnd": 1800021600,
+   "requiredExpiry": 1801390592,
+   "result": "ok"
+  },
+  {
+   "name": "J10_not_kernel",
+   "now": 1800000000,
+   "sender": "0x00000000000000000000000000000000000000b1",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 2,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "bound": true,
+   "claimId": "7",
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000b1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "T": 92,
+    "K": 8,
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 1,
+    "windowEnd": 1800108000
+   },
+   "claimAlreadyBound": false,
+   "requiredWindowEnd": 1800021600,
+   "requiredExpiry": 1801390592,
+   "result": "NotKernel"
+  },
+  {
+   "name": "J1_not_bound",
+   "now": 1800000000,
+   "sender": "0xea4daa3100a767e86fded867729ae7446476eba6",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 2,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "bound": false,
+   "claimId": "7",
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000b1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "T": 92,
+    "K": 8,
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 1,
+    "windowEnd": 1800108000
+   },
+   "claimAlreadyBound": false,
+   "requiredWindowEnd": 1800021600,
+   "requiredExpiry": 1801390592,
+   "result": "NotBound"
+  },
+  {
+   "name": "not_submitted_funded",
+   "now": 1800000000,
+   "sender": "0xea4daa3100a767e86fded867729ae7446476eba6",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 1,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000000"
+   },
+   "bound": true,
+   "claimId": "0",
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000b1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "T": 92,
+    "K": 8,
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 1,
+    "windowEnd": 1800108000
+   },
+   "claimAlreadyBound": false,
+   "requiredWindowEnd": 1800021600,
+   "requiredExpiry": 1801390592,
+   "result": "NotSubmitted"
+  },
+  {
+   "name": "claim_already_bound",
+   "now": 1800000000,
+   "sender": "0xea4daa3100a767e86fded867729ae7446476eba6",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 2,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "bound": true,
+   "claimId": "7",
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000b1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "T": 92,
+    "K": 8,
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 1,
+    "windowEnd": 1800108000
+   },
+   "claimAlreadyBound": true,
+   "requiredWindowEnd": 1800021600,
+   "requiredExpiry": 1801390592,
+   "result": "AlreadyBound"
+  },
+  {
+   "name": "J5_short_return_data",
+   "now": 1800000000,
+   "sender": "0xea4daa3100a767e86fded867729ae7446476eba6",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 2,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "bound": true,
+   "claimId": "7",
+   "claim": null,
+   "claimAlreadyBound": false,
+   "requiredWindowEnd": 1800021600,
+   "requiredExpiry": 1801390592,
+   "result": "BadGame"
+  },
+  {
+   "name": "J5_no_such_claim",
+   "now": 1800000000,
+   "sender": "0xea4daa3100a767e86fded867729ae7446476eba6",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 2,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "bound": true,
+   "claimId": "7",
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000b1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "T": 92,
+    "K": 8,
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 0,
+    "windowEnd": 1800108000
+   },
+   "claimAlreadyBound": false,
+   "requiredWindowEnd": 1800021600,
+   "requiredExpiry": 1801390592,
+   "result": "BadDeliverable"
+  },
+  {
+   "name": "J5_claimant_not_provider",
+   "now": 1800000000,
+   "sender": "0xea4daa3100a767e86fded867729ae7446476eba6",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 2,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "bound": true,
+   "claimId": "7",
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000f1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "T": 92,
+    "K": 8,
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 1,
+    "windowEnd": 1800108000
+   },
+   "claimAlreadyBound": false,
+   "requiredWindowEnd": 1800021600,
+   "requiredExpiry": 1801390592,
+   "result": "ClaimMismatch"
+  },
+  {
+   "name": "J5_netlist_differs",
+   "now": 1800000000,
+   "sender": "0xea4daa3100a767e86fded867729ae7446476eba6",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 2,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "bound": true,
+   "claimId": "7",
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000b1",
+    "netlistHash2": "0x4444444444444444444444444444444444444444444444444444444444444444",
+    "T": 92,
+    "K": 8,
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 1,
+    "windowEnd": 1800108000
+   },
+   "claimAlreadyBound": false,
+   "requiredWindowEnd": 1800021600,
+   "requiredExpiry": 1801390592,
+   "result": "ClaimMismatch"
+  },
+  {
+   "name": "J5_input_root_differs",
+   "now": 1800000000,
+   "sender": "0xea4daa3100a767e86fded867729ae7446476eba6",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 2,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "bound": true,
+   "claimId": "7",
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000b1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "T": 92,
+    "K": 8,
+    "inputRoot": "0x4444444444444444444444444444444444444444444444444444444444444444",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 1,
+    "windowEnd": 1800108000
+   },
+   "claimAlreadyBound": false,
+   "requiredWindowEnd": 1800021600,
+   "requiredExpiry": 1801390592,
+   "result": "ClaimMismatch"
+  },
+  {
+   "name": "J5_T_differs",
+   "now": 1800000000,
+   "sender": "0xea4daa3100a767e86fded867729ae7446476eba6",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 2,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "bound": true,
+   "claimId": "7",
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000b1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "T": 93,
+    "K": 8,
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 1,
+    "windowEnd": 1800108000
+   },
+   "claimAlreadyBound": false,
+   "requiredWindowEnd": 1800021600,
+   "requiredExpiry": 1801390592,
+   "result": "ClaimMismatch"
+  },
+  {
+   "name": "J5_K_differs",
+   "now": 1800000000,
+   "sender": "0xea4daa3100a767e86fded867729ae7446476eba6",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 2,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "bound": true,
+   "claimId": "7",
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000b1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "T": 92,
+    "K": 4,
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 1,
+    "windowEnd": 1800108000
+   },
+   "claimAlreadyBound": false,
+   "requiredWindowEnd": 1800021600,
+   "requiredExpiry": 1801390592,
+   "result": "ClaimMismatch"
+  },
+  {
+   "name": "J5_claim_accepted_already",
+   "now": 1800000000,
+   "sender": "0xea4daa3100a767e86fded867729ae7446476eba6",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 2,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "bound": true,
+   "claimId": "7",
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000b1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "T": 92,
+    "K": 8,
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 3,
+    "windowEnd": 1800108000
+   },
+   "claimAlreadyBound": false,
+   "requiredWindowEnd": 1800021600,
+   "requiredExpiry": 1801390592,
+   "result": "ClaimNotOpen"
+  },
+  {
+   "name": "J5_claim_rejected_already",
+   "now": 1800000000,
+   "sender": "0xea4daa3100a767e86fded867729ae7446476eba6",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 2,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "bound": true,
+   "claimId": "7",
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000b1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "T": 92,
+    "K": 8,
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 2,
+    "windowEnd": 1800108000
+   },
+   "claimAlreadyBound": false,
+   "requiredWindowEnd": 1800021600,
+   "requiredExpiry": 1801390592,
+   "result": "ClaimNotOpen"
+  },
+  {
+   "name": "J5_claim_abandoned",
+   "now": 1800000000,
+   "sender": "0xea4daa3100a767e86fded867729ae7446476eba6",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 2,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "bound": true,
+   "claimId": "7",
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000b1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "T": 92,
+    "K": 8,
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 4,
+    "windowEnd": 1800108000
+   },
+   "claimAlreadyBound": false,
+   "requiredWindowEnd": 1800021600,
+   "requiredExpiry": 1801390592,
+   "result": "ClaimNotOpen"
+  },
+  {
+   "name": "J3_window_one_second_short",
+   "now": 1800000000,
+   "sender": "0xea4daa3100a767e86fded867729ae7446476eba6",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 2,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "bound": true,
+   "claimId": "7",
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000b1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "T": 92,
+    "K": 8,
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 1,
+    "windowEnd": 1800021599
+   },
+   "claimAlreadyBound": false,
+   "requiredWindowEnd": 1800021600,
+   "requiredExpiry": 1801390592,
+   "result": "WindowTooShort"
+  },
+  {
+   "name": "J3_window_ended",
+   "now": 1800000000,
+   "sender": "0xea4daa3100a767e86fded867729ae7446476eba6",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 2,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "bound": true,
+   "claimId": "7",
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000b1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "T": 92,
+    "K": 8,
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 1,
+    "windowEnd": 1799999999
+   },
+   "claimAlreadyBound": false,
+   "requiredWindowEnd": 1800021600,
+   "requiredExpiry": 1801390592,
+   "result": "WindowTooShort"
+  },
+  {
+   "name": "J2_expiry_short_at_submit",
+   "now": 1800000000,
+   "sender": "0xea4daa3100a767e86fded867729ae7446476eba6",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 2,
+    "budget": 5000000,
+    "expiredAt": 1801390591,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "bound": true,
+   "claimId": "7",
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000b1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "T": 92,
+    "K": 8,
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 1,
+    "windowEnd": 1800108000
+   },
+   "claimAlreadyBound": false,
+   "requiredWindowEnd": 1800021600,
+   "requiredExpiry": 1801390592,
+   "result": "ExpiryTooSoon"
+  }
+ ],
+ "settle": [
+  {
+   "name": "no_claim",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 2,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "claim": null,
+   "settled": false,
+   "result": "NoClaim"
+  },
+  {
+   "name": "already_settled",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 3,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000b1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "T": 92,
+    "K": 8,
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 3,
+    "windowEnd": 1800108000
+   },
+   "settled": true,
+   "result": "AlreadySettled"
+  },
+  {
+   "name": "J6_pending_open",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 2,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000b1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "T": 92,
+    "K": 8,
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 1,
+    "windowEnd": 1800108000
+   },
+   "settled": false,
+   "result": "NotDecided"
+  },
+  {
+   "name": "J6_pending_abandoned",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 2,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000b1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "T": 92,
+    "K": 8,
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 4,
+    "windowEnd": 1800108000
+   },
+   "settled": false,
+   "result": "NotDecided"
+  },
+  {
+   "name": "J6_expired_job_accepted_claim",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 5,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000b1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "T": 92,
+    "K": 8,
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 3,
+    "windowEnd": 1800108000
+   },
+   "settled": false,
+   "result": "NotSubmitted"
+  },
+  {
+   "name": "J6_expired_job_rejected_claim",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 5,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000b1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "T": 92,
+    "K": 8,
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 2,
+    "windowEnd": 1800108000
+   },
+   "settled": false,
+   "result": "NotSubmitted"
+  },
+  {
+   "name": "complete",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 2,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000b1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "T": 92,
+    "K": 8,
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 3,
+    "windowEnd": 1800108000
+   },
+   "settled": false,
+   "result": "ok",
+   "decision": "complete",
+   "kernelCall": "complete",
+   "reason": "0x49a91c7fae25893cc1da766811f9d59c0f0c648ffcb143dac675922dd6692da8"
+  },
+  {
+   "name": "reject",
+   "job": {
+    "client": "0x00000000000000000000000000000000000000c1",
+    "provider": "0x00000000000000000000000000000000000000b1",
+    "evaluator": "0x00000000000000000000000000000000000000e1",
+    "hook": "0x00000000000000000000000000000000000000e1",
+    "status": 2,
+    "budget": 5000000,
+    "expiredAt": 1801476992,
+    "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007"
+   },
+   "claim": {
+    "claimant": "0x00000000000000000000000000000000000000b1",
+    "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+    "T": 92,
+    "K": 8,
+    "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+    "checkpointRoot": "0x3333333333333333333333333333333333333333333333333333333333333333",
+    "leaves": 13,
+    "status": 2,
+    "windowEnd": 1800108000
+   },
+   "settled": false,
+   "result": "ok",
+   "decision": "reject",
+   "kernelCall": "reject",
+   "reason": "0x8d3cd87d9fd538a417e6dec345357e2f7aac6adfbb04f747c97daa9eae71fffe"
+  }
+ ],
+ "hookRules": [
+  {
+   "name": "fund_ok",
+   "entry": {
+    "selector": "fund",
+    "gasUsed": 60000,
+    "externalStaticCalls": 1
+   },
+   "result": "ok"
+  },
+  {
+   "name": "submit_ok_three_calls",
+   "entry": {
+    "selector": "submit",
+    "gasUsed": 120000,
+    "externalStaticCalls": 3
+   },
+   "result": "ok"
+  },
+  {
+   "name": "J7_gas_over_limit",
+   "entry": {
+    "selector": "submit",
+    "gasUsed": 1000001,
+    "externalStaticCalls": 3
+   },
+   "result": "J-7: entry exceeds HOOK_GAS_LIMIT"
+  },
+  {
+   "name": "J7_gas_at_limit",
+   "entry": {
+    "selector": "submit",
+    "gasUsed": 1000000,
+    "externalStaticCalls": 3
+   },
+   "result": "ok"
+  },
+  {
+   "name": "J7_four_static_calls",
+   "entry": {
+    "selector": "submit",
+    "gasUsed": 120000,
+    "externalStaticCalls": 4
+   },
+   "result": "J-7: more than three external static calls"
+  },
+  {
+   "name": "J8_complete_calls_out",
+   "entry": {
+    "selector": "complete",
+    "gasUsed": 30000,
+    "externalStaticCalls": 0,
+    "callsOut": true
+   },
+   "result": "J-8: afterAction(complete|reject) only records and emits"
+  },
+  {
+   "name": "J8_reject_calls_out",
+   "entry": {
+    "selector": "reject",
+    "gasUsed": 30000,
+    "externalStaticCalls": 0,
+    "callsOut": true
+   },
+   "result": "J-8: afterAction(complete|reject) only records and emits"
+  },
+  {
+   "name": "J8_complete_records_only",
+   "entry": {
+    "selector": "complete",
+    "gasUsed": 30000,
+    "externalStaticCalls": 0,
+    "callsOut": false
+   },
+   "result": "ok"
+  },
+  {
+   "name": "J8_setBudget_changes_state",
+   "entry": {
+    "selector": "setBudget",
+    "gasUsed": 25000,
+    "externalStaticCalls": 0,
+    "changesState": true
+   },
+   "result": "J-8: other entries return without effect"
+  },
+  {
+   "name": "J8_setBudget_no_effect",
+   "entry": {
+    "selector": "setBudget",
+    "gasUsed": 25000,
+    "externalStaticCalls": 0,
+    "changesState": false
+   },
+   "result": "ok"
+  },
+  {
+   "name": "J10_not_from_kernel",
+   "entry": {
+    "selector": "fund",
+    "gasUsed": 60000,
+    "externalStaticCalls": 1,
+    "senderIsKernel": false
+   },
+   "result": "J-10: entry not from the pinned kernel must revert"
+  }
+ ],
+ "dispatch": [
+  {
+   "phase": "before",
+   "kernelFunction": "createJob",
+   "selector": "0x41528812",
+   "runs": "none"
+  },
+  {
+   "phase": "before",
+   "kernelFunction": "setProvider",
+   "selector": "0xc9a84bb9",
+   "runs": "none"
+  },
+  {
+   "phase": "before",
+   "kernelFunction": "setBudget",
+   "selector": "0xdd4ae9d4",
+   "runs": "none"
+  },
+  {
+   "phase": "before",
+   "kernelFunction": "fund",
+   "selector": "0xd2e13f50",
+   "runs": "fund"
+  },
+  {
+   "phase": "before",
+   "kernelFunction": "submit",
+   "selector": "0x9e63798d",
+   "runs": "none"
+  },
+  {
+   "phase": "before",
+   "kernelFunction": "complete",
+   "selector": "0xd75bbdf3",
+   "runs": "none"
+  },
+  {
+   "phase": "before",
+   "kernelFunction": "reject",
+   "selector": "0x41dd26f5",
+   "runs": "none"
+  },
+  {
+   "phase": "after",
+   "kernelFunction": "createJob",
+   "selector": "0x41528812",
+   "runs": "none"
+  },
+  {
+   "phase": "after",
+   "kernelFunction": "setProvider",
+   "selector": "0xc9a84bb9",
+   "runs": "none"
+  },
+  {
+   "phase": "after",
+   "kernelFunction": "setBudget",
+   "selector": "0xdd4ae9d4",
+   "runs": "none"
+  },
+  {
+   "phase": "after",
+   "kernelFunction": "fund",
+   "selector": "0xd2e13f50",
+   "runs": "none"
+  },
+  {
+   "phase": "after",
+   "kernelFunction": "submit",
+   "selector": "0x9e63798d",
+   "runs": "submit"
+  },
+  {
+   "phase": "after",
+   "kernelFunction": "complete",
+   "selector": "0xd75bbdf3",
+   "runs": "terminal"
+  },
+  {
+   "phase": "after",
+   "kernelFunction": "reject",
+   "selector": "0x41dd26f5",
+   "runs": "terminal"
+  },
+  {
+   "phase": "after",
+   "kernelFunction": "unknown",
+   "selector": "0xdeadbeef",
+   "runs": "none"
+  }
+ ],
+ "expiry": {
+  "arithmetic": [
+   {
+    "now": 1800000000,
+    "maxSettlementSeconds": 1368992,
+    "margin": 21600,
+    "requiredExpiry": 1801390592,
+    "ok": {
+     "exact": true,
+     "minusOne": false,
+     "plusOne": true
+    }
+   },
+   {
+    "now": 1800000000,
+    "maxSettlementSeconds": 302464,
+    "margin": 21600,
+    "requiredExpiry": 1800324064,
+    "ok": {
+     "exact": true,
+     "minusOne": false,
+     "plusOne": true
+    }
+   },
+   {
+    "now": 1800000000,
+    "maxSettlementSeconds": 0,
+    "margin": 21600,
+    "requiredExpiry": 1800021600,
+    "ok": {
+     "exact": true,
+     "minusOne": false,
+     "plusOne": true
+    }
+   },
+   {
+    "now": 1800000000,
+    "maxSettlementSeconds": 1368992,
+    "margin": 86400,
+    "requiredExpiry": 1801455392,
+    "ok": {
+     "exact": true,
+     "minusOne": false,
+     "plusOne": true
+    }
+   },
+   {
+    "now": 1800000000,
+    "minRemainingWindow": 21600,
+    "requiredWindowEnd": 1800021600,
+    "ok": {
+     "exact": true,
+     "minusOne": false,
+     "plusOne": true
+    }
+   },
+   {
+    "now": 1800000000,
+    "minRemainingWindow": 108000,
+    "requiredWindowEnd": 1800108000,
+    "ok": {
+     "exact": true,
+     "minusOne": false,
+     "plusOne": true
+    }
+   }
+  ],
+  "constants": [
+   {
+    "name": "default",
+    "margin": 21600,
+    "minRemainingWindow": 21600,
+    "maxSettlementSeconds": 1368992,
+    "MAX_EXPIRY_DURATION": 31536000,
+    "result": "ok"
+   },
+   {
+    "name": "margin_below_minimum",
+    "margin": 21599,
+    "minRemainingWindow": 21600,
+    "maxSettlementSeconds": 1368992,
+    "MAX_EXPIRY_DURATION": 31536000,
+    "result": "margin-below-minimum"
+   },
+   {
+    "name": "window_below_minimum",
+    "margin": 21600,
+    "minRemainingWindow": 21599,
+    "maxSettlementSeconds": 1368992,
+    "MAX_EXPIRY_DURATION": 31536000,
+    "result": "minRemainingWindow-below-minimum"
+   },
+   {
+    "name": "infeasible_equal",
+    "margin": 21600,
+    "minRemainingWindow": 21600,
+    "maxSettlementSeconds": 31514400,
+    "MAX_EXPIRY_DURATION": 31536000,
+    "result": "infeasible-expiry"
+   },
+   {
+    "name": "feasible_by_one",
+    "margin": 21600,
+    "minRemainingWindow": 21600,
+    "maxSettlementSeconds": 31514399,
+    "MAX_EXPIRY_DURATION": 31536000,
+    "result": "ok"
+   },
+   {
+    "name": "large_set_infeasible",
+    "margin": 21600,
+    "minRemainingWindow": 21600,
+    "maxSettlementSeconds": 103295104,
+    "MAX_EXPIRY_DURATION": 31536000,
+    "result": "infeasible-expiry"
+   }
+  ],
+  "feasibility": [
+   {
+    "createdAt": 1800000000,
+    "expiredAt": 1831536000,
+    "maxSettlementSeconds": 1368992,
+    "margin": 21600,
+    "latestBindOrSubmitTime": 1830145408,
+    "secondsAvailable": 30145408
+   },
+   {
+    "createdAt": 1800000000,
+    "expiredAt": 1831536000,
+    "maxSettlementSeconds": 302464,
+    "margin": 21600,
+    "latestBindOrSubmitTime": 1831211936,
+    "secondsAvailable": 31211936
+   }
+  ]
+ },
+ "kernelMatrix": [
+  {
+   "jobStatus": 0,
+   "jobStatusName": "Open",
+   "function": "setProvider",
+   "byRole": {
+    "client": "ok",
+    "provider": "Unauthorized",
+    "evaluator": "Unauthorized",
+    "stranger": "Unauthorized"
+   }
+  },
+  {
+   "jobStatus": 0,
+   "jobStatusName": "Open",
+   "function": "setBudget",
+   "byRole": {
+    "client": "ok",
+    "provider": "ok",
+    "evaluator": "Unauthorized",
+    "stranger": "Unauthorized"
+   }
+  },
+  {
+   "jobStatus": 0,
+   "jobStatusName": "Open",
+   "function": "fund",
+   "byRole": {
+    "client": "ok",
+    "provider": "Unauthorized",
+    "evaluator": "Unauthorized",
+    "stranger": "Unauthorized"
+   }
+  },
+  {
+   "jobStatus": 0,
+   "jobStatusName": "Open",
+   "function": "submit",
+   "byRole": {
+    "client": "WrongStatus",
+    "provider": "WrongStatus",
+    "evaluator": "WrongStatus",
+    "stranger": "WrongStatus"
+   }
+  },
+  {
+   "jobStatus": 0,
+   "jobStatusName": "Open",
+   "function": "complete",
+   "byRole": {
+    "client": "WrongStatus",
+    "provider": "WrongStatus",
+    "evaluator": "WrongStatus",
+    "stranger": "WrongStatus"
+   }
+  },
+  {
+   "jobStatus": 0,
+   "jobStatusName": "Open",
+   "function": "reject",
+   "byRole": {
+    "client": "ok",
+    "provider": "Unauthorized",
+    "evaluator": "Unauthorized",
+    "stranger": "Unauthorized"
+   }
+  },
+  {
+   "jobStatus": 0,
+   "jobStatusName": "Open",
+   "function": "claimRefund",
+   "byRole": {
+    "client": "WrongStatus",
+    "provider": "WrongStatus",
+    "evaluator": "WrongStatus",
+    "stranger": "WrongStatus"
+   }
+  },
+  {
+   "jobStatus": 1,
+   "jobStatusName": "Funded",
+   "function": "setProvider",
+   "byRole": {
+    "client": "WrongStatus",
+    "provider": "WrongStatus",
+    "evaluator": "WrongStatus",
+    "stranger": "WrongStatus"
+   }
+  },
+  {
+   "jobStatus": 1,
+   "jobStatusName": "Funded",
+   "function": "setBudget",
+   "byRole": {
+    "client": "WrongStatus",
+    "provider": "WrongStatus",
+    "evaluator": "WrongStatus",
+    "stranger": "WrongStatus"
+   }
+  },
+  {
+   "jobStatus": 1,
+   "jobStatusName": "Funded",
+   "function": "fund",
+   "byRole": {
+    "client": "WrongStatus",
+    "provider": "WrongStatus",
+    "evaluator": "WrongStatus",
+    "stranger": "WrongStatus"
+   }
+  },
+  {
+   "jobStatus": 1,
+   "jobStatusName": "Funded",
+   "function": "submit",
+   "byRole": {
+    "client": "Unauthorized",
+    "provider": "ok",
+    "evaluator": "Unauthorized",
+    "stranger": "Unauthorized"
+   }
+  },
+  {
+   "jobStatus": 1,
+   "jobStatusName": "Funded",
+   "function": "complete",
+   "byRole": {
+    "client": "WrongStatus",
+    "provider": "WrongStatus",
+    "evaluator": "WrongStatus",
+    "stranger": "WrongStatus"
+   }
+  },
+  {
+   "jobStatus": 1,
+   "jobStatusName": "Funded",
+   "function": "reject",
+   "byRole": {
+    "client": "Unauthorized",
+    "provider": "Unauthorized",
+    "evaluator": "ok",
+    "stranger": "Unauthorized"
+   }
+  },
+  {
+   "jobStatus": 1,
+   "jobStatusName": "Funded",
+   "function": "claimRefund",
+   "byRole": {
+    "client": "ok",
+    "provider": "ok",
+    "evaluator": "ok",
+    "stranger": "ok"
+   }
+  },
+  {
+   "jobStatus": 2,
+   "jobStatusName": "Submitted",
+   "function": "setProvider",
+   "byRole": {
+    "client": "WrongStatus",
+    "provider": "WrongStatus",
+    "evaluator": "WrongStatus",
+    "stranger": "WrongStatus"
+   }
+  },
+  {
+   "jobStatus": 2,
+   "jobStatusName": "Submitted",
+   "function": "setBudget",
+   "byRole": {
+    "client": "WrongStatus",
+    "provider": "WrongStatus",
+    "evaluator": "WrongStatus",
+    "stranger": "WrongStatus"
+   }
+  },
+  {
+   "jobStatus": 2,
+   "jobStatusName": "Submitted",
+   "function": "fund",
+   "byRole": {
+    "client": "WrongStatus",
+    "provider": "WrongStatus",
+    "evaluator": "WrongStatus",
+    "stranger": "WrongStatus"
+   }
+  },
+  {
+   "jobStatus": 2,
+   "jobStatusName": "Submitted",
+   "function": "submit",
+   "byRole": {
+    "client": "WrongStatus",
+    "provider": "WrongStatus",
+    "evaluator": "WrongStatus",
+    "stranger": "WrongStatus"
+   }
+  },
+  {
+   "jobStatus": 2,
+   "jobStatusName": "Submitted",
+   "function": "complete",
+   "byRole": {
+    "client": "Unauthorized",
+    "provider": "Unauthorized",
+    "evaluator": "ok",
+    "stranger": "Unauthorized"
+   }
+  },
+  {
+   "jobStatus": 2,
+   "jobStatusName": "Submitted",
+   "function": "reject",
+   "byRole": {
+    "client": "Unauthorized",
+    "provider": "Unauthorized",
+    "evaluator": "ok",
+    "stranger": "Unauthorized"
+   }
+  },
+  {
+   "jobStatus": 2,
+   "jobStatusName": "Submitted",
+   "function": "claimRefund",
+   "byRole": {
+    "client": "ok",
+    "provider": "ok",
+    "evaluator": "ok",
+    "stranger": "ok"
+   }
+  },
+  {
+   "jobStatus": 3,
+   "jobStatusName": "Completed",
+   "function": "setProvider",
+   "byRole": {
+    "client": "WrongStatus",
+    "provider": "WrongStatus",
+    "evaluator": "WrongStatus",
+    "stranger": "WrongStatus"
+   }
+  },
+  {
+   "jobStatus": 3,
+   "jobStatusName": "Completed",
+   "function": "setBudget",
+   "byRole": {
+    "client": "WrongStatus",
+    "provider": "WrongStatus",
+    "evaluator": "WrongStatus",
+    "stranger": "WrongStatus"
+   }
+  },
+  {
+   "jobStatus": 3,
+   "jobStatusName": "Completed",
+   "function": "fund",
+   "byRole": {
+    "client": "WrongStatus",
+    "provider": "WrongStatus",
+    "evaluator": "WrongStatus",
+    "stranger": "WrongStatus"
+   }
+  },
+  {
+   "jobStatus": 3,
+   "jobStatusName": "Completed",
+   "function": "submit",
+   "byRole": {
+    "client": "WrongStatus",
+    "provider": "WrongStatus",
+    "evaluator": "WrongStatus",
+    "stranger": "WrongStatus"
+   }
+  },
+  {
+   "jobStatus": 3,
+   "jobStatusName": "Completed",
+   "function": "complete",
+   "byRole": {
+    "client": "WrongStatus",
+    "provider": "WrongStatus",
+    "evaluator": "WrongStatus",
+    "stranger": "WrongStatus"
+   }
+  },
+  {
+   "jobStatus": 3,
+   "jobStatusName": "Completed",
+   "function": "reject",
+   "byRole": {
+    "client": "WrongStatus",
+    "provider": "WrongStatus",
+    "evaluator": "WrongStatus",
+    "stranger": "WrongStatus"
+   }
+  },
+  {
+   "jobStatus": 3,
+   "jobStatusName": "Completed",
+   "function": "claimRefund",
+   "byRole": {
+    "client": "WrongStatus",
+    "provider": "WrongStatus",
+    "evaluator": "WrongStatus",
+    "stranger": "WrongStatus"
+   }
+  }
+ ],
+ "kernelTiming": {
+  "note": "measured on a local fork of chain 56 at block 129352831: claimRefund needs ts >= expiredAt and Funded or Submitted; submit needs ts < expiredAt; complete and reject have no time rule, so after expiredAt settle races claimRefund",
+  "actions": [
+   {
+    "jobStatus": 1,
+    "jobStatusName": "Funded",
+    "function": "claimRefund",
+    "expiredAt": 1801000000,
+    "at": {
+     "E-1": "WrongStatus",
+     "E": "ok",
+     "E+1": "ok"
+    },
+    "settlementGuaranteed": {
+     "E-1": true,
+     "E": false
+    }
+   },
+   {
+    "jobStatus": 1,
+    "jobStatusName": "Funded",
+    "function": "submit",
+    "expiredAt": 1801000000,
+    "at": {
+     "E-1": "ok",
+     "E": "expired",
+     "E+1": "expired"
+    },
+    "settlementGuaranteed": {
+     "E-1": true,
+     "E": false
+    }
+   },
+   {
+    "jobStatus": 1,
+    "jobStatusName": "Funded",
+    "function": "reject",
+    "expiredAt": 1801000000,
+    "at": {
+     "E-1": "ok",
+     "E": "ok",
+     "E+1": "ok"
+    },
+    "settlementGuaranteed": {
+     "E-1": true,
+     "E": false
+    }
+   },
+   {
+    "jobStatus": 2,
+    "jobStatusName": "Submitted",
+    "function": "claimRefund",
+    "expiredAt": 1801000000,
+    "at": {
+     "E-1": "WrongStatus",
+     "E": "ok",
+     "E+1": "ok"
+    },
+    "settlementGuaranteed": {
+     "E-1": true,
+     "E": false
+    }
+   },
+   {
+    "jobStatus": 2,
+    "jobStatusName": "Submitted",
+    "function": "complete",
+    "expiredAt": 1801000000,
+    "at": {
+     "E-1": "ok",
+     "E": "ok",
+     "E+1": "ok"
+    },
+    "settlementGuaranteed": {
+     "E-1": true,
+     "E": false
+    }
+   },
+   {
+    "jobStatus": 2,
+    "jobStatusName": "Submitted",
+    "function": "reject",
+    "expiredAt": 1801000000,
+    "at": {
+     "E-1": "ok",
+     "E": "ok",
+     "E+1": "ok"
+    },
+    "settlementGuaranteed": {
+     "E-1": true,
+     "E": false
+    }
+   },
+   {
+    "jobStatus": 0,
+    "jobStatusName": "Open",
+    "function": "claimRefund",
+    "expiredAt": 1801000000,
+    "at": {
+     "E-1": "WrongStatus",
+     "E": "WrongStatus",
+     "E+1": "WrongStatus"
+    },
+    "settlementGuaranteed": {
+     "E-1": true,
+     "E": false
+    }
+   }
+  ],
+  "createJobExpiry": [
+   {
+    "now": 1800000000,
+    "expiredAt": 1800000299,
+    "lead": 299,
+    "result": "ExpiryTooShort"
+   },
+   {
+    "now": 1800000000,
+    "expiredAt": 1800000300,
+    "lead": 300,
+    "result": "ExpiryTooShort"
+   },
+   {
+    "now": 1800000000,
+    "expiredAt": 1800000301,
+    "lead": 301,
+    "result": "ok"
+   },
+   {
+    "now": 1800000000,
+    "expiredAt": 1831536000,
+    "lead": 31536000,
+    "result": "ok"
+   },
+   {
+    "now": 1800000000,
+    "expiredAt": 1831536001,
+    "lead": 31536001,
+    "result": "ExpiryTooLong"
+   }
+  ]
+ },
+ "hookData": {
+  "callbacks": {
+   "createJob": {
+    "before": false,
+    "after": true,
+    "data": "abi.encode(address client, address provider, address evaluator)"
+   },
+   "setProvider": {
+    "before": true,
+    "after": true,
+    "data": "abi.encode(address provider, bytes optParams)"
+   },
+   "setBudget": {
+    "before": true,
+    "after": true,
+    "data": "abi.encode(uint256 budget, bytes optParams)"
+   },
+   "fund": {
+    "before": true,
+    "after": true,
+    "data": "optParams (raw bytes, no ABI wrapping, no expectedBudget)"
+   },
+   "submit": {
+    "before": true,
+    "after": true,
+    "data": "abi.encode(bytes32 deliverable, bytes optParams)"
+   },
+   "complete": {
+    "before": true,
+    "after": true,
+    "data": "abi.encode(bytes32 reason, bytes optParams)"
+   },
+   "reject": {
+    "before": true,
+    "after": true,
+    "data": "abi.encode(bytes32 reason, bytes optParams)"
+   },
+   "claimRefund": {
+    "before": false,
+    "after": false,
+    "data": null
+   }
+  },
+  "measuredEntryGas": {
+   "beforeAction": 993935,
+   "afterAction": 998845
+  },
+  "examples": [
+   {
+    "function": "createJob",
+    "selector": "0x41528812",
+    "args": {
+     "client": "0x00000000000000000000000000000000000000c1",
+     "provider": "0x00000000000000000000000000000000000000b1",
+     "evaluator": "0x00000000000000000000000000000000000000e1"
+    },
+    "data": "0x00000000000000000000000000000000000000000000000000000000000000c100000000000000000000000000000000000000000000000000000000000000b100000000000000000000000000000000000000000000000000000000000000e1",
+    "dataLength": 96
+   },
+   {
+    "function": "setProvider",
+    "selector": "0xc9a84bb9",
+    "args": {
+     "provider": "0x00000000000000000000000000000000000000b1",
+     "optParams": "0x"
+    },
+    "data": "0x00000000000000000000000000000000000000000000000000000000000000b100000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000",
+    "dataLength": 96
+   },
+   {
+    "function": "setBudget",
+    "selector": "0xdd4ae9d4",
+    "args": {
+     "budget": 5000000,
+     "optParams": "0x"
+    },
+    "data": "0x00000000000000000000000000000000000000000000000000000000004c4b4000000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000",
+    "dataLength": 96
+   },
+   {
+    "function": "fund",
+    "selector": "0xd2e13f50",
+    "args": {
+     "optParams": "0x"
+    },
+    "data": "0x",
+    "dataLength": 0
+   },
+   {
+    "function": "fund",
+    "selector": "0xd2e13f50",
+    "args": {
+     "optParams": "0xccdd"
+    },
+    "data": "0xccdd",
+    "dataLength": 2
+   },
+   {
+    "function": "submit",
+    "selector": "0x9e63798d",
+    "args": {
+     "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007",
+     "optParams": "0x"
+    },
+    "data": "0x000000000000000000000000000000000000000000000000000000000000000700000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000",
+    "dataLength": 96
+   },
+   {
+    "function": "submit",
+    "selector": "0x9e63798d",
+    "args": {
+     "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007",
+     "optParams": "0x0102"
+    },
+    "data": "0x0000000000000000000000000000000000000000000000000000000000000007000000000000000000000000000000000000000000000000000000000000004000000000000000000000000000000000000000000000000000000000000000020102000000000000000000000000000000000000000000000000000000000000",
+    "dataLength": 128
+   },
+   {
+    "function": "complete",
+    "selector": "0xd75bbdf3",
+    "args": {
+     "reason": "0x49a91c7fae25893cc1da766811f9d59c0f0c648ffcb143dac675922dd6692da8",
+     "optParams": "0x"
+    },
+    "data": "0x49a91c7fae25893cc1da766811f9d59c0f0c648ffcb143dac675922dd6692da800000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000",
+    "dataLength": 96
+   },
+   {
+    "function": "reject",
+    "selector": "0x41dd26f5",
+    "args": {
+     "reason": "0x8d3cd87d9fd538a417e6dec345357e2f7aac6adfbb04f747c97daa9eae71fffe",
+     "optParams": "0x"
+    },
+    "data": "0x8d3cd87d9fd538a417e6dec345357e2f7aac6adfbb04f747c97daa9eae71fffe00000000000000000000000000000000000000000000000000000000000000400000000000000000000000000000000000000000000000000000000000000000",
+    "dataLength": 96
+   },
+   {
+    "function": "claimRefund",
+    "selector": "0x5b7baf64",
+    "args": {},
+    "data": null,
+    "dataLength": null
+   }
+  ]
+ },
+ "mlp": {
+  "note": "the verifiable-inference demo of TAP-draft-large-netlists (pull request #74, draft under review): demo/inference of its reference repository BruceLanLan/tap-large-netlists at commit 18e0c7bfb4c1fba7fe0bae3a6fa86d2863b1c3b3 (not yet in the commit #74 names): 64-16-10 MLP, tapnet/2 of 88,854 bytes, T = 92, K = 8, 13 checkpoint leaves; disputes cost 2.6 to 6.7 million gas for all parties, the costliest move 4,961,813 gas (scenario G). Times are inputs chosen for the example (maxSettlementSeconds 1,368,992; challengeWindow 108,000).",
+  "spec": {
+   "game": "0x00000000000000000000000000000000000000d1",
+   "netlistHash2": "0x1111111111111111111111111111111111111111111111111111111111111111",
+   "inputRoot": "0x2222222222222222222222222222222222222222222222222222222222222222",
+   "T": 92,
+   "K": 8,
+   "budget": 5000000,
+   "expiredAt": 1801900800,
+   "inputProvider": "0x0000000000000000000000000000000000000000"
+  },
+  "specHash": "0x0211cf6385a19496a16d0843355661fdac637c6eac1296d37e79cbb374530f34",
+  "claimId": "7",
+  "deliverable": "0x0000000000000000000000000000000000000000000000000000000000000007",
+  "timeline": {
+   "createJob": 1800000000,
+   "bindJob": 1800000600,
+   "fund": 1800001200,
+   "game.claim": 1800003600,
+   "windowEnd": 1800111600,
+   "submit": 1800003900,
+   "earliestAccept": 1800111601
+  },
+  "checks": {
+   "bind": "ok",
+   "bindRequiredExpiry": 1801391192,
+   "fund": "ok",
+   "submit": "ok",
+   "submitRequiredWindowEnd": 1800025500,
+   "submitRequiredExpiry": 1801394492
+  },
+  "outcomes": {
+   "accepted": {
+    "claimStatus": 3,
+    "check": 1,
+    "kernelCall": "complete",
+    "reason": "0x49a91c7fae25893cc1da766811f9d59c0f0c648ffcb143dac675922dd6692da8"
+   },
+   "rejected": {
+    "claimStatus": 2,
+    "check": 2,
+    "kernelCall": "reject",
+    "reason": "0x8d3cd87d9fd538a417e6dec345357e2f7aac6adfbb04f747c97daa9eae71fffe"
+   },
+   "open": {
+    "claimStatus": 1,
+    "check": 0,
+    "settle": "NotDecided"
+   }
+  },
+  "gas": {
+   "disputeAllPartiesMin": 2627766,
+   "disputeAllPartiesMax": 6731163,
+   "costliestMove": 4961813,
+   "noDisputeAllParties": 362959
+  }
+ }
+}
