@@ -21,7 +21,7 @@ An agent's spending limits are written as a small circuit whose bytes are hashed
 
 ## Abstract
 
-This TAP specifies a **policy circuit**: a `tapnet/1` netlist of at most 49,152 bytes with 128 input pins and 8 output pins. The inputs carry one **request word**, a canonical encoding of a spend request (amount in policy-declared units with saturation and an overflow flag, an asset class, a counterparty class, a request kind, the UTC day, hour and weekday); the outputs carry one `allow` bit and a 7-bit reason code, and anything other than exactly `allow = 1, reason = 0` denies. A combinational policy answers one request; a policy with latches keeps state across the ordered requests one gatekeeper presents to it, so that daily limits and counters are circuits too. A **binding** is an EIP-712 statement in the TAP-11 domain, `PolicyBinding(netlistHash, subjectKind, subject, tablesHash, notBefore, expires, issued)`, signed by the party that the subject kind names (the holder of a mandate's principal, the consumer of an escrow channel, the holder of the circuit whose container is the account, never the account itself), that ties the policy and its class tables to a mandate hash, an escrow session, an account or a display label. The TAP fixes the pin convention, the request word, the tables, the binding and its revocation, the ordered checks a counterparty runs (re-evaluating off chain with the TAP-02 reference evaluator, or on chain through the `evalFile` / `stepFile` calls of the netlist-NFT draft when the policy is small), the two `tap.policy` metadata members, and what a gate does not prove: it constrains only the parties that check it, and the wallet that signs may ignore it.
+This TAP specifies a **policy circuit**: a `tapnet/1` netlist of at most 49,152 bytes with 128 input pins and 8 output pins. The inputs carry one **request word**, a canonical encoding of a spend request (the amount counted in the unit the binding's tables give its asset, with saturation and an overflow flag that is also set for an asset the tables do not list, an asset class, a counterparty class, a request kind, the UTC day, hour and weekday); the outputs carry one `allow` bit and a 7-bit reason code, and anything other than exactly `allow = 1, reason = 0` denies. A combinational policy answers one request; a policy with latches keeps state across the ordered requests one gatekeeper presents to it, so that daily limits and counters are circuits too. A **binding** is an EIP-712 statement in the TAP-11 domain, `PolicyBinding(netlistHash, subjectKind, subject, tablesHash, notBefore, expires, issued)`, signed by the party that the subject kind names (the holder of a mandate's principal, the consumer of an escrow channel, the holder of the circuit whose container is the account, never the account itself), that ties the policy and its tables (a class and a unit per asset, a class per counterparty) to a mandate hash, an escrow session, an account or a display label. The TAP fixes the pin convention, the request word, the tables, the binding and its revocation, the ordered checks a counterparty runs (re-evaluating off chain with the TAP-02 reference evaluator, or on chain through the `evalFile` / `stepFile` calls of the netlist-NFT draft when the policy is small), the two `tap.policy` metadata members, and what a gate does not prove: it constrains only the parties that check it, and the wallet that signs may ignore it.
 
 ## Motivation
 
@@ -59,7 +59,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 | G-4 | TAP-18, from pull request [#47](https://github.com/TapeOutProtocol/TAPs/pull/47), mandates phase 0, at commit `50a5a6f92abfefb3cdde4af2c86a9b18c087a3d6` (**the mandate draft**) | Merged as a Draft on 2026-11-03; the merged text is that commit | Conditional only (§5.1 row 1, §8.1): the subject kind `mandate` names mandates of that draft at the commit given; nothing else here depends on it |
 | G-5 | Pull requests [#59](https://github.com/TapeOutProtocol/TAPs/pull/59) (escrow channels, commit `098de456152615d7c289c650a8a50533ccf53df1`) and [#60](https://github.com/TapeOutProtocol/TAPs/pull/60) (mandates phase 1, commit `42ce7aef2d16ef64c3d8ba94e255076c3db16a25`) (**the escrow drafts**) | Open; the escrow contract is not audited and not deployed | Conditional only (§5.1 row 2, §4.2 item 4, §8.2): the subject kind `escrow-session` and the cumulative-voucher rule name channels of that interface at the commits given |
 
-In this version a verifier MUST NOT report a binding of subject kind 1 or 2 as `enforceable: true`; a binding of those kinds that passes every check of §5.3 is reported as `conditional`. A revision of this TAP, not the merge of another text, changes that; a verifier's answer never depends on which drafts it believes are merged. This TAP does not require any of G-4 and G-5 and names none of them in `requires`.
+In this version a verifier MUST NOT report a binding of subject kind 1 or 2 as `enforceable: true` (which reports the binder's authority, not anyone's enforcement: §5.3); a binding of those kinds that passes every check of §5.3 is reported as `conditional`. A revision of this TAP, not the merge of another text, changes that; a verifier's answer never depends on which drafts it believes are merged. This TAP does not require any of G-4 and G-5 and names none of them in `requires`.
 
 #### 0.2 Scope and non-claims
 
@@ -71,10 +71,10 @@ In this version a verifier MUST NOT report a binding of subject kind 1 or 2 as `
 ### 1. Terms and notation
 
 - **Policy circuit** (or **policy**): a valid `tapnet/1` file that meets §2.2. **Netlist hash**: `SHA-256(file)`, written `0x` + 64 lowercase hex digits. **Combinational** policy: one without LATCH records; **stateful**: one with at least one.
-- **Request**: the object of §3.2 (amount, asset, counterparty, kind, time). **Request word**: its 128-bit encoding of §3.3. **Tables**: the object of §3.1 that maps assets and counterparties to classes and fixes the amount unit.
+- **Request**: the object of §3.2 (amount, asset, counterparty, kind, time). **Request word**: its 128-bit encoding of §3.3. **Tables**: the object of §3.1 that maps each listed asset to a class and a unit, and counterparties to classes.
 - **Verdict**: `allow` or `deny`, with a **reason code** 0–127 (§2.3, §2.5).
 - **Gatekeeper**: the party that presents requests to a policy and acts on the verdict: a contract (an escrow-side vault, a job hook, a caveat enforcer), a service deciding whether to serve, or a tool. **Trace**: the ordered list of the requests one gatekeeper presented under one binding (§4.2).
-- **Binding**: a signed `PolicyBinding` (§5.2). **Binder**: the account the subject kind requires as its signer (§5.1). **Subject**: what the binding constrains, named by `subjectKind` and a 32-byte `subject` value. **Binding hash**: the binding's EIP-712 digest, its identity.
+- **Binding**: a signed `PolicyBinding` (§5.2). **Binder**: the account the subject kind requires as its signer (§5.1). **Subject**: what the binding constrains, named by `subjectKind` and a 32-byte `subject` value. **Binding hash**: the binding's EIP-712 digest, its identity. **Enforceable**: the member of a verifier's result (§5.3) that reports whether the signer had the authority to bind the subject; it does not report that anyone enforces the binding.
 - **Principal**, **holder**, **mandate**, **mandate hash**: as in the mandate draft when it applies (§0.1 G-4). **Consumer**, **provider**, **channel**, **session key**, **voucher**, **cumulative**: as in the escrow drafts when they apply (G-5).
 - `u32be`, `ceil`, `‖`: big-endian 32-bit integer, rounding up, byte concatenation. `keccak256` is Ethereum's; `canonicalJSON` is TAP-11 §6. Bit `i` of a packed byte string is bit `i mod 8` of byte `floor(i / 8)` (TAP-02 §5). `now` is the verifier's Unix time in seconds.
 
@@ -120,7 +120,7 @@ A combinational policy is evaluated as one beat of TAP-02 §4 with no state: thi
 | 3 | `counterparty-not-allowed` | the counterparty class is not allowed |
 | 4 | `asset-not-allowed` | the asset class is not allowed |
 | 5 | `outside-time-window` | the day or hour is outside the policy's window |
-| 6 | `amount-overflow` | the overflow bit is set (§3.3) |
+| 6 | `amount-overflow` | the overflow bit is set: the amount does not fit in 32 bits of its asset's unit, or the asset is not listed in the tables (§3.3) |
 | 7 | `kind-not-allowed` | the request kind is not allowed |
 | 8–63 | reserved | a tool displays `reserved` |
 | 64–127 | policy-defined | named, if at all, by `tap.policy.reasons` of the policy token (§6.1); a tool displays `policy-defined` |
@@ -139,11 +139,19 @@ The tables of a binding are a JSON object with exactly the members:
 
 | Member | Form | Meaning |
 |---|---|---|
-| `amountUnit` | decimal string, an integer in `[1, 2^256)` | base units of the asset per amount unit |
-| `assets` | object: lowercase `0x` + 40 hex address → integer class in `[1, 255]` | the asset classes; an address not listed is class 0 |
-| `counterparties` | object: the same form | the counterparty classes; an address not listed is class 0 |
+| `assets` | object: lowercase `0x` + 40 hex address → asset entry | the listed assets; an address not listed has no class and no unit (§3.3) |
+| `counterparties` | object: lowercase `0x` + 40 hex address → integer class in `[1, 255]` | the counterparty classes; an address not listed is class 0 |
 
-`tablesHash = keccak256(utf8(canonicalJSON(tables)))`. A tool MUST reject tables of another form (`tables-malformed`): a checksummed or uppercase address, class 0 or above 255, a unit of 0, a member not listed, a non-integer. Class 0 is reserved for "not listed" and cannot be assigned.
+An **asset entry** is a JSON object with exactly the members:
+
+| Member | Form | Meaning |
+|---|---|---|
+| `class` | integer in `[1, 255]` | the asset class |
+| `unit` | decimal string without sign or leading zero, an integer in `[1, 2^256)` | base units of this asset per amount unit |
+
+Each asset has its own unit, so that a limit of `n` units means the amount the binder intended in every asset it lists: with 18-decimal and 6-decimal assets, units of `10^15` and `10^3` both mean a thousandth of a token. Two assets MAY share a class and keep different units (two stablecoins of 6 and 18 decimals in one class, each counted in cents with units `10^4` and `10^16`); a policy that adds amounts across assets then adds amounts of the value the units give them.
+
+`tablesHash = keccak256(utf8(canonicalJSON(tables)))`; it covers every class and every unit, so two tables that differ in one asset's unit only have different hashes, and a binding over one is not a binding over the other. A tool MUST reject tables of another form (`tables-malformed`): a checksummed or uppercase address, class 0 or above 255, a unit of 0, at or above `2^256`, given as a JSON number or with a leading zero, an asset entry without `class` or `unit` or with another member, a member not listed (including the single `amountUnit` member of earlier versions of this draft), a non-integer. Class 0 is reserved for "not listed" and cannot be assigned.
 
 #### 3.2 Request
 
@@ -155,10 +163,10 @@ The request word is 128 bits, bit `i` of the word being input `i` of the policy 
 
 | Bits | Width | Field | Value |
 |---|---|---|---|
-| 0–31 | 32 | `amount` | `u = ceil(amount / amountUnit)`; if `u < 2^32`, `u`; otherwise `2^32 − 1` |
-| 32 | 1 | `overflow` | 1 if `u ≥ 2^32`, else 0 |
+| 0–31 | 32 | `amount` | for a listed asset, `u = ceil(amount / assets[asset].unit)`; if `u < 2^32`, `u`; otherwise `2^32 − 1`. For an asset not listed, `2^32 − 1` |
+| 32 | 1 | `overflow` | 1 if the asset is not listed or `u ≥ 2^32`, else 0 |
 | 33–39 | 7 | reserved | 0 |
-| 40–47 | 8 | `asset` | `assets[asset]`, or 0 if not listed |
+| 40–47 | 8 | `asset` | `assets[asset].class`, or 0 if not listed |
 | 48–55 | 8 | `counterparty` | `counterparties[counterparty]`, or 0 if not listed |
 | 56–58 | 3 | `kind` | the request kind |
 | 59–63 | 5 | reserved | 0 |
@@ -167,7 +175,7 @@ The request word is 128 bits, bit `i` of the word being input `i` of the policy 
 | 85–87 | 3 | `weekday` | `(floor(ts / 86400) + 3) mod 7`; Monday is 0, Sunday is 6 |
 | 88–127 | 40 | reserved | 0 |
 
-An encoder MUST produce reserved bits as 0, and a tool that is handed a word rather than a request MUST reject one with a reserved bit set (`word-reserved-bits`). Amounts round **up**: a request of one base unit above a whole number of units is encoded as the next unit, so a policy never under-counts. A verifier MUST recompute the word from the request and the tables and MUST NOT trust a word it received. The example request `{ amount 10^15, asset of class 1, counterparty of class 1, kind 1, ts 1793008800 }` (Monday 2026-10-26 10:00:00 UTC) with `amountUnit = 10^15` encodes to ``0x010000000001010110510a0000000000``.
+An encoder MUST produce reserved bits as 0, and a tool that is handed a word rather than a request MUST reject one with a reserved bit set (`word-reserved-bits`). The amount is counted in the unit of the request's own asset and never in another asset's unit. Amounts round **up**: a request of one base unit above a whole number of units is encoded as the next unit, a non-zero amount below one unit as one unit, and zero as zero, so a policy never under-counts. An asset that the tables do not list has no unit: its request MUST be encoded with `overflow` set, `amount` `2^32 − 1` and `asset` 0, whatever its amount (zero included), so that a policy that tests `overflow` or compares the amount denies it (fail closed); `overflow = 1` therefore always comes with `amount = 2^32 − 1`. A verifier MUST recompute the word from the request and the tables and MUST NOT trust a word it received. The example request `{ amount 10^15, asset of class 1 with unit 10^15, counterparty of class 1, kind 1, ts 1793008800 }` (Monday 2026-10-26 10:00:00 UTC) encodes to ``0x010000000001010110510a0000000000``; the same `10^9` base units are one unit of that asset and 1,000 units of a 6-decimal asset of class 2 with unit `10^6` (``0xe80300000002010110510a0000000000``).
 
 #### 3.4 Request kinds
 
@@ -216,7 +224,7 @@ A counterparty handed a binding, its signature, its tables and the policy file (
 
 #### 5.1 Subjects and binders
 
-| `subjectKind` | Name | `subject` (32 bytes) | Binder (the required signer) | Enforceable |
+| `subjectKind` | Name | `subject` (32 bytes) | Binder (the required signer) | `enforceable` when every check passes (§5.3) |
 |---|---|---|---|---|
 | 1 | `mandate` | the mandate hash (the digest of the mandate draft §3.1), when G-4 applies | the current holder of the mandate's principal (mandate draft §4), checked as TAP-11 §4.4 | `conditional` (fixed in this version, §0.1) |
 | 2 | `escrow-session` | `keccak256(escrow ‖ consumer ‖ provider ‖ key)` over the four 20-byte addresses, when G-5 applies | the channel's consumer; when the consumer is a contract, its holder under TAP-11 §4.4 | `conditional` (fixed in this version, §0.1) |
@@ -271,6 +279,8 @@ After §5.2, a verifier checks and reports, in this order, every problem that ap
 
 The result names the binding hash, the signer, the subject kind, the problems, whether the binder and the file were checked, whether the binding is display only (kind 4), and `enforceable`, decided in this order: false for kind 4; absent when the binder was not checked; false when there is any problem or when the policy file was not at hand and checked under item 5; `conditional` for kinds 1 and 2 (§0.1); true for kind 3. A binding checked without the policy file is not a checked policy: the verifier MUST say that the file was not checked and MUST NOT report `enforceable` as true or `conditional` (no file, no verdict: §7). A verifier that does not know the binder (item 3 skipped) MUST say so and MUST NOT report `enforceable`.
 
+`enforceable` is a statement about authority, not about enforcement. `true` means exactly that the binding passed every check above with the file at hand and that its signer is the account the subject kind entitles to bind the subject (§5.1), so that a gatekeeper which chooses to enforce the binding enforces a rule the binder set; `conditional` means the same for a subject kind whose binder rule rests on an unmerged draft (§0.1). Neither value states or implies that any gatekeeper, wallet, escrow or contract will honour the binding, consults it, or enforces it on chain or off; a tool MUST NOT present `enforceable: true` as such a statement (§5.5).
+
 #### 5.4 Revocation and supersession
 
 ```
@@ -284,7 +294,7 @@ A binder changes a policy by issuing a new binding for the same subject with a l
 
 #### 5.5 What a passing binding means
 
-A binding that passes §5.3 with the file at hand means exactly: the binder stated, at `issued`, that for this subject and these tables the circuit with this hash is the rule, between `notBefore` and `expires`. It does not mean that any party enforces it, that the agent's wallet consults it, that the agent cannot spend outside it elsewhere, or that the rule is a good one. A tool MUST NOT present a binding as a bound on what an agent can spend; it MAY present it as the bound the gatekeeper that checks it enforces.
+A binding that passes §5.3 with the file at hand means exactly: the binder stated, at `issued`, that for this subject and these tables the circuit with this hash is the rule, between `notBefore` and `expires`. The same holds for `enforceable: true` (§5.3), which adds only that the signer had the authority to say it. It does not mean that any party enforces it, that the agent's wallet consults it, that the agent cannot spend outside it elsewhere, or that the rule is a good one. A tool MUST NOT present a binding as a bound on what an agent can spend; it MAY present it as the bound the gatekeeper that checks it enforces.
 
 ### 6. Metadata members
 
@@ -345,15 +355,17 @@ Built by `examples.py` of the reference folder; files under `policies/`, hashes 
 | `allowlist` | no | 1,584 | 224 | `pay` only; counterparty class 1 or 2; asset class 1; at most 1,000 units |
 | `time-window` | no | 653 | 91 | `pay` or `call`; 09:00 ≤ UTC hour < 17:00; Monday to Friday; no amount limit |
 | `deny-all` | no | 135 | 17 | denies everything, reason 7 |
-| `per-asset-limits` | no | 2,340 | 332 | `pay` only; asset class 1 at most 1,000 units, class 2 at most 50; other assets denied |
+| `per-asset-limits` | no | 2,340 | 332 | `pay` only; asset class 1 at most 1,000 units, class 2 at most 50, each in its asset's own unit; other assets denied |
 
-The day field is 16 bits, so `daily-cap` sees two requests exactly 65,536 days apart as the same day; the vectors record this (it errs toward denial).
+The day field is 16 bits, so `daily-cap` sees two requests exactly 65,536 days apart as the same day; the vectors record this (it errs toward denial). The examples test `overflow` before the asset class, so an asset the tables do not list is denied by `daily-cap`, `allowlist` and `per-asset-limits` with reason 6, and reason 4 is given for a listed asset of a class the policy does not accept; a policy that wants reason 4 for an unlisted asset tests asset class 0 first. `time-window` sets no amount limit and does not test `overflow`, so it allows an unlisted asset inside its window. The circuits do not depend on the tables: the units are in the tables, not in the files, and the vectors use an 18-decimal asset of class 1 with unit `10^15` and a 6-decimal asset of class 2 with unit `10^6` (one token).
 
 ## Rationale
 
 **A netlist, not a schema or a rules language.** A schema of numeric fields (ERC-8196, ERC-8226, spend permissions) is easy to display but fixes the shape of every rule in advance; a rules language needs an interpreter that every verifier has to agree on. A `tapnet/1` file is already both: TAP-02 fixes its meaning bit for bit, the reference evaluator and the on-chain evaluator agree by test, and a verifiable-execution game can be about it. The cost is that a policy is written as gates; the builder in the reference folder shows that the common rules are a few hundred gates.
 
-**A fixed 128-bit word.** Policies and gatekeepers can only interoperate if the pins mean the same thing everywhere; the word is the whole interface. 128 bits leave 52 reserved for a later version without changing `nIn`. Amounts are 32 bits of policy-declared units rather than a 256-bit base-unit value because a 256-bit comparator per rule would dominate every policy and because a unit is what a human means by a limit; saturation plus an overflow bit lets a policy deny what it cannot count.
+**A fixed 128-bit word.** Policies and gatekeepers can only interoperate if the pins mean the same thing everywhere; the word is the whole interface. 128 bits leave 52 reserved for a later version without changing `nIn`. Amounts are 32 bits of per-asset units rather than a 256-bit base-unit value because a 256-bit comparator per rule would dominate every policy and because a unit is what a human means by a limit; saturation plus an overflow bit lets a policy deny what it cannot count.
+
+**A unit per asset.** An earlier version of this draft had one `amountUnit` for every asset. With assets of different decimals that distorts every limit: under a unit of `10^15`, 1,000 whole tokens of a 6-decimal asset (`10^9` base units) count as one unit, so "at most 50 units" of that asset admits up to `5·10^10` tokens. A unit in each asset entry lets the binder say what one unit is for each asset, and a limit then means the same thing in every asset it lists. Since the unit decides the verdict as much as the class, it is inside the signed tables and therefore inside `tablesHash` and the binding hash; it is a decimal string so that the canonical JSON, and with it the hash, has one form per value. A request in an asset the tables do not list cannot be counted at all, so it is encoded as an overflow instead of being counted in some default unit: a policy that tests `overflow` denies it without naming assets, which keeps a listed set of assets closed. Units do not change the circuit: the same file serves tables of any units.
 
 **Rounding up.** A request one base unit above a whole number of units counts as the next unit. Rounding down would let a request slip under a limit by a fraction of a unit.
 
@@ -386,22 +398,22 @@ Nothing existing changes. A policy circuit is an ordinary `tapnet/1` file, so an
 
 ## Test Cases
 
-`assets/tap-draft-policy-circuit-gate/vectors.json` is generated by `make_vectors.py`, reproducible byte for byte (`--check`), with SHA-256 `6232d588ba3ebb8faae8498b2a2040f2d56f9dc2afe30980a585d3abd942c93e`; 163 cases. Its sections:
+`assets/tap-draft-policy-circuit-gate/vectors.json` is generated by `make_vectors.py`, reproducible byte for byte (`--check`), with SHA-256 `8a4659d8f157fdad7b4ebe9b6bc08d946f9f55b8ab688e3804bfe33b9970acd6`; 188 cases. Its sections:
 
 - `vendored`: SHA-256 of the four copied files;
 - `constants`: the word layout, kinds, reason codes, the domain and its separator for chains 56, 97 and 31337, the two types and typehashes, the subject kinds;
 - `policies`: the five examples with file paths, parameters, hashes, metrics, state sizes and (for files up to 2,048 bytes) their hex; `policyChecks`: rejected files, one per rule of §2.2 (wrong `nIn`, wrong `nOut`, too large, a REF record, a truncated header) and the stateful declaration both ways; `tooLargeGenerator`: how to rebuild the 49,716-byte file;
 - `results`: eleven output bytes and their interpretation (§2.3);
-- `encoding`: eighteen requests with fields, words and the word as an integer (rounding up, saturation, class 0, the kinds, epoch, a Saturday, a Monday, the day wrap); `encodingErrors` and `tablesErrors`: malformed requests and tables; `wordDecode`: reserved bits set; `tables`: the example tables, their canonical JSON and hash;
-- `evaluations`: 29 single requests across the five policies, including reason priority and `evalFile` on a stateful policy;
+- `encoding`: 23 requests with fields, words and the word as an integer (rounding up, saturation, class 0, an unlisted asset with and without an amount, one base unit of a 6-decimal asset, the same `10^9` base units counted in the units of an 18-decimal and a 6-decimal asset, the kinds, epoch, a Saturday, a Monday, the day wrap); `encodingErrors`: malformed requests; `tablesErrors`: fourteen malformed tables (a unit of 0, at `2^256`, negative, as a JSON number, with a leading zero, an entry without a unit or with another member, the earlier bare-class and `amountUnit` forms, and the class and address rules); `wordDecode`: reserved bits set; `tables`, `tablesUnitB` and `tablesSharedClass`: the example tables, the same tables with another unit for one asset, and two assets of 6 and 18 decimals sharing a class, each with its canonical JSON and hash;
+- `evaluations`: 34 single requests across the five policies, including reason priority, per-asset limits at, above and one base unit above the limit, 1,000 tokens of a 6-decimal asset against a limit of 50 units, unlisted assets (reason 6) and `evalFile` on a stateful policy; `perAssetUnits`: seven requests under the two other tables; `unitsChangeIdentity`: two bindings identical except that their tables differ in one unit, with different `tablesHash` and binding hash;
 - `traces`: fifteen traces: the daily limit filling and resetting at midnight, denials that do not consume, non-`pay` kinds, recorded verdicts agreeing and disagreeing, time going backwards, entries outside the window, escrow cumulative deltas, a decreasing cumulative, an empty trace and the 65,536-day wrap;
-- `bindings`: 36 checks: a holder-signed mandate binding with the file (`conditional`) and without it (not enforceable), wrong key, unsigned, another chain's signature, the window at both ends, changed tables, another file, a wrong stateful declaration, revocation by hash, by time, of another binding and by another signer, an escrow-session binding by the consumer and by someone else, a revocation whose `revokedBefore` equals `issued` (not covered) and one with `revokedBefore` 0, an account binding by the circuit holder with and without the file, an account binding signed by the account itself (`binding-self-signed`, with and without a known binder), a label binding with and without binder and file (display only, never enforceable), and seven static failures; `bindingHashes`; `subjects`; `keys` (test keys);
+- `bindings`: 36 checks: a holder-signed mandate binding with the file (`conditional`) and without it (not enforceable), wrong key, unsigned, another chain's signature, the window at both ends, tables changed in one asset's unit only, another file, a wrong stateful declaration, revocation by hash, by time, of another binding and by another signer, an escrow-session binding by the consumer and by someone else, a revocation whose `revokedBefore` equals `issued` (not covered) and one with `revokedBefore` 0, an account binding by the circuit holder with and without the file, an account binding signed by the account itself (`binding-self-signed`, with and without a known binder), a label binding with and without binder and file (display only, never enforceable), and seven static failures; `bindingHashes`; `subjects`; `keys` (test keys);
 - `revocations`: cover by hash, by time, `revokedBefore` equal to `issued` (not covering) and one above it (covering), `revokedBefore` 0, not covering, too many hashes, a zero hash;
 - `tokenMetadata` and `subjectMetadata`: the two `tap.policy` members, valid and broken one rule at a time; `example`: the two documents in full.
 
 ## Reference Implementation
 
-Python, standard library only: `assets/tap-draft-policy-circuit-gate/policy_gate.py` (checks, encoding, evaluation, replay, bindings, revocations, metadata, canonical JSON), `examples.py` (a NAND/LATCH builder and the five policies with Python oracles), `make_vectors.py`, `test_policy_gate.py` (20 tests: byte-for-byte regeneration, regeneration under `python3 -I` from another directory, vendored digests, 4,000 random requests per policy against its oracle with stateful sequences, an exhaustive time-window check, the fail-closed result table, EIP-712 round trips cross-checked against `eth_account` when installed, and that no binding vector reports `enforceable` without a checked file, for a label, or when an account signed its own binding), with `tapnft.py` and `tap02_reference.py` copied unchanged from the netlist-NFT draft's assets and `credits.py`, `canon.py` copied unchanged from the Soulbound Credentials draft (keccak-256 and secp256k1 only). The copied files' SHA-256 digests are in the folder's `README.md` and in `vectors.json`. EIP-1271 binders (§5.3 item 2), network reads (so the binder, for kind 3 the holder of the circuit, is passed in by the caller) and `binding-outlives-subject` (§8.1, §8.2, which needs the mandate or the session) are not implemented. The three scripts insert their own directory into `sys.path`, so they run under `python3 -I`. There is no Solidity gatekeeper and nothing was measured on a chain.
+Python, standard library only: `assets/tap-draft-policy-circuit-gate/policy_gate.py` (checks, encoding, evaluation, replay, bindings, revocations, metadata, canonical JSON), `examples.py` (a NAND/LATCH builder and the five policies with Python oracles), `make_vectors.py`, `test_policy_gate.py` (25 tests: byte-for-byte regeneration, regeneration under `python3 -I` from another directory, vendored digests, an independent model of the request word against the encoder and the vectors, per-asset units, unlisted assets, unit bounds and rounding, the hash change for a unit change, 4,000 random requests per policy and per table (three tables, unlisted assets included) against its oracle with stateful sequences, an exhaustive time-window check, the fail-closed result table, EIP-712 round trips cross-checked against `eth_account` when installed, and that no binding vector reports `enforceable` without a checked file, for a label, or when an account signed its own binding), with `tapnft.py` and `tap02_reference.py` copied unchanged from the netlist-NFT draft's assets and `credits.py`, `canon.py` copied unchanged from the Soulbound Credentials draft (keccak-256 and secp256k1 only). The copied files' SHA-256 digests are in the folder's `README.md` and in `vectors.json`. EIP-1271 binders (§5.3 item 2), network reads (so the binder, for kind 3 the holder of the circuit, is passed in by the caller) and `binding-outlives-subject` (§8.1, §8.2, which needs the mandate or the session) are not implemented. The three scripts insert their own directory into `sys.path`, so they run under `python3 -I`. There is no Solidity gatekeeper and nothing was measured on a chain.
 
 ## Deployments
 
@@ -411,11 +423,11 @@ None. This TAP depends on no deployed contract. A gatekeeper contract of §4.3 w
 
 - **The wallet may ignore the gate.** The central limit of this TAP, stated in §0.2 and §5.5: a binding constrains the parties that check it. An agent whose wallet signs without consulting the policy can spend outside it toward any counterparty that does not check. A principal who wants a hard bound uses an escrow balance or a wallet-side limit; the gate is the rule inside that bound for those who look.
 - **Fail closed.** Every unavailable read, invalid file, malformed binding or revert is a denial (§7). A gatekeeper that defaults to allowing on error is not a gatekeeper of this TAP.
-- **Tables are part of the policy.** The classes an address maps to decide the verdict; that is why `tablesHash` is signed and why a verifier recomputes it. A binder who lists a counterparty under the wrong class has signed that mistake.
-- **Rounding and units.** A unit too coarse makes small requests count as a whole unit each; a unit too fine saturates early. Saturation sets `overflow`, and a policy that does not test it allows what it cannot count only if its author wrote it so. The examples deny on `overflow`.
+- **Tables are part of the policy.** The classes and units an address maps to decide the verdict; that is why `tablesHash` is signed and why a verifier recomputes it. A binder who lists a counterparty under the wrong class has signed that mistake.
+- **Rounding and units.** A unit too coarse makes small requests count as a whole unit each; a unit too fine saturates early. Each asset has its own unit (§3.1), and a binder who gives an asset the unit meant for another has signed a limit wrong by the ratio of the two: `10^15` (a thousandth of an 18-decimal token) given to a 6-decimal asset makes one unit `10^9` tokens instead of a thousandth of one, a limit `10^12` times wider than meant. A policy that does not test the asset class adds units of different assets together; that sum means something only when the units are of equal value. Saturation and an unlisted asset set `overflow`, and a policy that does not test it allows what it cannot count only if its author wrote it so. The examples with an amount limit deny on `overflow`.
 - **State belongs to one gatekeeper.** An agent that spreads requests over several gatekeepers is limited per gatekeeper, not in total; a lost state cannot be rebuilt without the trace, and a gatekeeper that restarts from zero without saying so has widened the limit (§7).
 - **Replay of the request, not of the word.** A verifier that accepts a word from the agent accepts whatever classes and amounts the agent wrote. §3.3 forbids it.
-- **Time.** A contract uses `block.timestamp`; a service uses its own clock; a replay uses the recorded `ts`. A gatekeeper that back-dates entries can make a window or a day look different; the trace's monotonic `ts` and the binding window bound that, and a counterparty that keeps its own copy of the trace detects it. Day and hour are UTC; a policy written for a local day is wrong by the offset.
+- **Time.** A contract uses `block.timestamp`; a service uses its own clock; a replay uses the recorded `ts`. A gatekeeper that back-dates entries can make a window or a day look different; the trace's monotonic `ts` and the binding window bound that, and a counterparty that keeps its own copy of the trace detects it. Day and hour are UTC; a policy written for a local day is wrong by the offset. How a verifier's `now` is obtained and what skew it tolerates for `notBefore` and `expires` are left to a revision of TAP-11, whose Clock consideration this TAP follows; this version adds no tolerance.
 - **Day index wrap.** Sixteen bits of day index wrap every 65,536 days; the collision errs toward denial.
 - **Binder impersonation.** A binding is only as good as its signer being the binder of §5.1. A verifier that skips item 3 of §5.3 has checked a signature, not an authority, and must say so.
 - **Supersession races.** Two bindings with different `issued` for the same subject are ordered; a gatekeeper that installed the earlier one and is never shown the later one keeps enforcing the earlier. The binder revokes the earlier one when that matters.

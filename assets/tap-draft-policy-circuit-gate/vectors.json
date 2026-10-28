@@ -493,7 +493,7 @@
   {
    "name": "asset class 2",
    "request": {
-    "amount": "1000000000000000",
+    "amount": "1000000",
     "asset": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
     "counterparty": "0x1111111111111111111111111111111111111111",
     "kind": 1,
@@ -522,8 +522,8 @@
     "ts": 1793008800
    },
    "fields": {
-    "amount": 1,
-    "overflow": 0,
+    "amount": 4294967295,
+    "overflow": 1,
     "asset": 0,
     "counterparty": 1,
     "kind": 1,
@@ -531,8 +531,118 @@
     "hour": 10,
     "weekday": 0
    },
-   "word": "0x010000000000010110510a0000000000",
-   "wordInt": "12472065101502981376835585"
+   "word": "0xffffffff0100010110510a0000000000",
+   "wordInt": "12472065101502989966770175"
+  },
+  {
+   "name": "asset not listed, zero amount",
+   "request": {
+    "amount": "0",
+    "asset": "0xcccccccccccccccccccccccccccccccccccccccc",
+    "counterparty": "0x1111111111111111111111111111111111111111",
+    "kind": 1,
+    "ts": 1793008800
+   },
+   "fields": {
+    "amount": 4294967295,
+    "overflow": 1,
+    "asset": 0,
+    "counterparty": 1,
+    "kind": 1,
+    "day": 20752,
+    "hour": 10,
+    "weekday": 0
+   },
+   "word": "0xffffffff0100010110510a0000000000",
+   "wordInt": "12472065101502989966770175"
+  },
+  {
+   "name": "asset class 2, one base unit rounds up to one unit",
+   "request": {
+    "amount": "1",
+    "asset": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "counterparty": "0x1111111111111111111111111111111111111111",
+    "kind": 1,
+    "ts": 1793008800
+   },
+   "fields": {
+    "amount": 1,
+    "overflow": 0,
+    "asset": 2,
+    "counterparty": 1,
+    "kind": 1,
+    "day": 20752,
+    "hour": 10,
+    "weekday": 0
+   },
+   "word": "0x010000000002010110510a0000000000",
+   "wordInt": "12472065101505180400091137"
+  },
+  {
+   "name": "asset class 2, 1,000 tokens of a 6-decimal asset",
+   "request": {
+    "amount": "1000000000",
+    "asset": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "counterparty": "0x1111111111111111111111111111111111111111",
+    "kind": 1,
+    "ts": 1793008800
+   },
+   "fields": {
+    "amount": 1000,
+    "overflow": 0,
+    "asset": 2,
+    "counterparty": 1,
+    "kind": 1,
+    "day": 20752,
+    "hour": 10,
+    "weekday": 0
+   },
+   "word": "0xe80300000002010110510a0000000000",
+   "wordInt": "12472065101505180400092136"
+  },
+  {
+   "name": "asset class 1, the same 10^9 base units of an 18-decimal asset",
+   "request": {
+    "amount": "1000000000",
+    "asset": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "counterparty": "0x1111111111111111111111111111111111111111",
+    "kind": 1,
+    "ts": 1793008800
+   },
+   "fields": {
+    "amount": 1,
+    "overflow": 0,
+    "asset": 1,
+    "counterparty": 1,
+    "kind": 1,
+    "day": 20752,
+    "hour": 10,
+    "weekday": 0
+   },
+   "word": "0x010000000001010110510a0000000000",
+   "wordInt": "12472065101504080888463361"
+  },
+  {
+   "name": "asset class 2 saturates",
+   "request": {
+    "amount": "4294967296000000",
+    "asset": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "counterparty": "0x1111111111111111111111111111111111111111",
+    "kind": 1,
+    "ts": 1793008800
+   },
+   "fields": {
+    "amount": 4294967295,
+    "overflow": 1,
+    "asset": 2,
+    "counterparty": 1,
+    "kind": 1,
+    "day": 20752,
+    "hour": 10,
+    "weekday": 0
+   },
+   "word": "0xffffffff0102010110510a0000000000",
+   "wordInt": "12472065101505188990025727"
   },
   {
    "name": "counterparty class 3",
@@ -871,10 +981,15 @@
   {
    "name": "unit zero",
    "tables": {
-    "amountUnit": "0",
     "assets": {
-     "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": 1,
-     "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": 2
+     "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+      "class": 1,
+      "unit": "0"
+     },
+     "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": {
+      "class": 2,
+      "unit": "1000000"
+     }
     },
     "counterparties": {
      "0x1111111111111111111111111111111111111111": 1,
@@ -887,9 +1002,15 @@
   {
    "name": "class 0",
    "tables": {
-    "amountUnit": "1000000000000000",
     "assets": {
-     "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": 0
+     "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+      "class": 0,
+      "unit": "1"
+     },
+     "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": {
+      "class": 2,
+      "unit": "1000000"
+     }
     },
     "counterparties": {
      "0x1111111111111111111111111111111111111111": 1,
@@ -902,10 +1023,15 @@
   {
    "name": "class 256",
    "tables": {
-    "amountUnit": "1000000000000000",
     "assets": {
-     "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": 1,
-     "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": 2
+     "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+      "class": 1,
+      "unit": "1000000000000000"
+     },
+     "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": {
+      "class": 2,
+      "unit": "1000000"
+     }
     },
     "counterparties": {
      "0x1111111111111111111111111111111111111111": 256
@@ -916,9 +1042,11 @@
   {
    "name": "checksummed key",
    "tables": {
-    "amountUnit": "1000000000000000",
     "assets": {
-     "0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA": 1
+     "0xAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA": {
+      "class": 1,
+      "unit": "1"
+     }
     },
     "counterparties": {
      "0x1111111111111111111111111111111111111111": 1,
@@ -931,10 +1059,15 @@
   {
    "name": "extra member",
    "tables": {
-    "amountUnit": "1000000000000000",
     "assets": {
-     "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": 1,
-     "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": 2
+     "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+      "class": 1,
+      "unit": "1000000000000000"
+     },
+     "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": {
+      "class": 2,
+      "unit": "1000000"
+     }
     },
     "counterparties": {
      "0x1111111111111111111111111111111111111111": 1,
@@ -948,10 +1081,15 @@
   {
    "name": "unit as float",
    "tables": {
-    "amountUnit": 1.5,
     "assets": {
-     "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": 1,
-     "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": 2
+     "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+      "class": 1,
+      "unit": 1.5
+     },
+     "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": {
+      "class": 2,
+      "unit": "1000000"
+     }
     },
     "counterparties": {
      "0x1111111111111111111111111111111111111111": 1,
@@ -960,14 +1098,185 @@
     }
    },
    "error": "tables-malformed"
+  },
+  {
+   "name": "unit as integer",
+   "tables": {
+    "assets": {
+     "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+      "class": 1,
+      "unit": 1000000000000000
+     },
+     "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": {
+      "class": 2,
+      "unit": "1000000"
+     }
+    },
+    "counterparties": {
+     "0x1111111111111111111111111111111111111111": 1,
+     "0x2222222222222222222222222222222222222222": 2,
+     "0x3333333333333333333333333333333333333333": 3
+    }
+   },
+   "error": "tables-malformed"
+  },
+  {
+   "name": "unit with leading zero",
+   "tables": {
+    "assets": {
+     "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+      "class": 1,
+      "unit": "01"
+     },
+     "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": {
+      "class": 2,
+      "unit": "1000000"
+     }
+    },
+    "counterparties": {
+     "0x1111111111111111111111111111111111111111": 1,
+     "0x2222222222222222222222222222222222222222": 2,
+     "0x3333333333333333333333333333333333333333": 3
+    }
+   },
+   "error": "tables-malformed"
+  },
+  {
+   "name": "unit 2^256",
+   "tables": {
+    "assets": {
+     "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+      "class": 1,
+      "unit": "115792089237316195423570985008687907853269984665640564039457584007913129639936"
+     },
+     "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": {
+      "class": 2,
+      "unit": "1000000"
+     }
+    },
+    "counterparties": {
+     "0x1111111111111111111111111111111111111111": 1,
+     "0x2222222222222222222222222222222222222222": 2,
+     "0x3333333333333333333333333333333333333333": 3
+    }
+   },
+   "error": "tables-malformed"
+  },
+  {
+   "name": "unit negative",
+   "tables": {
+    "assets": {
+     "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+      "class": 1,
+      "unit": "-1"
+     },
+     "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": {
+      "class": 2,
+      "unit": "1000000"
+     }
+    },
+    "counterparties": {
+     "0x1111111111111111111111111111111111111111": 1,
+     "0x2222222222222222222222222222222222222222": 2,
+     "0x3333333333333333333333333333333333333333": 3
+    }
+   },
+   "error": "tables-malformed"
+  },
+  {
+   "name": "entry without unit",
+   "tables": {
+    "assets": {
+     "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+      "class": 1
+     },
+     "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": {
+      "class": 2,
+      "unit": "1000000"
+     }
+    },
+    "counterparties": {
+     "0x1111111111111111111111111111111111111111": 1,
+     "0x2222222222222222222222222222222222222222": 2,
+     "0x3333333333333333333333333333333333333333": 3
+    }
+   },
+   "error": "tables-malformed"
+  },
+  {
+   "name": "entry with extra member",
+   "tables": {
+    "assets": {
+     "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+      "class": 1,
+      "unit": "1",
+      "decimals": 18
+     },
+     "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": {
+      "class": 2,
+      "unit": "1000000"
+     }
+    },
+    "counterparties": {
+     "0x1111111111111111111111111111111111111111": 1,
+     "0x2222222222222222222222222222222222222222": 2,
+     "0x3333333333333333333333333333333333333333": 3
+    }
+   },
+   "error": "tables-malformed"
+  },
+  {
+   "name": "entry as a bare class (earlier form)",
+   "tables": {
+    "assets": {
+     "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": 1,
+     "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": {
+      "class": 2,
+      "unit": "1000000"
+     }
+    },
+    "counterparties": {
+     "0x1111111111111111111111111111111111111111": 1,
+     "0x2222222222222222222222222222222222222222": 2,
+     "0x3333333333333333333333333333333333333333": 3
+    }
+   },
+   "error": "tables-malformed"
+  },
+  {
+   "name": "single amountUnit member (earlier form)",
+   "tables": {
+    "assets": {
+     "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+      "class": 1,
+      "unit": "1000000000000000"
+     },
+     "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": {
+      "class": 2,
+      "unit": "1000000"
+     }
+    },
+    "counterparties": {
+     "0x1111111111111111111111111111111111111111": 1,
+     "0x2222222222222222222222222222222222222222": 2,
+     "0x3333333333333333333333333333333333333333": 3
+    },
+    "amountUnit": "1000000000000000"
+   },
+   "error": "tables-malformed"
   }
  ],
  "tables": {
   "tables": {
-   "amountUnit": "1000000000000000",
    "assets": {
-    "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": 1,
-    "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": 2
+    "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+     "class": 1,
+     "unit": "1000000000000000"
+    },
+    "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": {
+     "class": 2,
+     "unit": "1000000"
+    }
    },
    "counterparties": {
     "0x1111111111111111111111111111111111111111": 1,
@@ -975,8 +1284,48 @@
     "0x3333333333333333333333333333333333333333": 3
    }
   },
-  "canonicalJSON": "{\"amountUnit\":\"1000000000000000\",\"assets\":{\"0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\":1,\"0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\":2},\"counterparties\":{\"0x1111111111111111111111111111111111111111\":1,\"0x2222222222222222222222222222222222222222\":2,\"0x3333333333333333333333333333333333333333\":3}}",
-  "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d"
+  "canonicalJSON": "{\"assets\":{\"0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\":{\"class\":1,\"unit\":\"1000000000000000\"},\"0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\":{\"class\":2,\"unit\":\"1000000\"}},\"counterparties\":{\"0x1111111111111111111111111111111111111111\":1,\"0x2222222222222222222222222222222222222222\":2,\"0x3333333333333333333333333333333333333333\":3}}",
+  "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083"
+ },
+ "tablesUnitB": {
+  "tables": {
+   "assets": {
+    "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+     "class": 1,
+     "unit": "1000000000000000"
+    },
+    "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": {
+     "class": 2,
+     "unit": "1000"
+    }
+   },
+   "counterparties": {
+    "0x1111111111111111111111111111111111111111": 1,
+    "0x2222222222222222222222222222222222222222": 2,
+    "0x3333333333333333333333333333333333333333": 3
+   }
+  },
+  "canonicalJSON": "{\"assets\":{\"0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\":{\"class\":1,\"unit\":\"1000000000000000\"},\"0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\":{\"class\":2,\"unit\":\"1000\"}},\"counterparties\":{\"0x1111111111111111111111111111111111111111\":1,\"0x2222222222222222222222222222222222222222\":2,\"0x3333333333333333333333333333333333333333\":3}}",
+  "tablesHash": "0xb89d842702ba93be118685d1de39c89423b5a101e28d8b1c98a4b792a04a6753"
+ },
+ "tablesSharedClass": {
+  "tables": {
+   "assets": {
+    "0xd6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6": {
+     "class": 1,
+     "unit": "10000"
+    },
+    "0xd8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8": {
+     "class": 1,
+     "unit": "10000000000000000"
+    }
+   },
+   "counterparties": {
+    "0x1111111111111111111111111111111111111111": 1
+   }
+  },
+  "canonicalJSON": "{\"assets\":{\"0xd6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6\":{\"class\":1,\"unit\":\"10000\"},\"0xd8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8\":{\"class\":1,\"unit\":\"10000000000000000\"}},\"counterparties\":{\"0x1111111111111111111111111111111111111111\":1}}",
+  "tablesHash": "0xd7e792a15c0df4402362e0af67ff2b2df9ea95e2d9c9ea5ba55c4ab5c6535c20"
  },
  "wordDecode": [
   {
@@ -1077,7 +1426,7 @@
    "policy": "allowlist",
    "name": "asset class 2",
    "request": {
-    "amount": "1000000000000000",
+    "amount": "1000000",
     "asset": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
     "counterparty": "0x1111111111111111111111111111111111111111",
     "kind": 1,
@@ -1088,6 +1437,22 @@
    "reason": 4,
    "reasonName": "asset-not-allowed",
    "outputs": "0x08"
+  },
+  {
+   "policy": "allowlist",
+   "name": "asset not listed: overflow, not asset-not-allowed",
+   "request": {
+    "amount": "1000000000000000",
+    "asset": "0xcccccccccccccccccccccccccccccccccccccccc",
+    "counterparty": "0x1111111111111111111111111111111111111111",
+    "kind": 1,
+    "ts": 1793008800
+   },
+   "word": "0xffffffff0100010110510a0000000000",
+   "verdict": "deny",
+   "reason": 6,
+   "reasonName": "amount-overflow",
+   "outputs": "0x0c"
   },
   {
    "policy": "allowlist",
@@ -1373,7 +1738,7 @@
    "policy": "per-asset-limits",
    "name": "asset 2 at limit",
    "request": {
-    "amount": "50000000000000000",
+    "amount": "50000000",
     "asset": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
     "counterparty": "0x1111111111111111111111111111111111111111",
     "kind": 1,
@@ -1388,7 +1753,7 @@
    "policy": "per-asset-limits",
    "name": "asset 2 over",
    "request": {
-    "amount": "51000000000000000",
+    "amount": "51000000",
     "asset": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
     "counterparty": "0x1111111111111111111111111111111111111111",
     "kind": 1,
@@ -1402,7 +1767,54 @@
   },
   {
    "policy": "per-asset-limits",
-   "name": "asset not listed",
+   "name": "asset 2, one base unit above the limit rounds up",
+   "request": {
+    "amount": "50000001",
+    "asset": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "counterparty": "0x1111111111111111111111111111111111111111",
+    "kind": 1,
+    "ts": 1793008800
+   },
+   "word": "0x330000000002010110510a0000000000",
+   "verdict": "deny",
+   "reason": 1,
+   "reasonName": "amount-over-limit",
+   "outputs": "0x02"
+  },
+  {
+   "policy": "per-asset-limits",
+   "name": "asset 2, 1,000 tokens of a 6-decimal asset",
+   "request": {
+    "amount": "1000000000",
+    "asset": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "counterparty": "0x1111111111111111111111111111111111111111",
+    "kind": 1,
+    "ts": 1793008800
+   },
+   "word": "0xe80300000002010110510a0000000000",
+   "verdict": "deny",
+   "reason": 1,
+   "reasonName": "amount-over-limit",
+   "outputs": "0x02"
+  },
+  {
+   "policy": "per-asset-limits",
+   "name": "asset 1, the same 10^9 base units",
+   "request": {
+    "amount": "1000000000",
+    "asset": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "counterparty": "0x1111111111111111111111111111111111111111",
+    "kind": 1,
+    "ts": 1793008800
+   },
+   "word": "0x010000000001010110510a0000000000",
+   "verdict": "allow",
+   "reason": 0,
+   "outputs": "0x01"
+  },
+  {
+   "policy": "per-asset-limits",
+   "name": "asset not listed: overflow, not asset-not-allowed",
    "request": {
     "amount": "1000000000000000",
     "asset": "0xcccccccccccccccccccccccccccccccccccccccc",
@@ -1410,11 +1822,27 @@
     "kind": 1,
     "ts": 1793008800
    },
-   "word": "0x010000000000010110510a0000000000",
+   "word": "0xffffffff0100010110510a0000000000",
    "verdict": "deny",
-   "reason": 4,
-   "reasonName": "asset-not-allowed",
-   "outputs": "0x08"
+   "reason": 6,
+   "reasonName": "amount-overflow",
+   "outputs": "0x0c"
+  },
+  {
+   "policy": "per-asset-limits",
+   "name": "asset not listed, zero amount",
+   "request": {
+    "amount": "0",
+    "asset": "0xcccccccccccccccccccccccccccccccccccccccc",
+    "counterparty": "0x1111111111111111111111111111111111111111",
+    "kind": 1,
+    "ts": 1793008800
+   },
+   "word": "0xffffffff0100010110510a0000000000",
+   "verdict": "deny",
+   "reason": 6,
+   "reasonName": "amount-overflow",
+   "outputs": "0x0c"
   },
   {
    "policy": "daily-cap",
@@ -1460,6 +1888,194 @@
     "ts": 1793008800
    },
    "error": "policy-stateful"
+  }
+ ],
+ "perAssetUnits": [
+  {
+   "name": "unit B: 50 tokens of asset 2 are 50,000 units",
+   "tables": "tablesUnitB",
+   "policy": "per-asset-limits",
+   "request": {
+    "amount": "50000000",
+    "asset": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "counterparty": "0x1111111111111111111111111111111111111111",
+    "kind": 1,
+    "ts": 1793008800
+   },
+   "fields": {
+    "amount": 50000,
+    "overflow": 0,
+    "asset": 2,
+    "counterparty": 1,
+    "kind": 1,
+    "day": 20752,
+    "hour": 10,
+    "weekday": 0
+   },
+   "word": "0x50c300000002010110510a0000000000",
+   "verdict": "deny",
+   "reason": 1,
+   "reasonName": "amount-over-limit",
+   "outputs": "0x02"
+  },
+  {
+   "name": "unit B: 0.05 token of asset 2 is at the limit",
+   "tables": "tablesUnitB",
+   "policy": "per-asset-limits",
+   "request": {
+    "amount": "50000",
+    "asset": "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "counterparty": "0x1111111111111111111111111111111111111111",
+    "kind": 1,
+    "ts": 1793008800
+   },
+   "fields": {
+    "amount": 50,
+    "overflow": 0,
+    "asset": 2,
+    "counterparty": 1,
+    "kind": 1,
+    "day": 20752,
+    "hour": 10,
+    "weekday": 0
+   },
+   "word": "0x320000000002010110510a0000000000",
+   "verdict": "allow",
+   "reason": 0,
+   "outputs": "0x01"
+  },
+  {
+   "name": "shared class: $10.00 of the 6-decimal asset",
+   "tables": "tablesSharedClass",
+   "policy": "allowlist",
+   "request": {
+    "amount": "10000000",
+    "asset": "0xd6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6",
+    "counterparty": "0x1111111111111111111111111111111111111111",
+    "kind": 1,
+    "ts": 1793008800
+   },
+   "fields": {
+    "amount": 1000,
+    "overflow": 0,
+    "asset": 1,
+    "counterparty": 1,
+    "kind": 1,
+    "day": 20752,
+    "hour": 10,
+    "weekday": 0
+   },
+   "word": "0xe80300000001010110510a0000000000",
+   "verdict": "allow",
+   "reason": 0,
+   "outputs": "0x01"
+  },
+  {
+   "name": "shared class: $10.00 of the 18-decimal asset",
+   "tables": "tablesSharedClass",
+   "policy": "allowlist",
+   "request": {
+    "amount": "10000000000000000000",
+    "asset": "0xd8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8",
+    "counterparty": "0x1111111111111111111111111111111111111111",
+    "kind": 1,
+    "ts": 1793008800
+   },
+   "fields": {
+    "amount": 1000,
+    "overflow": 0,
+    "asset": 1,
+    "counterparty": 1,
+    "kind": 1,
+    "day": 20752,
+    "hour": 10,
+    "weekday": 0
+   },
+   "word": "0xe80300000001010110510a0000000000",
+   "verdict": "allow",
+   "reason": 0,
+   "outputs": "0x01"
+  },
+  {
+   "name": "shared class: $10.01 of the 6-decimal asset",
+   "tables": "tablesSharedClass",
+   "policy": "allowlist",
+   "request": {
+    "amount": "10010000",
+    "asset": "0xd6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6d6",
+    "counterparty": "0x1111111111111111111111111111111111111111",
+    "kind": 1,
+    "ts": 1793008800
+   },
+   "fields": {
+    "amount": 1001,
+    "overflow": 0,
+    "asset": 1,
+    "counterparty": 1,
+    "kind": 1,
+    "day": 20752,
+    "hour": 10,
+    "weekday": 0
+   },
+   "word": "0xe90300000001010110510a0000000000",
+   "verdict": "deny",
+   "reason": 1,
+   "reasonName": "amount-over-limit",
+   "outputs": "0x02"
+  },
+  {
+   "name": "shared class: $10.00 and one base unit of the 18-decimal asset rounds up",
+   "tables": "tablesSharedClass",
+   "policy": "allowlist",
+   "request": {
+    "amount": "10000000000000000001",
+    "asset": "0xd8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8d8",
+    "counterparty": "0x1111111111111111111111111111111111111111",
+    "kind": 1,
+    "ts": 1793008800
+   },
+   "fields": {
+    "amount": 1001,
+    "overflow": 0,
+    "asset": 1,
+    "counterparty": 1,
+    "kind": 1,
+    "day": 20752,
+    "hour": 10,
+    "weekday": 0
+   },
+   "word": "0xe90300000001010110510a0000000000",
+   "verdict": "deny",
+   "reason": 1,
+   "reasonName": "amount-over-limit",
+   "outputs": "0x02"
+  },
+  {
+   "name": "shared class: an asset not in these tables",
+   "tables": "tablesSharedClass",
+   "policy": "allowlist",
+   "request": {
+    "amount": "1",
+    "asset": "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "counterparty": "0x1111111111111111111111111111111111111111",
+    "kind": 1,
+    "ts": 1793008800
+   },
+   "fields": {
+    "amount": 4294967295,
+    "overflow": 1,
+    "asset": 0,
+    "counterparty": 1,
+    "kind": 1,
+    "day": 20752,
+    "hour": 10,
+    "weekday": 0
+   },
+   "word": "0xffffffff0100010110510a0000000000",
+   "verdict": "deny",
+   "reason": 6,
+   "reasonName": "amount-overflow",
+   "outputs": "0x0c"
   }
  ],
  "traces": [
@@ -2328,16 +2944,16 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "expectedSigner": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
    "declaredStateful": true,
    "result": {
-    "bindingHash": "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
+    "bindingHash": "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
     "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
     "subjectKind": "mandate",
     "status": "ok",
@@ -2355,14 +2971,14 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "result": {
-    "bindingHash": "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
+    "bindingHash": "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
     "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
     "subjectKind": "mandate",
     "status": "ok",
@@ -2380,15 +2996,15 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x128dc13a3f92fcc1a51a5f0bcb98fa3b804933dedab164306217619b39e2d7dc67a1082c894de43d91958f54e3bab6a84064964e052218425580551068a6d4031c",
+   "sig": "0x63b112fed44fda52a5eaa885485bd8274c0a0736a4f39e781615746c814da354579d7128ebb2b4b0070722130cb6b8d3e7ca8a2085f97d212b9feeeaa05a87031c",
    "expectedSigner": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
    "result": {
-    "bindingHash": "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
+    "bindingHash": "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
     "signer": "0xcdcb72443ee04790133bdbe86da1e35327ec2d51",
     "subjectKind": "mandate",
     "status": "problems",
@@ -2408,7 +3024,7 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
@@ -2416,7 +3032,7 @@
    "sig": null,
    "expectedSigner": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
    "result": {
-    "bindingHash": "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
+    "bindingHash": "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
     "signer": null,
     "subjectKind": "mandate",
     "status": "problems",
@@ -2436,16 +3052,16 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x90eff5723aba9607efcb10e0f7c54c23d79816355a5e7c5dcfb6a9b16e3c08bd177137df5e0fb0db106a712e4881464c4cc57b47e89cb170b138103e89dd46441b",
+   "sig": "0xd5c58f49b15a0ebd21592f5e44e1e7821a6f24f862a41d7be778358a28f54bdd3806005ac605541d784eee184d339e5adcb63031656f9433ddff298f71902bd11b",
    "expectedSigner": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
    "result": {
-    "bindingHash": "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-    "signer": "0xc6aab288f7ae85eecb1745e990d6e35ec35e3e29",
+    "bindingHash": "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+    "signer": "0xedc84aec8c7f67e98dab9ed756df5e8e1536c82d",
     "subjectKind": "mandate",
     "status": "problems",
     "problems": [
@@ -2464,16 +3080,16 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "expectedSigner": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
    "now": 1793008799,
    "result": {
-    "bindingHash": "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
+    "bindingHash": "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
     "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
     "subjectKind": "mandate",
     "status": "problems",
@@ -2493,16 +3109,16 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "expectedSigner": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
    "now": 1793008800,
    "result": {
-    "bindingHash": "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
+    "bindingHash": "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
     "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
     "subjectKind": "mandate",
     "status": "ok",
@@ -2520,16 +3136,16 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "expectedSigner": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
    "now": 1793613600,
    "result": {
-    "bindingHash": "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
+    "bindingHash": "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
     "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
     "subjectKind": "mandate",
     "status": "ok",
@@ -2547,16 +3163,16 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "expectedSigner": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
    "now": 1793613601,
    "result": {
-    "bindingHash": "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
+    "bindingHash": "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
     "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
     "subjectKind": "mandate",
     "status": "problems",
@@ -2570,21 +3186,21 @@
    }
   },
   {
-   "name": "tables changed",
+   "name": "tables changed: only the unit of asset 2",
    "chainId": 56,
    "binding": {
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "expectedSigner": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
    "result": {
-    "bindingHash": "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
+    "bindingHash": "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
     "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
     "subjectKind": "mandate",
     "status": "problems",
@@ -2604,15 +3220,15 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "expectedSigner": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
    "result": {
-    "bindingHash": "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
+    "bindingHash": "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
     "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
     "subjectKind": "mandate",
     "status": "problems",
@@ -2632,15 +3248,15 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "expectedSigner": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
    "result": {
-    "bindingHash": "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
+    "bindingHash": "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
     "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
     "subjectKind": "mandate",
     "status": "problems",
@@ -2660,16 +3276,16 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "expectedSigner": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
    "declaredStateful": false,
    "result": {
-    "bindingHash": "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
+    "bindingHash": "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
     "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
     "subjectKind": "mandate",
     "status": "problems",
@@ -2689,15 +3305,15 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "expectedSigner": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
    "result": {
-    "bindingHash": "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
+    "bindingHash": "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
     "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
     "subjectKind": "mandate",
     "status": "problems",
@@ -2718,28 +3334,28 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "expectedSigner": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
    "revocations": [
     {
      "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
      "revocation": {
       "bindingHashes": [
-       "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12"
+       "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8"
       ],
       "revokedBefore": 0,
       "issued": 1793095200
      },
-     "sig": "0x50651f3e33b0cac258333eef4b5f013fce26463dfb3e3180d6014b0db8a89f6f77e075892d3598abf9fe5b38c11244050ec22d0cdcfa4978a73711a311c70ed01c"
+     "sig": "0x6caad3469d370214dfbd617fa482893ab2dfb406dcc78416bf5bb1f21f5a13bb57b5999ecb5332a6abf0af79a4888796334c72be507b96db8672b69169aaa94c1b"
     }
    ],
    "result": {
-    "bindingHash": "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
+    "bindingHash": "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
     "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
     "subjectKind": "mandate",
     "status": "problems",
@@ -2759,12 +3375,12 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "expectedSigner": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
    "revocations": [
     {
@@ -2777,7 +3393,7 @@
     }
    ],
    "result": {
-    "bindingHash": "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
+    "bindingHash": "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
     "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
     "subjectKind": "mandate",
     "status": "problems",
@@ -2797,19 +3413,19 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "expectedSigner": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
    "revocations": [
     {
      "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
      "revocation": {
       "bindingHashes": [
-       "0xbc6989ce4e21902b648b9b35a08839aea9834e3c59e3e62e0d47734fbcfb8c02"
+       "0xdd907aa4cb7739d81ccfb137e8e67b4c5acf90f1d592f51fcf901f27e6023cdc"
       ],
       "revokedBefore": 0,
       "issued": 1793095200
@@ -2817,7 +3433,7 @@
     }
    ],
    "result": {
-    "bindingHash": "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
+    "bindingHash": "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
     "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
     "subjectKind": "mandate",
     "status": "ok",
@@ -2835,12 +3451,12 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "expectedSigner": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
    "declaredStateful": true,
    "revocations": [
@@ -2854,7 +3470,7 @@
     }
    ],
    "result": {
-    "bindingHash": "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
+    "bindingHash": "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
     "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
     "subjectKind": "mandate",
     "status": "ok",
@@ -2872,12 +3488,12 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "expectedSigner": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
    "declaredStateful": true,
    "revocations": [
@@ -2891,7 +3507,7 @@
     }
    ],
    "result": {
-    "bindingHash": "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
+    "bindingHash": "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
     "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
     "subjectKind": "mandate",
     "status": "ok",
@@ -2909,19 +3525,19 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "expectedSigner": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
    "revocations": [
     {
      "signer": "0xcdcb72443ee04790133bdbe86da1e35327ec2d51",
      "revocation": {
       "bindingHashes": [
-       "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12"
+       "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8"
       ],
       "revokedBefore": 0,
       "issued": 1793095200
@@ -2929,7 +3545,7 @@
     }
    ],
    "result": {
-    "bindingHash": "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
+    "bindingHash": "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
     "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
     "subjectKind": "mandate",
     "status": "ok",
@@ -2947,15 +3563,15 @@
     "netlistHash": "0xdcb5b163ce32adc5b1406678c519cafc467e3f65e18b6e088b2cf26895d52d5b",
     "subjectKind": 2,
     "subject": "0xf0ce2161807e39eda6ff2b3f487abb0e797da635792720ddc31ee5faff97f85d",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x35b9f7ec5e224eaec21fcb74a44a2dba68910f826e07e3adaa30625fca2fa62142b592ed1f0daa0fcb2da9325c2a8312f0c62229219b4f5516611aea9e730c221b",
+   "sig": "0xe6f85d62c506cf9f64fcacdbc32c65cb934195ba71151787c5fbd1e4bfeb71150fa0237882f9f3a53c3fe5a352f5d5b180b9662b806948a52c60fe5fd35950d11b",
    "expectedSigner": "0xdd0735c7849f01796c9350d5cfbd00a3aa4008ed",
    "result": {
-    "bindingHash": "0xbc6989ce4e21902b648b9b35a08839aea9834e3c59e3e62e0d47734fbcfb8c02",
+    "bindingHash": "0xdd907aa4cb7739d81ccfb137e8e67b4c5acf90f1d592f51fcf901f27e6023cdc",
     "signer": "0xdd0735c7849f01796c9350d5cfbd00a3aa4008ed",
     "subjectKind": "escrow-session",
     "status": "ok",
@@ -2973,15 +3589,15 @@
     "netlistHash": "0xdcb5b163ce32adc5b1406678c519cafc467e3f65e18b6e088b2cf26895d52d5b",
     "subjectKind": 2,
     "subject": "0xf0ce2161807e39eda6ff2b3f487abb0e797da635792720ddc31ee5faff97f85d",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0xa353a2b94a61866587bcdcc760b8ce40f72ae54e41f4c8e6db53155df9b20c6235570122e2724cbfae58bb95c9afa627dd63e160b20f12e2db8929572ed808151c",
+   "sig": "0xd2e6238c8c10ea45f3c79f309c0e865bd198b7dfd0845b6a6d3a2382ba9e02235143ab6ddfd3b39fd63ef099b2124092f7ae65435f7cdc76af52befd03fa4ec41b",
    "expectedSigner": "0xdd0735c7849f01796c9350d5cfbd00a3aa4008ed",
    "result": {
-    "bindingHash": "0xbc6989ce4e21902b648b9b35a08839aea9834e3c59e3e62e0d47734fbcfb8c02",
+    "bindingHash": "0xdd907aa4cb7739d81ccfb137e8e67b4c5acf90f1d592f51fcf901f27e6023cdc",
     "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
     "subjectKind": "escrow-session",
     "status": "problems",
@@ -3001,15 +3617,15 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "expectedSigner": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
    "result": {
-    "bindingHash": "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
+    "bindingHash": "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
     "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
     "subjectKind": "mandate",
     "status": "ok",
@@ -3027,16 +3643,16 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 3,
     "subject": "0x000000000000000000000000cdcb72443ee04790133bdbe86da1e35327ec2d51",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0xc9bd1877aa8cee08eaadafd4f02b22d4453a2841c3fac6aa7993574ab7b20cdd16cabb3ac08ed3ed2fa03f8de52c93940b58d49cedf77128321aed1876da237b1b",
+   "sig": "0x6dcdead35af74e5cc5745231d43b9e05dbdb15ae18e4a1ce02d7d38d97353eb461309c5322c79f98bc785770a22725e89f94dd1a1781e866151bc87de1e81bab1b",
    "expectedSigner": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
    "declaredStateful": true,
    "result": {
-    "bindingHash": "0xbfd2f0f2af424ea2dc7ef83413ba6ce1ac0943b424c8a0b95d92cc92e12de772",
+    "bindingHash": "0xedf9c27f6e5c174140a2776f579b3691a8efdfa2bdfa5288eaf24f7d84f49641",
     "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
     "subjectKind": "account",
     "status": "ok",
@@ -3054,15 +3670,15 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 3,
     "subject": "0x000000000000000000000000cdcb72443ee04790133bdbe86da1e35327ec2d51",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0xc9bd1877aa8cee08eaadafd4f02b22d4453a2841c3fac6aa7993574ab7b20cdd16cabb3ac08ed3ed2fa03f8de52c93940b58d49cedf77128321aed1876da237b1b",
+   "sig": "0x6dcdead35af74e5cc5745231d43b9e05dbdb15ae18e4a1ce02d7d38d97353eb461309c5322c79f98bc785770a22725e89f94dd1a1781e866151bc87de1e81bab1b",
    "expectedSigner": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
    "result": {
-    "bindingHash": "0xbfd2f0f2af424ea2dc7ef83413ba6ce1ac0943b424c8a0b95d92cc92e12de772",
+    "bindingHash": "0xedf9c27f6e5c174140a2776f579b3691a8efdfa2bdfa5288eaf24f7d84f49641",
     "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
     "subjectKind": "account",
     "status": "ok",
@@ -3080,16 +3696,16 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 3,
     "subject": "0x000000000000000000000000cdcb72443ee04790133bdbe86da1e35327ec2d51",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x046a73c12d444af93e10c959124ca08f1d0e81d04764aa9a3235692fbb7272914654d5038fd59c65084ecdada06361afdf14c3dec19c07f8ac668bf40c3b68dd1b",
+   "sig": "0x7f4feecb34a2241180993245494de0cfe8e479f986a97e3e6ae110da259e17cb396e7b810cd7da469f6118d646298dccf5feaabc393e20312f277e84f439bc901c",
    "expectedSigner": "0xcdcb72443ee04790133bdbe86da1e35327ec2d51",
    "declaredStateful": true,
    "result": {
-    "bindingHash": "0xbfd2f0f2af424ea2dc7ef83413ba6ce1ac0943b424c8a0b95d92cc92e12de772",
+    "bindingHash": "0xedf9c27f6e5c174140a2776f579b3691a8efdfa2bdfa5288eaf24f7d84f49641",
     "signer": "0xcdcb72443ee04790133bdbe86da1e35327ec2d51",
     "subjectKind": "account",
     "status": "problems",
@@ -3109,14 +3725,14 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 3,
     "subject": "0x000000000000000000000000cdcb72443ee04790133bdbe86da1e35327ec2d51",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x046a73c12d444af93e10c959124ca08f1d0e81d04764aa9a3235692fbb7272914654d5038fd59c65084ecdada06361afdf14c3dec19c07f8ac668bf40c3b68dd1b",
+   "sig": "0x7f4feecb34a2241180993245494de0cfe8e479f986a97e3e6ae110da259e17cb396e7b810cd7da469f6118d646298dccf5feaabc393e20312f277e84f439bc901c",
    "result": {
-    "bindingHash": "0xbfd2f0f2af424ea2dc7ef83413ba6ce1ac0943b424c8a0b95d92cc92e12de772",
+    "bindingHash": "0xedf9c27f6e5c174140a2776f579b3691a8efdfa2bdfa5288eaf24f7d84f49641",
     "signer": "0xcdcb72443ee04790133bdbe86da1e35327ec2d51",
     "subjectKind": "account",
     "status": "problems",
@@ -3136,14 +3752,14 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 4,
     "subject": "0xb765fad85ef451952091230b79c28de237545ba4b562c3495fd4bf1f5513152e",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0xfb2bb8c7dafbf431660d52e37141c71eb47e6d82b4530a517cf4136c292ad77e1a634a652d1a3e27bfce8a283c1e60c272854045e3acf0a15ca2f6016510523e1c",
+   "sig": "0xd0bbf5976ff5e62411d151e7792a4b514a2e0b2440d2de2f675b4213f1b3e2495e87d374fbc2fffdf2d9047d4f9895f5df5fbf14183e6af37aa0c6959775705d1c",
    "result": {
-    "bindingHash": "0xe5633ec72139965debd8ce4efcb1cebec963c24b1fa730d94011700b08781ef8",
+    "bindingHash": "0x3f0324a8fcf09476cf76ae0c5b9a0a6a60d71647df682fd5648d6ea26c26ceea",
     "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
     "subjectKind": "label",
     "status": "ok",
@@ -3161,16 +3777,16 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 4,
     "subject": "0xb765fad85ef451952091230b79c28de237545ba4b562c3495fd4bf1f5513152e",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0xfb2bb8c7dafbf431660d52e37141c71eb47e6d82b4530a517cf4136c292ad77e1a634a652d1a3e27bfce8a283c1e60c272854045e3acf0a15ca2f6016510523e1c",
+   "sig": "0xd0bbf5976ff5e62411d151e7792a4b514a2e0b2440d2de2f675b4213f1b3e2495e87d374fbc2fffdf2d9047d4f9895f5df5fbf14183e6af37aa0c6959775705d1c",
    "expectedSigner": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
    "declaredStateful": true,
    "result": {
-    "bindingHash": "0xe5633ec72139965debd8ce4efcb1cebec963c24b1fa730d94011700b08781ef8",
+    "bindingHash": "0x3f0324a8fcf09476cf76ae0c5b9a0a6a60d71647df682fd5648d6ea26c26ceea",
     "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
     "subjectKind": "label",
     "status": "ok",
@@ -3188,12 +3804,12 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793008800,
     "issued": 1793005200
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "error": "binding-window-empty"
   },
   {
@@ -3203,12 +3819,12 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793613601
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "error": "binding-issued-after-expiry"
   },
   {
@@ -3218,12 +3834,12 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 5,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "error": "binding-unknown-subject-kind"
   },
   {
@@ -3233,12 +3849,12 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 3,
     "subject": "0x1111111111111111111111111111111111111111111111111111111111111111",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "error": "binding-malformed"
   },
   {
@@ -3248,12 +3864,12 @@
     "netlistHash": "0x0000000000000000000000000000000000000000000000000000000000000000",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "error": "binding-malformed"
   },
   {
@@ -3263,12 +3879,12 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xBA89D2C77E2091AB4B5C994A99611B5876B93B829AC52173ECB065D67F7627D2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "error": "binding-malformed"
   },
   {
@@ -3278,33 +3894,49 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "error": "binding-malformed"
   }
  ],
  "bindingHashes": {
-  "mandate": "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-  "mandateStructHash": "0xb90e2c450fb1ba8508bc90f929c7de1eb62fa907764892d25b7a790e4c13ba71",
-  "mandateOnChain97": "0x8c6031293da5dfe0f324097d892d6def2f3a8af3f8d65835d6f02f1198f9a3c7",
-  "escrowSession": "0xbc6989ce4e21902b648b9b35a08839aea9834e3c59e3e62e0d47734fbcfb8c02"
+  "mandate": "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+  "mandateStructHash": "0xe778c6d6450f5bdd81cbc7b5902c063fa3931578bc33c0519d8fd4c8f59b2180",
+  "mandateOnChain97": "0x97b1a133fcf600552884936d09aed65b8a3b52cad2959d2b789b16454d2ccf7e",
+  "escrowSession": "0xdd907aa4cb7739d81ccfb137e8e67b4c5acf90f1d592f51fcf901f27e6023cdc"
+ },
+ "unitsChangeIdentity": {
+  "note": "Two bindings identical except that their tables differ only in the unit of asset 2.",
+  "tablesHash": [
+   "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
+   "0xb89d842702ba93be118685d1de39c89423b5a101e28d8b1c98a4b792a04a6753"
+  ],
+  "bindingHash": [
+   "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+   "0xf0137a06a0f40f65f0f23ceafcb2cfe9d35458da21ab279f9242ea1f4e076036"
+  ],
+  "word": [
+   "0x320000000002010110510a0000000000",
+   "0x50c300000002010110510a0000000000"
+  ],
+  "differ": true
  },
  "revocations": [
   {
    "name": "by hash",
    "revocation": {
     "bindingHashes": [
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12"
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8"
     ],
     "revokedBefore": 0,
     "issued": 1793095200
    },
-   "sig": "0x50651f3e33b0cac258333eef4b5f013fce26463dfb3e3180d6014b0db8a89f6f77e075892d3598abf9fe5b38c11244050ec22d0cdcfa4978a73711a311c70ed01c",
+   "sig": "0x6caad3469d370214dfbd617fa482893ab2dfb406dcc78416bf5bb1f21f5a13bb57b5999ecb5332a6abf0af79a4888796334c72be507b96db8672b69169aaa94c1b",
    "signer": "0x7b9cbc6dfd675433e094499cf07213178f509dd6",
-   "hash": "0x392c721951a75b72fec0d06a8d36d779c619a11a8f1613aa5bb978eb66b5d637",
+   "hash": "0xb93358173a224f311309cfc2a14bcb2090e7983a85899ccb62dc89b579a26a82",
    "covers": true
   },
   {
@@ -3350,43 +3982,43 @@
    "name": "other binding",
    "revocation": {
     "bindingHashes": [
-     "0xbc6989ce4e21902b648b9b35a08839aea9834e3c59e3e62e0d47734fbcfb8c02"
+     "0xdd907aa4cb7739d81ccfb137e8e67b4c5acf90f1d592f51fcf901f27e6023cdc"
     ],
     "revokedBefore": 0,
     "issued": 1793095200
    },
-   "hash": "0xb5eb93380309d057325f618f302d21f11b88daa97bc28c6a317544721b627b45",
+   "hash": "0x25ff3c4fbb66d7fd84831dbae5ef3ce693fa4b5706bb5c1520da835ba0172e26",
    "covers": false
   },
   {
    "name": "too many hashes",
    "revocation": {
     "bindingHashes": [
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12",
-     "0x7a9bccd421f4a4d981a242f2f7902b589c13ad98b110b83222753a6af4d38f12"
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8",
+     "0x342cb1a5d7bc85e13fdda937c05c370a5639212f978c2ceb03a09e29a1b4cbd8"
     ],
     "revokedBefore": 0,
     "issued": 1793095200
@@ -3666,17 +4298,22 @@
      "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
      "subjectKind": 1,
      "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-     "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+     "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
      "notBefore": 1793008800,
      "expires": 1793613600,
      "issued": 1793005200
     },
-    "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+    "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
     "tables": {
-     "amountUnit": "1000000000000000",
      "assets": {
-      "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": 1,
-      "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": 2
+      "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+       "class": 1,
+       "unit": "1000000000000000"
+      },
+      "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": {
+       "class": 2,
+       "unit": "1000000"
+      }
      },
      "counterparties": {
       "0x1111111111111111111111111111111111111111": 1,
@@ -3700,17 +4337,22 @@
      "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
      "subjectKind": 1,
      "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-     "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+     "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
      "notBefore": 1793008800,
      "expires": 1793613600,
      "issued": 1793005200
     },
-    "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+    "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
     "tables": {
-     "amountUnit": "1000000000000000",
      "assets": {
-      "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": 1,
-      "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": 2
+      "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+       "class": 1,
+       "unit": "1000000000000000"
+      },
+      "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": {
+       "class": 2,
+       "unit": "1000000"
+      }
      },
      "counterparties": {
       "0x1111111111111111111111111111111111111111": 1,
@@ -3729,17 +4371,22 @@
      "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
      "subjectKind": 1,
      "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-     "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+     "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
      "notBefore": 1793008800,
      "expires": 1793613600,
      "issued": 1793005200
     },
-    "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a45",
+    "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed7",
     "tables": {
-     "amountUnit": "1000000000000000",
      "assets": {
-      "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": 1,
-      "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": 2
+      "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+       "class": 1,
+       "unit": "1000000000000000"
+      },
+      "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": {
+       "class": 2,
+       "unit": "1000000"
+      }
      },
      "counterparties": {
       "0x1111111111111111111111111111111111111111": 1,
@@ -3763,17 +4410,22 @@
      "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
      "subjectKind": 1,
      "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-     "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+     "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
      "notBefore": 1793008800,
      "expires": 1793613600,
      "issued": 1793005200
     },
-    "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+    "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
     "tables": {
-     "amountUnit": "0",
      "assets": {
-      "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": 1,
-      "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": 2
+      "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+       "class": 1,
+       "unit": "0"
+      },
+      "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": {
+       "class": 2,
+       "unit": "1000000"
+      }
      },
      "counterparties": {
       "0x1111111111111111111111111111111111111111": 1,
@@ -3797,17 +4449,22 @@
      "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
      "subjectKind": 9,
      "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-     "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+     "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
      "notBefore": 1793008800,
      "expires": 1793613600,
      "issued": 1793005200
     },
-    "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+    "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
     "tables": {
-     "amountUnit": "1000000000000000",
      "assets": {
-      "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": 1,
-      "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": 2
+      "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+       "class": 1,
+       "unit": "1000000000000000"
+      },
+      "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": {
+       "class": 2,
+       "unit": "1000000"
+      }
      },
      "counterparties": {
       "0x1111111111111111111111111111111111111111": 1,
@@ -3831,17 +4488,22 @@
      "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
      "subjectKind": 1,
      "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-     "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+     "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
      "notBefore": 1793008800,
      "expires": 1793613600,
      "issued": 1793005200
     },
-    "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+    "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
     "tables": {
-     "amountUnit": "1000000000000000",
      "assets": {
-      "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": 1,
-      "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": 2
+      "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+       "class": 1,
+       "unit": "1000000000000000"
+      },
+      "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": {
+       "class": 2,
+       "unit": "1000000"
+      }
      },
      "counterparties": {
       "0x1111111111111111111111111111111111111111": 1,
@@ -3863,17 +4525,22 @@
      "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
      "subjectKind": 1,
      "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-     "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+     "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
      "notBefore": 1793008800,
      "expires": 1793613600,
      "issued": 1793005200
     },
-    "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+    "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
     "tables": {
-     "amountUnit": "1000000000000000",
      "assets": {
-      "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": 1,
-      "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": 2
+      "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+       "class": 1,
+       "unit": "1000000000000000"
+      },
+      "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": {
+       "class": 2,
+       "unit": "1000000"
+      }
      },
      "counterparties": {
       "0x1111111111111111111111111111111111111111": 1,
@@ -3919,17 +4586,22 @@
     "netlistHash": "0x5e2d00e35e7e9a7a521027164a037fead6bbed69ef1ef5816c1b9de07f6cd8c6",
     "subjectKind": 1,
     "subject": "0xba89d2c77e2091ab4b5c994a99611b5876b93b829ac52173ecb065d67f7627d2",
-    "tablesHash": "0x5dd5fff7b0d8013385e181a7366e6014f2e438d88ed0d3071e18512ed35e381d",
+    "tablesHash": "0xef34c7aa556c6ae186d393617d6550e8dd038d258ea785dba1745ee10fb29083",
     "notBefore": 1793008800,
     "expires": 1793613600,
     "issued": 1793005200
    },
-   "sig": "0x5f6b73642969d17138d7bc8c05802a22417ba6fcd5b592ca5f36b6b488c43e6f45a7b4d1c32fb55b470326c987bbe976aeedc8c39a840229819e0b4648883a451b",
+   "sig": "0xb26a2e4e28bd5dbef5bbf4635ec59dadd396cbab93f3cf0d0588481e86480fd473c93dc17c936fa1d4c995dee4fb7b81ea4d345eb8c85bb0fba2b5ab3341aed71b",
    "tables": {
-    "amountUnit": "1000000000000000",
     "assets": {
-     "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": 1,
-     "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": 2
+     "0xaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa": {
+      "class": 1,
+      "unit": "1000000000000000"
+     },
+     "0xbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb": {
+      "class": 2,
+      "unit": "1000000"
+     }
     },
     "counterparties": {
      "0x1111111111111111111111111111111111111111": 1,
@@ -3947,16 +4619,17 @@
  "caseCount": {
   "policyChecks": 8,
   "results": 11,
-  "encoding": 18,
+  "encoding": 23,
   "encodingErrors": 10,
-  "tablesErrors": 6,
+  "tablesErrors": 14,
   "wordDecode": 5,
-  "evaluations": 29,
+  "evaluations": 34,
+  "perAssetUnits": 7,
   "traces": 15,
   "bindings": 36,
   "revocations": 8,
   "tokenMetadata": 10,
   "subjectMetadata": 7,
-  "total": 163
+  "total": 188
  }
 }

@@ -25,8 +25,16 @@ CHAIN = 56
 A = lambda b: "0x" + (b * 20)  # noqa: E731
 ASSET_U, ASSET_V, ASSET_X = A("aa"), A("bb"), A("cc")
 P1, P2, P3, PX = A("11"), A("22"), A("33"), A("44")
-TABLES = {"amountUnit": "1000000000000000", "assets": {ASSET_U: 1, ASSET_V: 2}, "counterparties": {P1: 1, P2: 2, P3: 3}}
-UNIT = 10 ** 15
+UNIT = 10 ** 15        # the unit of ASSET_U, an 18-decimal asset: 0.001 token
+UNIT_V = 10 ** 6       # the unit of ASSET_V, a 6-decimal asset: one whole token
+TABLES = {"assets": {ASSET_U: {"class": 1, "unit": str(UNIT)}, ASSET_V: {"class": 2, "unit": str(UNIT_V)}},
+          "counterparties": {P1: 1, P2: 2, P3: 3}}
+# The same tables except for the unit of ASSET_V (0.001 token): a different tablesHash, so a different binding.
+TABLES_UNIT_B = {**TABLES, "assets": {**TABLES["assets"], ASSET_V: {"class": 2, "unit": str(10 ** 3)}}}
+# Two stablecoin-like assets of 6 and 18 decimals sharing class 1, each counted in cents.
+STABLE6, STABLE18 = A("d6"), A("d8")
+TABLES_SHARED_CLASS = {"assets": {STABLE6: {"class": 1, "unit": str(10 ** 4)}, STABLE18: {"class": 1, "unit": str(10 ** 16)}},
+                       "counterparties": {P1: 1}}
 
 
 def key(n: int) -> int:
@@ -123,7 +131,12 @@ def build() -> dict:
     enc_cases = [
         ("one unit", req(UNIT)), ("zero", req(0)), ("rounds up", req(UNIT + 1)), ("just under two units", req(2 * UNIT - 1)),
         ("saturates", req((1 << 32) * UNIT)), ("last non-saturating", req(((1 << 32) - 1) * UNIT)),
-        ("asset class 2", req(UNIT, asset=ASSET_V)), ("asset not listed", req(UNIT, asset=ASSET_X)),
+        ("asset class 2", req(UNIT_V, asset=ASSET_V)), ("asset not listed", req(UNIT, asset=ASSET_X)),
+        ("asset not listed, zero amount", req(0, asset=ASSET_X)),
+        ("asset class 2, one base unit rounds up to one unit", req(1, asset=ASSET_V)),
+        ("asset class 2, 1,000 tokens of a 6-decimal asset", req(1000 * UNIT_V, asset=ASSET_V)),
+        ("asset class 1, the same 10^9 base units of an 18-decimal asset", req(1000 * UNIT_V)),
+        ("asset class 2 saturates", req((1 << 32) * UNIT_V, asset=ASSET_V)),
         ("counterparty class 3", req(UNIT, cp=P3)), ("counterparty not listed", req(UNIT, cp=PX)),
         ("kind call", req(UNIT, kind=3)), ("kind 7", req(UNIT, kind=7)),
         ("epoch", req(UNIT, ts=0)), ("saturday noon", req(UNIT, ts=SAT_NOON)), ("monday 10:00", req(UNIT, ts=MON_10)),
@@ -143,13 +156,24 @@ def build() -> dict:
         ("extra member", {**req(UNIT), "memo": "x"}), ("missing member", {k: val for k, val in req(UNIT).items() if k != "ts"}),
     ]
     v["encodingErrors"] = [{"name": n, "request": r, **outcome(lambda r=r: hx(pg.encode_request(r, TABLES)))} for n, r in bad_reqs]
+    au = lambda e: {**TABLES, "assets": {**TABLES["assets"], ASSET_U: e}}  # noqa: E731  ASSET_U's entry replaced
     bad_tables = [
-        ("unit zero", {**TABLES, "amountUnit": "0"}), ("class 0", {**TABLES, "assets": {ASSET_U: 0}}),
-        ("class 256", {**TABLES, "counterparties": {P1: 256}}), ("checksummed key", {**TABLES, "assets": {"0x" + "AA" * 20: 1}}),
-        ("extra member", {**TABLES, "kinds": {}}), ("unit as float", {**TABLES, "amountUnit": 1.5}),
+        ("unit zero", au({"class": 1, "unit": "0"})), ("class 0", au({"class": 0, "unit": "1"})),
+        ("class 256", {**TABLES, "counterparties": {P1: 256}}),
+        ("checksummed key", {**TABLES, "assets": {"0x" + "AA" * 20: {"class": 1, "unit": "1"}}}),
+        ("extra member", {**TABLES, "kinds": {}}), ("unit as float", au({"class": 1, "unit": 1.5})),
+        ("unit as integer", au({"class": 1, "unit": UNIT})), ("unit with leading zero", au({"class": 1, "unit": "01"})),
+        ("unit 2^256", au({"class": 1, "unit": str(1 << 256)})), ("unit negative", au({"class": 1, "unit": "-1"})),
+        ("entry without unit", au({"class": 1})), ("entry with extra member", au({"class": 1, "unit": "1", "decimals": 18})),
+        ("entry as a bare class (earlier form)", au(1)),
+        ("single amountUnit member (earlier form)", {**TABLES, "amountUnit": str(UNIT)}),
     ]
     v["tablesErrors"] = [{"name": n, "tables": t, **outcome(lambda t=t: hx(pg.tables_hash(t)))} for n, t in bad_tables]
     v["tables"] = {"tables": TABLES, "canonicalJSON": pg.canonical_json(TABLES), "tablesHash": hx(pg.tables_hash(TABLES))}
+    v["tablesUnitB"] = {"tables": TABLES_UNIT_B, "canonicalJSON": pg.canonical_json(TABLES_UNIT_B),
+                        "tablesHash": hx(pg.tables_hash(TABLES_UNIT_B))}
+    v["tablesSharedClass"] = {"tables": TABLES_SHARED_CLASS, "canonicalJSON": pg.canonical_json(TABLES_SHARED_CLASS),
+                              "tablesHash": hx(pg.tables_hash(TABLES_SHARED_CLASS))}
     v["wordDecode"] = [{"word": w, **outcome(lambda w=w: pg.decode_word(bytes.fromhex(w[2:])))} for w in (
         v["encoding"][0]["word"], "0x" + "00" * 4 + "02" + "00" * 11, "0x" + "00" * 7 + "08" + "00" * 8, "0x" + "00" * 15 + "80", "0x" + "00" * 15)]
 
@@ -165,7 +189,8 @@ def build() -> dict:
     ev("allowlist", "one wei over the limit", req(1000 * UNIT + 1, cp=P2))
     ev("allowlist", "counterparty class 3", req(UNIT, cp=P3))
     ev("allowlist", "counterparty not listed", req(UNIT, cp=PX))
-    ev("allowlist", "asset class 2", req(UNIT, asset=ASSET_V))
+    ev("allowlist", "asset class 2", req(UNIT_V, asset=ASSET_V))
+    ev("allowlist", "asset not listed: overflow, not asset-not-allowed", req(UNIT, asset=ASSET_X))
     ev("allowlist", "kind call", req(UNIT, kind=3))
     ev("allowlist", "overflow beats counterparty", req((1 << 40) * UNIT, cp=PX))
     ev("allowlist", "kind beats overflow", req((1 << 40) * UNIT, cp=PX, kind=0))
@@ -184,14 +209,35 @@ def build() -> dict:
     ev("deny-all", "zero", req(0, kind=0))
     ev("per-asset-limits", "asset 1 at limit", req(1000 * UNIT))
     ev("per-asset-limits", "asset 1 over", req(1001 * UNIT))
-    ev("per-asset-limits", "asset 2 at limit", req(50 * UNIT, asset=ASSET_V))
-    ev("per-asset-limits", "asset 2 over", req(51 * UNIT, asset=ASSET_V))
-    ev("per-asset-limits", "asset not listed", req(UNIT, asset=ASSET_X))
+    ev("per-asset-limits", "asset 2 at limit", req(50 * UNIT_V, asset=ASSET_V))
+    ev("per-asset-limits", "asset 2 over", req(51 * UNIT_V, asset=ASSET_V))
+    ev("per-asset-limits", "asset 2, one base unit above the limit rounds up", req(50 * UNIT_V + 1, asset=ASSET_V))
+    ev("per-asset-limits", "asset 2, 1,000 tokens of a 6-decimal asset", req(1000 * UNIT_V, asset=ASSET_V))
+    ev("per-asset-limits", "asset 1, the same 10^9 base units", req(1000 * UNIT_V))
+    ev("per-asset-limits", "asset not listed: overflow, not asset-not-allowed", req(UNIT, asset=ASSET_X))
+    ev("per-asset-limits", "asset not listed, zero amount", req(0, asset=ASSET_X))
     ev("daily-cap", "first request from zero state", req(500 * UNIT))
     ev("daily-cap", "501 units from zero state", req(501 * UNIT))
     evals.append({"policy": "daily-cap", "name": "evalFile on a stateful policy", "request": req(UNIT),
                   **outcome(lambda: hx(loaded["daily-cap"].eval(pg.encode_request(req(UNIT), TABLES))))})
     v["evaluations"] = evals
+
+    # ---- per-asset units (§3.1, §3.3): other tables, the same circuits
+    per_asset = []
+
+    def pu(name, tables_name, tables, policy, r):
+        per_asset.append({"name": name, "tables": tables_name, "policy": policy, "request": r, "fields": pg.fields_of(r, tables),
+                          **pg.evaluate(loaded[policy], r, tables)})
+
+    pu("unit B: 50 tokens of asset 2 are 50,000 units", "tablesUnitB", TABLES_UNIT_B, "per-asset-limits", req(50 * UNIT_V, asset=ASSET_V))
+    pu("unit B: 0.05 token of asset 2 is at the limit", "tablesUnitB", TABLES_UNIT_B, "per-asset-limits", req(50 * 10 ** 3, asset=ASSET_V))
+    pu("shared class: $10.00 of the 6-decimal asset", "tablesSharedClass", TABLES_SHARED_CLASS, "allowlist", req(1000 * 10 ** 4, asset=STABLE6))
+    pu("shared class: $10.00 of the 18-decimal asset", "tablesSharedClass", TABLES_SHARED_CLASS, "allowlist", req(1000 * 10 ** 16, asset=STABLE18))
+    pu("shared class: $10.01 of the 6-decimal asset", "tablesSharedClass", TABLES_SHARED_CLASS, "allowlist", req(1001 * 10 ** 4, asset=STABLE6))
+    pu("shared class: $10.00 and one base unit of the 18-decimal asset rounds up", "tablesSharedClass", TABLES_SHARED_CLASS, "allowlist",
+       req(1000 * 10 ** 16 + 1, asset=STABLE18))
+    pu("shared class: an asset not in these tables", "tablesSharedClass", TABLES_SHARED_CLASS, "allowlist", req(1, asset=ASSET_U))
+    v["perAssetUnits"] = per_asset
 
     # ---- traces (§4.2)
     def trace(name, policy, entries, **kw):
@@ -274,8 +320,8 @@ def build() -> dict:
         bc("at notBefore", B, sig, expectedSigner=HOLDER, now=nb),
         bc("at expires", B, sig, expectedSigner=HOLDER, now=exp_),
         bc("expired", B, sig, expectedSigner=HOLDER, now=exp_ + 1),
-        bc("tables changed", B, sig, tables={**TABLES, "amountUnit": "1"}, expectedSigner=HOLDER),
-        bc("tables malformed", B, sig, tables={**TABLES, "amountUnit": "0"}, expectedSigner=HOLDER),
+        bc("tables changed: only the unit of asset 2", B, sig, tables=TABLES_UNIT_B, expectedSigner=HOLDER),
+        bc("tables malformed", B, sig, tables=au({"class": 1, "unit": "0"}), expectedSigner=HOLDER),
         bc("policy file is another policy", B, sig, expectedSigner=HOLDER, policy_file=files["allowlist"]),
         bc("policy file declared combinational", B, sig, expectedSigner=HOLDER, policy_file=files["daily-cap"], declaredStateful=False),
         bc("policy file invalid", B, sig, expectedSigner=HOLDER, policy_file=bad_files[0][1]),
@@ -309,6 +355,13 @@ def build() -> dict:
     v["bindings"] = bindings
     v["bindingHashes"] = {"mandate": hx(pg.binding_hash(CHAIN, B)), "mandateStructHash": hx(pg.struct_hash(pg.BINDING_FIELDS, pg.BINDING_TYPEHASH, B, "x")),
                           "mandateOnChain97": hx(pg.binding_hash(97, B)), "escrowSession": hx(pg.binding_hash(CHAIN, B2))}
+    B_unit = {**B, "tablesHash": v["tablesUnitB"]["tablesHash"]}
+    v["unitsChangeIdentity"] = {
+        "note": "Two bindings identical except that their tables differ only in the unit of asset 2.",
+        "tablesHash": [th, v["tablesUnitB"]["tablesHash"]],
+        "bindingHash": [hx(pg.binding_hash(CHAIN, B)), hx(pg.binding_hash(CHAIN, B_unit))],
+        "word": [hx(pg.encode_request(req(50 * UNIT_V, asset=ASSET_V), t)) for t in (TABLES, TABLES_UNIT_B)],
+        "differ": th != v["tablesUnitB"]["tablesHash"] and pg.binding_hash(CHAIN, B) != pg.binding_hash(CHAIN, B_unit)}
     v["revocations"] = [
         {"name": "by hash", "revocation": rev, "sig": rev_sig, "signer": credits.recover(pg.revocation_hash(CHAIN, rev), bytes.fromhex(rev_sig[2:])),
          "hash": hx(pg.revocation_hash(CHAIN, rev)), "covers": pg.revocation_covers(rev, v["bindingHashes"]["mandate"], iss)},
@@ -343,7 +396,7 @@ def build() -> dict:
     sub_ok = {"chainId": CHAIN, "binding": B, "sig": sig, "tables": TABLES, "policy": {"chainId": CHAIN, "contract": A("c0"), "tokenId": 7}}
     sub_cases = [
         ("valid", sub_ok), ("without policy location", {k: val for k, val in sub_ok.items() if k != "policy"}),
-        ("sig short", {**sub_ok, "sig": sig[:-2]}), ("tables malformed", {**sub_ok, "tables": {**TABLES, "amountUnit": "0"}}),
+        ("sig short", {**sub_ok, "sig": sig[:-2]}), ("tables malformed", {**sub_ok, "tables": au({"class": 1, "unit": "0"})}),
         ("binding malformed", {**sub_ok, "binding": {**B, "subjectKind": 9}}), ("policy location incomplete", {**sub_ok, "policy": {"chainId": CHAIN}}),
         ("extra member", {**sub_ok, "note": "x"}),
     ]
@@ -353,7 +406,7 @@ def build() -> dict:
     v["example"] = {"tokenMetadataTap": tok_ok, "subjectRecordTapPolicy": sub_ok}
 
     # ---- case count
-    sections = ("policyChecks", "results", "encoding", "encodingErrors", "tablesErrors", "wordDecode", "evaluations", "traces",
+    sections = ("policyChecks", "results", "encoding", "encodingErrors", "tablesErrors", "wordDecode", "evaluations", "perAssetUnits", "traces",
                 "bindings", "revocations", "tokenMetadata", "subjectMetadata")
     v["caseCount"] = {s: len(v[s]) for s in sections}
     v["caseCount"]["total"] = sum(v["caseCount"].values())

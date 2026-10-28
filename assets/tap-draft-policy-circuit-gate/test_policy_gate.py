@@ -25,6 +25,36 @@ with open(os.path.join(HERE, "vectors.json"), encoding="utf-8") as f:
 T = mv.TABLES
 POLICIES = {n: pg.Policy.load(d) for n, ((d, _), _) in ex.build_all().items()}
 ORACLES = {n: o for n, ((_, o), _) in ex.build_all().items()}
+ALL_TABLES = {"tables": mv.TABLES, "tablesUnitB": mv.TABLES_UNIT_B, "tablesSharedClass": mv.TABLES_SHARED_CLASS}
+
+
+def expected_fields(r: dict, tables: dict) -> dict:
+    """An independent model of §3.3, written from the text: the amount counted in the unit of the request's own
+    asset, rounded up, saturated at 2^32 - 1 with the overflow bit; an unlisted asset is class 0 with the overflow
+    bit set and the amount saturated, whatever its amount."""
+    a = int(r["amount"])
+    e = tables["assets"].get(r["asset"])
+    if e is None:
+        cls, over = 0, True
+    else:
+        cls, unit = e["class"], int(e["unit"])
+        q, rem = divmod(a, unit)
+        u = q + (1 if rem else 0)
+        over = u > 0xFFFFFFFF
+    d = r["ts"] // 86400
+    return {"amount": 0xFFFFFFFF if over else u, "overflow": int(over), "asset": cls,
+            "counterparty": tables["counterparties"].get(r["counterparty"], 0), "kind": r["kind"],
+            "day": d & 0xFFFF, "hour": (r["ts"] % 86400) // 3600, "weekday": (d + 3) % 7}
+
+
+def random_request(rnd: random.Random, tables: dict, ts: int, unlisted: str = mv.ASSET_X) -> dict:
+    """A request whose amount is a chosen number of units of its asset, minus a random fraction of a unit."""
+    asset = rnd.choice(list(tables["assets"]) + [unlisted])
+    unit = int(tables["assets"][asset]["unit"]) if asset in tables["assets"] else rnd.choice([1, 10 ** 6, 10 ** 15])
+    units = rnd.choice([0, 1, 49, 50, 51, 499, 500, 501, 999, 1000, 1001, 1999, 2000, 2001, rnd.randrange(0, 3000), rnd.randrange(0, 1 << 33)])
+    amount = units * unit - (rnd.randrange(unit) if units else 0)
+    return {"amount": str(amount), "asset": asset, "counterparty": rnd.choice(list(tables["counterparties"]) + [mv.PX]),
+            "kind": rnd.choice([1, 1, 1, 3, 0, 2, 7]), "ts": ts}
 
 
 class Vectors(unittest.TestCase):
@@ -72,16 +102,62 @@ class Vectors(unittest.TestCase):
 class Encoding(unittest.TestCase):
     def test_round_trip_and_reserved_zero(self):
         rnd = random.Random(7)
-        for _ in range(2000):
-            r = {"amount": str(rnd.randrange(0, 1 << rnd.choice([8, 32, 60, 100, 256]))), "asset": rnd.choice(list(T["assets"]) + [mv.ASSET_X]),
-                 "counterparty": rnd.choice(list(T["counterparties"]) + [mv.PX]), "kind": rnd.randrange(8), "ts": rnd.randrange(0, 1 << 40)}
-            f = pg.fields_of(r, T)
-            w = pg.encode_request(r, T)
-            self.assertEqual(len(w), 16)
-            self.assertEqual(pg.decode_word(w), f)
-            units = -(-int(r["amount"]) // mv.UNIT)
-            self.assertEqual(f["overflow"], 1 if units >= 1 << 32 else 0)
-            self.assertEqual(f["amount"], min(units, (1 << 32) - 1))
+        for tables in ALL_TABLES.values():
+            for _ in range(2000):
+                r = {"amount": str(rnd.randrange(0, 1 << rnd.choice([8, 32, 60, 100, 256]))),
+                     "asset": rnd.choice(list(tables["assets"]) + [mv.ASSET_X]),
+                     "counterparty": rnd.choice(list(tables["counterparties"]) + [mv.PX]), "kind": rnd.randrange(8),
+                     "ts": rnd.randrange(0, 1 << 40)}
+                f = pg.fields_of(r, tables)
+                w = pg.encode_request(r, tables)
+                self.assertEqual(len(w), 16)
+                self.assertEqual(pg.decode_word(w), f)
+                self.assertEqual(f, expected_fields(r, tables), r)
+
+    def test_vectors_match_the_model(self):
+        for case in V["encoding"]:
+            self.assertEqual(case["fields"], expected_fields(case["request"], T), case["name"])
+        for case in V["perAssetUnits"]:
+            self.assertEqual(case["fields"], expected_fields(case["request"], ALL_TABLES[case["tables"]]), case["name"])
+            self.assertEqual(V[case["tables"]]["tablesHash"], "0x" + pg.tables_hash(ALL_TABLES[case["tables"]]).hex())
+
+    def test_unit_is_per_asset(self):
+        """§3.3: the same base-unit amount counts in each asset's own unit; the old single unit would have counted
+        1,000 tokens of a 6-decimal asset as one 10^15 unit."""
+        r_v, r_u = mv.req(1000 * mv.UNIT_V, asset=mv.ASSET_V), mv.req(1000 * mv.UNIT_V)
+        self.assertEqual(pg.fields_of(r_v, T)["amount"], 1000)
+        self.assertEqual(pg.fields_of(r_u, T)["amount"], 1)
+        self.assertEqual(pg.evaluate(POLICIES["per-asset-limits"], r_v, T)["reason"], 1)
+
+    def test_unlisted_asset_fails_closed(self):
+        for amount in (0, 1, mv.UNIT, (1 << 256) - 1):
+            f = pg.fields_of(mv.req(amount, asset=mv.ASSET_X), T)
+            self.assertEqual((f["asset"], f["overflow"], f["amount"]), (0, 1, (1 << 32) - 1), amount)
+            for name in ("allowlist", "per-asset-limits", "daily-cap", "deny-all"):
+                self.assertEqual(pg.evaluate(POLICIES[name], mv.req(amount, asset=mv.ASSET_X), T)["verdict"], "deny")
+
+    def test_unit_bounds_and_rounding(self):
+        def tab(unit):
+            return {"assets": {mv.ASSET_U: {"class": 1, "unit": unit}}, "counterparties": {}}
+        for bad in ("0", "-1", "01", str(1 << 256), 1, 1.0, None, ""):
+            with self.assertRaises(pg.Invalid) as c:
+                pg.check_tables(tab(bad))
+            self.assertEqual(c.exception.code, "tables-malformed", bad)
+        top = str((1 << 256) - 1)
+        for unit, amount, want in (("1", 0, 0), ("1", 7, 7), ("7", 14, 2), ("7", 15, 3), ("7", 13, 2), ("7", 1, 1),
+                                   (top, (1 << 256) - 1, 1), (top, 1, 1), (str(1 << 255), (1 << 256) - 1, 2)):
+            self.assertEqual(pg.fields_of(mv.req(amount), tab(unit))["amount"], want, (unit, amount))
+
+    def test_units_change_tables_hash_and_binding_hash(self):
+        u = V["unitsChangeIdentity"]
+        self.assertTrue(u["differ"])
+        self.assertNotEqual(pg.tables_hash(mv.TABLES), pg.tables_hash(mv.TABLES_UNIT_B))
+        self.assertEqual(["0x" + pg.tables_hash(t).hex() for t in (mv.TABLES, mv.TABLES_UNIT_B)], u["tablesHash"])
+        self.assertNotEqual(u["bindingHash"][0], u["bindingHash"][1])
+        # every unit change of every listed asset changes the hash
+        for a in mv.TABLES["assets"]:
+            t2 = {**mv.TABLES, "assets": {**mv.TABLES["assets"], a: {**mv.TABLES["assets"][a], "unit": str(int(mv.TABLES["assets"][a]["unit"]) + 1)}}}
+            self.assertNotEqual(pg.tables_hash(t2), pg.tables_hash(mv.TABLES), a)
 
     def test_weekday_matches_calendar(self):
         import datetime as d
@@ -92,7 +168,7 @@ class Encoding(unittest.TestCase):
             self.assertEqual(f["hour"], dt.hour, ts)
 
     def test_tables_hash_is_canonical(self):
-        a = {"counterparties": T["counterparties"], "assets": T["assets"], "amountUnit": T["amountUnit"]}
+        a = {"counterparties": T["counterparties"], "assets": {k: {"unit": e["unit"], "class": e["class"]} for k, e in reversed(list(T["assets"].items()))}}
         self.assertEqual(pg.tables_hash(a), pg.tables_hash(T))
         self.assertEqual(pg.canonical_json(T), V["tables"]["canonicalJSON"])
 
@@ -101,22 +177,24 @@ class Differential(unittest.TestCase):
     """Every example circuit against its Python oracle, random requests, stateful sequences included."""
 
     def test_all_examples(self):
+        """4,000 random requests per policy and per tables (two assets of different units, a unit variant, two
+        assets of 6 and 18 decimals sharing a class), plus unlisted assets. The oracle reads the fields of the
+        independent model `expected_fields`, not those of the encoder under test."""
         rnd = random.Random(2026)
-        assets = list(T["assets"]) + [mv.ASSET_X]
-        cps = list(T["counterparties"]) + [mv.PX]
-        for name, pol in POLICIES.items():
-            st_b, st = None, None
-            ts = 1_790_000_000
-            for _ in range(4000):
-                units = rnd.choice([0, 1, 49, 50, 51, 499, 500, 501, 999, 1000, 1001, 1999, 2000, 2001, rnd.randrange(0, 3000), rnd.randrange(0, 1 << 33)])
-                amount = units * mv.UNIT - (rnd.randrange(mv.UNIT) if units else 0)
-                ts += rnd.choice([0, 1, 60, 3600, 40000, 86400, 200000])
-                r = {"amount": str(amount), "asset": rnd.choice(assets), "counterparty": rnd.choice(cps), "kind": rnd.choice([1, 1, 1, 3, 0, 2, 7]), "ts": ts}
-                want = ORACLES[name](pg.fields_of(r, T), st)
-                got = pg.evaluate(pol, r, T, st_b)
-                self.assertEqual((got["verdict"], got["reason"]), (want[0], want[1]), (name, r, st))
-                if pol.info.stateful:
-                    st, st_b = want[2], bytes.fromhex(got["newState"][2:])
+        for tname, tables in ALL_TABLES.items():
+            for name, pol in POLICIES.items():
+                st_b, st = None, None
+                ts = 1_790_000_000
+                for _ in range(4000):
+                    ts += rnd.choice([0, 1, 60, 3600, 40000, 86400, 200000])
+                    r = random_request(rnd, tables, ts)
+                    f = expected_fields(r, tables)
+                    self.assertEqual(pg.fields_of(r, tables), f, (tname, r))
+                    want = ORACLES[name](f, st)
+                    got = pg.evaluate(pol, r, tables, st_b)
+                    self.assertEqual((got["verdict"], got["reason"]), (want[0], want[1]), (tname, name, r, st))
+                    if pol.info.stateful:
+                        st, st_b = want[2], bytes.fromhex(got["newState"][2:])
 
     def test_denied_request_leaves_daily_state(self):
         pol = POLICIES["daily-cap"]

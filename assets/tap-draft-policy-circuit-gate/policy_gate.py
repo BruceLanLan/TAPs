@@ -7,7 +7,7 @@ Their SHA-256 digests are recorded in vectors.json (`vendored`) and checked by t
 
 Contents, in the order of the Specification:
   §2  policy circuits: pin convention, validity check of a policy file, result interpretation
-  §3  spend requests: tables, canonical encoding of a request into the 128-bit request word
+  §3  spend requests: tables (a class and a unit per asset), canonical encoding of a request into the 128-bit word
   §4  evaluation: one request (combinational or stateful) and the replay of a trace
   §5  bindings: EIP-712 `PolicyBinding` / `PolicyBindingRevocation` in the TAP-11 domain, checks
   §6  the `tap.policy` metadata members (policy token and subject record)
@@ -142,24 +142,42 @@ def _dec(v, where: str, code: str = "request-malformed") -> int:
     return v
 
 
+def _unit(v, where: str) -> int:
+    """A per-asset unit: a decimal string (no sign, no leading zero) of an integer in [1, 2^256). Strings only, so
+    that the canonical JSON of the tables, and with it `tablesHash`, is a function of the unit's value."""
+    if not isinstance(v, str) or not DEC_RE.fullmatch(v):
+        raise Invalid("tables-malformed", f"{where}: unit must be a decimal string")
+    u = int(v)
+    if u < 1 or u >= 1 << 256:
+        raise Invalid("tables-malformed", f"{where}: unit must be in [1, 2^256)")
+    return u
+
+
+def _class(c, where: str) -> int:
+    if isinstance(c, bool) or not isinstance(c, int) or not 1 <= c <= MAX_CLASS:
+        raise Invalid("tables-malformed", f"{where}: class must be an integer in [1, 255]")
+    return c
+
+
 def check_tables(tables) -> dict:
-    """§3.1: the tables of a binding. Returns them normalised (classes as ints, amountUnit as int)."""
-    if not isinstance(tables, dict) or set(tables) != {"amountUnit", "assets", "counterparties"}:
-        raise Invalid("tables-malformed", "members must be exactly amountUnit, assets, counterparties")
-    unit = _dec(tables["amountUnit"], "amountUnit", "tables-malformed")
-    if unit < 1 or unit >= 1 << 256:
-        raise Invalid("tables-malformed", "amountUnit must be in [1, 2^256)")
-    out = {"amountUnit": unit, "assets": {}, "counterparties": {}}
+    """§3.1: the tables of a binding: {"assets": {address: {"class", "unit"}}, "counterparties": {address: class}}.
+    Returns them normalised: assets[address] = (class, unit as int), counterparties[address] = class."""
+    if not isinstance(tables, dict) or set(tables) != {"assets", "counterparties"}:
+        raise Invalid("tables-malformed", "members must be exactly assets, counterparties")
+    out = {"assets": {}, "counterparties": {}}
     for name in ("assets", "counterparties"):
         t = tables[name]
         if not isinstance(t, dict):
             raise Invalid("tables-malformed", f"{name} must be an object")
-        for k, c in t.items():
+        for k, e in t.items():
             if not ADDR_RE.fullmatch(k):
                 raise Invalid("tables-malformed", f"{name}: key {k!r} is not a lowercase address")
-            if isinstance(c, bool) or not isinstance(c, int) or not 1 <= c <= MAX_CLASS:
-                raise Invalid("tables-malformed", f"{name}[{k}]: class must be an integer in [1, 255]")
-            out[name][k] = c
+            if name == "counterparties":
+                out[name][k] = _class(e, f"{name}[{k}]")
+                continue
+            if not isinstance(e, dict) or set(e) != {"class", "unit"}:
+                raise Invalid("tables-malformed", f"assets[{k}]: entry must have exactly class and unit")
+            out[name][k] = (_class(e["class"], f"assets[{k}]"), _unit(e["unit"], f"assets[{k}]"))
     return out
 
 
@@ -187,15 +205,22 @@ def check_request(req) -> dict:
 
 
 def fields_of(req, tables) -> dict:
-    """§3.3: the fields of the request word, before packing."""
+    """§3.3: the fields of the request word, before packing. The amount is counted in the unit of the request's own
+    asset, rounded up; an asset the tables do not list has no unit, so its request is encoded as class 0 with the
+    overflow bit set and the amount saturated, whatever its amount (fail closed)."""
     r, t = check_request(req), check_tables(tables)
-    units = -(-r["amount"] // t["amountUnit"])          # ceil
-    overflow = units >= 1 << AMOUNT_BITS
+    entry = t["assets"].get(r["asset"])
+    if entry is None:
+        asset_class, overflow, units = 0, True, None
+    else:
+        asset_class, unit = entry
+        units = -(-r["amount"] // unit)                  # ceil
+        overflow = units >= 1 << AMOUNT_BITS
     day = r["ts"] // 86400
     return {
         "amount": (1 << AMOUNT_BITS) - 1 if overflow else units,
         "overflow": 1 if overflow else 0,
-        "asset": t["assets"].get(r["asset"], 0),
+        "asset": asset_class,
         "counterparty": t["counterparties"].get(r["counterparty"], 0),
         "kind": r["kind"],
         "day": day % (1 << DAY_BITS),
@@ -426,7 +451,9 @@ def check_binding(chain_id: int, b: dict, sig: str | None, tables, *, now: int, 
                   expected_signer: str | None = None, declared_stateful: bool | None = None,
                   revocations: list | None = None) -> dict:
     """§5.3: check a binding. Returns {"bindingHash", "signer", "subjectKind", "status", "problems", "binderChecked",
-    "fileChecked", "displayOnly", "enforceable"}; `enforceable` is always False for a `label`; otherwise None when the
+    "fileChecked", "displayOnly", "enforceable"}. `enforceable` reports authority only: that the signer is the account
+    entitled to bind the subject and every check passed with the file at hand; it says nothing about whether any party
+    will honour or enforce the binding. `enforceable` is always False for a `label`; otherwise None when the
     binder was not checked; otherwise False when there is a problem or the policy file was not checked (fail closed,
     §7); otherwise "conditional" for kinds 1 and 2 (fixed in this version, §0.1) and True for kind 3. `expected_signer` is
     the binder the subject kind names (§5.1), read by the caller (for kind 3, the holder of the circuit whose container
