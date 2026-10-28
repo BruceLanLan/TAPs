@@ -30,7 +30,7 @@ A Foundry project with no libraries (no forge-std; the few cheatcodes used are d
 | `test/utils/StandInKernel.sol` | **stand-in** kernel used by the vector replay only (the vectors use placeholder addresses): `getJob`, the two constants, `complete`/`reject` |
 | `test/utils/ProbeHook.sol` | a recording hook for the kernel measurements (Annex B style) |
 
-Run (Foundry 1.x with solc 0.8.28 already installed; `offline = true` in `foundry.toml`, nothing is fetched):
+Run (Foundry 1.x with solc 0.8.28 already installed; `offline = true` in `foundry.toml`, so nothing is fetched; without a local solc 0.8.28, remove that line and `forge build` downloads the compiler):
 
 ```bash
 cd sol
@@ -50,7 +50,7 @@ Last run (2026-10-29, Foundry 1.8.3, solc 0.8.28, fork of chain 56 at block 130,
 |---|---|
 | J-7, hook entries as called by the kernel (trace, cooled storage, §3.4 description) | `beforeAction(fund)` 41,046 gas; `afterAction(submit)` 112,371 (of which `getJob` 34,097 and `claimSummary` 15,889); `afterAction(complete)` 3,803; no-effect entries 701 to 743. `beforeAction(fund)` called cold and directly: 60,046 |
 | J-7, description length (cold) | 12,288 bytes: `fund` and `submit` pass; 13,312 bytes: `fund` passes, `afterAction(submit)` runs out of gas (`HookCallFailed`); 14,336 bytes: `beforeAction(fund)` runs out of gas |
-| `settle` | 228,086 gas including `accept`, `kernel.complete`, the token transfer and `afterAction(complete)`; completes within 1,000,000 gas when `accept` burns its 200,000 cap |
+| `settle` | 206,190 gas including `accept`, `kernel.complete`, the token transfer and `afterAction(complete)`; completes within 1,000,000 gas when `accept` burns its 200,000 cap |
 | Pre-3 / M-5 | an `afterAction` revert for `fund`, `submit`, `complete` or `reject` fails the action with no state change; the kernel re-raises the hook's revert data (`Error(string)`, or the evaluator's own error) and raises `HookCallFailed` (`0xa9e35b2f`) only for an empty revert; a contract evaluator's `reject` in `Funded` succeeds and refunds the client |
 | M-3 order | the kernel writes the new status and the deliverable before `afterAction`; `gasleft()` at entry 999,411 (`beforeAction`) and 999,455 (`afterAction`) for a hook that reads it first |
 

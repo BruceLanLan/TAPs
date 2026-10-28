@@ -65,7 +65,8 @@ contract TapCircuitEvaluator is ITapCircuitJob, IACPHook, IERC165 {
     address private immutable inputProvider;
 
     mapping(uint256 => Record) private records;
-    bool private settling;
+    /// re-entry guard of settle, in transient storage (EIP-1153): not state between transactions (8.1)
+    bool private transient settling;
 
     constructor(address kernel_, address game_, uint64 margin_, uint64 minRemainingWindow_) {
         // 2.3 item 1
