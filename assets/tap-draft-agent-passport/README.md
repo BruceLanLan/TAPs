@@ -69,7 +69,7 @@ sign with these keys; never use them for anything else. No transaction was sent 
 
 ## Log queries on keyless public nodes (Specification §6.4)
 
-Informative, measured on 2026-10-28 with `eth_getLogs` from one machine; the endpoints are those tried at the time of
+Informative, measured on 2026-10-28 with `eth_getLogs`; the endpoints are those tried at the time of
 writing, not an endorsement and not a guarantee, and limits change without notice. Spot checks repeated later the
 same day are given where they differ.
 
