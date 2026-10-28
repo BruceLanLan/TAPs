@@ -5,7 +5,8 @@
 # Every case carries a hand-written expectation; the generator also runs the reference verifier and
 # stops if the two differ, so the file cannot drift from the rules silently.
 # Chain state in "synthetic" cases is invented for the test (addresses are keccak-derived and belong to
-# nobody). The two "bsc-mainnet-read" cases are real reads, listed with their block (README.md).
+# nobody, except the holders that sign listings, whose keys are published test keys: see TEST_KEYS).
+# The two "bsc-mainnet-read" cases are real reads, listed with their block (README.md).
 from __future__ import annotations
 
 import copy
@@ -17,6 +18,7 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import passport as P  # noqa: E402
+import secp256k1 as EC  # noqa: E402
 from keccak import keccak256  # noqa: E402
 
 FORMAT = "tap-agent-passport-vectors/1"
@@ -102,7 +104,15 @@ PROC = A(1)                    # processor contract, processor number 2
 PROC_OTHER = [A(100), A(101)]  # processor numbers 0 and 1
 TOKEN = 7
 NAME = "7.2.tape"
-HOLDER = A(10)
+# Published test keys (never use them for anything else). The holder key is the one of TAP-11's delegation
+# vectors (address 0x19E7E376E7C213B7E7e7e46cc70A5dD086DAff2A).
+TEST_KEYS = {"holder": int("11" * 32, 16), "former-holder": int("22" * 32, 16), "safe-owner": int("33" * 32, 16)}
+HOLDER_KEY = TEST_KEYS["holder"]
+HOLDER = EC.address_of_key(HOLDER_KEY)
+FORMER = EC.address_of_key(TEST_KEYS["former-holder"])
+SAFE = A(15)                   # a contract holder (EIP-1271), synthetic
+SAFE_CODE = "0x" + keccak256(b"tap-agent-passport synthetic contract code").hex()
+ISSUED = TS - 1_000            # listing time of the base file
 CONTAINER = A(20)
 AGENT = 1001
 GATEWAY = "gateway.example"
@@ -115,7 +125,15 @@ R2_PROC, R2_TOKEN, R2_NAME = PROC_OTHER[0], 3, "3.0.tape"
 R2_CONTAINER, R2_HOLDER = A(31), A(41)
 
 
-def reg_doc(agent_ids=(AGENT,), **over) -> dict:
+def listing(agent_id=AGENT, key=HOLDER_KEY, registry=None, container=CONTAINER, issued=ISSUED, chain=56) -> dict:
+    """The tap.listing member of §5.5, signed with a test key."""
+    registry = registry or CFG["identityRegistry"]
+    d = P.listing_digest(chain, agent_id, registry, container, issued)
+    return {"issued": issued, "sig": "0x" + EC.sign(key, d).hex()}
+
+
+def reg_doc(agent_ids=(AGENT,), lst=None, **over) -> dict:
+    lst = lst if lst is not None else listing(agent_ids[0] if agent_ids else AGENT)
     doc = {
         "type": P.REG_TYPE,
         "name": "digits-agent (example)",
@@ -131,7 +149,8 @@ def reg_doc(agent_ids=(AGENT,), **over) -> dict:
         "registrations": [{"agentId": a, "agentRegistry": "eip155:56:" + CFG["identityRegistry"]} for a in agent_ids],
         "supportedTrust": ["reputation"],
         "tap": {"v": 1, "chainId": 56, "processor": PROC, "tokenId": str(TOKEN), "container": CONTAINER,
-                "manifest": {"path": "/.well-known/tapeapi.json", "sha256": MANIFEST_SHA}},
+                "manifest": {"path": "/.well-known/tapeapi.json", "sha256": MANIFEST_SHA},
+                "listing": lst},
     }
     for k, v in over.items():
         doc[k] = v
@@ -175,6 +194,7 @@ def base_answers(doc=None) -> dict:
         "%s.cpuAt(3)" % f: REVERT(),
         "%s.fileInfo(%s,%s)" % (s, CONTAINER, P.MANIFEST_KEY): e_file_info(900, "application/json", MANIFEST_SHA, TS - 600, 1),
         "logs.OperatorSet(%s)" % CONTAINER: [],
+        "code:" + HOLDER: "0x",
         "logs.Transfer.circuit(%s,%d)" % (PROC, TOKEN): [{"block": 48_000_000, "from": ZERO, "to": HOLDER}],
     }
     ans.update(agent_answers(AGENT, HOLDER, HOLDER, P.encode_passport_key(56, PROC, TOKEN), CANON_URI))
@@ -427,24 +447,33 @@ def resolution_cases() -> list:
     add("unknown-members-ignored", ["P-7"], "Unknown members (an ordinary name inside tap; any name outside tap) are ignored.",
         snapshot(with_doc(d), BY_AGENT), "CONFIRMED", warnings=[])
 
-    # Operators.
+    # Operators (§6.4: optional, informative; never changes the state word).
     ok = "logs.OperatorSet(%s)" % CONTAINER
+    stale_display = (ok_display.replace("; identity registered", "; a site operator not set by the holder is active: "
+                                        "the unsigned texts of the site may not be the holder's; identity registered"))
     a = base_answers(); a[ok] = [{"operator": A(50), "setBy": A(11), "until": TS + 86400, "block": 47_000_000}]
-    add("stale-operator", ["P-8", "T-operator"], "An operator set by an earlier holder is still active.",
-        snapshot(a, BY_AGENT), "BROKEN", ["stale-operator"])
+    add("stale-operator", ["P-8", "T-operator"],
+        "An operator set by an earlier holder is still active; the listing signature still holds, so only a warning.",
+        snapshot(a, BY_AGENT), "CONFIRMED", warnings=["stale-operator"], display=stale_display)
     a = base_answers(); a[ok] = [{"operator": A(50), "setBy": HOLDER, "until": TS + 86400, "block": 49_100_000}]
     add("operator-by-holder", ["P-8"], "The only active operator was set by the current holder.", snapshot(a, BY_AGENT), "CONFIRMED", warnings=[])
     a = base_answers(); a[ok] = [{"operator": A(50), "setBy": A(11), "until": TS - 1, "block": 47_000_000}]
     add("operator-expired", ["P-8"], "An earlier holder's operator has expired.", snapshot(a, BY_AGENT), "CONFIRMED", warnings=[])
     a = base_answers(); a[ok] = [{"operator": A(50), "setBy": A(11), "until": TS, "block": 47_000_000}]
     add("operator-until-equals-block-time", ["P-8"], "An earlier holder's operator whose until equals the pinned block's timestamp is still active.",
-        snapshot(a, BY_AGENT), "BROKEN", ["stale-operator"])
+        snapshot(a, BY_AGENT), "CONFIRMED", warnings=["stale-operator"])
     a = base_answers(); a[ok] = [{"operator": A(50), "setBy": A(11), "until": TS + 86400, "block": 47_000_000},
                                  {"operator": A(50), "setBy": HOLDER, "until": 0, "block": 49_100_000}]
     add("operator-cleared", ["P-8"], "The current holder later set the same operator's ttl to zero.", snapshot(a, BY_AGENT), "CONFIRMED", warnings=[])
     a = base_answers(); a[ok] = {"unavailable": True}
     add("operators-not-checked", ["P-8", "D-1"], "The OperatorSet logs could not be obtained.", snapshot(a, BY_AGENT), "CONFIRMED",
         warnings=["operators-not-checked"], display=ok_base + "; site operators not checked; identity registered at block 49000000")
+    a = base_answers(); del a[ok]
+    add("operators-check-not-attempted", ["P-8", "T-log-less"],
+        "A tool without logs does not attempt the optional operator check: CONFIRMED, no warning.",
+        snapshot(a, BY_AGENT), "CONFIRMED", warnings=[], display=ok_display)
+
+    listing_cases(add, ok_display)
 
     # Warnings.
     a = base_answers(); a["%s.tokenURI(%d)" % (CFG["identityRegistry"], AGENT)] = e_string("https://%s/7.2.tape/agent.json" % GATEWAY)
@@ -463,6 +492,114 @@ def resolution_cases() -> list:
     add("circuit-none-listed", ["P-10"], "Resolved from the circuit: the holder's file lists no identity of this registry.",
         snapshot(with_doc(d), BY_CIRCUIT), "BROKEN", ["not-listed"])
     return C
+
+
+def high_s(sig: bytes) -> bytes:
+    """The same signature with s replaced by n - s and v flipped: it recovers to the same key but is not low-s."""
+    return sig[:32] + (EC.N - int.from_bytes(sig[32:64], "big")).to_bytes(32, "big") + bytes([55 - sig[64]])
+
+
+def listing_cases(add, ok_display) -> None:
+    """P-8: the listing signature (§5.5)."""
+    ident = CFG["identityRegistry"]
+
+    def doc_with(lst):
+        return with_doc(reg_doc(lst=lst))
+
+    add("listing-valid-eoa", ["P-8"], "The holder (an EOA) signed the listing over agentId, registry and container.",
+        snapshot(base_answers(), BY_AGENT), "CONFIRMED", warnings=[], display=ok_display)
+    lst = listing(); sig = bytearray(P.unhex(lst["sig"])); sig[64] -= 27
+    add("listing-v-zero-one", ["P-8"], "The same signature with v written as 0 or 1 is read as 27 or 28 (TAP-11 §4.4).",
+        snapshot(doc_with({"issued": ISSUED, "sig": P.hx(bytes(sig))}), BY_AGENT), "CONFIRMED", warnings=[])
+    # Both tokens were sold by FORMER to HOLDER; the file still carries FORMER's listing.
+    a = doc_with(listing(key=TEST_KEYS["former-holder"]))
+    a["logs.Transfer.identity(%d)" % AGENT] = [{"block": 49_000_000, "from": ZERO, "to": FORMER},
+                                              {"block": 49_600_000, "from": FORMER, "to": HOLDER}]
+    a["logs.Transfer.circuit(%s,%d)" % (PROC, TOKEN)] = [{"block": 48_000_000, "from": ZERO, "to": FORMER},
+                                                      {"block": 49_600_100, "from": FORMER, "to": HOLDER}]
+    add("listing-by-former-holder", ["P-8", "T-sale"],
+        "Both tokens changed hands; the file still carries the former holder's listing.",
+        snapshot(a, BY_AGENT), "BROKEN", ["listing-not-by-holder"], display="not a passport: listing-not-by-holder")
+    add("listing-wrong-agent", ["P-8"], "The holder's signature is over another agentId.",
+        snapshot(doc_with(listing(agent_id=AGENT + 1)), BY_AGENT), "BROKEN", ["listing-not-by-holder"])
+    add("listing-wrong-registry", ["P-8"], "The holder's signature names the reputation registry instead of the identity registry.",
+        snapshot(doc_with(listing(registry=CFG["reputationRegistry"])), BY_AGENT), "BROKEN", ["listing-not-by-holder"])
+    add("listing-wrong-container", ["P-8"], "The holder's signature names another container.",
+        snapshot(doc_with(listing(container=A(21))), BY_AGENT), "BROKEN", ["listing-not-by-holder"])
+    add("listing-other-chain-domain", ["P-8"], "The holder signed under the TAP-11 domain with chainId 8453.",
+        snapshot(doc_with(listing(chain=8453)), BY_AGENT), "BROKEN", ["listing-not-by-holder"])
+    lst = listing(); lst["issued"] = ISSUED + 1
+    add("listing-issued-altered", ["P-8", "T-operator"], "issued was changed after signing (for example by a site operator).",
+        snapshot(doc_with(lst), BY_AGENT), "BROKEN", ["listing-not-by-holder"])
+    lst = listing(); lst["sig"] = lst["sig"][:-2]
+    add("listing-short-signature", ["P-8"], "A 64-byte signature on an EOA holder (no code, so no EIP-1271 branch).",
+        snapshot(doc_with(lst), BY_AGENT), "BROKEN", ["listing-not-by-holder"])
+    hi = high_s(P.unhex(listing()["sig"]))
+    add("listing-high-s", ["P-8"], "The holder's signature with s replaced by n - s (and v flipped) recovers to the holder but fails the low-s check.",
+        snapshot(doc_with({"issued": ISSUED, "sig": P.hx(hi)}), BY_AGENT), "BROKEN", ["listing-not-by-holder"])
+    lst = listing(); lst["sig"] = lst["sig"][:-2] + "1d"
+    add("listing-bad-v", ["P-8"], "v = 29 is outside {0, 1, 27, 28}.",
+        snapshot(doc_with(lst), BY_AGENT), "BROKEN", ["listing-not-by-holder"])
+    lst = listing(); lst["sig"] = lst["sig"].upper().replace("0X", "0x")
+    add("listing-sig-not-lowercase-hex", ["P-7", "P-8"], "tap.listing.sig in upper-case hex does not match the schema.",
+        snapshot(doc_with(lst), BY_AGENT), "BROKEN", ["registration-file-invalid"])
+    d = reg_doc(); del d["tap"]["listing"]
+    add("listing-missing", ["P-7", "P-8"], "The tap member has no listing (a file written for an earlier draft).",
+        snapshot(with_doc(d), BY_AGENT), "BROKEN", ["registration-file-invalid"])
+    lst = listing(); lst["issued"] = str(ISSUED)
+    add("listing-issued-string", ["P-7", "P-8"], "tap.listing.issued is a string, not a JSON integer.",
+        snapshot(doc_with(lst), BY_AGENT), "BROKEN", ["registration-file-invalid"])
+
+    # A site operator left by an earlier holder writes a file listing a gifted identity (T1 + T5). It can write
+    # files but cannot sign for the holder: the copied signature is over the holder's own identity.
+    gift = 2004
+    d = reg_doc(agent_ids=(gift,), lst=listing(AGENT))
+    a = with_doc(d)
+    a.update(agent_answers(gift, HOLDER, HOLDER, P.encode_passport_key(56, PROC, TOKEN), CANON_URI))
+    a["logs.OperatorSet(%s)" % CONTAINER] = [{"operator": A(50), "setBy": A(11), "until": TS + 86400, "block": 47_000_000}]
+    add("operator-forged-listing", ["P-8", "T-operator", "T-gift"],
+        "A former holder's site operator rewrote the file to list a gifted identity, reusing the holder's signature.",
+        snapshot(a, {"agentId": str(gift)}), "BROKEN", ["listing-not-by-holder"])
+    add("operator-forged-listing-own-identity", ["P-8", "P-10", "T-operator"],
+        "The same world resolved from the holder's own identity: no longer listed, BROKEN (an operator can break, not forge).",
+        snapshot(a, BY_AGENT), "BROKEN", ["not-listed"])
+
+    # Contract holder (EIP-1271). Both tokens are held by SAFE; its owner key signs.
+    def safe_world(sig: bytes, magic=None, extra_ops=None):
+        d = reg_doc(lst={"issued": ISSUED, "sig": P.hx(sig)})
+        a = with_doc(d)
+        a["%s.ownerOf(%d)" % (PROC, TOKEN)] = e_addr(SAFE)
+        a.update(agent_answers(AGENT, SAFE, SAFE, P.encode_passport_key(56, PROC, TOKEN), CANON_URI))
+        a["logs.Transfer.circuit(%s,%d)" % (PROC, TOKEN)] = [{"block": 48_000_000, "from": ZERO, "to": SAFE}]
+        a["code:" + SAFE] = SAFE_CODE
+        dg = P.hx(P.listing_digest(56, AGENT, ident, CONTAINER, ISSUED))
+        if magic is not None:
+            a["%s.isValidSignature(%s,%s)" % (SAFE, dg, P.hx(sig))] = magic
+        return a
+    owner_sig = EC.sign(TEST_KEYS["safe-owner"], P.listing_digest(56, AGENT, ident, CONTAINER, ISSUED))
+    magic = P.ERC1271_MAGIC
+    add("listing-eip1271-valid", ["P-8"],
+        "The holder is a contract; a 65-byte owner signature does not recover to it, and isValidSignature returns the magic value.",
+        snapshot(safe_world(owner_sig, magic), BY_AGENT), "CONFIRMED", warnings=[])
+    long_sig = owner_sig + owner_sig                  # 130 bytes, for example two owners: no ECDSA branch
+    add("listing-eip1271-long-signature", ["P-8"],
+        "A 130-byte contract signature goes to isValidSignature only; a return longer than 32 bytes is accepted.",
+        snapshot(safe_world(long_sig, magic + "00" * 32), BY_AGENT), "CONFIRMED", warnings=[])
+    add("listing-eip1271-wrong-magic", ["P-8"], "isValidSignature returns 0xffffffff.",
+        snapshot(safe_world(owner_sig, "0xffffffff" + "00" * 28), BY_AGENT), "BROKEN", ["listing-not-by-holder"])
+    add("listing-eip1271-revert", ["P-8"], "isValidSignature reverts.",
+        snapshot(safe_world(owner_sig, REVERT("not signed")), BY_AGENT), "BROKEN", ["listing-not-by-holder"])
+    add("listing-eip1271-short-return", ["P-8"], "isValidSignature returns only 4 bytes.",
+        snapshot(safe_world(owner_sig, "0x1626ba7e"), BY_AGENT), "BROKEN", ["listing-not-by-holder"])
+    hi = high_s(owner_sig)
+    add("listing-eip1271-high-s-not-forwarded", ["P-8"],
+        "A 65-byte signature that fails the range checks is rejected without calling isValidSignature (TAP-11 §4.4).",
+        snapshot(safe_world(hi, magic), BY_AGENT), "BROKEN", ["listing-not-by-holder"])
+    dg = P.hx(P.listing_digest(56, AGENT, ident, CONTAINER, ISSUED))
+    vkey = "%s.isValidSignature(%s,%s)" % (SAFE, dg, P.hx(owner_sig))
+    add("listing-eip1271-node-disagreement", ["P-6", "P-8"], "Two operators disagree on isValidSignature: unavailable, not broken.",
+        snapshot(safe_world(owner_sig, magic), BY_AGENT, op_over={"publicnode": {vkey: "0x" + "00" * 32}}),
+        "UNAVAILABLE", ["node-disagreement"])
 
 
 # ---------------------------------------------------------------------------
@@ -652,9 +789,14 @@ def feedback_cases() -> list:
         feedback_world([fb_entry(R_HOLDER, 1, 49_500_000, rec)], files, V, base=a), [],
         [{"feedback": t1, "reason": "earlier-holder"}], None)
     a = base_answers(); a["logs.Transfer.circuit(%s,%d)" % (PROC, TOKEN)] = {"unavailable": True}
-    add("feedback-epoch-unknown", ["F-7"], "Without transfer history no feedback is attributed to the current holder.",
-        feedback_world([fb_entry(R_HOLDER, 1, 49_500_000, rec)], files, V, base=a), [],
-        [{"feedback": t1, "reason": "epoch-unknown"}], None)
+    C.append({"id": "feedback-epoch-unknown", "rules": ["F-7", "T-log-less"],
+              "description": "Without transfer history the holder epoch is unknown: no summary at all, never an empty one.",
+              "snapshot": feedback_world([fb_entry(R_HOLDER, 1, 49_500_000, rec)], files, V, base=a),
+              "expected": {"state": "CONFIRMED", "computed": False, "why": "epoch-unknown"}})
+    C.append({"id": "feedback-history-unavailable", "rules": ["F-0", "T-log-less"],
+              "description": "The NewFeedback logs cannot be obtained (a log-less tool): no summary.",
+              "snapshot": feedback_world({"unavailable": True}, files, V),
+              "expected": {"state": "CONFIRMED", "computed": False, "why": "history-unavailable"}})
     # F-0: feedback from addresses outside the named client set is counted, never fetched (spam).
     spam = [fb_entry(A(66 + i), 1, 49_700_000 + i, rec, feedbackURI="https://spam%d.example/x.json" % i) for i in range(3)]
     add("feedback-outside-client-set", ["F-0"],
@@ -681,6 +823,25 @@ def feedback_cases() -> list:
               "snapshot": feedback_world([fb_entry(R_HOLDER, 1, 49_500_000, rec)], files, V, base=a),
               "expected": {"state": "wallet-unset", "computed": False, "why": "passport not confirmed"}})
     return C
+
+
+def listing_signature_cases() -> list:
+    """§5.5 worked example: type hash, domain separator, struct hash, digest and signature by the test key."""
+    ident = CFG["identityRegistry"]
+    sh = P.listing_struct_hash(AGENT, ident, CONTAINER, ISSUED)
+    dg = P.listing_digest(56, AGENT, ident, CONTAINER, ISSUED)
+    sig = EC.sign(HOLDER_KEY, dg)
+    base = {"chainId": 56, "agentId": AGENT, "registry": ident, "container": CONTAINER, "issued": ISSUED}
+    out = [dict(id="listing-worked-example", rules=["P-8"], **base, typeHash=P.LISTING_TYPEHASH,
+                domainSeparator=P.hx(P.tapeapi_domain_separator(56)), structHash=P.hx(sh), digest=P.hx(dg),
+                signerKey="0x" + "11" * 32, sig=P.hx(sig), expected={"recoversTo": HOLDER})]
+    other = dict(base, chainId=8453)
+    out.append(dict(id="listing-signature-on-other-chain", rules=["P-8"], **other,
+                    digest=P.hx(P.listing_digest(8453, AGENT, ident, CONTAINER, ISSUED)), sig=P.hx(sig),
+                    expected={"recoversTo": EC.recover(P.listing_digest(8453, AGENT, ident, CONTAINER, ISSUED), sig)}))
+    out.append(dict(id="listing-signature-high-s", rules=["P-8"], **base, digest=P.hx(dg), sig=P.hx(high_s(sig)),
+                    expected={"recoversTo": None}))
+    return out
 
 
 def feedback_param_cases() -> list:
@@ -774,10 +935,12 @@ SELECTORS = [
     ("putFile(address,string,string,bytes32,bytes)", "siteRegistry", True), ("appendChunk(address,string,uint256,bytes)", "siteRegistry", True),
     ("setOperator(address,address,uint256)", "siteRegistry", True), ("fileInfo(address,string)", "siteRegistry", True),
     ("read(address,string)", "siteRegistry", True), ("isCPU(address)", "factory", True), ("cpuAt(uint256)", "factory", True),
+    ("isValidSignature(bytes32,bytes)", "contract holder (EIP-1271)", None),
 ]
 TOPICS = [("Transfer(address,address,uint256)", "ERC-721", False),
           ("OperatorSet(address,address,address,uint40)", "siteRegistry", True),
-          ("AgentWalletSet(uint256 agentId,address newWallet,address owner,uint256 deadline)", "identity (EIP-712 type hash)", True)]
+          ("AgentWalletSet(uint256 agentId,address newWallet,address owner,uint256 deadline)", "identity (EIP-712 type hash)", True),
+          (P.LISTING_TYPE, "this TAP (EIP-712 type hash, §5.5); signed off chain, in no contract", None)]
 
 
 def interface_section() -> dict:
@@ -850,17 +1013,26 @@ def build() -> dict:
     for c in dels:
         assert P.check_delegation_proposal(c["now"], c["expires"], c["isDefault"], c["signerGeneratedHere"])["ok"] == c["expected"]["ok"], c["id"]
     fparams = feedback_param_cases()
-    total = len(res_cases) + len(fb) + len(keys) + len(names) + len(canon) + len(calls) + len(dels) + len(fparams)
+    lsigs = listing_signature_cases()
+    for c in lsigs:
+        dg = P.listing_digest(c["chainId"], c["agentId"], c["registry"], c["container"], c["issued"])
+        assert P.hx(dg) == c["digest"], c["id"]
+        assert EC.recover(dg, P.unhex(c["sig"])) == c["expected"]["recoversTo"], c["id"]
+    total = (len(res_cases) + len(fb) + len(keys) + len(names) + len(canon) + len(calls) + len(dels) + len(fparams)
+             + len(lsigs))
     return {
         "format": FORMAT,
         "note": ("Synthetic chain state unless a case says source bsc-mainnet-read. Synthetic addresses are "
                  "keccak256('tap-agent-passport synthetic <n>')[12:] and belong to nobody. No transaction was sent."),
         "counts": {"resolution": len(res_cases), "feedback": len(fb), "passportKey": len(keys), "forbiddenNames": len(names),
                    "canonicalJson": len(canon), "runtimeCalls": len(calls), "delegationProposals": len(dels),
-                   "feedbackParams": len(fparams), "total": total},
+                   "feedbackParams": len(fparams), "listingSignatures": len(lsigs), "total": total},
         "constants": {"reviewTypehash": P.REVIEW_TYPEHASH, "reviewType": P.REVIEW_TYPE, "registrationType": P.REG_TYPE,
                       "registrationKey": P.REG_KEY, "reviewDirKey": P.REVIEW_DIR_KEY, "tag1": P.REVIEW_TAG1,
-                      "passportKeyName": P.PASSPORT_KEY,
+                      "passportKeyName": P.PASSPORT_KEY, "listingType": P.LISTING_TYPE,
+                      "listingTypehash": P.LISTING_TYPEHASH, "eip1271Magic": P.ERC1271_MAGIC,
+                      "testKeys": {name: {"key": "0x%064x" % k, "address": EC.address_of_key(k)}
+                                   for name, k in TEST_KEYS.items()},
                       "confusables": {"U+%04X" % ord(k): v for k, v in sorted(P._CONFUSABLE.items(), key=lambda kv: ord(kv[0]))}},
         "interfaces": interface_section(),
         "passportKey": keys,
@@ -869,6 +1041,7 @@ def build() -> dict:
         "resolution": res_cases,
         "feedback": fb,
         "feedbackParams": fparams,
+        "listingSignatures": lsigs,
         "runtimeCalls": calls,
         "delegationProposals": dels,
     }

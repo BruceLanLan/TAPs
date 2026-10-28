@@ -15,6 +15,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import make_vectors as M  # noqa: E402
 import passport as P  # noqa: E402
+import secp256k1 as EC  # noqa: E402
 from keccak import keccak256  # noqa: E402
 
 with open(os.path.join(HERE, "vectors.json"), encoding="utf-8") as _f:
@@ -35,6 +36,28 @@ class Crypto(unittest.TestCase):
 
     def test_review_typehash(self):
         self.assertEqual("0x" + keccak256(P.REVIEW_TYPE.encode()).hex(), P.REVIEW_TYPEHASH)
+
+    def test_secp256k1_against_tap11(self):
+        # TAP-11 assets/tap-11/delegation.json: the published test key and its first valid signature, the same
+        # signature presented on chainId 196, and the n - s rejection.
+        key = int("11" * 32, 16)
+        self.assertEqual(EC.address_of_key(key), "0x19e7e376e7c213b7e7e7e46cc70a5dd086daff2a")
+        dg = bytes.fromhex("b6c9879471c2f82db4bb634a7ede3637872c77f75cf2746e30032e00a6b1be41")
+        sig = bytes.fromhex("994dcf9eb17d5a15516f6950754a02396ea980d5cda5d234218421432af87f4b"
+                            "3046e4061758dc5d04a31224c2bd152e45429d9c119a21a20659a3e84092567c1c")
+        self.assertEqual(EC.sign(key, dg), sig)
+        self.assertEqual(EC.recover(dg, sig), "0x19e7e376e7c213b7e7e7e46cc70a5dd086daff2a")
+        dg196 = bytes.fromhex("a5998e0823a79c4201fdaa489543eb47229263b2c7fdf5e1b404389c0cbe5b98")
+        self.assertEqual(EC.recover(dg196, sig), "0xf041d1b484c5103d32ee6eb3fe5fe8cf3448f5b6")
+        self.assertIsNone(EC.recover(dg, M.high_s(sig)))
+        self.assertIsNone(EC.recover(dg, sig[:64]))
+        self.assertEqual(EC.recover(dg, sig[:64] + bytes([sig[64] - 27])), EC.recover(dg, sig))
+
+    def test_listing_constants(self):
+        self.assertEqual("0x" + keccak256(P.LISTING_TYPE.encode()).hex(), P.LISTING_TYPEHASH)
+        # TAP-11 §4.1 / delegation.json: the domain separator on chain 56.
+        self.assertEqual(P.hx(P.tapeapi_domain_separator(56)),
+                         "0xa73ee348b5672f12dbc174f66a7d162c69e0d64befdba88475d9d7e3c0fd3ac7")
 
     @unittest.skipUnless(shutil.which("cast"), "Foundry cast not installed")
     def test_against_cast(self):
@@ -89,6 +112,46 @@ class Vectors(unittest.TestCase):
                 low = res["display"].lower()
                 for bad in P.DISPLAY_FORBIDDEN:
                     self.assertNotIn(bad, low)
+
+    def test_state_never_depends_on_logs(self):
+        # §6.4: removing every log answer from a snapshot changes warnings at most, never the state or reasons.
+        for c in V["resolution"]:
+            with self.subTest(c["id"]):
+                snap = json.loads(json.dumps(c["snapshot"]))
+                for k in [k for k in snap["answers"] if k.startswith("logs.")]:
+                    del snap["answers"][k]
+                for op in snap["operators"].values():
+                    for k in [k for k in op["answers"] if k.startswith("logs.")]:
+                        del op["answers"][k]
+                res = P.resolve(snap)
+                self.assertEqual((res["state"], res["reasons"]), (c["expected"]["state"], c["expected"]["reasons"]))
+                if res["state"] == "CONFIRMED":
+                    self.assertIsNone(res["holderEpoch"])
+                    self.assertIn("transfer-history-unavailable", res["warnings"])
+                    self.assertNotIn("stale-operator", res["warnings"])
+
+    def test_listing_signatures(self):
+        for c in V["listingSignatures"]:
+            with self.subTest(c["id"]):
+                dg = P.listing_digest(c["chainId"], c["agentId"], c["registry"], c["container"], c["issued"])
+                self.assertEqual(P.hx(dg), c["digest"])
+                self.assertEqual(EC.recover(dg, P.unhex(c["sig"])), c["expected"]["recoversTo"])
+                if "structHash" in c:
+                    self.assertEqual(P.hx(P.listing_struct_hash(c["agentId"], c["registry"], c["container"], c["issued"])),
+                                     c["structHash"])
+                    self.assertEqual(c["typeHash"], P.LISTING_TYPEHASH)
+                    self.assertEqual(EC.sign(int(c["signerKey"], 16), dg), P.unhex(c["sig"]))
+
+    def test_no_summary_without_epoch(self):
+        # F-7: a tool that does not know the holder epoch shows no summary, not an empty one.
+        for c in V["feedback"]:
+            res = P.resolve(c["snapshot"])
+            rep = P.summarise_feedback(c["snapshot"], res)
+            if res["state"] == "CONFIRMED" and res["holderEpoch"] is None:
+                self.assertFalse(rep["computed"], c["id"])
+                self.assertEqual(rep["why"], "epoch-unknown")
+            if not rep["computed"]:
+                self.assertIn(rep["why"], P.SUMMARY_NOT_COMPUTED)
 
     def test_unavailable_never_broken(self):
         for c in V["resolution"]:
@@ -158,7 +221,7 @@ class Vectors(unittest.TestCase):
     def test_rule_coverage(self):
         seen = set()
         for sec in ("resolution", "feedback", "feedbackParams", "passportKey", "forbiddenNames", "canonicalJson",
-                    "runtimeCalls", "delegationProposals"):
+                    "runtimeCalls", "delegationProposals", "listingSignatures"):
             for c in V[sec]:
                 seen.update(c["rules"])
         self.assertEqual(MACHINE_RULES - seen, set())

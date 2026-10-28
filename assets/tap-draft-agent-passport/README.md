@@ -5,10 +5,11 @@ an optional cross-check uses Foundry `cast` when installed. Code is MIT; everyth
 
 | File | Content |
 |---|---|
-| `passport.py` | Read-only verifier. Input: a snapshot (below); output: state word, reasons, warnings, holder epoch, display text, and on request the §10 feedback summary. Also: `tap.passport` encoding (§4), registration-file checks (§5), canonical JSON (TAP-11 §6), forbidden names (§5.4), the #54 review hash, the §10.2 `giveFeedback` arguments, and the W-1 to W-3 checks. `python3 passport.py <snapshot.json>` prints the result |
+| `passport.py` | Read-only verifier. Input: a snapshot (below); output: state word, reasons, warnings, holder epoch, display text, and on request the §10 feedback summary. Also: `tap.passport` encoding (§4), registration-file checks (§5), the listing digest and its ECDSA or EIP-1271 acceptance (§5.5), canonical JSON (TAP-11 §6), forbidden names (§5.4), the #54 review hash, the §10.2 `giveFeedback` arguments, and the W-1 to W-3 checks. `python3 passport.py <snapshot.json>` prints the result |
 | `make_vectors.py` | Writes `vectors.json` deterministically; `--check` compares with the file on disk. Every case has a hand-written expectation, and the generator stops if the verifier disagrees |
-| `vectors.json` | 147 cases, SHA-256 `7720772c05d60062f48daa7c1d2ab6f45affc3d05425126d9de9b00a4ff8fca4` (resolution 73, feedback 21, passportKey 10, forbiddenNames 20, canonicalJson 4, runtimeCalls 12, delegationProposals 6, feedbackParams 1) plus the `interfaces` table and, under `constants.confusables`, the confusable table of Specification §5.4 |
-| `test_passport.py` | 18 tests (with subtests over every case): replays all vectors, recomputes selectors and hashes, checks that every machine-checkable rule has a vector, reproducibility, UNAVAILABLE never caused by a binding fact, display wording, and canonical-JSON edge cases; cross-checks with `cast` when present |
+| `vectors.json` | 175 cases, SHA-256 `a03e690d7ec7e0d96435d0bd71768829e114b324d792bbc2150c527f2c856066` (resolution 97, feedback 22, passportKey 10, forbiddenNames 20, canonicalJson 4, runtimeCalls 12, delegationProposals 6, feedbackParams 1, listingSignatures 3) plus the `interfaces` table, the published test keys under `constants.testKeys` and, under `constants.confusables`, the confusable table of Specification §5.4 |
+| `test_passport.py` | 23 tests (with subtests over every case): replays all vectors, recomputes selectors and hashes, checks that every machine-checkable rule has a vector, reproducibility, UNAVAILABLE never caused by a binding fact, that no state word changes when every log answer is removed, that no §10 summary is computed without a holder epoch, the listing digests and signatures, `secp256k1.py` against TAP-11's published delegation signature, display wording, and canonical-JSON edge cases; cross-checks with `cast` when present |
+| `secp256k1.py` | Minimal secp256k1: `recover` (with the range checks of TAP-11 §4.4) for the verifier, and deterministic `sign` (RFC 6979, low `s`) used only to build the vectors with the published test keys. Not constant-time; never use it with a real key |
 | `IERC8004PassportSubset.sol` | The ERC-8004 interface subset of Specification §2 item 4, with selectors |
 | `keccak.py` | Keccak-256 (vendored, below) |
 
@@ -34,10 +35,14 @@ python3 make_vectors.py --check && python3 test_passport.py
 
 An operator's answer for a key is its own entry if present (`null` = no answer), otherwise the common one. A read is
 adopted only when every operator that answered agrees and at least max(2, min(3, operators)) answered. Read keys:
-`eth_chainId`; `block` (`{hash, timestamp}`); `implSlot:<proxy>`; `<contract>.<function>(<args>)` for `eth_call`
-(answer: ABI-encoded return data as hex, or `{"revert": "0x…"}`); `logs.OperatorSet(<container>)`,
+`eth_chainId`; `block` (`{hash, timestamp}`); `implSlot:<proxy>`; `code:<address>` for `eth_getCode` (answer: hex,
+`"0x"` for none); `<contract>.<function>(<args>)` for `eth_call` (answer: ABI-encoded return data as hex, or
+`{"revert": "0x…"}`), including `<owner>.isValidSignature(<digest>,<sig>)` for the EIP-1271 branch of §5.5;
+`logs.OperatorSet(<container>)`,
 `logs.Transfer.identity(<agentId>)`, `logs.Transfer.circuit(<processor>,<tokenId>)`, `logs.NewFeedback(<agentId>)`
-(answer: a decoded list, or `{"unavailable": true}`). The #54 verdicts are an input because verifying #54 records
+(answer: a decoded list, or `{"unavailable": true}`). A missing `logs.*` read is treated as unobtainable, never as an
+empty list, and never changes the state word (Specification §6.4); a missing `logs.OperatorSet` read means the
+optional operator check was not attempted. The #54 verdicts are an input because verifying #54 records
 (signatures, evidence) belongs to #54's own reference implementation.
 
 ## Real reads
@@ -45,7 +50,9 @@ adopted only when every operator that answered agrees and at least max(2, min(3,
 Two resolution cases (`source: bsc-mainnet-read`) use answers read from BNB Smart Chain at block **129353737**
 (hash `0xc8c2af8680fe6d23f826e1089e00a605b8b52605df7ab746a787f463592cf0f9`, timestamp 1792772831 =
 2026-10-23T16:27:11Z) from two operators, `https://bsc-dataseed.binance.org` and `https://bsc-rpc.publicnode.com`,
-whose answers were identical. Other read-only facts cited by the specification:
+whose answers were identical. These are the endpoints used at the time of writing; naming them is not an
+endorsement of their operators and no guarantee that they will keep serving these reads. Other read-only facts cited
+by the specification:
 
 | Fact | Block | How |
 |---|---|---|
@@ -55,7 +62,30 @@ whose answers were identical. Other read-only facts cited by the specification:
 | Registration with metadata, transfer clearing `agentWallet` and keeping URI and metadata, reserved key, gift identity, self-signed `setAgentWallet` (+240 s accepted, +400 s rejected) | fork of 129352831 | local anvil fork, throwaway keys |
 
 Everything else in `vectors.json` is synthetic. Synthetic addresses are `keccak256("tap-agent-passport synthetic <n>")[12:]`
-and belong to nobody. No transaction was sent to any public chain.
+and belong to nobody. The holders that sign listings use published test keys (`constants.testKeys`): the holder is
+`0x` followed by 64 digits `1` (address `0x19E7E376E7C213B7E7e7e46cc70A5dD086DAff2A`, the test holder of TAP-11's
+vectors), the former holder 64 digits `2`, and the owner behind the synthetic contract holder 64 digits `3`. Anyone can
+sign with these keys; never use them for anything else. No transaction was sent to any public chain.
+
+## Log queries on keyless public nodes (Specification §6.4)
+
+Informative, measured on 2026-10-28 with `eth_getLogs` from one machine; the endpoints are those tried at the time of
+writing, not an endorsement and not a guarantee, and limits change without notice. Spot checks repeated later the
+same day are given where they differ.
+
+| Endpoint | Result |
+|---|---|
+| `bsc-rpc.publicnode.com` | Ranges of at most 5,000 blocks and 20,000 results; first run: only about the last 8,000 to 9,000 blocks, older ranges HTTP 403. Spot check: a 2-block range 200,000 blocks back served; 2,000,000 or more blocks back refused (HTTP 403, "archive requests require a personal token") |
+| `1rpc.io/bnb` | At most 50 blocks per query |
+| `bsc-dataseed.binance.org` (BNB Chain) | "limit exceeded" at 1,000 blocks (spot check: also at 999 blocks on `bsc-dataseed1.bnbchain.org`) |
+| `bsc.drpc.org` | HTTP 400 or 429 in the first run; a 10-block recent range served in the spot check |
+| `bsc-mainnet.public.blastapi.io` | HTTP 429 on `eth_getLogs`; historical `eth_call` works |
+| `bsc.meowrpc.com` | `eth_getLogs` not supported |
+| Ankr public endpoint | Needs an API key |
+
+No endpoint served `eth_getLogs` from the first block. A holder epoch or an operator scan from the mint at 5,000 blocks per
+query would take tens of thousands of queries per token on the endpoint that allowed the widest range, and strict
+agreement needs the same answers from at least two operators.
 
 ## Included copy
 
@@ -63,6 +93,7 @@ and belong to nobody. No transaction was sent to any public chain.
 |---|---|---|
 | `keccak.py` | Lines 38–82 of `assets/tap-draft-design-credits/credits.py` (that file's SHA-256 `7204a16d0610695267f8c925f67935c67368d14feca98d5d55ec651e69122dab`), copied unchanged; only a header was added. The copied lines hash to `6502131244d17916e547c33e6e6ecd3e32bc5509d65956202af8d5dec6933566` in both files | `323f07502cb465cdb3ae3fe6c4013375d1b6902314a66f67cc8a98e8b006d292` |
 | `IERC8004PassportSubset.sol` | Written for this TAP from the deployed interface (not a copy) | `705d54dd747ddf78ac2d15860262ac1f7b3d05fc75c1e449fe50a7206bbae135` |
+| `secp256k1.py` | Written for this TAP (not a copy); checked against TAP-11's `assets/tap-11/delegation.json` | `2ea9be0cca9db626a991d9ab43898990f2ef83954fd50b23d75628d0427c1c55` |
 
 ## Confusable table (Specification §5.4)
 
@@ -98,12 +129,12 @@ Capitals are mapped through their lowercase form.
 
 | # | Threat | Outcome under this TAP | Rules |
 |---|---|---|---|
-| T1 | **Gift identity**: a stranger registers an identity naming a victim's circuit and transfers it to the victim (measured: no consent needed, `agentWallet` becomes zero, the stranger's URI and metadata stay) | BROKEN `not-listed`; if the victim lists it, `wallet-unset` until the victim self-signs | P-9, P-10 |
+| T1 | **Gift identity**: a stranger registers an identity naming a victim's circuit and transfers it to the victim (measured: no consent needed, `agentWallet` becomes zero, the stranger's URI and metadata stay) | BROKEN `not-listed`; if the victim lists and signs it, `wallet-unset` until the victim self-signs `setAgentWallet` | P-8, P-9, P-10 |
 | T2 | Repeated gifts to force AMBIGUOUS (measured: unlimited) | No effect: only identities the holder lists count | P-10 |
 | T3 | The circuit is sold; the old identity keeps acting as the passport | BROKEN `holder-mismatch` | P-1 |
-| T4 | Both tokens are sold together (bought reputation) | CONFIRMED for the buyer only after `setAgentWallet`; earlier reputation is not attributed | P-9, E-1, E-2, F-7 |
-| T5 | A site operator set by the previous holder rewrites the registration file | BROKEN `stale-operator`, or a visible warning when events are unobtainable | P-8 |
-| T6 | A malicious onboarding contract writes files or leaves an operator | Caught by P-8 and by re-reading every file before relying on the result | P-8, W-3 |
+| T4 | Both tokens are sold together (bought reputation) | BROKEN `listing-not-by-holder` until the buyer signs a listing, then `wallet-unset` until `setAgentWallet`; earlier reputation is not attributed (with the history tier), and no summary is shown without it | P-8, P-9, E-1, E-2, F-7 |
+| T5 | A site operator set by the previous holder rewrites the registration file (for example to list a gifted identity) | It can break the passport (BROKEN or AMBIGUOUS) but not forge one: the copied listing does not verify for another identity (`listing-not-by-holder`); a tool with the history tier also warns `stale-operator` | P-8, §6.4 |
+| T6 | A malicious onboarding contract writes files or leaves an operator | Cannot sign a listing; caught by re-reading every file before relying on the result | P-8, W-3, W-5 |
 | T7 | Cross-chain or cross-contract replay of the key or the listing | BROKEN `chain-mismatch` or `not-listed` | P-3 |
 | T8 | Lying or colluding nodes; registry upgrade under its owner | UNAVAILABLE | P-6, S-4 |
 | T9 | Text read by a language model steers it into transfers, approvals or a long delegation to a stranger's key | Calls refused by the runtime; signers only from the tool's own session; short default expiry | W-1, W-2, W-3 |
@@ -111,6 +142,7 @@ Capitals are mapped through their lowercase form.
 | T11 | Flooding an identity with feedback to exhaust summary tools | Only named clients are fetched; a bounded tool reports `summary-truncated` | F-0 |
 | T12 | Custodial holder frozen or lost; credentials bound to the custodial address | Not prevented (Security Considerations) | W-1 |
 | T13 | **Gift circuit**: a stranger copies the holder's registration file into a circuit it controls and transfers that circuit to the holder | BROKEN `key-circuit-mismatch` when resolved by that circuit; the real passport is unaffected | P-11 |
+| T14 | A writer of the site puts back an older registration file whose listing the current holder signed earlier for the same container | Not prevented: the older identity can resolve CONFIRMED and the current one `not-listed`; holders clear the key of identities they stop using (Security Considerations; open question 8) | P-8 |
 
 ## Onboarding with a custodial agent wallet (detail of Specification Appendix A)
 
@@ -130,9 +162,10 @@ preview|execute --binanceChainId 56 --from <wallet> --to <contract> --value <wei
 | 4 | Generate the TAP-11 signer locally; sign the delegation (W-1: 7 days by default) | EIP-712 signature | Only when offering a service |
 | 5 | Write the manifest (`putFile`) | Contract call | Only when offering a service |
 | 6 | `register(agentURI, [("tap.passport", abi.encode(56, processor, tokenId))])` | Contract call | `agentWallet` becomes the wallet; read `agentId` from the event |
-| 7 | Write the registration file listing `agentId` (`putFile`), then resolve under §6 | Contract call, then reads | Re-read every written file and the site operators before relying on the result |
+| 7 | Sign the listing `PassportListing(agentId, identity registry, container, issued)` (§5.5) | EIP-712 signature | Values from the receipt and chain reads only (W-5); check that it recovers to the wallet |
+| 8 | Write the registration file listing `agentId` with `tap.listing` (`putFile`), then resolve under §6 | Contract call, then reads | Re-read every written file before relying on the result |
 
-Counts: **6 contract calls and 1 signature** for an agent that offers a service, **5 calls** for an identity without a service. Each call and the signature may or may not require a confirmation in the app, depending on the provider's risk policy, so the number of confirmations is between 0 and 7, plus the one-time pairing and Developer Mode. The registration file comes after `register` because the `agentId` is not known before it.
+Counts: **6 contract calls and 2 signatures** for an agent that offers a service, **5 calls and 1 signature** for an identity without a service. Both signatures are EIP-712 typed data, which the wallet signs with `--signType EIP712`; no `personal_sign` is needed. Each call and signature may or may not require a confirmation in the app, depending on the provider's risk policy, so the number of confirmations is between 0 and 8, plus the one-time pairing and Developer Mode. The listing and the registration file come after `register` because the `agentId` is not known before it.
 
 **What the wallet provider must do: nothing.** Every step uses documented commands.
 

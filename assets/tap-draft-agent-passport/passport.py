@@ -6,6 +6,9 @@
 # Output: a state word (CONFIRMED, BROKEN, AMBIGUOUS, wallet-unset, stale-agent-wallet, UNAVAILABLE),
 # the reasons, warnings, the holder epoch and, when asked, the reputation summary of §10.
 #
+# The state word depends only on eth_call-type reads at the pinned block (§6.4): log queries (holder epoch,
+# site operators, feedback) only add warnings or decide whether a §10 summary can be computed.
+#
 # The verifier never talks to a node. It applies the rules of the Specification to the answers it is
 # given, so that every implementation can be checked against the same snapshots (vectors.json).
 from __future__ import annotations
@@ -20,6 +23,8 @@ import unicodedata
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from keccak import keccak256  # noqa: E402
+from secp256k1 import recover as ecrecover  # noqa: E402
+from secp256k1 import N as SECP256K1_N  # noqa: E402
 
 SNAPSHOT_FORMAT = "tap-agent-passport-snapshot/1"
 PASSPORT_KEY = "tap.passport"
@@ -36,6 +41,10 @@ REVIEW_TYPE = ("Review(bytes32 reviewer,bytes32 reviewee,uint8 kind,uint8 score,
                "bytes32 evidenceHash,bytes32 textHash,uint64 issued)")
 REVIEW_TYPEHASH = "0xb9c66a727a6fba79714dcc4f0dfdbaf876840b1a35de576ed8fe3eef1f1b9a0b"   # #54 §2.1
 EIP712_DOMAIN_TYPE = "EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)"
+LISTING_TYPE = "PassportListing(uint256 agentId,address registry,address container,uint64 issued)"   # §5.5
+LISTING_TYPEHASH = "0x" + keccak256(LISTING_TYPE.encode()).hex()
+MAX_LISTING_SIG_BYTES = 4096                                                                        # §5.3
+ERC1271_MAGIC = "0x1626ba7e" + "00" * 28                                                            # TAP-11 §4.4 item 2
 REVIEW_TAG1 = "tap-review"
 REVIEW_TAG2 = {"level-1": 1, "level-2": 2}
 DEFAULT_DELEGATION_MAX_S = 2_592_000      # §9 W-1: a proposed default expiry is at most 30 days ahead
@@ -57,13 +66,16 @@ REASONS = {
     "registration-file-incomplete": "P-7", "registration-file-no-hash": "P-7",
     "registration-file-invalid": "P-7", "forbidden-name": "P-7", "file-chain-mismatch": "P-7",
     "tape-service-missing": "P-7",
-    "stale-operator": "P-8",
+    "listing-not-by-holder": "P-8",
     "wallet-unset": "P-9", "stale-agent-wallet": "P-9",
     "not-listed": "P-10", "several-listed": "P-10",
     "key-circuit-mismatch": "P-11",
 }
 WARNINGS = ("operators-not-checked", "agent-uri-not-canonical", "manifest-hash-differs",
-            "holder-changed", "transfer-history-unavailable")
+            "holder-changed", "transfer-history-unavailable", "stale-operator")
+# Why a §10 summary was not computed (§10.3).
+SUMMARY_NOT_COMPUTED = ("passport not confirmed", "no-client-set", "epoch-unknown", "registry-changed",
+                        "history-unavailable", "summary-truncated", "node-disagreement", "unavailable")
 
 
 class Unavailable(Exception):
@@ -404,7 +416,7 @@ def check_tap_member(tap) -> None:
     for p, k in _walk_names(tap, "/tap"):
         if forbidden_name(k):
             raise Broken("forbidden-name", p)
-    req = ("v", "chainId", "processor", "tokenId", "container")
+    req = ("v", "chainId", "processor", "tokenId", "container", "listing")
     for k in req:
         if k not in tap:
             raise Broken("registration-file-invalid", "tap.%s missing" % k)
@@ -419,6 +431,16 @@ def check_tap_member(tap) -> None:
     t = tap["tokenId"]
     if not isinstance(t, str) or not re.fullmatch(r"[1-9][0-9]{0,18}", t) or int(t) > MAX_TOKEN_ID:
         raise Broken("registration-file-invalid", "tap.tokenId")
+    lst = tap["listing"]
+    if not isinstance(lst, dict) or "issued" not in lst or "sig" not in lst:
+        raise Broken("registration-file-invalid", "tap.listing")
+    i = lst["issued"]
+    if not isinstance(i, int) or isinstance(i, bool) or not 0 <= i <= 2 ** 53 - 1:
+        raise Broken("registration-file-invalid", "tap.listing.issued")
+    sg = lst["sig"]
+    if (not isinstance(sg, str) or not re.fullmatch(r"0x(?:[0-9a-f]{2})+", sg)
+            or (len(sg) - 2) // 2 > MAX_LISTING_SIG_BYTES):
+        raise Broken("registration-file-invalid", "tap.listing.sig")
     if "manifest" in tap:
         m = tap["manifest"]
         if (not isinstance(m, dict) or m.get("path") != "/" + MANIFEST_KEY
@@ -468,6 +490,58 @@ def listed_agent_ids(doc: dict, chain_id: int, registry: str) -> list:
             out.append(aid)
         elif isinstance(aid, str) and re.fullmatch(r"0|[1-9][0-9]*", aid):
             out.append(int(aid))
+    return out
+
+
+# ---------------------------------------------------------------------------
+# §5.5: the listing signature (EIP-712, TAP-11 §4.1 domain)
+# ---------------------------------------------------------------------------
+
+def tapeapi_domain_separator(chain_id: int) -> bytes:
+    """TAP-11 §4.1: name "TapeAPI", version "1", chainId, verifyingContract = the DeWEB hub."""
+    return keccak256(keccak256(EIP712_DOMAIN_TYPE.encode()) + keccak256(b"TapeAPI") + keccak256(b"1")
+                     + chain_id.to_bytes(32, "big") + b"\x00" * 12 + unhex(HUB))
+
+
+def listing_struct_hash(agent_id: int, registry: str, container: str, issued: int) -> bytes:
+    return keccak256(unhex(LISTING_TYPEHASH) + agent_id.to_bytes(32, "big") + b"\x00" * 12 + unhex(addr(registry))
+                     + b"\x00" * 12 + unhex(addr(container)) + issued.to_bytes(32, "big"))
+
+
+def listing_digest(chain_id: int, agent_id: int, registry: str, container: str, issued: int) -> bytes:
+    return keccak256(b"\x19\x01" + tapeapi_domain_separator(chain_id)
+                     + listing_struct_hash(agent_id, registry, container, issued))
+
+
+def ecdsa_range_ok(sig: bytes) -> bool:
+    """TAP-11 §4.4 item 1 range checks of a 65-byte signature."""
+    r, s, v = int.from_bytes(sig[:32], "big"), int.from_bytes(sig[32:64], "big"), sig[64]
+    return v in (0, 1, 27, 28) and 1 <= r < SECP256K1_N and 1 <= s <= SECP256K1_N // 2
+
+
+def check_listing(rd: "Reads", chain: int, registry: str, agent_id: int, owner: str, container: str, listing: dict) -> dict:
+    """P-8: the listing is signed by ownerOf(agentId) over values read from the chain, never from the file.
+
+    agentId is the identity being resolved, registry the identity registry of §2 and container the one of P-4;
+    only `issued` and `sig` come from the file. Acceptance is TAP-11 §4.4 with the holder = owner: ECDSA first
+    for a 65-byte signature, EIP-1271 on an owner that has code at the pinned block otherwise."""
+    issued = listing["issued"]
+    sig = unhex(listing["sig"])
+    digest = listing_digest(chain, agent_id, registry, container, issued)
+    out = {"digest": hx(digest), "issued": issued}
+    if len(sig) == 65:
+        if not ecdsa_range_ok(sig):
+            raise Broken("listing-not-by-holder", "65-byte signature fails the TAP-11 §4.4 range checks")
+        if ecrecover(digest, sig) == owner:
+            out["branch"] = "ecdsa"
+            return out
+    code = rd.get("code:" + owner)                    # eth_getCode at the pinned block
+    if not isinstance(code, str) or unhex(code) == b"":
+        raise Broken("listing-not-by-holder", "the signature does not recover to %s, which has no code" % owner)
+    r = rd.call("%s.isValidSignature(%s,%s)" % (owner, hx(digest), hx(sig)))
+    if _is_revert(r) or len(r) < 32 or hx(r[:32]) != ERC1271_MAGIC:
+        raise Broken("listing-not-by-holder", "isValidSignature on %s did not return the magic value" % owner)
+    out["branch"] = "eip1271"
     return out
 
 
@@ -582,9 +656,23 @@ def _read_file(rd: Reads, cfg: dict, container: str, key: str, missing: str, max
     return data, info
 
 
+def _has_read(rd: Reads, key: str) -> bool:
+    if key in rd.snap.get("answers", {}):
+        return True
+    return any(key in op.get("answers", {}) for op in rd.ops.values())
+
+
 def _operators(rd: Reads, cfg: dict, container: str, holder: str, ts: int, warnings: list) -> None:
-    """P-8: every site operator active at the pinned block was set by the current holder."""
-    recs = rd.get("logs.OperatorSet(%s)" % container)
+    """§6.4, optional and informative: is a site operator active that the current holder did not set?
+
+    Never changes the state word. A snapshot without the read means the check was not attempted."""
+    key = "logs.OperatorSet(%s)" % container
+    if not _has_read(rd, key):
+        return
+    try:
+        recs = rd.get(key)
+    except Unavailable:
+        recs = {"unavailable": True}
     if isinstance(recs, dict) and recs.get("unavailable"):
         warnings.append("operators-not-checked")
         return
@@ -595,13 +683,18 @@ def _operators(rd: Reads, cfg: dict, container: str, holder: str, ts: int, warni
         if op == ZERO_ADDR or int(r["until"]) < ts:
             continue
         if addr(r["setBy"]) != holder:
-            raise Broken("stale-operator", op)
+            warnings.append("stale-operator")
+            return
 
 
 def _epoch(rd: Reads, cfg: dict, agent_id: int, processor: str, token_id: int, holder: str, warnings: list):
     """§7: the holder epoch starts at the later of the last transfers of the two tokens."""
-    ti = rd.get("logs.Transfer.identity(%d)" % agent_id)
-    tc = rd.get("logs.Transfer.circuit(%s,%d)" % (processor, token_id))
+    try:
+        ti = rd.get("logs.Transfer.identity(%d)" % agent_id)
+        tc = rd.get("logs.Transfer.circuit(%s,%d)" % (processor, token_id))
+    except Unavailable:                       # history tier (§6.4): never changes the state word
+        ti = {"unavailable": True}
+        tc = ti
     if (isinstance(ti, dict) and ti.get("unavailable")) or (isinstance(tc, dict) and tc.get("unavailable")):
         warnings.append("transfer-history-unavailable")
         return None
@@ -714,13 +807,14 @@ def _by_agent(rd: Reads, cfg: dict, agent_id: int, res: dict, fixed: dict, input
     if not any(isinstance(s, dict) and s.get("name") == "tape" and s.get("endpoint") == want
                for s in doc["services"]):
         raise Broken("tape-service-missing", want)
-    _operators(rd, cfg, c["container"], c["holder"], fixed["timestamp"], warnings)   # P-8
-    ids = listed_agent_ids(doc, chain, registry)                     # P-10
+    ids = listed_agent_ids(doc, chain, registry)                     # P-10 (§6.2 step 6)
     if agent_id not in ids:
         raise Broken("not-listed", "the holder's file does not list agent %d" % agent_id)
     if len(ids) > 1:
         res["agentId"] = [str(x) for x in ids]
         raise Broken("several-listed")
+    res["listing"] = check_listing(rd, chain, registry, agent_id, owner, c["container"], tap["listing"])  # P-8
+    _operators(rd, cfg, c["container"], c["holder"], fixed["timestamp"], warnings)   # §6.4, informative
     # Warnings that do not change the state.
     if agent_uri is None or not re.fullmatch(
             r"https://%s\.[A-Za-z0-9.-]+/\.well-known/agent-registration\.json"
@@ -753,6 +847,8 @@ def display(res: dict) -> str:
             res["name"], res["container"], res["agentId"], res["pinnedBlock"])
         if "operators-not-checked" in res["warnings"]:
             out += "; site operators not checked"
+        if "stale-operator" in res["warnings"]:
+            out += "; a site operator not set by the holder is active: the unsigned texts of the site may not be the holder's"
         ep = res.get("holderEpoch")
         if ep is None:
             out += "; holder history not checked"
@@ -789,8 +885,7 @@ def review_hash(review: dict) -> str:
     for k in ("kind", "score", "issued"):
         if not isinstance(review[k], int) or isinstance(review[k], bool):
             raise ValueError(k)
-    dom = keccak256(keccak256(EIP712_DOMAIN_TYPE.encode()) + keccak256(b"TapeAPI") + keccak256(b"1")
-                    + chain_id.to_bytes(32, "big") + b"\x00" * 12 + unhex(HUB))
+    dom = tapeapi_domain_separator(chain_id)
     sh = keccak256(unhex(REVIEW_TYPEHASH) + reviewer + _b32(review["reviewee"])
                    + review["kind"].to_bytes(32, "big") + review["score"].to_bytes(32, "big")
                    + _b32(review["subject"]) + _b32(review["evidenceHash"]) + _b32(review["textHash"])
@@ -831,13 +926,22 @@ def summarise_feedback(snap: dict, res: dict) -> dict:
     if not named:
         return {"computed": False, "why": "no-client-set"}
     cap = req.get("maxEntries")
+    # F-7: without a holder epoch nothing can be attributed to the current holder, so no summary is
+    # computed at all; zeros or an empty summary would read as "no reputation" (§6.4).
+    if epoch is None:
+        return {"computed": False, "why": "epoch-unknown"}
     try:
         impl = "0x" + rd.get("implSlot:" + addr(cfg["reputationRegistry"]))[-40:]
         if impl.lower() not in [addr(x) for x in cfg["reputationImplementations"]]:
             return {"computed": False, "why": "registry-changed"}
-        items = rd.get("logs.NewFeedback(%d)" % agent_id)
     except Unavailable as e:
         return {"computed": False, "why": e.reason}
+    try:
+        items = rd.get("logs.NewFeedback(%d)" % agent_id)
+    except Unavailable:
+        items = {"unavailable": True}
+    if isinstance(items, dict) and items.get("unavailable"):
+        return {"computed": False, "why": "history-unavailable"}
     excluded, candidates = [], []
     outside, examined = 0, 0
     uri_re = re.compile(r"(?:https://([0-9-]+)\.[A-Za-z0-9.-]+|tape://([0-9.]+\.tape))/(\.well-known/tapeapi-reviews/(0x[0-9a-f]{64})\.json)")
@@ -912,8 +1016,6 @@ def summarise_feedback(snap: dict, res: dict) -> dict:
                 out("level-mismatch"); continue
             if addr(fb["client"]) != r_holder:                         # F-6
                 out("client-not-reviewer-holder"); continue
-            if epoch is None:
-                out("epoch-unknown"); continue
             if int(fb["block"]) < epoch["startBlock"]:                  # F-7
                 out("earlier-holder"); continue
             candidates.append({"reviewer": container, "holder": r_holder, "level": v["level"],
