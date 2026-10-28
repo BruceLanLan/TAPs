@@ -70,22 +70,22 @@ sign with these keys; never use them for anything else. No transaction was sent 
 ## Log queries on keyless public nodes (Specification §6.4)
 
 Informative, measured on 2026-10-28 with `eth_getLogs`; the endpoints are those tried at the time of
-writing, not an endorsement and not a guarantee, and limits change without notice. Spot checks repeated later the
-same day are given where they differ.
+writing, not an endorsement and not a guarantee, and limits change without notice.
 
 | Endpoint | Result |
 |---|---|
-| `bsc-rpc.publicnode.com` | Ranges of at most 5,000 blocks and 20,000 results; first run: only about the last 8,000 to 9,000 blocks, older ranges HTTP 403. Spot check: a 2-block range 200,000 blocks back served; 2,000,000 or more blocks back refused (HTTP 403, "archive requests require a personal token") |
+| `bsc-rpc.publicnode.com` | Ranges of at most 5,000 blocks and 20,000 results; served back to about 281,000 blocks before the head (about 35 hours), older ranges HTTP 403 ("archive requests require a personal token") |
 | `1rpc.io/bnb` | At most 50 blocks per query |
-| `bsc-dataseed.binance.org` (BNB Chain) | "limit exceeded" at 1,000 blocks (spot check: also at 999 blocks on `bsc-dataseed1.bnbchain.org`) |
-| `bsc.drpc.org` | HTTP 400 or 429 in the first run; a 10-block recent range served in the spot check |
+| `bsc-dataseed.bnbchain.org` (BNB Chain) | "limit exceeded" at 1,000 blocks, also at 999 blocks |
+| `bsc.drpc.org` | Small recent ranges served; a 1,000-block range HTTP 400, and HTTP 429 under load |
 | `bsc-mainnet.public.blastapi.io` | HTTP 429 on `eth_getLogs`; historical `eth_call` works |
 | `bsc.meowrpc.com` | `eth_getLogs` not supported |
 | Ankr public endpoint | Needs an API key |
 
-No endpoint served `eth_getLogs` from the first block. A holder epoch or an operator scan from the mint at 5,000 blocks per
-query would take tens of thousands of queries per token on the endpoint that allowed the widest range, and strict
-agreement needs the same answers from at least two operators.
+No endpoint served `eth_getLogs` from the first block. The identity registry's proxy has code from about 51,000,000
+blocks before the measurement, while the deepest log window above covers about 281,000. Even where ranges of 5,000
+blocks are allowed, a scan from deployment would take more than 10,000 queries, and strict agreement needs the same
+answers from at least two operators.
 
 ## Included copy
 
