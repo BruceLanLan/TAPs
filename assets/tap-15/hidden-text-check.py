@@ -1,51 +1,37 @@
 #!/usr/bin/env python3
-# Rechecks hidden-text.json from the text of TAP-draft-mcp-tools alone (Specification §3.4), written independently of the
-# reference implementation. Usage: python3 hidden-text-check.py [hidden-text.json]. Exits 1 on any mismatch.
-# The three property tables below are the general category Cf, Default_Ignorable_Code_Point and Emoji of Unicode 17.0
-# (UnicodeData.txt, DerivedCoreProperties.txt, emoji-data.txt), as ranges of code points, extracted from the Unicode data
-# of ICU 78.2; another Unicode version can differ slightly (Security Considerations). MIT License.
-import json, os, re, sys
+# Rechecks hidden-text.json against TAP-11 §3.5 items 1 and 2, which TAP-draft-mcp-tools §3.4 cites, applied to the covered
+# members of a tool list. Usage: python3 -I hidden-text-check.py [hidden-text.json]. Exits 1 on any mismatch.
+# Standard library only. MIT License.
+#
+# The Unicode properties and NFC come from unicode-15.1.json in this directory, which is byte for byte the table file of
+# TAP-11 §3.5 (assets/tap-11/unicode-15.1.json); the digest below is the one that section states. The Python
+# `unicodedata` module is not used: its Unicode version is not the pinned one. The NFC code is UAX #15 over the tables.
+import hashlib, json, os, re, sys
 
-CF = (
-    (0xAD, 0xAD), (0x600, 0x605), (0x61C, 0x61C), (0x6DD, 0x6DD), (0x70F, 0x70F), (0x890, 0x891), (0x8E2, 0x8E2),
-    (0x180E, 0x180E), (0x200B, 0x200F), (0x202A, 0x202E), (0x2060, 0x2064), (0x2066, 0x206F), (0xFEFF, 0xFEFF),
-    (0xFFF9, 0xFFFB), (0x110BD, 0x110BD), (0x110CD, 0x110CD), (0x13430, 0x1343F), (0x1BCA0, 0x1BCA3),
-    (0x1D173, 0x1D17A), (0xE0001, 0xE0001), (0xE0020, 0xE007F),
-)
-DEFAULT_IGNORABLE = (
-    (0xAD, 0xAD), (0x34F, 0x34F), (0x61C, 0x61C), (0x115F, 0x1160), (0x17B4, 0x17B5), (0x180B, 0x180F),
-    (0x200B, 0x200F), (0x202A, 0x202E), (0x2060, 0x206F), (0x3164, 0x3164), (0xFE00, 0xFE0F), (0xFEFF, 0xFEFF),
-    (0xFFA0, 0xFFA0), (0xFFF0, 0xFFF8), (0x1BCA0, 0x1BCA3), (0x1D173, 0x1D17A), (0xE0000, 0xE0FFF),
-)
-EMOJI = (
-    (0x23, 0x23), (0x2A, 0x2A), (0x30, 0x39), (0xA9, 0xA9), (0xAE, 0xAE), (0x203C, 0x203C), (0x2049, 0x2049),
-    (0x2122, 0x2122), (0x2139, 0x2139), (0x2194, 0x2199), (0x21A9, 0x21AA), (0x231A, 0x231B), (0x2328, 0x2328),
-    (0x23CF, 0x23CF), (0x23E9, 0x23F3), (0x23F8, 0x23FA), (0x24C2, 0x24C2), (0x25AA, 0x25AB), (0x25B6, 0x25B6),
-    (0x25C0, 0x25C0), (0x25FB, 0x25FE), (0x2600, 0x2604), (0x260E, 0x260E), (0x2611, 0x2611), (0x2614, 0x2615),
-    (0x2618, 0x2618), (0x261D, 0x261D), (0x2620, 0x2620), (0x2622, 0x2623), (0x2626, 0x2626), (0x262A, 0x262A),
-    (0x262E, 0x262F), (0x2638, 0x263A), (0x2640, 0x2640), (0x2642, 0x2642), (0x2648, 0x2653), (0x265F, 0x2660),
-    (0x2663, 0x2663), (0x2665, 0x2666), (0x2668, 0x2668), (0x267B, 0x267B), (0x267E, 0x267F), (0x2692, 0x2697),
-    (0x2699, 0x2699), (0x269B, 0x269C), (0x26A0, 0x26A1), (0x26A7, 0x26A7), (0x26AA, 0x26AB), (0x26B0, 0x26B1),
-    (0x26BD, 0x26BE), (0x26C4, 0x26C5), (0x26C8, 0x26C8), (0x26CE, 0x26CF), (0x26D1, 0x26D1), (0x26D3, 0x26D4),
-    (0x26E9, 0x26EA), (0x26F0, 0x26F5), (0x26F7, 0x26FA), (0x26FD, 0x26FD), (0x2702, 0x2702), (0x2705, 0x2705),
-    (0x2708, 0x270D), (0x270F, 0x270F), (0x2712, 0x2712), (0x2714, 0x2714), (0x2716, 0x2716), (0x271D, 0x271D),
-    (0x2721, 0x2721), (0x2728, 0x2728), (0x2733, 0x2734), (0x2744, 0x2744), (0x2747, 0x2747), (0x274C, 0x274C),
-    (0x274E, 0x274E), (0x2753, 0x2755), (0x2757, 0x2757), (0x2763, 0x2764), (0x2795, 0x2797), (0x27A1, 0x27A1),
-    (0x27B0, 0x27B0), (0x27BF, 0x27BF), (0x2934, 0x2935), (0x2B05, 0x2B07), (0x2B1B, 0x2B1C), (0x2B50, 0x2B50),
-    (0x2B55, 0x2B55), (0x3030, 0x3030), (0x303D, 0x303D), (0x3297, 0x3297), (0x3299, 0x3299), (0x1F004, 0x1F004),
-    (0x1F0CF, 0x1F0CF), (0x1F170, 0x1F171), (0x1F17E, 0x1F17F), (0x1F18E, 0x1F18E), (0x1F191, 0x1F19A),
-    (0x1F1E6, 0x1F1FF), (0x1F201, 0x1F202), (0x1F21A, 0x1F21A), (0x1F22F, 0x1F22F), (0x1F232, 0x1F23A),
-    (0x1F250, 0x1F251), (0x1F300, 0x1F321), (0x1F324, 0x1F393), (0x1F396, 0x1F397), (0x1F399, 0x1F39B),
-    (0x1F39E, 0x1F3F0), (0x1F3F3, 0x1F3F5), (0x1F3F7, 0x1F4FD), (0x1F4FF, 0x1F53D), (0x1F549, 0x1F54E),
-    (0x1F550, 0x1F567), (0x1F56F, 0x1F570), (0x1F573, 0x1F57A), (0x1F587, 0x1F587), (0x1F58A, 0x1F58D),
-    (0x1F590, 0x1F590), (0x1F595, 0x1F596), (0x1F5A4, 0x1F5A5), (0x1F5A8, 0x1F5A8), (0x1F5B1, 0x1F5B2),
-    (0x1F5BC, 0x1F5BC), (0x1F5C2, 0x1F5C4), (0x1F5D1, 0x1F5D3), (0x1F5DC, 0x1F5DE), (0x1F5E1, 0x1F5E1),
-    (0x1F5E3, 0x1F5E3), (0x1F5E8, 0x1F5E8), (0x1F5EF, 0x1F5EF), (0x1F5F3, 0x1F5F3), (0x1F5FA, 0x1F64F),
-    (0x1F680, 0x1F6C5), (0x1F6CB, 0x1F6D2), (0x1F6D5, 0x1F6D8), (0x1F6DC, 0x1F6E5), (0x1F6E9, 0x1F6E9),
-    (0x1F6EB, 0x1F6EC), (0x1F6F0, 0x1F6F0), (0x1F6F3, 0x1F6FC), (0x1F7E0, 0x1F7EB), (0x1F7F0, 0x1F7F0),
-    (0x1F90C, 0x1F93A), (0x1F93C, 0x1F945), (0x1F947, 0x1F9FF), (0x1FA70, 0x1FA7C), (0x1FA80, 0x1FA8A),
-    (0x1FA8E, 0x1FAC6), (0x1FAC8, 0x1FAC8), (0x1FACD, 0x1FADC), (0x1FADF, 0x1FAEA), (0x1FAEF, 0x1FAF8),
-)
+HERE = os.path.dirname(os.path.abspath(__file__))
+TABLES_SHA256 = 'a5fc0644d85d4638999ab5bb2d09f50514cfe10e7db6b4134638682a7c9fc4fd'
+_raw = open(os.path.join(HERE, 'unicode-15.1.json'), 'rb').read()
+if hashlib.sha256(_raw).hexdigest() != TABLES_SHA256:
+    sys.exit('unicode-15.1.json does not match the digest stated in TAP-11 section 3.5')
+T = json.loads(_raw.decode('utf-8'))
+
+
+def _ranges(lst):
+    out = []
+    for r in lst:
+        lo, _, hi = r.partition('-')
+        out.append((int(lo, 16), int(hi or lo, 16)))
+    return tuple(out)
+
+
+CC, CF, DI, BIDI, EMOJI, FCE = (_ranges(T[k]) for k in (
+    'Cc', 'Cf', 'Default_Ignorable_Code_Point', 'Bidi_Control', 'Emoji', 'Full_Composition_Exclusion'))
+CCC = {}
+for _v, _lst in T['ccc'].items():
+    for _lo, _hi in _ranges(_lst):
+        for _c in range(_lo, _hi + 1):
+            CCC[_c] = int(_v)
+DECOMP = {int(k, 16): [int(x, 16) for x in v.split()] for k, v in T['decomposition'].items()}
 
 
 def _in(table, cp):
@@ -59,35 +45,84 @@ def _in(table, cp):
     return False
 
 
-def hidden(s, in_description):
-    """The first hidden code point of the string s (§3.4), or None."""
+COMPOSE = {(d[0], d[1]): c for c, d in DECOMP.items() if len(d) == 2 and not _in(FCE, c)}
+SB, LB, VB, TB, LC, VC, TC = 0xAC00, 0x1100, 0x1161, 0x11A7, 19, 21, 28
+
+
+def _decompose(c, out):
+    if SB <= c < SB + LC * VC * TC:
+        n = c - SB
+        out.append(LB + n // (VC * TC)); out.append(VB + (n % (VC * TC)) // TC)
+        if n % TC: out.append(TB + n % TC)
+    elif c in DECOMP:
+        for x in DECOMP[c]: _decompose(x, out)
+    else:
+        out.append(c)
+
+
+def _pair(a, b):
+    if LB <= a < LB + LC and VB <= b < VB + VC: return SB + ((a - LB) * VC + (b - VB)) * TC
+    if SB <= a < SB + LC * VC * TC and (a - SB) % TC == 0 and TB < b < TB + TC: return a + (b - TB)
+    return COMPOSE.get((a, b))
+
+
+def nfc(s):
+    d = []
+    for ch in s: _decompose(ord(ch), d)
+    for i in range(1, len(d)):                       # canonical ordering, stable
+        c = CCC.get(d[i], 0)
+        if c == 0: continue
+        j = i
+        while j > 0 and CCC.get(d[j - 1], 0) > c:
+            d[j - 1], d[j] = d[j], d[j - 1]; j -= 1
+    if not d: return ''
+    sp, sc, last, n = 0, d[0], (0 if CCC.get(d[0], 0) == 0 else 256), 1
+    for i in range(1, len(d)):
+        ch, cl = d[i], CCC.get(d[i], 0)
+        comp = _pair(sc, ch)
+        if comp is not None and (last < cl or last == 0):
+            d[sp] = comp; sc = comp
+        else:
+            if cl == 0: sp, sc = n, ch
+            last = cl; d[n] = ch; n += 1
+    return ''.join(chr(c) for c in d[:n])
+
+
+def first_fault(s, lf_tab_ok):
+    """The first fault of the string s under TAP-11 §3.5 items 1 and 2: (reason, code point or None), or None."""
+    for ch in s:                                     # items 1, third bullet: unpaired surrogates
+        if 0xD800 <= ord(ch) <= 0xDFFF: return ('unpaired-surrogate', ord(ch))
     prev = None
     for ch in s:
         cp = ord(ch)
+        if _in(BIDI, cp): return ('bidi-control', cp)
+        if lf_tab_ok and cp in (0x0A, 0x09):
+            prev = cp; continue
         if 0xFE00 <= cp <= 0xFE0F or 0xE0100 <= cp <= 0xE01EF:      # variation selectors
-            ok = cp in (0xFE0E, 0xFE0F) and prev is not None and _in(EMOJI, prev)
-            if not ok: return cp
-        elif _in(CF, cp) or _in(DEFAULT_IGNORABLE, cp) or cp in (0x2800, 0x1D159):
-            return cp
-        elif (cp <= 0x1F or 0x7F <= cp <= 0x9F) and not (in_description and cp in (0x0A, 0x09)):
-            return cp
+            ok = cp in (0xFE0E, 0xFE0F) and prev is not None and _in(EMOJI, prev) \
+                and not (0xFE00 <= prev <= 0xFE0F or 0xE0100 <= prev <= 0xE01EF)
+            if not ok: return ('hidden-text', cp)
+        elif _in(CF, cp) or _in(CC, cp) or _in(DI, cp) or cp in (0x2028, 0x2029, 0x2800, 0x1D159):
+            return ('hidden-text', cp)
         prev = cp
+    if nfc(s) != s: return ('not-nfc', None)         # item 2
     return None
 
 
 def found(tools):
-    """The first hidden code point of every string and member name in the covered members, in a fixed walk order."""
+    """The first fault of every string and member name in the covered members, in a fixed walk order. U+000A and U+0009
+    are allowed in a string that is the value of a member named description, at any depth (TAP-draft-mcp-tools §3.4)."""
     out = []
     def walk(v, key):
         if isinstance(v, str):
-            c = hidden(v, key == 'description')
-            if c is not None: out.append(c)
+            f = first_fault(v, key == 'description')
+            if f is not None: out.append(f)
         elif isinstance(v, list):
-            for x in v: walk(x, key)
+            for x in v: walk(x, None)
         elif isinstance(v, dict):
             for k, x in v.items():
-                c = hidden(k, False)
-                if c is not None: out.append(c)
+                f = first_fault(k, False)
+                if f is not None: out.append(f)
                 walk(x, k)
     for t in tools if isinstance(tools, list) else []:
         if not isinstance(t, dict): continue
@@ -97,14 +132,16 @@ def found(tools):
 
 
 def main():
-    path = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(os.path.abspath(__file__)), 'hidden-text.json')
+    path = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, 'hidden-text.json')
     doc = json.load(open(path, encoding='utf-8'))
     bad = 0
     for c in doc['cases']:
         got = found(json.loads(c['toolsJson']))
-        want = [int(m, 16) for m in re.findall(r'U\+([0-9A-F]{4,6})$', '\n'.join(c['problems']), re.M)]
-        ok = (len(got) > 0) == c['refused'] and got == want
-        print(('ok       ' if ok else 'MISMATCH ') + c['name'] + ('' if ok else ' got %r want %r' % ([hex(x) for x in got], [hex(x) for x in want])))
+        want_cps = [int(m, 16) for m in re.findall(r'U\+([0-9A-F]{4,6})$', '\n'.join(c['problems']), re.M)]
+        got_cps = [cp for _, cp in got if cp is not None]
+        ok = (len(got) > 0) == c['refused'] and got_cps == want_cps and [r for r, _ in got] == c['reasons']
+        print(('ok       ' if ok else 'MISMATCH ') + c['name'] + ('' if ok else ' got %r want %r %r' % (
+            got, want_cps, c['reasons'])))
         bad += not ok
     print('%d cases, %d mismatches' % (len(doc['cases']), bad))
     sys.exit(1 if bad else 0)
