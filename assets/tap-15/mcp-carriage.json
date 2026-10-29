@@ -1,0 +1,1026 @@
+{
+ "tap": "TAP-draft-mcp-tools, Specification §4.3 (signed calls over MCP) and §7 (which service an MCP endpoint belongs to)",
+ "source": "Written from the text of the specification. Every envelope is copied from envelopes.json in this directory, unchanged or with the change the case names; no new signature was made. A case whose outcome is accepted names the envelopes.json case whose digest and recovered signer apply, since the client's own id, method and params equal that case's.",
+ "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+ "signerAddress": "0x1563915e194D8CfBA1943570603F7606A3115508",
+ "maxSkew": 300,
+ "note": "request and response are JSON-RPC messages as sent over Streamable HTTP. The client verifies with the container and signer above, its own request id (request.params._meta[\"fun.tapeapi/request\"].id), request.params.name as the method and request.params.arguments as params. now is the client's clock.",
+ "carriage": [
+  {
+   "name": "result: the outer tool result equals the signed result; the envelope is the one of envelopes.json for call-1",
+   "now": 1790000030,
+   "request": {
+    "jsonrpc": "2.0",
+    "id": 7,
+    "method": "tools/call",
+    "params": {
+     "name": "add",
+     "arguments": {
+      "a": 2,
+      "b": 3
+     },
+     "_meta": {
+      "fun.tapeapi/request": {
+       "id": "call-1"
+      }
+     }
+    }
+   },
+   "response": {
+    "jsonrpc": "2.0",
+    "id": 7,
+    "result": {
+     "content": [
+      {
+       "type": "text",
+       "text": "5"
+      }
+     ],
+     "structuredContent": {
+      "sum": 5
+     },
+     "_meta": {
+      "fun.tapeapi/envelope": {
+       "id": "call-1",
+       "ok": true,
+       "result": {
+        "content": [
+         {
+          "type": "text",
+          "text": "5"
+         }
+        ],
+        "structuredContent": {
+         "sum": 5
+        }
+       },
+       "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+       "ts": 1790000000,
+       "sig": "0x6043d4f7c0e31e444b654217c9fda6191450357c9e8ec12f0d3f6e5b06c8ac912fc156f8f89c3a66bd0d883884959b1ebc99cf3f035d60c494f82ce859e4a3d41c"
+      }
+     }
+    }
+   },
+   "outcome": "accepted result",
+   "signatureFrom": "envelopes.json case call-1"
+  },
+  {
+   "name": "tool error: isError true inside a signed result, ok true",
+   "now": 1790000030,
+   "request": {
+    "jsonrpc": "2.0",
+    "id": 8,
+    "method": "tools/call",
+    "params": {
+     "name": "fails",
+     "arguments": {},
+     "_meta": {
+      "fun.tapeapi/request": {
+       "id": "call-2"
+      }
+     }
+    }
+   },
+   "response": {
+    "jsonrpc": "2.0",
+    "id": 8,
+    "result": {
+     "content": [
+      {
+       "type": "text",
+       "text": "no luck"
+      }
+     ],
+     "isError": true,
+     "_meta": {
+      "fun.tapeapi/envelope": {
+       "id": "call-2",
+       "ok": true,
+       "result": {
+        "content": [
+         {
+          "type": "text",
+          "text": "no luck"
+         }
+        ],
+        "isError": true
+       },
+       "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+       "ts": 1790000000,
+       "sig": "0x503a7f4b82d6df154c552ae3ca9a0d4aa49522352cb945f6b55749d8a24b609b31144e8bc8a2de57786aecddfca3d42019c7dc74510440800c8104d6a4bc7bb71c"
+      }
+     }
+    }
+   },
+   "outcome": "accepted result",
+   "signatureFrom": "envelopes.json case call-2"
+  },
+  {
+   "name": "signed TOOLS_CHANGED: isError true and one text item, the canonical JSON of error",
+   "now": 1790000030,
+   "request": {
+    "jsonrpc": "2.0",
+    "id": 9,
+    "method": "tools/call",
+    "params": {
+     "name": "add",
+     "arguments": {
+      "a": 2,
+      "b": 3
+     },
+     "_meta": {
+      "fun.tapeapi/request": {
+       "id": "call-3"
+      }
+     }
+    }
+   },
+   "response": {
+    "jsonrpc": "2.0",
+    "id": 9,
+    "result": {
+     "content": [
+      {
+       "type": "text",
+       "text": "{\"code\":\"TOOLS_CHANGED\",\"data\":{\"current\":\"df5931dcb68ac516132cb03877ddf3a292c66d40a986f33f7bf61a8040ce7a4d\",\"published\":\"2cb770664010656778a2bfe845829e241edcb057a76e09c55d4efa231fdba132\"},\"message\":\"the upstream MCP server changed its tool definitions since the manifest was published; the holder must republish the manifest before calls are served again\"}"
+      }
+     ],
+     "isError": true,
+     "_meta": {
+      "fun.tapeapi/envelope": {
+       "id": "call-3",
+       "ok": false,
+       "error": {
+        "code": "TOOLS_CHANGED",
+        "message": "the upstream MCP server changed its tool definitions since the manifest was published; the holder must republish the manifest before calls are served again",
+        "data": {
+         "published": "2cb770664010656778a2bfe845829e241edcb057a76e09c55d4efa231fdba132",
+         "current": "df5931dcb68ac516132cb03877ddf3a292c66d40a986f33f7bf61a8040ce7a4d"
+        }
+       },
+       "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+       "ts": 1790000061,
+       "sig": "0xb51e709ade9cd9a5ebba6d68bdea629fc55891d1c1cd9294f9f6f292c9fe848e502a901cc44dfd0f429fb92de0aad90054c34bfc769ec3d75541dca884ac14e51c"
+      }
+     }
+    }
+   },
+   "outcome": "accepted error",
+   "signatureFrom": "envelopes.json case call-3"
+  },
+  {
+   "name": "unsigned provenance text and a verification link appended to content: what the model would read is not what was signed",
+   "now": 1790000030,
+   "request": {
+    "jsonrpc": "2.0",
+    "id": 10,
+    "method": "tools/call",
+    "params": {
+     "name": "add",
+     "arguments": {
+      "a": 2,
+      "b": 3
+     },
+     "_meta": {
+      "fun.tapeapi/request": {
+       "id": "call-1"
+      }
+     }
+    }
+   },
+   "response": {
+    "jsonrpc": "2.0",
+    "id": 10,
+    "result": {
+     "content": [
+      {
+       "type": "text",
+       "text": "5"
+      },
+      {
+       "type": "text",
+       "text": "Signed by service 0x86DD... Verify: https://verify.example/#r=..."
+      }
+     ],
+     "structuredContent": {
+      "sum": 5
+     },
+     "_meta": {
+      "fun.tapeapi/envelope": {
+       "id": "call-1",
+       "ok": true,
+       "result": {
+        "content": [
+         {
+          "type": "text",
+          "text": "5"
+         }
+        ],
+        "structuredContent": {
+         "sum": 5
+        }
+       },
+       "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+       "ts": 1790000000,
+       "sig": "0x6043d4f7c0e31e444b654217c9fda6191450357c9e8ec12f0d3f6e5b06c8ac912fc156f8f89c3a66bd0d883884959b1ebc99cf3f035d60c494f82ce859e4a3d41c"
+      }
+     }
+    }
+   },
+   "outcome": "binding failure"
+  },
+  {
+   "name": "a proxy rewrites content and structuredContent and keeps the valid envelope in _meta",
+   "now": 1790000030,
+   "request": {
+    "jsonrpc": "2.0",
+    "id": 11,
+    "method": "tools/call",
+    "params": {
+     "name": "add",
+     "arguments": {
+      "a": 2,
+      "b": 3
+     },
+     "_meta": {
+      "fun.tapeapi/request": {
+       "id": "call-1"
+      }
+     }
+    }
+   },
+   "response": {
+    "jsonrpc": "2.0",
+    "id": 11,
+    "result": {
+     "content": [
+      {
+       "type": "text",
+       "text": "7"
+      }
+     ],
+     "structuredContent": {
+      "sum": 7
+     },
+     "_meta": {
+      "fun.tapeapi/envelope": {
+       "id": "call-1",
+       "ok": true,
+       "result": {
+        "content": [
+         {
+          "type": "text",
+          "text": "5"
+         }
+        ],
+        "structuredContent": {
+         "sum": 5
+        }
+       },
+       "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+       "ts": 1790000000,
+       "sig": "0x6043d4f7c0e31e444b654217c9fda6191450357c9e8ec12f0d3f6e5b06c8ac912fc156f8f89c3a66bd0d883884959b1ebc99cf3f035d60c494f82ce859e4a3d41c"
+      }
+     }
+    }
+   },
+   "outcome": "binding failure"
+  },
+  {
+   "name": "replay: the client chose call-9, the server returns the valid envelope of another request (call-1)",
+   "now": 1790000030,
+   "request": {
+    "jsonrpc": "2.0",
+    "id": 12,
+    "method": "tools/call",
+    "params": {
+     "name": "add",
+     "arguments": {
+      "a": 2,
+      "b": 3
+     },
+     "_meta": {
+      "fun.tapeapi/request": {
+       "id": "call-9"
+      }
+     }
+    }
+   },
+   "response": {
+    "jsonrpc": "2.0",
+    "id": 12,
+    "result": {
+     "content": [
+      {
+       "type": "text",
+       "text": "5"
+      }
+     ],
+     "structuredContent": {
+      "sum": 5
+     },
+     "_meta": {
+      "fun.tapeapi/envelope": {
+       "id": "call-1",
+       "ok": true,
+       "result": {
+        "content": [
+         {
+          "type": "text",
+          "text": "5"
+         }
+        ],
+        "structuredContent": {
+         "sum": 5
+        }
+       },
+       "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+       "ts": 1790000000,
+       "sig": "0x6043d4f7c0e31e444b654217c9fda6191450357c9e8ec12f0d3f6e5b06c8ac912fc156f8f89c3a66bd0d883884959b1ebc99cf3f035d60c494f82ce859e4a3d41c"
+      }
+     }
+    }
+   },
+   "outcome": "binding failure"
+  },
+  {
+   "name": "replay with other params: the client asked add(2, 4) under call-1 and receives the envelope signed for add(2, 3)",
+   "now": 1790000030,
+   "request": {
+    "jsonrpc": "2.0",
+    "id": 13,
+    "method": "tools/call",
+    "params": {
+     "name": "add",
+     "arguments": {
+      "a": 2,
+      "b": 4
+     },
+     "_meta": {
+      "fun.tapeapi/request": {
+       "id": "call-1"
+      }
+     }
+    }
+   },
+   "response": {
+    "jsonrpc": "2.0",
+    "id": 13,
+    "result": {
+     "content": [
+      {
+       "type": "text",
+       "text": "5"
+      }
+     ],
+     "structuredContent": {
+      "sum": 5
+     },
+     "_meta": {
+      "fun.tapeapi/envelope": {
+       "id": "call-1",
+       "ok": true,
+       "result": {
+        "content": [
+         {
+          "type": "text",
+          "text": "5"
+         }
+        ],
+        "structuredContent": {
+         "sum": 5
+        }
+       },
+       "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+       "ts": 1790000000,
+       "sig": "0x6043d4f7c0e31e444b654217c9fda6191450357c9e8ec12f0d3f6e5b06c8ac912fc156f8f89c3a66bd0d883884959b1ebc99cf3f035d60c494f82ce859e4a3d41c"
+      }
+     }
+    }
+   },
+   "outcome": "binding failure"
+  },
+  {
+   "name": "the envelope names another container",
+   "now": 1790000030,
+   "request": {
+    "jsonrpc": "2.0",
+    "id": 14,
+    "method": "tools/call",
+    "params": {
+     "name": "add",
+     "arguments": {
+      "a": 2,
+      "b": 3
+     },
+     "_meta": {
+      "fun.tapeapi/request": {
+       "id": "call-1"
+      }
+     }
+    }
+   },
+   "response": {
+    "jsonrpc": "2.0",
+    "id": 14,
+    "result": {
+     "content": [
+      {
+       "type": "text",
+       "text": "5"
+      }
+     ],
+     "structuredContent": {
+      "sum": 5
+     },
+     "_meta": {
+      "fun.tapeapi/envelope": {
+       "id": "call-1",
+       "ok": true,
+       "result": {
+        "content": [
+         {
+          "type": "text",
+          "text": "5"
+         }
+        ],
+        "structuredContent": {
+         "sum": 5
+        }
+       },
+       "container": "0x0000000000000000000000000000000000000001",
+       "ts": 1790000000,
+       "sig": "0x6043d4f7c0e31e444b654217c9fda6191450357c9e8ec12f0d3f6e5b06c8ac912fc156f8f89c3a66bd0d883884959b1ebc99cf3f035d60c494f82ce859e4a3d41c"
+      }
+     }
+    }
+   },
+   "outcome": "binding failure"
+  },
+  {
+   "name": "stale: the client's clock is 301 seconds after ts",
+   "now": 1790000301,
+   "request": {
+    "jsonrpc": "2.0",
+    "id": 15,
+    "method": "tools/call",
+    "params": {
+     "name": "add",
+     "arguments": {
+      "a": 2,
+      "b": 3
+     },
+     "_meta": {
+      "fun.tapeapi/request": {
+       "id": "call-1"
+      }
+     }
+    }
+   },
+   "response": {
+    "jsonrpc": "2.0",
+    "id": 15,
+    "result": {
+     "content": [
+      {
+       "type": "text",
+       "text": "5"
+      }
+     ],
+     "structuredContent": {
+      "sum": 5
+     },
+     "_meta": {
+      "fun.tapeapi/envelope": {
+       "id": "call-1",
+       "ok": true,
+       "result": {
+        "content": [
+         {
+          "type": "text",
+          "text": "5"
+         }
+        ],
+        "structuredContent": {
+         "sum": 5
+        }
+       },
+       "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+       "ts": 1790000000,
+       "sig": "0x6043d4f7c0e31e444b654217c9fda6191450357c9e8ec12f0d3f6e5b06c8ac912fc156f8f89c3a66bd0d883884959b1ebc99cf3f035d60c494f82ce859e4a3d41c"
+      }
+     }
+    }
+   },
+   "outcome": "binding failure"
+  },
+  {
+   "name": "the server ignores fun.tapeapi/request and returns only a receipt of its own shape with an id it chose (as the public instance did on 2026-10-29)",
+   "now": 1790000030,
+   "request": {
+    "jsonrpc": "2.0",
+    "id": 16,
+    "method": "tools/call",
+    "params": {
+     "name": "add",
+     "arguments": {
+      "a": 2,
+      "b": 3
+     },
+     "_meta": {
+      "fun.tapeapi/request": {
+       "id": "call-1"
+      }
+     }
+    }
+   },
+   "response": {
+    "jsonrpc": "2.0",
+    "id": 16,
+    "result": {
+     "content": [
+      {
+       "type": "text",
+       "text": "5"
+      }
+     ],
+     "structuredContent": {
+      "sum": 5
+     },
+     "_meta": {
+      "fun.tapeapi/receipt": {
+       "v": 1,
+       "service": {
+        "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95"
+       },
+       "method": "add",
+       "params": {
+        "a": 2,
+        "b": 3
+       },
+       "id": "mcp-server-chosen-0",
+       "ts": 1790000000,
+       "ok": true,
+       "result": {
+        "content": [
+         {
+          "type": "text",
+          "text": "5"
+         }
+        ],
+        "structuredContent": {
+         "sum": 5
+        }
+       },
+       "sig": "0x6043d4f7c0e31e444b654217c9fda6191450357c9e8ec12f0d3f6e5b06c8ac912fc156f8f89c3a66bd0d883884959b1ebc99cf3f035d60c494f82ce859e4a3d41c"
+      }
+     }
+    }
+   },
+   "outcome": "transport failure"
+  },
+  {
+   "name": "an envelope under the right key, but over an id the server chose",
+   "now": 1790000030,
+   "request": {
+    "jsonrpc": "2.0",
+    "id": 17,
+    "method": "tools/call",
+    "params": {
+     "name": "add",
+     "arguments": {
+      "a": 2,
+      "b": 3
+     },
+     "_meta": {
+      "fun.tapeapi/request": {
+       "id": "call-1"
+      }
+     }
+    }
+   },
+   "response": {
+    "jsonrpc": "2.0",
+    "id": 17,
+    "result": {
+     "content": [
+      {
+       "type": "text",
+       "text": "5"
+      }
+     ],
+     "structuredContent": {
+      "sum": 5
+     },
+     "_meta": {
+      "fun.tapeapi/envelope": {
+       "id": "mcp-server-chosen-0",
+       "ok": true,
+       "result": {
+        "content": [
+         {
+          "type": "text",
+          "text": "5"
+         }
+        ],
+        "structuredContent": {
+         "sum": 5
+        }
+       },
+       "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+       "ts": 1790000000,
+       "sig": "0x6043d4f7c0e31e444b654217c9fda6191450357c9e8ec12f0d3f6e5b06c8ac912fc156f8f89c3a66bd0d883884959b1ebc99cf3f035d60c494f82ce859e4a3d41c"
+      }
+     }
+    }
+   },
+   "outcome": "binding failure"
+  },
+  {
+   "name": "revision 2026-07-28: resultType complete next to the signed members (not signed); the request _meta also carries the protocol version",
+   "now": 1790000030,
+   "request": {
+    "jsonrpc": "2.0",
+    "id": 20,
+    "method": "tools/call",
+    "params": {
+     "name": "add",
+     "arguments": {
+      "a": 2,
+      "b": 3
+     },
+     "_meta": {
+      "fun.tapeapi/request": {
+       "id": "call-1"
+      },
+      "io.modelcontextprotocol/protocolVersion": "2026-07-28"
+     }
+    }
+   },
+   "response": {
+    "jsonrpc": "2.0",
+    "id": 20,
+    "result": {
+     "content": [
+      {
+       "type": "text",
+       "text": "5"
+      }
+     ],
+     "structuredContent": {
+      "sum": 5
+     },
+     "_meta": {
+      "fun.tapeapi/envelope": {
+       "id": "call-1",
+       "ok": true,
+       "result": {
+        "content": [
+         {
+          "type": "text",
+          "text": "5"
+         }
+        ],
+        "structuredContent": {
+         "sum": 5
+        }
+       },
+       "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+       "ts": 1790000000,
+       "sig": "0x6043d4f7c0e31e444b654217c9fda6191450357c9e8ec12f0d3f6e5b06c8ac912fc156f8f89c3a66bd0d883884959b1ebc99cf3f035d60c494f82ce859e4a3d41c"
+      }
+     },
+     "resultType": "complete"
+    }
+   },
+   "outcome": "accepted result",
+   "signatureFrom": "envelopes.json case call-1"
+  },
+  {
+   "name": "revision 2026-07-28: resultType input_required cannot carry an envelope",
+   "now": 1790000030,
+   "request": {
+    "jsonrpc": "2.0",
+    "id": 21,
+    "method": "tools/call",
+    "params": {
+     "name": "add",
+     "arguments": {
+      "a": 2,
+      "b": 3
+     },
+     "_meta": {
+      "fun.tapeapi/request": {
+       "id": "call-1"
+      }
+     }
+    }
+   },
+   "response": {
+    "jsonrpc": "2.0",
+    "id": 21,
+    "result": {
+     "content": [
+      {
+       "type": "text",
+       "text": "5"
+      }
+     ],
+     "structuredContent": {
+      "sum": 5
+     },
+     "_meta": {
+      "fun.tapeapi/envelope": {
+       "id": "call-1",
+       "ok": true,
+       "result": {
+        "content": [
+         {
+          "type": "text",
+          "text": "5"
+         }
+        ],
+        "structuredContent": {
+         "sum": 5
+        }
+       },
+       "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+       "ts": 1790000000,
+       "sig": "0x6043d4f7c0e31e444b654217c9fda6191450357c9e8ec12f0d3f6e5b06c8ac912fc156f8f89c3a66bd0d883884959b1ebc99cf3f035d60c494f82ce859e4a3d41c"
+      }
+     },
+     "resultType": "input_required"
+    }
+   },
+   "outcome": "binding failure"
+  },
+  {
+   "name": "a JSON-RPC error instead of a tool result",
+   "now": 1790000030,
+   "request": {
+    "jsonrpc": "2.0",
+    "id": 18,
+    "method": "tools/call",
+    "params": {
+     "name": "add",
+     "arguments": {
+      "a": 2,
+      "b": 3
+     },
+     "_meta": {
+      "fun.tapeapi/request": {
+       "id": "call-1"
+      }
+     }
+    }
+   },
+   "response": {
+    "jsonrpc": "2.0",
+    "id": 18,
+    "error": {
+     "code": -32603,
+     "message": "internal error"
+    }
+   },
+   "outcome": "transport failure"
+  },
+  {
+   "name": "a signed error carried in a tool result whose isError is false",
+   "now": 1790000030,
+   "request": {
+    "jsonrpc": "2.0",
+    "id": 19,
+    "method": "tools/call",
+    "params": {
+     "name": "add",
+     "arguments": {
+      "a": 2,
+      "b": 3
+     },
+     "_meta": {
+      "fun.tapeapi/request": {
+       "id": "call-3"
+      }
+     }
+    }
+   },
+   "response": {
+    "jsonrpc": "2.0",
+    "id": 19,
+    "result": {
+     "content": [
+      {
+       "type": "text",
+       "text": "{\"code\":\"TOOLS_CHANGED\",\"data\":{\"current\":\"df5931dcb68ac516132cb03877ddf3a292c66d40a986f33f7bf61a8040ce7a4d\",\"published\":\"2cb770664010656778a2bfe845829e241edcb057a76e09c55d4efa231fdba132\"},\"message\":\"the upstream MCP server changed its tool definitions since the manifest was published; the holder must republish the manifest before calls are served again\"}"
+      }
+     ],
+     "isError": false,
+     "_meta": {
+      "fun.tapeapi/envelope": {
+       "id": "call-3",
+       "ok": false,
+       "error": {
+        "code": "TOOLS_CHANGED",
+        "message": "the upstream MCP server changed its tool definitions since the manifest was published; the holder must republish the manifest before calls are served again",
+        "data": {
+         "published": "2cb770664010656778a2bfe845829e241edcb057a76e09c55d4efa231fdba132",
+         "current": "df5931dcb68ac516132cb03877ddf3a292c66d40a986f33f7bf61a8040ce7a4d"
+        }
+       },
+       "container": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+       "ts": 1790000061,
+       "sig": "0xb51e709ade9cd9a5ebba6d68bdea629fc55891d1c1cd9294f9f6f292c9fe848e502a901cc44dfd0f429fb92de0aad90054c34bfc769ec3d75541dca884ac14e51c"
+      }
+     }
+    }
+   },
+   "outcome": "binding failure"
+  }
+ ],
+ "endpointIdentityNote": "resolution stands for a resolution under TAP-11 §2: its outcome and, when resolved, the parts of the manifest that matter here. serverInfoName is what the MCP server calls itself; it never changes the outcome.",
+ "endpointIdentity": [
+  {
+   "name": "the URL is the manifest's mcp.endpoint",
+   "url": "https://mcp.example.com/mcp",
+   "resolution": {
+    "outcome": "resolved",
+    "manifest": {
+     "endpoints": {
+      "live": [
+       "https://api.example.com/tapeapi/v1"
+      ],
+      "async": false
+     },
+     "mcp": {
+      "endpoint": "https://mcp.example.com/mcp",
+      "toolsSha256": "2cb770664010656778a2bfe845829e241edcb057a76e09c55d4efa231fdba132"
+     }
+    }
+   },
+   "outcome": "endpoint-bound"
+  },
+  {
+   "name": "a look-alike server names the service in serverInfo; the manifest lists another endpoint",
+   "url": "https://mcp.example-verify.com/mcp",
+   "resolution": {
+    "outcome": "resolved",
+    "manifest": {
+     "endpoints": {
+      "live": [
+       "https://api.example.com/tapeapi/v1"
+      ],
+      "async": false
+     },
+     "mcp": {
+      "endpoint": "https://mcp.example.com/mcp",
+      "toolsSha256": "2cb770664010656778a2bfe845829e241edcb057a76e09c55d4efa231fdba132"
+     }
+    }
+   },
+   "outcome": "endpoint-not-listed",
+   "serverInfoName": "tapeapi-11.1013.tape"
+  },
+  {
+   "name": "a trailing slash makes another URL",
+   "url": "https://mcp.example.com/mcp/",
+   "resolution": {
+    "outcome": "resolved",
+    "manifest": {
+     "endpoints": {
+      "live": [
+       "https://api.example.com/tapeapi/v1"
+      ],
+      "async": false
+     },
+     "mcp": {
+      "endpoint": "https://mcp.example.com/mcp",
+      "toolsSha256": "2cb770664010656778a2bfe845829e241edcb057a76e09c55d4efa231fdba132"
+     }
+    }
+   },
+   "outcome": "endpoint-not-listed"
+  },
+  {
+   "name": "host case differs: compared code unit for code unit",
+   "url": "https://MCP.example.com/mcp",
+   "resolution": {
+    "outcome": "resolved",
+    "manifest": {
+     "endpoints": {
+      "live": [
+       "https://api.example.com/tapeapi/v1"
+      ],
+      "async": false
+     },
+     "mcp": {
+      "endpoint": "https://mcp.example.com/mcp",
+      "toolsSha256": "2cb770664010656778a2bfe845829e241edcb057a76e09c55d4efa231fdba132"
+     }
+    }
+   },
+   "outcome": "endpoint-not-listed"
+  },
+  {
+   "name": "the manifest has no mcp member; the URL is the service's MCP front, named only by serverInfo (the public instance on 2026-10-29)",
+   "url": "https://api.example.com/mcp",
+   "resolution": {
+    "outcome": "resolved",
+    "manifest": {
+     "endpoints": {
+      "live": [
+       "https://api.example.com/tapeapi/v1"
+      ],
+      "async": false
+     }
+    }
+   },
+   "outcome": "no-mcp",
+   "serverInfoName": "tapeapi-11.1013.tape"
+  },
+  {
+   "name": "a live endpoint is not an MCP endpoint",
+   "url": "https://api.example.com/tapeapi/v1",
+   "resolution": {
+    "outcome": "resolved",
+    "manifest": {
+     "endpoints": {
+      "live": [
+       "https://api.example.com/tapeapi/v1"
+      ],
+      "async": false
+     }
+    }
+   },
+   "outcome": "no-mcp"
+  },
+  {
+   "name": "an unusable mcp member (http://)",
+   "url": "http://mcp.example.com/mcp",
+   "resolution": {
+    "outcome": "resolved",
+    "manifest": {
+     "endpoints": {
+      "live": [
+       "https://api.example.com/tapeapi/v1"
+      ],
+      "async": false
+     },
+     "mcp": {
+      "endpoint": "http://mcp.example.com/mcp",
+      "toolsSha256": "2cb770664010656778a2bfe845829e241edcb057a76e09c55d4efa231fdba132"
+     }
+    }
+   },
+   "outcome": "no-mcp"
+  },
+  {
+   "name": "an unusable mcp member (upper-case digest)",
+   "url": "https://mcp.example.com/mcp",
+   "resolution": {
+    "outcome": "resolved",
+    "manifest": {
+     "endpoints": {
+      "live": [
+       "https://api.example.com/tapeapi/v1"
+      ],
+      "async": false
+     },
+     "mcp": {
+      "endpoint": "https://mcp.example.com/mcp",
+      "toolsSha256": "2CB770664010656778A2BFE845829E241EDCB057A76E09C55D4EFA231FDBA132"
+     }
+    }
+   },
+   "outcome": "no-mcp"
+  },
+  {
+   "name": "an unusable mcp member (query in the endpoint)",
+   "url": "https://mcp.example.com/mcp?k=1",
+   "resolution": {
+    "outcome": "resolved",
+    "manifest": {
+     "endpoints": {
+      "live": [
+       "https://api.example.com/tapeapi/v1"
+      ],
+      "async": false
+     },
+     "mcp": {
+      "endpoint": "https://mcp.example.com/mcp?k=1",
+      "toolsSha256": "2cb770664010656778a2bfe845829e241edcb057a76e09c55d4efa231fdba132"
+     }
+    }
+   },
+   "outcome": "no-mcp"
+  },
+  {
+   "name": "resolution fails: the TAP-11 outcome is reported",
+   "url": "https://mcp.example.com/mcp",
+   "resolution": {
+    "outcome": "delegation-invalid",
+    "manifest": null
+   },
+   "outcome": "delegation-invalid"
+  }
+ ]
+}
