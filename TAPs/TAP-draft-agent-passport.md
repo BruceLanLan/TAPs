@@ -24,11 +24,11 @@ A **passport** binds an ERC-8004 agent identity (`agentId` in the identity regis
 
 **Builds on drafts not yet merged.** `requires` lists only TAPs merged as Drafts (TAP-10, TAP-11, TAP-13) and ERC-8004 as deployed. This text also refers to the following pull requests of the TAPs repository, each at the commit named here. Every rule that depends on one of them is conditional on a tool implementing that draft at that commit; none of the core rules P-1 to P-11 depends on them. When one is merged and numbered, the references change to its number.
 
-- [#16](https://github.com/TapeOutProtocol/TAPs/pull/16), *MCP Tools as Container Service Methods*, at commit `13d1179f89b8c7037ebfb4e3ec3e574c1740e989`: the manifest member `mcp` (display rule D-7).
-- [#47](https://github.com/TapeOutProtocol/TAPs/pull/47), *Container Agent Mandates and Task Messages, Phase 0*, at commit `50a5a6f92abfefb3cdde4af2c86a9b18c087a3d6`, and [#60](https://github.com/TapeOutProtocol/TAPs/pull/60), *Container Agent Mandates Enforced by Escrow Channels, Phase 1*, at commit `42ce7aef2d16ef64c3d8ba94e255076c3db16a25`: the authorisation layers of §11.
+- TAP-15, *MCP Tools as Container Service Methods* (pull request [#16](https://github.com/TapeOutProtocol/TAPs/pull/16), merged as a Draft from commit `13d1179f89b8c7037ebfb4e3ec3e574c1740e989`): the manifest member `mcp` (display rule D-7).
+- TAP-18, *Container Agent Mandates and Task Messages, Phase 0* (pull request [#47](https://github.com/TapeOutProtocol/TAPs/pull/47), merged as a Draft from commit `50a5a6f92abfefb3cdde4af2c86a9b18c087a3d6`), and [#60](https://github.com/TapeOutProtocol/TAPs/pull/60), *Container Agent Mandates Enforced by Escrow Channels, Phase 1*, at commit `42ce7aef2d16ef64c3d8ba94e255076c3db16a25`: the authorisation layers of §11.
 - [#49](https://github.com/TapeOutProtocol/TAPs/pull/49), *Agent Member of the Service Manifest*, at commit `2af5cb34a02969491f88d0343edc6ccbfdca73ac`: informative only (Rationale).
 - [#54](https://github.com/TapeOutProtocol/TAPs/pull/54), *Evidence-Backed Reviews between Containers*, at commit `703b2a91edf7545b3179a08b8041b49190fd4a0a`: the review record, its review hash and its counting rules, used by §10.
-- [#12](https://github.com/TapeOutProtocol/TAPs/pull/12) (*Private Channels*, at commit `496c3c90c9dc191e434659b451f718bd02cd5e79`), [#52](https://github.com/TapeOutProtocol/TAPs/pull/52) (*Payment Vouchers*, at commit `82b412495b7ee97dda6e86174e98cd051ea61bda`), [#59](https://github.com/TapeOutProtocol/TAPs/pull/59) (*Escrow Channels*, at commit `098de456152615d7c289c650a8a50533ccf53df1`) and [#77](https://github.com/TapeOutProtocol/TAPs/pull/77) (*Visitor Grants*, at commit `24eaf4c8514535f079bbe9f99172e2d540c28698`): mentioned in §8, §11 and the Rationale; nothing here depends on them.
+- TAP-14 (*Private Channels*, merged as a Draft from pull request [#12](https://github.com/TapeOutProtocol/TAPs/pull/12) at commit `496c3c90c9dc191e434659b451f718bd02cd5e79`), [#52](https://github.com/TapeOutProtocol/TAPs/pull/52) (*Payment Vouchers*, at commit `82b412495b7ee97dda6e86174e98cd051ea61bda`), [#59](https://github.com/TapeOutProtocol/TAPs/pull/59) (*Escrow Channels*, at commit `098de456152615d7c289c650a8a50533ccf53df1`) and [#77](https://github.com/TapeOutProtocol/TAPs/pull/77) (*Visitor Grants*, at commit `24eaf4c8514535f079bbe9f99172e2d540c28698`): mentioned in §8, §11 and the Rationale; nothing here depends on them.
 
 ## Motivation
 
@@ -190,7 +190,7 @@ The file MUST contain a top-level member `tap` that is valid under this JSON Sch
 
 1. `tokenId` MUST NOT exceed 10^18 (TAP-10 §3.1; the pattern cannot express this bound).
 2. **R-1.** `chainId`, `processor`, `tokenId` and `container` MUST equal the values read from the chain under §3. Where they differ, the chain prevails, and the result is `file-chain-mismatch`.
-3. **R-4.** `manifest`, when present, gives the SHA-256 of the TAP-11 manifest when the file was written. A tool uses it only to notice that the two files were not written together (warning `manifest-hash-differs`), never in place of the site store's own hash. The `tap` member does not copy any digest of the manifest's members (such as #16's `toolsSha256`); the manifest is the only source of them.
+3. **R-4.** `manifest`, when present, gives the SHA-256 of the TAP-11 manifest when the file was written. A tool uses it only to notice that the two files were not written together (warning `manifest-hash-differs`), never in place of the site store's own hash. The `tap` member does not copy any digest of the manifest's members (such as TAP-15's `toolsSha256`); the manifest is the only source of them.
 
 #### 5.4 Forbidden member names
 
@@ -250,12 +250,12 @@ Between the registration transaction and the transaction that writes the registr
 - **S-2.** A signer speaks for the service only through TAP-11 §4.5. Addresses in the registration file, an agent card, an MCP handshake or any other document are display only, and a tool MUST NOT accept a signer from them.
 - **S-3.** A holder whose identity is in `wallet-unset` restores P-9 only by signing `AgentWalletSet` itself and submitting `setAgentWallet(agentId, holder, deadline, signature)` (§2 item 5) within the registry's deadline. A tool that prepares this MUST read the block time immediately before asking for the signature, MUST set `deadline` no more than 240 seconds after it, and MUST prepare a new signature when the window passes. When a wallet returns a signature as `r ‖ s` and a recovery identifier, a tool MUST assemble the 65-byte form and MUST check that it recovers to the holder before submitting it.
 - **S-4.** A tool MUST treat a change of the identity registry's implementation as `registry-changed` (§2 item 2) until it is updated with a new accepted implementation.
-- A holder that can produce EIP-712 signatures but cannot produce EIP-191 `personal_sign` signatures, such as a custodial wallet that exposes typed-data signing only, cannot derive a TapeSend messaging key under TAP-10 §14.2. Its passport can receive public messages (TAP-10 §15.2) and can use private channels whose key record is an EIP-712 signature (#12, key type `"tape-channel/v1"`). A tool MUST NOT report the absence of a sealed inbox for such a holder as a failure of the passport.
+- A holder that can produce EIP-712 signatures but cannot produce EIP-191 `personal_sign` signatures, such as a custodial wallet that exposes typed-data signing only, cannot derive a TapeSend messaging key under TAP-10 §14.2. Its passport can receive public messages (TAP-10 §15.2) and can use private channels whose key record is an EIP-712 signature (TAP-14, key type `"tape-channel/v1"`). A tool MUST NOT report the absence of a sealed inbox for such a holder as a failure of the passport.
 
 ### 9. Tools that request signatures or build calls
 
 - **W-1 (delegation expiry).** A tool that asks a holder to sign a TAP-11 delegation MUST NOT propose by default an `expires` later than 30 days after the time of signing, SHOULD propose 7 days or less by default, and MUST let the holder choose any `expires` up to the limit of TAP-11 §4.3. The holder sets the upper limit; a tool MUST NOT propose the longest delegation TAP-11 allows (366 days) as its default.
-- **W-2 (signer origin).** A tool MUST NOT ask a holder to sign a delegation whose `signer`, a mandate whose `agentKey` (#47), or a channel key record (#12) whose keys were not generated by that tool in the same session.
+- **W-2 (signer origin).** A tool MUST NOT ask a holder to sign a delegation whose `signer`, a mandate whose `agentKey` (TAP-18), or a channel key record (TAP-14) whose keys were not generated by that tool in the same session.
 - **W-3 (runtimes driven by untrusted text).** A runtime driven by untrusted text that can request transactions from a holder's wallet:
   1. MUST NOT construct `approve(address,uint256)` (`0x095ea7b3`), `setApprovalForAll(address,bool)` (`0xa22cb465`), `transfer(address,uint256)` (`0xa9059cbb`), `transferFrom(address,address,uint256)` (`0x23b872dd`), `safeTransferFrom(address,address,uint256)` (`0x42842e0e`) or `safeTransferFrom(address,address,uint256,bytes)` (`0xb88d4fde`) on any contract, and MUST NOT construct any call that transfers the circuit or the identity;
   2. MUST NOT construct a container `execute(address,uint256,bytes,uint8)` (`0x51945447`);
@@ -305,14 +305,14 @@ A tool that shows a summary of the feedback of a passport:
 
 ### 11. Authorisation layers (optional, conditional)
 
-This section applies to tools that show the authority of an agent: mandates under #47 at commit `50a5a6f92abfefb3cdde4af2c86a9b18c087a3d6`, escrow sessions under #60 at commit `42ce7aef2d16ef64c3d8ba94e255076c3db16a25`, or limits of a holder's wallet provider.
+This section applies to tools that show the authority of an agent: mandates under TAP-18, escrow sessions under #60 at commit `42ce7aef2d16ef64c3d8ba94e255076c3db16a25`, or limits of a holder's wallet provider.
 
 **A-1.** A tool MUST NOT present a limit enforced by a holder's wallet provider (a daily amount, a token scope, a confirmation rule) as a bound that a counterparty can rely on, and MUST NOT compare such a limit with an escrow cap. No on-chain, wallet-native limit exists on a holder's wallet: limits are enforced only by the parties that check them, such as an escrow channel that #60 reads on chain or a published rule that a counterparty re-runs. Until an escrow instance is audited and deployed, every mandate is `enforcement: none`.
 
 | Layer | What it is | Who can see or check it | Enforced by |
 |---|---|---|---|
 | Wallet-provider policy (custodial wallets) | Daily limits in the provider's currency, token scope, confirmation rules, session sign-out | The user and the provider only | The provider, unilaterally; changeable at any time |
-| #47 mandate (phase 0) | The holder's EIP-712 `Mandate` naming an agent container, an agent key, a task and an expiry of at most 30 days | Any counterparty, off chain | Nothing (`enforcement: none`) |
+| TAP-18 mandate (phase 0) | The holder's EIP-712 `Mandate` naming an agent container, an agent key, a task and an expiry of at most 30 days | Any counterparty, off chain | Nothing (`enforcement: none`) |
 | #60 escrow session (phase 1) | One channel per capped provider; the agent key is a session key until the mandate's expiry | Anyone, by reading the escrow at a pinned block | The escrow contract (not audited, not deployed) |
 
 The three layers do not know about one another, and none of them can be verified from another. When a holder's wallet is frozen or lost, its limits stop the holder but not keys the holder authorised earlier: a TAP-11 signer stays valid until its delegation expires (TAP-11 §7.2), an agent key until its mandate or session expires, and no revocation can be signed. W-1 keeps that window short.
@@ -327,7 +327,7 @@ A tool that shows a passport:
 - **D-4.** For `wallet-unset` MUST say that the identity changed hands and is not confirmed until the holder sets the agent wallet again, and MUST NOT show it as a failure of the service.
 - **D-5.** For `stale-agent-wallet` MUST say that the agent wallet differs from the holder and MUST NOT show that address as a payment address.
 - **D-6.** For UNAVAILABLE MUST say that nothing could be verified and MUST NOT show any earlier state as current.
-- **D-7.** MUST NOT show, for any state, the words "verified agent", "certified", "official" or "trusted", a check mark or a badge; MUST NOT present a passport as proof that the agent runs any particular code, is honest or is safe; MUST mark the identity's `name`, `description` and `image` and every text of the registration file as the holder's statements and render them as plain text, removing the code points TAP-10 §16 lists; and, when the manifest carries `mcp` as defined in #16 at commit `13d1179f89b8c7037ebfb4e3ec3e574c1740e989`, MUST apply #16's digest check and MUST NOT let a tool list from the registration file or an agent card replace it.
+- **D-7.** MUST NOT show, for any state, the words "verified agent", "certified", "official" or "trusted", a check mark or a badge; MUST NOT present a passport as proof that the agent runs any particular code, is honest or is safe; MUST mark the identity's `name`, `description` and `image` and every text of the registration file as the holder's statements and render them as plain text, removing the code points TAP-10 §16 lists; and, when the manifest carries `mcp` as defined in TAP-15, MUST apply TAP-15's digest check and MUST NOT let a tool list from the registration file or an agent card replace it.
 
 ## Rationale
 
@@ -391,7 +391,7 @@ The threats considered, T1 to T13, are tabulated with their outcome and rules in
 
 ### Open questions
 
-1. Should §10 move into #54 and §11 into #47 or #60, leaving this TAP with the binding only?
+1. Should §10 move into #54 and §11 into #60, leaving this TAP with the binding only?
 2. Should a later version let the container own the identity (the identity follows the circuit), with a `stale-agent-wallet` rule for the previous holder's wallet?
 3. Should passports on Base and X Layer be defined once the ERC-8004 deployments there are checked?
 4. Should TAP-10 gain a messaging-key derivation from an EIP-712 signature, so that holders without `personal_sign` can receive sealed messages?
