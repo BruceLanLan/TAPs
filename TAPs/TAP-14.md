@@ -1,5 +1,5 @@
 ---
-tap: TBD
+tap: 14
 title: Private Channels Between Containers
 description: Holder-authorised channel keys, a triple Diffie-Hellman handshake and an encrypted frame format that let two circuit containers talk privately and in real time over relays, the ChannelBus contract or a direct connection.
 author: Bruce (@BruceLanLan)
@@ -11,7 +11,7 @@ requires: TAP-10, TAP-11, TAP-13
 license: CC0-1.0
 ---
 
-# TAP-TBD: Private Channels Between Containers
+# TAP-14: Private Channels Between Containers
 
 ## Summary
 
@@ -399,7 +399,7 @@ The wire formats, record format and signatures are unchanged. The labels of this
 
 ## Test Cases
 
-Test vectors are in `assets/tap-draft-private-channels/` while this pull request is open, and move to `assets/tap-<nn>/` with this file once a number is assigned (#11). Every file gives inputs and exact expected outputs:
+Test vectors are in `assets/tap-14/`. Every file gives inputs and exact expected outputs:
 
 | File | Covers |
 |---|---|
