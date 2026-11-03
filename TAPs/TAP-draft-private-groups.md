@@ -7,7 +7,7 @@ discussions-to: https://github.com/TapeOutProtocol/TAPs/issues/19
 status: Draft
 type: Application
 created: 2026-09-30
-requires: TAP-10, TAP-draft-private-channels
+requires: TAP-10, TAP-14
 license: CC0-1.0
 ---
 
@@ -19,13 +19,13 @@ A way for a small group of TapeOut containers, up to 32, to hold one private con
 
 ## Abstract
 
-This TAP defines a **group**: an encrypted conversation among 1 to 32 circuit containers, run by one of them, the **owner**. The owner keeps the member list. Every change of membership starts a new **epoch** with a fresh group key, which the owner seals to each member's channel X25519 key in an owner-signed **epoch message**; the epoch message also carries the member list (the **roster**), encrypted under the group key, and a commitment to that key. The slots that carry the key name nobody, so a relay or a chain observer learns the number of members and not who they are. Members encrypt **group messages** under per-sender keys derived from the group key and sign them with their Ed25519 channel keys, so members can read each other and cannot impersonate each other. Identities, invites and transports are those of TAP-draft-private-channels: channel key records, sealed inbox invites, relays and the ChannelBus contract carry groups unchanged, under the two wire types that draft reserves for them.
+This TAP defines a **group**: an encrypted conversation among 1 to 32 circuit containers, run by one of them, the **owner**. The owner keeps the member list. Every change of membership starts a new **epoch** with a fresh group key, which the owner seals to each member's channel X25519 key in an owner-signed **epoch message**; the epoch message also carries the member list (the **roster**), encrypted under the group key, and a commitment to that key. The slots that carry the key name nobody, so a relay or a chain observer learns the number of members and not who they are. Members encrypt **group messages** under per-sender keys derived from the group key and sign them with their Ed25519 channel keys, so members can read each other and cannot impersonate each other. Identities, invites and transports are those of TAP-14: channel key records, sealed inbox invites, relays and the ChannelBus contract carry groups unchanged, under the two wire types that draft reserves for them.
 
 ## Motivation
 
-TAP-draft-private-channels gives two containers a private channel, and its triple Diffie-Hellman handshake does not extend to more parties. An application that gathers several containers in one conversation, such as a table of card players, a working group of agents or a service with several clients in one session, can today either open a channel between every pair of members, which costs a handshake per pair and gives no common view of who is in the conversation, or send in the clear. TAP-10 TapeSend can seal one message to up to 16 keys (TAP-10 §15.3), but each message is a transaction, its metadata is public for ever, and its slot fingerprints show which keys it was sealed to.
+TAP-14 gives two containers a private channel, and its triple Diffie-Hellman handshake does not extend to more parties. An application that gathers several containers in one conversation, such as a table of card players, a working group of agents or a service with several clients in one session, can today either open a channel between every pair of members, which costs a handshake per pair and gives no common view of who is in the conversation, or send in the clear. TAP-10 TapeSend can seal one message to up to 16 keys (TAP-10 §15.3), but each message is a transaction, its metadata is public for ever, and its slot fingerprints show which keys it was sealed to.
 
-This TAP adds the smallest group construction that keeps the channel draft's properties where they can be kept (end-to-end confidentiality, sender authentication, no trusted server, hidden membership) and states plainly where it cannot (Security Considerations). It defines a conversation and nothing else: no roles besides the owner, no application state, no settlement.
+This TAP adds the smallest group construction that keeps TAP-14's properties where they can be kept (end-to-end confidentiality, sender authentication, no trusted server, hidden membership) and states plainly where it cannot (Security Considerations). It defines a conversation and nothing else: no roles besides the owner, no application state, no settlement.
 
 ## Specification
 
@@ -34,7 +34,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 ### 1. Terms and notation
 
 - **Container**, **holder**, **pinned block**, **strict agreement**: as defined in TAP-10 §1.
-- **Channel key record**, **inbox room**, **relay reference**, **relay**, **ChannelBus**, **wire message**: as defined in TAP-draft-private-channels (§3, §6.1, §5, §11, §12 and §10.2 of that draft).
+- **Channel key record**, **inbox room**, **relay reference**, **relay**, **ChannelBus**, **wire message**: as defined in TAP-14 (§3, §6.1, §5, §11, §12 and §10.2 of TAP-14).
 - **Group ID** `gid`: 16 random bytes that the owner draws when it creates the group.
 - **Owner**: the container that creates the group, keeps the roster and signs every epoch message. It is fixed for the life of the group.
 - **Member**: a container listed in the roster of an epoch, the owner included. A member's **index** is its position in that roster, starting at 0.
@@ -43,30 +43,30 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 - Notation follows TAP-10 §1: `‖` is concatenation, `uint64(x)` and `uint32(x)` are big-endian, and ASCII labels such as `"tape-group/room/v1"` are their raw bytes without a terminator. `X25519(k, U)` is RFC 7748; `HKDF-SHA256(IKM, salt, info, L)` is RFC 5869; XChaCha20-Poly1305 is draft-irtf-cfrg-xchacha-03 with a 32-byte key, a 24-byte nonce and a 16-byte tag, written `XChaCha20-Poly1305(key, nonce, aad).encrypt(plaintext)`; Ed25519 is RFC 8032, written `Ed25519(signer, message)`. "Hex" means lowercase hexadecimal; a field described as "`0x` hex" carries the prefix, one described as "bare hex" does not.
 - The labels in this TAP begin with `tape-group/` (see Backwards Compatibility).
 
-### 2. What this TAP takes from TAP-draft-private-channels
+### 2. What this TAP takes from TAP-14
 
-An implementation of this TAP implements the following parts of TAP-draft-private-channels, which this TAP uses without change:
+An implementation of this TAP implements the following parts of TAP-14, which this TAP uses without change:
 
-- canonical JSON and strict JSON (§2 of that draft);
+- canonical JSON and strict JSON (TAP-14 §2);
 - channel key records and how a client reads and verifies them (§3), with the X25519 key checks (§4.2) and the Ed25519 key check (§4.3);
 - relay references and the ChannelBus address rule (§5);
 - inbox rooms and sealed inbox wires of wire type `0x03` (§6.1);
-- wire messages (§10.2): this TAP defines wire types `0x04` (epoch message, §5) and `0x05` (group message, §6), which that draft reserves for group messaging;
+- wire messages (§10.2): this TAP defines wire types `0x04` (epoch message, §5) and `0x05` (group message, §6), which TAP-14 reserves for group messaging;
 - the relay service (§11) and the ChannelBus (§12).
 
-Every Ed25519 public key this TAP uses **MUST** pass §4.3 of that draft. Every Ed25519 signature this TAP defines is verified as RFC 8032 §5.1.7 specifies, with `S` below the group order, canonical encodings of `A` and `R` required (no ZIP-215 leniency), and the cofactored equation `[8][S]B = [8]R + [8][k]A`.
+Every Ed25519 public key this TAP uses **MUST** pass TAP-14 §4.3. Every Ed25519 signature this TAP defines is verified as RFC 8032 §5.1.7 specifies, with `S` below the group order, canonical encodings of `A` and `R` required (no ZIP-215 leniency), and the cofactored equation `[8][S]B = [8]R + [8][k]A`.
 
 ### 3. Identities and member verification
 
 Every member, the owner included, has a channel identity: the `x25519` and `ed25519` keys of its channel key record. A roster is the owner's statement of who is in the group; it proves nobody's keys. A receiver learns the owner's keys by reading the owner's record, and checks every other member's keys against that member's own record (§5.4 step 6).
 
-To **verify a member** `(container, chainId, x25519, ed25519)`, a client reads that container's channel key record on chain `chainId` as TAP-draft-private-channels §3.3 specifies and compares the record's `x25519` and `ed25519` with the member's, as bytes. The outcome is one of:
+To **verify a member** `(container, chainId, x25519, ed25519)`, a client reads that container's channel key record on chain `chainId` as TAP-14 §3.3 specifies and compares the record's `x25519` and `ed25519` with the member's, as bytes. The outcome is one of:
 
 - **match**: the record is accepted and both keys are equal;
 - **mismatch**: the record is definitively not accepted (absent, invalid, expired, or no longer signed by the circuit's current holder), or it is accepted and a key differs;
 - **no answer**: the client could not obtain an answer it may adopt (nodes unavailable or disagreeing). No answer decides nothing.
 
-A client **MAY** reuse an accepted record for member verification within the 300-second limit of TAP-draft-private-channels §3.3, so that a sold circuit or a removed record takes effect within minutes. It **MAY** share that cache with other uses of channel key records. It **MUST NOT** cache a "no answer".
+A client **MAY** reuse an accepted record for member verification within the 300-second limit of TAP-14 §3.3, so that a sold circuit or a removed record takes effect within minutes. It **MAY** share that cache with other uses of channel key records. It **MUST NOT** cache a "no answer".
 
 ### 4. Group ID and group room
 
@@ -76,7 +76,7 @@ All traffic of a group, epoch messages and group messages alike, goes to one roo
 groupRoom(gid) = SHA-256( "tape-group/room/v1" ‖ gid )                         (32 bytes)
 ```
 
-on every relay and ChannelBus the current roster names (§5.2). A room ID is written as 64 hex digits on relays and as `bytes32` on a ChannelBus (TAP-draft-private-channels §10.1).
+on every relay and ChannelBus the current roster names (§5.2). A room ID is written as 64 hex digits on relays and as `bytes32` on a ChannelBus (TAP-14 §10.1).
 
 ### 5. Epoch messages (wire type `0x04`)
 
@@ -126,10 +126,10 @@ The owner builds the roster object with exactly these keys (`bus` only when pres
 | `prev` | string | 64 bare hex digits: `SHA-256` of the roster plaintext bytes of epoch `n − 1` exactly as they were sent (the bytes a member decrypted, never a re-encoding); 64 zeros for epoch 0 |
 | `owner` | object | `{ "container": "0x…", "chainId": number }`: the owner |
 | `members` | array | `count` entries in member order, each exactly `{ "container", "chainId", "x25519", "ed25519" }`: `container` is `0x` and 40 hex digits in lowercase; `chainId` is an integer from 1 to 2^53 − 1 (TAP-10 §12.1); `x25519` and `ed25519` are `0x` and 64 hex digits in lowercase. `members[0]` is the owner |
-| `relays` | array | At most 4 relay references `{ "url", "container" }` under TAP-draft-private-channels §5; may be empty |
-| `bus` | string | Optional: the address of a ChannelBus on the chain TAP-draft-private-channels §12.1 names, `0x` and 40 hex digits |
+| `relays` | array | At most 4 relay references `{ "url", "container" }` under TAP-14 §5; may be empty |
+| `bus` | string | Optional: the address of a ChannelBus on the chain TAP-14 §12.1 names, `0x` and 40 hex digits |
 
-No two entries of `members` share a (`container`, `chainId`) pair, an `x25519` key or an `ed25519` key. Every `x25519` passes TAP-draft-private-channels §4.2 and every `ed25519` passes its §4.3. The owner **SHOULD** name at least one relay or a bus.
+No two entries of `members` share a (`container`, `chainId`) pair, an `x25519` key or an `ed25519` key. Every `x25519` passes TAP-14 §4.2 and every `ed25519` passes its §4.3. The owner **SHOULD** name at least one relay or a bus.
 
 Example (informative; the full value is in `epoch.json`):
 
@@ -142,7 +142,7 @@ Example (informative; the full value is in `epoch.json`):
 
 #### 5.3 Size
 
-An epoch message is one wire message, and an owner **MUST NOT** post one larger than 16,448 bytes (TAP-draft-private-channels §10.2). Its length is `114 + 48 · count + 4 + L + 64`, with `L` at least 16. With relay URLs whose characters are ASCII and need no escaping in JSON, the largest epoch message the rules of §5.2 allow (32 members, every `chainId` 2^53 − 1, four relays with 512-character URLs, and a bus) is 12,186 bytes; a group of 32 members on one chain with one relay of usual length takes about 9,500 bytes.
+An epoch message is one wire message, and an owner **MUST NOT** post one larger than 16,448 bytes (TAP-14 §10.2). Its length is `114 + 48 · count + 4 + L + 64`, with `L` at least 16. With relay URLs whose characters are ASCII and need no escaping in JSON, the largest epoch message the rules of §5.2 allow (32 members, every `chainId` 2^53 − 1, four relays with 512-character URLs, and a bus) is 12,186 bytes; a group of 32 members on one chain with one relay of usual length takes about 9,500 bytes.
 
 #### 5.4 Acceptance
 
@@ -152,7 +152,7 @@ A receiver processes epoch messages one at a time, and the epoch it holds never 
 2. **Duplicates and equivocation.** Two epoch messages are the **same** when their `body` bytes are equal. If the receiver has already accepted a message for epoch `n`, the same message is a duplicate and is ignored without error. A different message for the same `n` that passes step 1 is evidence that the owner equivocated (§5.6): the receiver **MUST** reject it and **MUST** report the equivocation to the application. A receiver **SHOULD** remember the `body` hash of every epoch message it accepted for the epochs from 64 below the newest it accepted up to the newest; an epoch it no longer remembers is handled by step 3.
 3. **Newer.** `n` is greater than the epoch the receiver holds, and not below the minimum epoch it was given after a restart (§10).
 4. **Key.** With its channel X25519 private key `r` and public key `R`, the receiver computes `X25519(r, E)` once, rejecting the message if that fails or gives 32 zero bytes, derives `kek` as in §5.1 with its own `R`, and tries every slot. Exactly one slot **MUST** open, and `SHA-256("tape-group/commit/v1" ‖ K)` for the `K` it yields **MUST** equal `commit`.
-5. **Roster.** `roster` decrypts under `K`, `N` and `aad = header ‖ slots`; the plaintext is strict JSON (TAP-draft-private-channels §2) whose value is an object, and:
+5. **Roster.** `roster` decrypts under `K`, `N` and `aad = header ‖ slots`; the plaintext is strict JSON (TAP-14 §2) whose value is an object, and:
    - `v` is 1 and `kind` is `"tape.group/roster"`; `gid` and `epoch` equal the header's;
    - `issued` is an integer, not more than 3,600 seconds after the receiver's clock and not more than 2,592,000 seconds (30 days) before it;
    - `owner` names the owner (its `container` compared case-insensitively, and its `chainId`);
@@ -224,11 +224,11 @@ A receiver **MUST** process a group message in this order and **MUST** reject it
 6. `seq` is greater than the highest `seq` the receiver has accepted from `s` in epoch `n`.
 7. `ct` decrypts under `key_s` with `aad = header`. A receiver that delivers the plaintext as text **MUST** decode it as UTF-8 at this step and **MUST** reject an authentic message that is not valid UTF-8 without consuming its `seq`.
 
-The receiver then records `seq` as the highest accepted from `s` in epoch `n`. It **MUST** accept a gap (a `seq` more than one above the previous highest) and **SHOULD** report it to the application, as TAP-draft-private-channels §9 does for frames: as `seq − high − 1` when that is below 2^16, and otherwise as a gap of unknown size (the sender restarted).
+The receiver then records `seq` as the highest accepted from `s` in epoch `n`. It **MUST** accept a gap (a `seq` more than one above the previous highest) and **SHOULD** report it to the application, as TAP-14 §9 does for frames: as `seq − high − 1` when that is below 2^16, and otherwise as a gap of unknown size (the sender restarted).
 
 ### 7. Invites and joining
 
-To invite a container, the owner reads its channel key record (§3) and posts to that container's inbox room, on one or more of the relays and buses its record lists under `inbox`, a sealed inbox wire (TAP-draft-private-channels §6.1, wire type `0x03`) whose content is:
+To invite a container, the owner reads its channel key record (§3) and posts to that container's inbox room, on one or more of the relays and buses its record lists under `inbox`, a sealed inbox wire (TAP-14 §6.1, wire type `0x03`) whose content is:
 
 | Key | Type | Rule |
 |---|---|---|
@@ -236,15 +236,15 @@ To invite a container, the owner reads its channel key record (§3) and posts to
 | `kind` | string | `"tape.group/invite"` |
 | `gid` | string | `gid`, 32 bare hex digits |
 | `owner` | object | `{ "container": "0x…", "chainId": number }`: the owner |
-| `relays` | array | Optional: at most 4 relay references (TAP-draft-private-channels §5) on which the group room can be read |
+| `relays` | array | Optional: at most 4 relay references (TAP-14 §5) on which the group room can be read |
 | `bus` | string | Optional: a ChannelBus address, as in §5.2 |
 
 The owner then posts an epoch message that includes the new member to the group room (§9). The invite and the epoch message go to different rooms: an owner that posts only the epoch message leaves the new member nothing to read.
 
 A container that opens such an invite from its inbox:
 
-1. requires `v` = 1, `kind` = `"tape.group/invite"`, `gid` of 32 bare hex digits, an `owner` with a `container` of `0x` and 40 hex digits and a `chainId`, and `relays` and `bus` valid under TAP-draft-private-channels §5; it ignores keys it does not use;
-2. reads the owner's channel key record under TAP-draft-private-channels §3.3, from `owner.container` and `owner.chainId`, and takes the owner's Ed25519 key from that record, never from the invite;
+1. requires `v` = 1, `kind` = `"tape.group/invite"`, `gid` of 32 bare hex digits, an `owner` with a `container` of `0x` and 40 hex digits and a `chainId`, and `relays` and `bus` valid under TAP-14 §5; it ignores keys it does not use;
+2. reads the owner's channel key record under TAP-14 §3.3, from `owner.container` and `owner.chainId`, and takes the owner's Ed25519 key from that record, never from the invite;
 3. reads the group room on the relays and bus the invite names, and accepts epoch messages under §5.4.
 
 The invite is trusted for nothing but where to look: a receiver accepts only epoch messages that the owner signed and that list it, so a forged invite cannot make anyone join. Once a receiver has accepted an epoch, it uses the `relays` and `bus` of the roster it holds, which the owner signed, and no longer those of the invite.
@@ -259,11 +259,11 @@ The owner's key is fixed when a member joins. There is no transfer of ownership 
 
 ### 9. Delivery
 
-Epoch messages and group messages are wire messages (TAP-draft-private-channels §10.2), posted to the group room (§4) on the relays and bus of the roster the poster holds: on a relay with the `relaySend` method (§11.1 of that draft), on a ChannelBus with `send` or `sendMany` (§12.1 of that draft). A ChannelBus is on BNB Smart Chain whatever the members' home chains (§12.1 of that draft): a group with members on Base (8453) or X Layer (196) uses relays, or a ChannelBus on BNB Smart Chain, each poster posting from an account funded there. Members read the group room as §11.3 and §12.2 of that draft specify, treat identical wire messages that arrive on several transports as one, and pass each to §5.4 or §6.3 by its first byte. Relays keep epoch messages under the protected bound of §11.2 of that draft, which other traffic cannot evict.
+Epoch messages and group messages are wire messages (TAP-14 §10.2), posted to the group room (§4) on the relays and bus of the roster the poster holds: on a relay with the `relaySend` method (TAP-14 §11.1), on a ChannelBus with `send` or `sendMany` (TAP-14 §12.1). A ChannelBus is on BNB Smart Chain whatever the members' home chains (TAP-14 §12.1): a group with members on Base (8453) or X Layer (196) uses relays, or a ChannelBus on BNB Smart Chain, each poster posting from an account funded there. Members read the group room as §11.3 and §12.2 of that draft specify, treat identical wire messages that arrive on several transports as one, and pass each to §5.4 or §6.3 by its first byte. Relays keep epoch messages under the protected bound of §11.2 of that draft, which other traffic cannot evict.
 
 A new epoch message is the only checkpoint of a group. The owner **SHOULD** repost the current epoch message, unchanged, whenever it invites a container and at least as often as its transports forget data, so that a member returning from a long absence can catch up (RECOMMENDED: every 30 minutes on a ChannelBus read through public nodes, and every 10 minutes on a relay whose idle rooms expire after 15 minutes). A repost is a duplicate for every member that already holds the epoch (§5.4 step 2).
 
-Note (informative): public BNB Smart Chain nodes measured by the author in September 2026 served `eth_getLogs` for roughly the last 5,000 to 10,000 blocks, about 40 to 75 minutes; the reference relay expires an idle room 900 seconds after its last use (TAP-draft-private-channels §11.2).
+Note (informative): public BNB Smart Chain nodes measured by the author in September 2026 served `eth_getLogs` for roughly the last 5,000 to 10,000 blocks, about 40 to 75 minutes; the reference relay expires an idle room 900 seconds after its last use (TAP-14 §11.2).
 
 ### 10. State across restarts
 
@@ -277,9 +277,9 @@ Nothing in this TAP needs saved state to keep confidentiality or authentication:
 
 - **An owner, not consensus.** Agreement among many parties on membership is the hard part of group protocols, and much of MLS (RFC 9420) is devoted to it. One owner who signs every roster is simple, verifiable and enough for a group that someone creates and runs. Its cost, a single point of control and of failure, is stated under Security Considerations.
 - **Slots without fingerprints, unlike TAP-10 §15.3.** TAP-10's sealed payload gives each slot a fingerprint, `SHA-256(R)[0..8) ‖ wrapped`, 56 bytes per slot, so that a reader finds its slot at once and can tell `damaged` from `not-for-key`; TAP-10's Security Considerations state the other side of that choice, that slot fingerprints reveal which key a message was sealed to. For a TapeSend message, whose sender and recipient are public in any case, this is a reasonable trade. For a group, the member list is what this TAP sets out to hide, and channel key records are public, so fingerprints would let anyone who hashes the published keys read a group's membership. The slots of this TAP are therefore the 48-byte wrapped key alone, and a receiver tries every slot, at the cost of one X25519 and at most 32 AEAD openings per epoch message. What is given up is the distinction between a damaged message and one not sealed to the reader: a receiver whose key opens no slot learns only that.
-- **The same primitives as TAP-10, in their own domain.** The suite is TAP-10's suite 1 (§14.1), the key commitment follows TAP-10 §15.3's `D`, and the key wrap binds `E ‖ R ‖ gid ‖ uint64(n)` as TAP-10 binds `E ‖ R ‖ X`. Every label begins with `tape-group/` and differs from TAP-10's and from the channel draft's, so no key, ciphertext or signature of one protocol can be taken for another's.
+- **The same primitives as TAP-10, in their own domain.** The suite is TAP-10's suite 1 (§14.1), the key commitment follows TAP-10 §15.3's `D`, and the key wrap binds `E ‖ R ‖ gid ‖ uint64(n)` as TAP-10 binds `E ‖ R ‖ X`. Every label begins with `tape-group/` and differs from TAP-10's and from TAP-14's, so no key, ciphertext or signature of one protocol can be taken for another's.
 - **A key commitment in the signed header.** XChaCha20-Poly1305 is not key-committing: a malicious owner could build a roster ciphertext that opens under two keys, or wrap different keys for different members. Committing to `K` in the header the owner signs makes every member hold the same key or reject the message (`negative.json` has an owner that tries).
-- **An encrypted roster.** The channel draft hides from relays who talks to whom. Publishing a group's member list in clear would undo that, so the roster travels under the epoch key, and the slot count is all that shows.
+- **An encrypted roster.** TAP-14 hides from relays who talks to whom. Publishing a group's member list in clear would undo that, so the roster travels under the epoch key, and the slot count is all that shows.
 - **Per-sender keys and random nonces.** Every member encrypts under keys derived from one epoch key; separate keys per sender keep senders apart, and a 24-byte random nonce makes a collision negligible without any counter to save. A nonce built from `seq` would need state that survives restarts: a member that restarted and accepted the same epoch again would reuse a (key, nonce) pair and reveal the XOR of two plaintexts.
 - **Signatures, not MACs.** With only a shared key, any member could forge another member's messages. Ed25519 signatures with each member's published key let every member verify the sender. The cost, non-repudiation inside the group, is stated under Security Considerations.
 - **Verifying every member against its record, at every epoch.** A roster is only the owner's word. Checking each entry against the member's own holder-signed record stops an owner from putting keys it controls under another container's name, and re-checking at every epoch drops a circuit that has been sold.
@@ -288,17 +288,17 @@ Nothing in this TAP needs saved state to keep confidentiality or authentication:
 
 ## Backwards Compatibility
 
-This TAP changes nothing in TAP-10 and nothing in TAP-draft-private-channels: it uses the wire types `0x04` and `0x05` that the channel draft reserves for group messaging, and relays and ChannelBus carry them as they carry any wire message. A client that does not implement this TAP drops them (TAP-draft-private-channels §10.2) and ignores group invites, whose `kind` it does not know (§6.1 of that draft).
+This TAP changes nothing in TAP-10 and nothing in TAP-14: it uses the wire types `0x04` and `0x05` that TAP-14 reserves for group messaging, and relays and ChannelBus carry them as they carry any wire message. A client that does not implement this TAP drops them (TAP-14 §10.2) and ignores group invites, whose `kind` it does not know (§6.1 of TAP-14).
 
 **Historical name.** This specification was first published in the TapeAPI repository as TAP-27 (renamed TAPI-27 on 2026-09-30; neither is a TAP number). The number of this TAP is assigned by the editors. The strings `tape.group/roster` and `tape.group/invite` were fixed under the old name and are frozen.
 
-**Labels.** The labels of §4 to §6 begin with `tape-group/`. In #11 the editors asked for the labels of the channel draft to use a prefix that does not look like a TAP number, and said that the same applies to this draft. Earlier revisions of this draft, and the reference implementation up to TapeAPI 1.8.0, used the same labels under the prefix of the historical name above, and sealed invites under the channel draft's earlier labels; only the prefixes differ, and groups of the two sets do not interoperate. The reference implementation implements the labels of this TAP from TapeAPI 1.8.1 as an option (`labels: 'v2'`, which also selects the channel draft's labels for invites), keeps its earlier labels as the default of its 1.x versions (they are frozen constants of its own version 1), and makes the labels of this TAP its default in TapeAPI 2.0. A group invite does not say which set it uses: it is read from the inbox room of the channel draft's labels, and the group keeps the labels of this TAP for its whole life.
+**Labels.** The labels of §4 to §6 begin with `tape-group/`. In #11 the editors asked for the labels of TAP-14, then a draft, to use a prefix that does not look like a TAP number, and said that the same applies to this draft. Earlier revisions of this draft, and the reference implementation up to TapeAPI 1.8.0, used the same labels under the prefix of the historical name above, and sealed invites under the earlier labels of TAP-14; only the prefixes differ, and groups of the two sets do not interoperate. The reference implementation implements the labels of this TAP from TapeAPI 1.8.1 as an option (`labels: 'v2'`, which also selects the labels of TAP-14 for invites), keeps its earlier labels as the default of its 1.x versions (they are frozen constants of its own version 1), and makes the labels of this TAP its default in TapeAPI 2.0. A group invite does not say which set it uses: it is read from the inbox room of the channel draft's labels, and the group keeps the labels of this TAP for its whole life.
 
 **Larger groups.** The reference implementation also carries, as an experimental option, a second format for groups of up to 128 members. It is not part of this TAP and would be proposed separately. It marks the high half of the epoch field, so every receiver that follows this TAP rejects its epoch messages and group messages (§5.4, §6.3).
 
 **Differences from the reference implementation** at the commit below, and the planned changes, none of which changes a message that the reference implementation produces:
 
-1. Member verification reads channel key records as the reference implementation reads them for the channel draft, which by default differs from TAP-draft-private-channels §3.3 in the ways listed in that draft's Backwards Compatibility (item 2); the experimental option that follows §3.3 exactly (`conform: 'tap10'`) covers group verification too, since `api.groupVerifier()` reads records through `chain.channelKeys`.
+1. Member verification reads channel key records as the reference implementation reads them for TAP-14, which by default differs from TAP-14 §3.3 in the ways listed in TAP-14's Backwards Compatibility (item 2); the experimental option that follows §3.3 exactly (`conform: 'tap10'`) covers group verification too, since `api.groupVerifier()` reads records through `chain.channelKeys`.
 2. The reference member verifier (`api.groupVerifier()`) reads records only on the chain its client is configured for. For a member on another chain it fails with `GROUP_INVALID`, the same code as a rejection, so such an epoch is not installed and the application cannot tell the cause from the code; an application can pass a verifier that reads each member's own chain. The verifier will do so by default, and will report a failure to read as no answer.
 3. The reference receiver is more lenient than §5.2, §5.4 and §7 on four points: it accepts a roster that begins with a UTF-8 byte order mark (which strict JSON excludes), a member `chainId` above 2^53 − 1, a roster `owner` or invite `owner` without `chainId` (taken as 56) and a roster without `relays` (taken as empty); and it checks only that an invite's `owner.container` is a string. The reference owner produces none of these inputs. The receiver will be tightened to this draft in a 1.x release, as an erratum.
 4. The reference invite reader also recognises an invite key `format`, used by the experimental larger-group format, and refuses values other than 1 and 2 instead of ignoring the key. This will stay until that format is proposed or withdrawn.
@@ -335,7 +335,7 @@ Reference error codes (informative): `GROUP_INVALID` for a rejected epoch messag
 
 ## Deployments
 
-This TAP deploys no contract. Groups can be carried by the ChannelBus of TAP-draft-private-channels, whose deployment is recorded there and was read back again for this draft:
+This TAP deploys no contract. Groups can be carried by the ChannelBus of TAP-14, whose deployment is recorded there and was read back again for this draft:
 
 | Chain (chainId) | Contract | Address | Implementation it must point to | How to verify read-only | Sealed? |
 |---|---|---|---|---|---|
