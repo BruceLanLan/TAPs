@@ -1,5 +1,5 @@
 ---
-tap: TBD
+tap: 17
 title: AI Usage Receipts for Container Services
 description: How a container service that fronts an AI API publishes its endpoints and price table in its manifest, and signs for every metered answer a receipt that binds the exact request and response bytes, the reported usage and the amounts it claims.
 author: Bruce (@BruceLanLan)
@@ -12,7 +12,7 @@ requires: TAP-10, TAP-11, TAP-13, WHATWG URL Standard (commit snapshot fde3f74, 
 license: CC0-1.0
 ---
 
-# TAP-TBD: AI Usage Receipts for Container Services
+# TAP-17: AI Usage Receipts for Container Services
 
 ## Summary
 
@@ -437,7 +437,7 @@ Where the reference implementation's resolution of a service differs from TAP-10
 
 ## Test Cases
 
-The vector files are in `assets/tap-draft-ai-usage-receipts/`. The first five below were produced with the reference implementation at commit `fda84db` (TapeAPI 1.3.0); every hash, amount, digest and recovered signer in them was also recomputed with the independent Python routines of `spec/vectors/verify.py` at that commit. With TapeAPI 1.5.0 (the commit under Reference Implementation), every stream hash of `sse-hash.json` is reproduced, and every receipt of `receipts.json` and `receipts-extra.json` still passes `verifyUsageReceipt` against the bytes the client received, with no ambiguous line and no event unfinished at the close. The signer key is a published test key. **Every price in them is a test value; none states the price of any model or service.**
+The vector files are in `assets/tap-17/`. The first five below were produced with the reference implementation at commit `fda84db` (TapeAPI 1.3.0); every hash, amount, digest and recovered signer in them was also recomputed with the independent Python routines of `spec/vectors/verify.py` at that commit. With TapeAPI 1.5.0 (the commit under Reference Implementation), every stream hash of `sse-hash.json` is reproduced, and every receipt of `receipts.json` and `receipts-extra.json` still passes `verifyUsageReceipt` against the bytes the client received, with no ambiguous line and no event unfinished at the close. The signer key is a published test key. **Every price in them is a test value; none states the price of any model or service.**
 
 - `receipts.json` (§4–§10): the reference implementation's seven vectors, unchanged, with each envelope's digest added: each format, streams and whole answers, usage injection, an alias, both kinds of cache writes, pricing by the requested model, a stream that ends in an `error` event (receipt appended) and an HTTP 429. Each gives the `ai` member, the request bytes, the upstream request when it differs, the upstream answer, the exact bytes the client receives, and the expected hashes, result, envelope, digest and header or comment value.
 - `receipts-extra.json` (§4–§10): six further cases from the reference sidecar, with `data: [DONE]` made a final line of `openai-responses` through `createAIProxy`'s public `formats` option: a Chat usage event with an empty-delta choice, removed; a Chat stream whose client asked for usage; a data-only Responses stream ending in `data: [DONE]`; a Responses stream with `response.completed` then `data: [DONE]`; an Anthropic whole answer with web-search counts in `unpriced`; a reported model outside the table. A seventh, marked as a control, sends the data-only stream through the default adapters: its receipt lands after `[DONE]`.
