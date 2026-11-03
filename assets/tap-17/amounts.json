@@ -1,0 +1,559 @@
+{
+ "tap": "TAP-draft-ai-usage-receipts, Specification §4",
+ "source": "Computed with sdk/src/ai.js (amountOf, usageOf, pricingOf) at https://github.com/BruceLanLan/tapeapi/tree/fda84db889d2a732915f264a799af24073177a85.",
+ "pricesNote": "Every price is an arbitrary test value, not the price of any model or service.",
+ "amounts": [
+  {
+   "name": "input and output only",
+   "price": {
+    "currency": "BEM",
+    "unit": "1M tokens",
+    "input": "3",
+    "output": "15"
+   },
+   "usage": {
+    "prompt_tokens": 1000,
+    "completion_tokens": 200,
+    "total_tokens": 1200
+   },
+   "amount": "0.00600000"
+  },
+  {
+   "name": "rounding up once, on the sum (1 token at 0.00000001 per 1M tokens)",
+   "price": {
+    "currency": "BEM",
+    "unit": "1M tokens",
+    "input": "0.00000001",
+    "output": "0"
+   },
+   "usage": {
+    "prompt_tokens": 1,
+    "completion_tokens": 0,
+    "total_tokens": 1
+   },
+   "amount": "0.00000001"
+  },
+  {
+   "name": "rounding: 3 buckets each below one unit add up before rounding",
+   "price": {
+    "currency": "USD",
+    "unit": "1M tokens",
+    "input": "0.3",
+    "output": "0.3",
+    "cacheRead": "0.3"
+   },
+   "usage": {
+    "prompt_tokens": 2,
+    "completion_tokens": 1,
+    "total_tokens": 3,
+    "cache_read_tokens": 1
+   },
+   "amount": "0.00000090"
+  },
+  {
+   "name": "exact: no rounding needed",
+   "price": {
+    "currency": "USDT",
+    "unit": "1M tokens",
+    "input": "1",
+    "output": "1"
+   },
+   "usage": {
+    "prompt_tokens": 1000000,
+    "completion_tokens": 0,
+    "total_tokens": 1000000
+   },
+   "amount": "1.00000000"
+  },
+  {
+   "name": "cacheRead absent: cache reads priced as input",
+   "price": {
+    "currency": "BEM",
+    "unit": "1M tokens",
+    "input": "2",
+    "output": "8"
+   },
+   "usage": {
+    "prompt_tokens": 1000,
+    "completion_tokens": 0,
+    "total_tokens": 1000,
+    "cache_read_tokens": 600
+   },
+   "amount": "0.00200000"
+  },
+  {
+   "name": "cacheWrite absent: cache writes priced as input; cacheWrite1h absent: as cacheWrite, here input",
+   "price": {
+    "currency": "BEM",
+    "unit": "1M tokens",
+    "input": "2",
+    "output": "8"
+   },
+   "usage": {
+    "prompt_tokens": 1000,
+    "completion_tokens": 0,
+    "total_tokens": 1000,
+    "cache_write_tokens": 500,
+    "cache_write_1h_tokens": 200
+   },
+   "amount": "0.00200000"
+  },
+  {
+   "name": "cacheWrite1h absent, cacheWrite given: 1-hour writes priced as cacheWrite",
+   "price": {
+    "currency": "BEM",
+    "unit": "1M tokens",
+    "input": "2",
+    "output": "8",
+    "cacheWrite": "2.5"
+   },
+   "usage": {
+    "prompt_tokens": 1000,
+    "completion_tokens": 0,
+    "total_tokens": 1000,
+    "cache_write_tokens": 500,
+    "cache_write_1h_tokens": 200
+   },
+   "amount": "0.00225000"
+  },
+  {
+   "name": "all cache prices given",
+   "price": {
+    "currency": "BEM",
+    "unit": "1M tokens",
+    "input": "2",
+    "output": "8",
+    "cacheRead": "0.2",
+    "cacheWrite": "2.5",
+    "cacheWrite1h": "4"
+   },
+   "usage": {
+    "prompt_tokens": 1000,
+    "completion_tokens": 0,
+    "total_tokens": 1000,
+    "cache_read_tokens": 300,
+    "cache_write_tokens": 500,
+    "cache_write_1h_tokens": 200
+   },
+   "amount": "0.00201000"
+  },
+  {
+   "name": "reasoning price given: reasoning tokens leave the output bucket",
+   "price": {
+    "currency": "USDT",
+    "unit": "1M tokens",
+    "input": "1",
+    "output": "10",
+    "reasoning": "12"
+   },
+   "usage": {
+    "prompt_tokens": 100,
+    "completion_tokens": 500,
+    "total_tokens": 600,
+    "reasoning_tokens": 400
+   },
+   "amount": "0.00590000"
+  },
+  {
+   "name": "reasoning price absent: reasoning tokens stay in output",
+   "price": {
+    "currency": "USDT",
+    "unit": "1M tokens",
+    "input": "1",
+    "output": "10"
+   },
+   "usage": {
+    "prompt_tokens": 100,
+    "completion_tokens": 500,
+    "total_tokens": 600,
+    "reasoning_tokens": 400
+   },
+   "amount": "0.00510000"
+  },
+  {
+   "name": "per-use counts add nothing",
+   "price": {
+    "currency": "BEM",
+    "unit": "1M tokens",
+    "input": "3",
+    "output": "15"
+   },
+   "usage": {
+    "prompt_tokens": 1000,
+    "completion_tokens": 100,
+    "total_tokens": 1100,
+    "other": {
+     "web_search_requests": 5
+    }
+   },
+   "amount": "0.00450000"
+  },
+  {
+   "name": "large values: 18 integer digits and 8 decimals, 2^53 - 1 tokens",
+   "price": {
+    "currency": "BEM",
+    "unit": "1M tokens",
+    "input": "999999999999999999.99999999",
+    "output": "0"
+   },
+   "usage": {
+    "prompt_tokens": 9007199254740991,
+    "completion_tokens": 0,
+    "total_tokens": 9007199254740991
+   },
+   "amount": "9007199254740990999999999909.92800746"
+  },
+  {
+   "name": "price written with trailing zeros",
+   "price": {
+    "currency": "BEM",
+    "unit": "1M tokens",
+    "input": "0.30",
+    "output": "1.50000000"
+   },
+   "usage": {
+    "prompt_tokens": 10,
+    "completion_tokens": 10,
+    "total_tokens": 20
+   },
+   "amount": "0.00001800"
+  }
+ ],
+ "usage": {
+  "note": "counts -> the usage object of §4.1, or null. Members are in the order the object must have.",
+  "cases": [
+   {
+    "name": "valid, subsets present",
+    "counts": {
+     "prompt_tokens": 10,
+     "completion_tokens": 5,
+     "total_tokens": 15,
+     "cache_read_tokens": 4,
+     "cache_write_tokens": 6,
+     "cache_write_1h_tokens": 6,
+     "reasoning_tokens": 5
+    },
+    "usage": {
+     "prompt_tokens": 10,
+     "completion_tokens": 5,
+     "total_tokens": 15,
+     "cache_read_tokens": 4,
+     "cache_write_tokens": 6,
+     "cache_write_1h_tokens": 6,
+     "reasoning_tokens": 5
+    }
+   },
+   {
+    "name": "total_tokens absent: prompt + completion",
+    "counts": {
+     "prompt_tokens": 10,
+     "completion_tokens": 5
+    },
+    "usage": {
+     "prompt_tokens": 10,
+     "completion_tokens": 5,
+     "total_tokens": 15
+    }
+   },
+   {
+    "name": "completion_tokens absent: 0",
+    "counts": {
+     "prompt_tokens": 10
+    },
+    "usage": {
+     "prompt_tokens": 10,
+     "completion_tokens": 0,
+     "total_tokens": 10
+    }
+   },
+   {
+    "name": "cache reads + cache writes above prompt_tokens: no usage",
+    "counts": {
+     "prompt_tokens": 10,
+     "completion_tokens": 0,
+     "cache_read_tokens": 6,
+     "cache_write_tokens": 5
+    },
+    "usage": null
+   },
+   {
+    "name": "1-hour writes above cache writes: no usage",
+    "counts": {
+     "prompt_tokens": 10,
+     "completion_tokens": 0,
+     "cache_write_tokens": 2,
+     "cache_write_1h_tokens": 3
+    },
+    "usage": null
+   },
+   {
+    "name": "reasoning above completion: no usage",
+    "counts": {
+     "prompt_tokens": 10,
+     "completion_tokens": 2,
+     "reasoning_tokens": 3
+    },
+    "usage": null
+   },
+   {
+    "name": "prompt_tokens absent: no usage",
+    "counts": {
+     "completion_tokens": 2
+    },
+    "usage": null
+   },
+   {
+    "name": "a count that is not a safe non-negative integer: no usage",
+    "counts": {
+     "prompt_tokens": 10.5,
+     "completion_tokens": 2
+    },
+    "usage": null
+   },
+   {
+    "name": "other: zero counts and bad names dropped, members sorted by name",
+    "counts": {
+     "prompt_tokens": 1,
+     "completion_tokens": 0,
+     "other": {
+      "zeta_calls": 2,
+      "alpha_calls": 1,
+      "empty_calls": 0,
+      "Bad-Name": 3
+     }
+    },
+    "usage": {
+     "prompt_tokens": 1,
+     "completion_tokens": 0,
+     "total_tokens": 1,
+     "other": {
+      "alpha_calls": 1,
+      "zeta_calls": 2
+     }
+    }
+   }
+  ]
+ },
+ "matching": {
+  "note": "Model matching (§4.2) against the models of receipts.json manifest.ai; expected is { model, prices, modelMatchedBy? }.",
+  "models": [
+   {
+    "id": "gpt-x",
+    "aliases": [
+     "gpt-x-2026-09-01"
+    ],
+    "formats": [
+     "openai-chat",
+     "openai-responses"
+    ],
+    "prices": [
+     {
+      "currency": "USDT",
+      "unit": "1M tokens",
+      "input": "1.25",
+      "output": "10",
+      "cacheRead": "0.125",
+      "reasoning": "12"
+     },
+     {
+      "currency": "BEM",
+      "unit": "1M tokens",
+      "input": "12.5",
+      "output": "100",
+      "cacheRead": "1.25"
+     }
+    ]
+   },
+   {
+    "id": "claude-x",
+    "aliases": [
+     "claude-x-20260901"
+    ],
+    "formats": [
+     "anthropic-messages"
+    ],
+    "prices": [
+     {
+      "currency": "BEM",
+      "unit": "1M tokens",
+      "input": "3",
+      "output": "15",
+      "cacheRead": "0.3",
+      "cacheWrite": "3.75",
+      "cacheWrite1h": "6"
+     },
+     {
+      "currency": "USD1",
+      "unit": "1M tokens",
+      "input": "0.3",
+      "output": "1.5",
+      "cacheRead": "0.03",
+      "cacheWrite": "0.375"
+     }
+    ]
+   },
+   {
+    "id": "embed-x",
+    "formats": [
+     "openai-embeddings"
+    ],
+    "prices": [
+     {
+      "currency": "USDC",
+      "unit": "1M tokens",
+      "input": "0.02",
+      "output": "0"
+     }
+    ]
+   }
+  ],
+  "cases": [
+   {
+    "name": "reported model equals an id",
+    "reported": "gpt-x",
+    "requested": "gpt-x",
+    "format": "openai-chat",
+    "usage": {
+     "prompt_tokens": 1000,
+     "completion_tokens": 100,
+     "total_tokens": 1100
+    },
+    "expected": {
+     "model": "gpt-x",
+     "prices": [
+      {
+       "currency": "USDT",
+       "amount": "0.00225000"
+      },
+      {
+       "currency": "BEM",
+       "amount": "0.02250000"
+      }
+     ],
+     "modelMatchedBy": "response"
+    }
+   },
+   {
+    "name": "reported model equals an alias: the receipt names the alias",
+    "reported": "gpt-x-2026-09-01",
+    "requested": "gpt-x",
+    "format": "openai-responses",
+    "usage": {
+     "prompt_tokens": 1000,
+     "completion_tokens": 100,
+     "total_tokens": 1100
+    },
+    "expected": {
+     "model": "gpt-x-2026-09-01",
+     "prices": [
+      {
+       "currency": "USDT",
+       "amount": "0.00225000"
+      },
+      {
+       "currency": "BEM",
+       "amount": "0.02250000"
+      }
+     ],
+     "modelMatchedBy": "response"
+    }
+   },
+   {
+    "name": "no case folding",
+    "reported": "GPT-X",
+    "requested": "gpt-x",
+    "format": "openai-chat",
+    "usage": {
+     "prompt_tokens": 1000,
+     "completion_tokens": 100,
+     "total_tokens": 1100
+    },
+    "expected": {
+     "model": "GPT-X",
+     "prices": null
+    }
+   },
+   {
+    "name": "no prefix matching",
+    "reported": "gpt-x-2026-09-01-preview",
+    "requested": "gpt-x",
+    "format": "openai-chat",
+    "usage": {
+     "prompt_tokens": 1000,
+     "completion_tokens": 100,
+     "total_tokens": 1100
+    },
+    "expected": {
+     "model": "gpt-x-2026-09-01-preview",
+     "prices": null
+    }
+   },
+   {
+    "name": "entry not allowed for the format (formats lists others)",
+    "reported": "gpt-x",
+    "requested": "gpt-x",
+    "format": "anthropic-messages",
+    "usage": {
+     "prompt_tokens": 1000,
+     "completion_tokens": 100,
+     "total_tokens": 1100
+    },
+    "expected": {
+     "model": "gpt-x",
+     "prices": null
+    }
+   },
+   {
+    "name": "no reported model: the requested model is matched",
+    "reported": null,
+    "requested": "embed-x",
+    "format": "openai-embeddings",
+    "usage": {
+     "prompt_tokens": 1000,
+     "completion_tokens": 100,
+     "total_tokens": 1100
+    },
+    "expected": {
+     "model": "embed-x",
+     "prices": [
+      {
+       "currency": "USDC",
+       "amount": "0.00002000"
+      }
+     ],
+     "modelMatchedBy": "request"
+    }
+   },
+   {
+    "name": "reported model not in the table: the requested model is not tried",
+    "reported": "gpt-y",
+    "requested": "gpt-x",
+    "format": "openai-chat",
+    "usage": {
+     "prompt_tokens": 1000,
+     "completion_tokens": 100,
+     "total_tokens": 1100
+    },
+    "expected": {
+     "model": "gpt-y",
+     "prices": null
+    }
+   },
+   {
+    "name": "neither matches",
+    "reported": null,
+    "requested": "nothing",
+    "format": "openai-chat",
+    "usage": {
+     "prompt_tokens": 1000,
+     "completion_tokens": 100,
+     "total_tokens": 1100
+    },
+    "expected": {
+     "model": null,
+     "prices": null
+    }
+   }
+  ]
+ }
+}
