@@ -280,7 +280,7 @@ These rules are fixed and never change: every signature already made over a cano
 
 #### 7.1 Caching and rereading
 
-A client MAY keep a resolved service for reuse. The holder and site status it keeps are resolution results in the sense of TAP-10 §11: a client SHOULD NOT rely on them for more than 60 seconds without a reread. A client SHOULD reread a manifest older than one hour before an action that spends funds, and MUST NOT rely on a delegation once its `expires` is reached by either the client's clock or the timestamp of the newest block it has read, whichever is later. A **reread** repeats §2.2 at a new pinned block: it reads the holder, the site status and the manifest file again and repeats every later step. Only the processor table MAY come from a cache (TAP-10 §4.3). Checking again only the delegation of a kept manifest is not a reread.
+A client MAY keep a resolved service for reuse. The holder and site status it keeps are resolution results in the sense of TAP-10 §11: a client SHOULD NOT rely on them for more than 60 seconds without a reread. A client SHOULD reread a manifest older than one hour before an action that spends funds, and MUST NOT rely on a delegation once its `expires` is at or before the later of the client's clock and the timestamp of the newest block it has read. A **reread** repeats §2.2 at a new pinned block: it reads the holder, the site status and the manifest file again and repeats every later step. Only the processor table MAY come from a cache (TAP-10 §4.3). Checking again only the delegation of a kept manifest is not a reread.
 
 A client MUST reread before it next relies on the service:
 
