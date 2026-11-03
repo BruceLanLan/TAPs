@@ -1,5 +1,5 @@
 ---
-tap: TBD
+tap: 15
 title: MCP Tools as Container Service Methods
 description: How a container service publishes the tools of a Model Context Protocol server as its methods, pins their definitions by a digest in its manifest, and signs a refusal when they change.
 author: Bruce (@BruceLanLan)
@@ -12,7 +12,7 @@ requires: TAP-10, TAP-11, TAP-13
 license: CC0-1.0
 ---
 
-# TAP-TBD: MCP Tools as Container Service Methods
+# TAP-15: MCP Tools as Container Service Methods
 
 ## Summary
 
@@ -206,7 +206,7 @@ Apart from these rows, the reference client and provider behave as §3 to §6 de
 
 ## Test Cases
 
-Vector files are in `assets/tap-draft-mcp-tools/` (the directory name will follow the number the editors assign, see #7). `tools-digest.json` and `envelopes.json` were generated with the reference implementation at commit `fda84db` (TapeAPI 1.3.0), and every value was recomputed with the canonicalisation, Keccak-256 and secp256k1 routines of its independent Python implementation (`spec/vectors/verify.py`) and Python's own SHA-256. TapeAPI 1.5.0 (the commit under Reference Implementation) gives the same digests for the positive cases of `tools-digest.json`, and none of the tool lists in the two files carries hidden text (§3.4).
+Vector files are in `assets/tap-15/`. `tools-digest.json` and `envelopes.json` were generated with the reference implementation at commit `fda84db` (TapeAPI 1.3.0), and every value was recomputed with the canonicalisation, Keccak-256 and secp256k1 routines of its independent Python implementation (`spec/vectors/verify.py`) and Python's own SHA-256. TapeAPI 1.5.0 (the commit under Reference Implementation) gives the same digests for the positive cases of `tools-digest.json`, and none of the tool lists in the two files carries hidden text (§3.4).
 
 **`tools-digest.json`** (§3). Each positive case gives the tool list as JSON text, its normalised canonical form and `toolsSha256`:
 
