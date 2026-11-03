@@ -318,7 +318,7 @@ Expected outcome at that block: **`unpaid`**. The file also gives the exact 3,41
 | `signer`, `delegation.expires` | `0xaB70dEe8e1CEabb1D10eDFeBcbe0c313c53cf154`, 1798190813 | `0x3cF7fb12C72653ba8415515387dBa9eF0353a0DD`, 1798219806 |
 | Delegation digest, recovered address | `0x2477541749b1b28de5dba42ee4d9f252e904dfb9042eb15068527e3213fb4a7b`, the holder | `0xf7bfac35220e3bc63e813fd09f707d6b5e35d77e4f1fab152447d046344786bc`, the holder |
 
-Expected outcome: **`resolved`**, for any `now` from the pinned block's timestamp up to `expires`. Each file also gives the exact manifest bytes (their SHA-256 equals the declared hash) and the output of the reference implementation's resolution (`resolution`).
+Expected outcome: **`resolved`**: `now` is the pinned block's timestamp (§1), which is before `expires`. Each file also gives the exact manifest bytes (their SHA-256 equals the declared hash) and the output of the reference implementation's resolution (`resolution`).
 
 ## Reference Implementation
 

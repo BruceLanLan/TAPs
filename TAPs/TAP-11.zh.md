@@ -320,7 +320,7 @@ TAP-10 §3.1 的名字数值范围（#ID 至多 10^18，处理器编号至多 10
 | `signer`、`delegation.expires` | `0xaB70dEe8e1CEabb1D10eDFeBcbe0c313c53cf154`、1798190813 | `0x3cF7fb12C72653ba8415515387dBa9eF0353a0DD`、1798219806 |
 | 委托摘要、恢复出的地址 | `0x2477541749b1b28de5dba42ee4d9f252e904dfb9042eb15068527e3213fb4a7b`，持有人 | `0xf7bfac35220e3bc63e813fd09f707d6b5e35d77e4f1fab152447d046344786bc`，持有人 |
 
-期望结果：**`resolved`**，对从钉块时间戳起至 `expires` 为止的任何 `now`。每个文件还给出精确的清单字节（其 SHA-256 等于声明的哈希），以及参考实现解析的输出（`resolution`）。
+期望结果：**`resolved`**：`now` 是钉块的时间戳（§1），早于 `expires`。每个文件还给出精确的清单字节（其 SHA-256 等于声明的哈希），以及参考实现解析的输出（`resolution`）。
 
 ## 参考实现
 
