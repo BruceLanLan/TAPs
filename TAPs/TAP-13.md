@@ -42,6 +42,7 @@ The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "S
 - **Envelope**: a response body defined in §4.
 - Notation is that of TAP-10 §1 (`‖`, `uint64(x)`, addresses as 20 raw bytes, ASCII labels as raw bytes). `keccak256` is the Keccak-256 hash used by Ethereum (original Keccak padding, not NIST SHA3-256). `utf8(s)` is the UTF-8 encoding of the string `s`.
 - The **length of a string in UTF-16 code units** is the number of 16-bit units in its UTF-16 encoding; a character outside the Basic Multilingual Plane counts as two. It is what JavaScript's `String.length` returns.
+- `now` is the client's clock, in Unix seconds, when it verifies an answer (§8 step 5). It is not the timestamp of a pinned block: TAP-11 resolves a service at a pinned block, but an envelope's `ts` is compared with the clock of the client that receives it.
 - **Outcomes** of client verification (§8): *accepted result*, *accepted error*, *own request malformed*, *binding failure*, *transport failure* and *rate limited*. These are descriptions, not wire values.
 
 ### 2. Canonical JSON and parsing
