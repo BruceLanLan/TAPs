@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Rechecks mcp-carriage.json from the text of TAP-draft-mcp-tools alone: the client side of Specification §4.3 (signed
+# Rechecks mcp-carriage.json from the text of TAP-15 alone: the client side of Specification §4.3 (signed
 # calls over MCP), §4.2 (well-formed tool results), §4.4 (manifest text in tool definitions) and §7 (which service an MCP
 # endpoint belongs to). Usage: python3 -I mcp-carriage-check.py [dir].
 # Exits 1 on any mismatch. Standard library only. MIT License.

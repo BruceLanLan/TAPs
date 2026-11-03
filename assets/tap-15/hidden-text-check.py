@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# Rechecks hidden-text.json against TAP-11 §3.5 items 1 and 2, which TAP-draft-mcp-tools §3.4 cites, applied to the covered
+# Rechecks hidden-text.json against TAP-11 §3.5 items 1 and 2, which TAP-15 §3.4 cites, applied to the covered
 # members of a tool list. Usage: python3 -I hidden-text-check.py [hidden-text.json]. Exits 1 on any mismatch.
 # Standard library only. MIT License.
 #
@@ -111,7 +111,7 @@ def first_fault(s, lf_tab_ok):
 
 def found(tools):
     """The first fault of every string and member name in the covered members, in a fixed walk order. U+000A and U+0009
-    are allowed in a string that is the value of a member named description, at any depth (TAP-draft-mcp-tools §3.4)."""
+    are allowed in a string that is the value of a member named description, at any depth (TAP-15 §3.4)."""
     out = []
     def walk(v, key):
         if isinstance(v, str):
