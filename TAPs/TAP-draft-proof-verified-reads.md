@@ -5,7 +5,7 @@ description: How a client checks the TapeOut state it reads over JSON-RPC agains
 author: Bruce (@BruceLanLan)
 discussions-to: https://github.com/TapeOutProtocol/TAPs/issues/27
 status: Draft
-type: Standards
+type: Application
 created: 2026-09-30
 requires: TAP-10
 license: CC0-1.0
@@ -212,7 +212,7 @@ A client that offers proof verification **SHOULD** offer the required policy. A 
 
 ## Rationale
 
-- **Standards, not Information.** This TAP defines client verification rules (TAP-01 §3) with requirements and test vectors that every implementation claiming proof verification must reproduce, and fixes storage layouts that such clients must agree on to reach the same outcome. An Information TAP carries no requirements. The layouts depend on upgradeable contracts; this TAP handles that as TAP-10 does, by accepting a layout only behind a proven implementation gate, and follows the Candidate path of TAP-01 §5.1 until those contracts are sealed.
+- **Application, not Standards or Information.** A client need not implement this TAP (§2 item 1), while a Standards TAP binds every implementation (TAP-01 §3); like TAP-14 and TAP-16, it is an optional capability whose requirements bind the applications that claim it. It is not Information either, which carries no requirements: a client that presents a read as proof-verified must follow §3 to §9 and reproduce the test vectors, and must agree with other such clients on the storage layouts to reach the same outcome. The layouts depend on upgradeable contracts; this TAP handles that as TAP-10 does, by accepting a layout only behind a proven implementation gate, and follows the Candidate path of TAP-01 §5.1 until those contracts are sealed.
 - **State root by agreement, proofs from anyone.** A proof is only as good as its root. Taking the root from the header that independent operators report for the TAP-10 pinned block keeps TAP-10's trust assumption and narrows what the operators must get right to one value. A node that serves a wrong proof fails the check, so proofs need no agreement, and a node that is not trusted at all, or is not among the agreeing operators, can still serve them.
 - **A proof adds, never replaces.** TAP-10 §21 fixes that disagreement means rejection. Using a proof to settle a disagreement, or to skip agreement, would change that rule and would make a wrong layout a silent error. Keeping every TAP-10 read also means that a client which turns proofs off behaves exactly as a TAP-10 client.
 - **Three outcomes.** A node can serve an invalid proof at no cost, so an invalid proof is not evidence of anything (`proof-unavailable`). Only a proof that verifies against the agreed root, under a proven layout gate, and contradicts the agreed answer is evidence that the answering nodes are wrong (`proof-mismatch`), and it is rejected in every policy. A pre-release version of the reference implementation only warned in that case under its opportunistic policy, which let a forged answer through; review caught it before release.
