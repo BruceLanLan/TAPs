@@ -60,7 +60,7 @@ This TAP does not define the settlement contract. It relies on four facts about 
 | Fact | Content |
 |---|---|
 | **F1** | The token the contract settles |
-| **F2** | For a channel, the amount the contract has already paid to the provider address (the **amount paid**) |
+| **F2** | For a channel, the total the contract has already taken out of the channel in settlement, whatever share of it went to the provider address and whatever share the contract kept or sent elsewhere (the **amount paid**). A voucher's `cumulative` is settled against this total |
 | **F3** | For a channel and a key, whether the consumer has authorised the key to sign vouchers for that channel, and until when |
 | **F4** | For a channel and an amount, whether the funds the contract holds for the channel cover that amount |
 
