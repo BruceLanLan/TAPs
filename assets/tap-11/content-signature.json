@@ -1,6 +1,6 @@
 {
   "description": "Optional manifest content signature (Specification §5) over the canonical JSON of §6. Test holder key only.",
-  "reproducedBy": "https://github.com/BruceLanLan/tapeapi/tree/fda84db889d2a732915f264a799af24073177a85 (sdk/src/sig.js manifestContentHash, hashManifestContent, manifestContentDigest, signDigest, recoverAddress; sdk/src/canon.js canonicalJSON)",
+  "reproducedBy": "https://github.com/BruceLanLan/tapeapi/tree/4a1ac4fe2a0b2e3327652a794794765dd5da98ef (sdk/src/sig.js manifestContentHash, hashManifestContent, manifestContentDigest, signDigest, recoverAddress; sdk/src/canon.js canonicalJSON)",
   "domain": {
     "name": "TapeAPI",
     "version": "1",

@@ -1,0 +1,57 @@
+{
+  "note": "Generated from the reference implementation at BruceLanLan/tapeapi@4a1ac4fe2a0b2e3327652a794794765dd5da98ef (TapeAPI 1.8.1, with the option labels: 'v2') (sdk/src/channel.js, sdk/src/sig.js, sdk/src/canon.js). Hex is lowercase; values without 0x are raw hex. Every field is an input or an exact expected output unless it is under \"example\".",
+  "covers": "Channel rooms and frames (Specification §9, §10.1). Keys are those of handshake.json.",
+  "cid": "697f8ba7adb6dae6fa02182440464f73",
+  "kAB": "bed5971c4d125f968853d42b740bb065dc07d4b391f1ec38554679551e434ce0",
+  "kBA": "b21f6df8eb0a29fa1dd3aac43bd6b555c73189fc7b5114ddc159b60ad643da88",
+  "rooms": {
+    "toInitiator_dir0": "23c75378cb0be42c12bcafa872cd22c1c5b5c3391bcea21faca70b5a7f9e3bd7",
+    "toResponder_dir1": "fa8801047faf0ac3b1d2d0a41f8d1ee1c6f16e03660607222d5fa0d54dc373d7"
+  },
+  "frames": [
+    {
+      "from": "initiator",
+      "seq": 0,
+      "dir": 0,
+      "key": "kAB",
+      "plaintextUTF8": "hello from A",
+      "plaintextHex": "68656c6c6f2066726f6d2041",
+      "nonce": "000000000000000000000000",
+      "aad": "746170652d6368616e6e656c2f6672616d652f7631697f8ba7adb6dae6fa02182440464f73000000000000000000",
+      "frame": "000000000000000086a25a6d040618ea4d5301b1edbb756b53d629be0d4b3a968904eedc"
+    },
+    {
+      "from": "initiator",
+      "seq": 1,
+      "dir": 0,
+      "key": "kAB",
+      "plaintextUTF8": "",
+      "plaintextHex": "",
+      "nonce": "000000000000000000000001",
+      "aad": "746170652d6368616e6e656c2f6672616d652f7631697f8ba7adb6dae6fa02182440464f73000000000000000001",
+      "frame": "00000000000000012e8f7ded6b301922960ac7ad624851c7"
+    },
+    {
+      "from": "responder",
+      "seq": 0,
+      "dir": 1,
+      "key": "kBA",
+      "plaintextUTF8": "hello from B",
+      "plaintextHex": "68656c6c6f2066726f6d2042",
+      "nonce": "000000000000000000000000",
+      "aad": "746170652d6368616e6e656c2f6672616d652f7631697f8ba7adb6dae6fa02182440464f73010000000000000000",
+      "frame": "0000000000000000c5067b71096347aff934c8df829b118d03ff6b09f0c30c1be4348c09"
+    },
+    {
+      "from": "initiator",
+      "seq": 2,
+      "dir": 0,
+      "key": "kAB",
+      "plaintextUTF8": "中文 😀",
+      "plaintextHex": "e4b8ade6968720f09f9880",
+      "nonce": "000000000000000000000002",
+      "aad": "746170652d6368616e6e656c2f6672616d652f7631697f8ba7adb6dae6fa02182440464f73000000000000000002",
+      "frame": "0000000000000002f13d17925c8daf614fd8686d85e91301627069bdc941a617f7f780"
+    }
+  ]
+}
