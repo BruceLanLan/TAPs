@@ -182,7 +182,7 @@ Implementations MUST use the member and trait names of this TAP (`nandBurn`, `la
    | `seed` | when `sampled` | hash | The 32-byte seed of the sampling procedure |
    | `reference` | unless `unconfirmed` | object | `processor` (address) and `circuitId` (decimal string) of the reference circuit |
 
-   `method` `"exhaustive"` is allowed only when `design.stateCount` is 0; an exhaustive match has `vectors` = 2^nIn. A tool MUST NOT present a netlist as correct unless `result` is `"match"`, and SHOULD show the method and, for `sampled`, the number of vectors.
+   `method` `"exhaustive"` is allowed only when both circuits are combinational: `design.stateCount` is 0 and the reference circuit has no LATCH records; an exhaustive match has `vectors` = 2^nIn. A tool MUST NOT present a netlist as correct unless `result` is `"match"`, and SHOULD show the method and, for `sampled`, the number of vectors.
 4. Procedure `tap-pod-fc/1`. Evaluation follows TAP-02 §4; input `j` is signal `2 + j`. If the candidate and the reference differ in `nIn` or `nOut`, the result is `"mismatch"` with `vectors` 0. `stream(seed, i_1, …, i_k)` is the bit string SHA-256(seed ‖ u32be(i_1) ‖ … ‖ u32be(i_k) ‖ u32be(0)) ‖ SHA-256(… ‖ u32be(1)) ‖ …, read byte by byte, least significant bit first.
    - Both combinational and nIn ≤ 16 (`exhaustive`): pattern `i` for `i` = 0 … 2^nIn − 1, input `j` = bit `j` of `i`.
    - Both combinational and nIn > 16 (`sampled`): 16,384 patterns; pattern `k` takes its inputs from `stream(seed, k)`.
