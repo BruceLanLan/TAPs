@@ -1,0 +1,229 @@
+{
+  "title": "Worked examples for TAP-draft-container-agent, Test Cases: mandate 0 and offer 0 of vectors.json with every intermediate",
+  "note": "typedData is the eth_signTypedData_v4 payload (uint256 values as decimal strings). encodeData = typeHash followed by one 32-byte word per field; digestPreimage = 0x1901 || domainSeparator || structHash.",
+  "examples": [
+    {
+      "name": "phase 0: two providers in scope, every cap 0 and every token the zero address, the agent is paid",
+      "typedData": {
+        "domain": {
+          "name": "TapeAPI",
+          "version": "1",
+          "chainId": 56,
+          "verifyingContract": "0xe61A9C7213a6Aa616C246a2B569e555B417b25ee"
+        },
+        "types": {
+          "EIP712Domain": [
+            {
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "name": "version",
+              "type": "string"
+            },
+            {
+              "name": "chainId",
+              "type": "uint256"
+            },
+            {
+              "name": "verifyingContract",
+              "type": "address"
+            }
+          ],
+          "Mandate": [
+            {
+              "name": "principal",
+              "type": "address"
+            },
+            {
+              "name": "agent",
+              "type": "address"
+            },
+            {
+              "name": "agentKey",
+              "type": "address"
+            },
+            {
+              "name": "mode",
+              "type": "uint8"
+            },
+            {
+              "name": "taskHash",
+              "type": "bytes32"
+            },
+            {
+              "name": "scope",
+              "type": "Scope[]"
+            },
+            {
+              "name": "feeToken",
+              "type": "address"
+            },
+            {
+              "name": "feeCap",
+              "type": "uint256"
+            },
+            {
+              "name": "notBefore",
+              "type": "uint64"
+            },
+            {
+              "name": "expires",
+              "type": "uint64"
+            },
+            {
+              "name": "nonce",
+              "type": "uint256"
+            },
+            {
+              "name": "subdelegate",
+              "type": "bool"
+            }
+          ],
+          "Scope": [
+            {
+              "name": "provider",
+              "type": "address"
+            },
+            {
+              "name": "token",
+              "type": "address"
+            },
+            {
+              "name": "cap",
+              "type": "uint256"
+            }
+          ]
+        },
+        "primaryType": "Mandate",
+        "message": {
+          "principal": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+          "agent": "0x19366c3c69FFEB3b286D9fA6cC5e616375BAafd3",
+          "agentKey": "0xAe72A48c1a36bd18Af168541c53037965d26e4A8",
+          "mode": 0,
+          "taskHash": "0x7cd6a489238bf6b1b71d7136181de5b847fee4b200fc3a8d6532f4915dcf7ff0",
+          "scope": [
+            {
+              "provider": "0x00000000000000000000000000000000000005e1",
+              "token": "0x0000000000000000000000000000000000000000",
+              "cap": "0"
+            },
+            {
+              "provider": "0x00000000000000000000000000000000000005e2",
+              "token": "0x0000000000000000000000000000000000000000",
+              "cap": "0"
+            }
+          ],
+          "feeToken": "0x0000000000000000000000000000000000000000",
+          "feeCap": "0",
+          "notBefore": 1789000000,
+          "expires": 1789086400,
+          "nonce": "1",
+          "subdelegate": false
+        }
+      },
+      "typeHash": "0xf2121b841c65f4d74c6cd4a5f8de39d1aaec1060d147338e7a635ecc5bca8171",
+      "encodeData": "0xf2121b841c65f4d74c6cd4a5f8de39d1aaec1060d147338e7a635ecc5bca817100000000000000000000000086ddaef00401e3f10418398d67d7189fc458ea9500000000000000000000000019366c3c69ffeb3b286d9fa6cc5e616375baafd3000000000000000000000000ae72a48c1a36bd18af168541c53037965d26e4a800000000000000000000000000000000000000000000000000000000000000007cd6a489238bf6b1b71d7136181de5b847fee4b200fc3a8d6532f4915dcf7ff0250d5b3f2525568ee800efa67d8491e37938baebbf85a6f5db2bac22c6a663d000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006aa1f940000000000000000000000000000000000000000000000000000000006aa34ac000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000000000000000",
+      "structHash": "0x95d93105029fb7124b3be259d91c6f1dd4c44ad4f7e94258cf042215efc50efb",
+      "domainSeparator": "0xa73ee348b5672f12dbc174f66a7d162c69e0d64befdba88475d9d7e3c0fd3ac7",
+      "digestPreimage": "0x1901a73ee348b5672f12dbc174f66a7d162c69e0d64befdba88475d9d7e3c0fd3ac795d93105029fb7124b3be259d91c6f1dd4c44ad4f7e94258cf042215efc50efb",
+      "digest": "0x35eb4e7a6b9350682344107fac505300358ae1a1ab561c982f23f0c3844c223a",
+      "sig": "0x69ff0d1e14fe3df990c5c8c80bc4e059f34104350a54c5d571ad8e099ee830503d130c932d4c65ccb9d05c13193e258747fbbaa085b03f1127d051b224bc940c1c",
+      "recoversTo": "0x19E7E376E7C213B7E7e7e46cc70A5dD086DAff2A",
+      "scopeHashes": [
+        "0xf3386688fada3a897b773e2432a2d9eb096e9a8fedf75b2d32e4e60068c7995f",
+        "0x2e7077b88f8cf5e85f3e3faaa93c13bc1bc7f9d476aa122bcf6cd416531faec7"
+      ],
+      "scopeArrayHash": "0x250d5b3f2525568ee800efa67d8491e37938baebbf85a6f5db2bac22c6a663d0"
+    },
+    {
+      "name": "the offer behind mandate 0",
+      "typedData": {
+        "domain": {
+          "name": "TapeAPI",
+          "version": "1",
+          "chainId": 56,
+          "verifyingContract": "0xe61A9C7213a6Aa616C246a2B569e555B417b25ee"
+        },
+        "types": {
+          "EIP712Domain": [
+            {
+              "name": "name",
+              "type": "string"
+            },
+            {
+              "name": "version",
+              "type": "string"
+            },
+            {
+              "name": "chainId",
+              "type": "uint256"
+            },
+            {
+              "name": "verifyingContract",
+              "type": "address"
+            }
+          ],
+          "TaskOffer": [
+            {
+              "name": "principal",
+              "type": "address"
+            },
+            {
+              "name": "agent",
+              "type": "address"
+            },
+            {
+              "name": "taskHash",
+              "type": "bytes32"
+            },
+            {
+              "name": "mode",
+              "type": "uint8"
+            },
+            {
+              "name": "feeToken",
+              "type": "address"
+            },
+            {
+              "name": "fee",
+              "type": "uint256"
+            },
+            {
+              "name": "deadline",
+              "type": "uint64"
+            },
+            {
+              "name": "exp",
+              "type": "uint64"
+            },
+            {
+              "name": "nonce",
+              "type": "uint256"
+            }
+          ]
+        },
+        "primaryType": "TaskOffer",
+        "message": {
+          "principal": "0x86DDaEF00401E3F10418398D67D7189fc458eA95",
+          "agent": "0x19366c3c69FFEB3b286D9fA6cC5e616375BAafd3",
+          "taskHash": "0x7cd6a489238bf6b1b71d7136181de5b847fee4b200fc3a8d6532f4915dcf7ff0",
+          "mode": 0,
+          "feeToken": "0x0000000000000000000000000000000000000000",
+          "fee": "0",
+          "deadline": 1789086400,
+          "exp": 1789003600,
+          "nonce": "1"
+        }
+      },
+      "typeHash": "0x9a96ccf2dd5736d1b56c02a80e91f86d6d8b5008b4abe68fee9cc78915e09546",
+      "encodeData": "0x9a96ccf2dd5736d1b56c02a80e91f86d6d8b5008b4abe68fee9cc78915e0954600000000000000000000000086ddaef00401e3f10418398d67d7189fc458ea9500000000000000000000000019366c3c69ffeb3b286d9fa6cc5e616375baafd37cd6a489238bf6b1b71d7136181de5b847fee4b200fc3a8d6532f4915dcf7ff0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000006aa34ac0000000000000000000000000000000000000000000000000000000006aa207500000000000000000000000000000000000000000000000000000000000000001",
+      "structHash": "0x4db3cd61f9e10376284fd8c893aef2712a17133e323d0f7606226ccf4e32e503",
+      "domainSeparator": "0xa73ee348b5672f12dbc174f66a7d162c69e0d64befdba88475d9d7e3c0fd3ac7",
+      "digestPreimage": "0x1901a73ee348b5672f12dbc174f66a7d162c69e0d64befdba88475d9d7e3c0fd3ac74db3cd61f9e10376284fd8c893aef2712a17133e323d0f7606226ccf4e32e503",
+      "digest": "0x81a04adea0ea7cf95587504002a3de06720ef082681c468fef256e786f224c69",
+      "sig": "0x2caee43461c34b03a3f6b1df503743c366bf3d9dd1cf104c92eceff95e35bbaf7da151e8ca04b950df785d69bf28952eb5e447929395a7c543a2a1092084d2c81c",
+      "recoversTo": "0x19E7E376E7C213B7E7e7e46cc70A5dD086DAff2A"
+    }
+  ]
+}

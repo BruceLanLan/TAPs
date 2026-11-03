@@ -1,0 +1,98 @@
+ok   holder address from the test key
+ok   encodeType Scope
+ok   typehash Scope
+ok   encodeType Mandate
+ok   typehash Mandate
+ok   encodeType TaskOffer
+ok   typehash TaskOffer
+ok   encodeType TaskVerdict
+ok   typehash TaskVerdict
+ok   encodeType MandateRevocation
+ok   typehash MandateRevocation
+ok   keccak256("") (empty Scope[] or bytes32[])
+ok   task canonical JSON
+ok   taskHash
+ok   domain separator (TAP-11 Test Cases, chainId 56)
+ok   mandate scope[0] hashStruct / phase 0: two providers in scope, every cap 0 and every token the zero address, the agent is paid
+ok   mandate scope[1] hashStruct / phase 0: two providers in scope, every cap 0 and every token the zero address, the agent is paid
+ok   mandate structHash / phase 0: two providers in scope, every cap 0 and every token the zero address, the agent is paid
+ok   mandate digest = mandateHash / phase 0: two providers in scope, every cap 0 and every token the zero address, the agent is paid
+ok   mandate signature recovers the holder / phase 0: two providers in scope, every cap 0 and every token the zero address, the agent is paid
+     phase-0 rule (3.6) passes / phase 0: two providers in scope, every cap 0 and every token the zero address, the agent is paid
+ok   mandate structHash / an empty scope hashes as keccak256 of nothing
+ok   mandate digest = mandateHash / an empty scope hashes as keccak256 of nothing
+ok   mandate signature recovers the holder / an empty scope hashes as keccak256 of nothing
+     phase-0 rule (3.6) passes / an empty scope hashes as keccak256 of nothing
+ok   mandate scope[0] hashStruct / mode 1 (the agent spends), a large nonce, a token and non-zero caps (refused by phase 0, signed only with allowFunds, still hashable)
+ok   mandate structHash / mode 1 (the agent spends), a large nonce, a token and non-zero caps (refused by phase 0, signed only with allowFunds, still hashable)
+ok   mandate digest = mandateHash / mode 1 (the agent spends), a large nonce, a token and non-zero caps (refused by phase 0, signed only with allowFunds, still hashable)
+ok   mandate signature recovers the holder / mode 1 (the agent spends), a large nonce, a token and non-zero caps (refused by phase 0, signed only with allowFunds, still hashable)
+     phase-0 rule (3.6) fails: phase0-no-funds / mode 1 (the agent spends), a large nonce, a token and non-zero caps (refused by phase 0, signed only with allowFunds, still hashable)
+ok   the same mandate on chainId 196
+ok   mandate 0 signature checked against the chainId 196 digest does not recover the holder
+     (it recovers 0x18b0de52E5078780Ba2F2363C71d62f10Ed1097e)
+ok   TaskOffer structHash / the offer behind mandate 0
+ok   TaskOffer digest / the offer behind mandate 0
+ok   TaskOffer signature recovers the holder / the offer behind mandate 0
+ok   TaskVerdict structHash / acceptance of the delivery under mandate 0
+ok   TaskVerdict digest / acceptance of the delivery under mandate 0
+ok   TaskVerdict signature recovers the holder / acceptance of the delivery under mandate 0
+ok   TaskVerdict structHash / rejection, with the hash of a reason
+ok   TaskVerdict digest / rejection, with the hash of a reason
+ok   TaskVerdict signature recovers the holder / rejection, with the hash of a reason
+ok   MandateRevocation structHash / two mandates revoked by hash
+ok   MandateRevocation digest / two mandates revoked by hash
+ok   MandateRevocation signature recovers the holder / two mandates revoked by hash
+ok   MandateRevocation structHash / every mandate with notBefore below a date, no list
+ok   MandateRevocation digest / every mandate with notBefore below a date, no list
+ok   MandateRevocation signature recovers the holder / every mandate with notBefore below a date, no list
+ok   verdict mandateHash is mandate 0 digest
+ok   revocation 0 lists mandates 0 and 1
+ok   high-s twin refused
+ok   worked Mandate: encodeData
+ok   worked Mandate: structHash
+ok   worked Mandate: domainSeparator
+ok   worked Mandate: 66-byte digest preimage
+ok   worked Mandate: digest
+ok   worked Mandate: signature recovers
+ok   worked TaskOffer: encodeData
+ok   worked TaskOffer: structHash
+ok   worked TaskOffer: domainSeparator
+ok   worked TaskOffer: 66-byte digest preimage
+ok   worked TaskOffer: digest
+ok   worked TaskOffer: signature recovers
+ok   eth_account EIP-712 digest of the worked Mandate
+ok   eth_account recovery of the worked Mandate
+ok   eth_account EIP-712 digest of the worked TaskOffer
+ok   eth_account recovery of the worked TaskOffer
+ok   revocation file, worst case, compact: 3,915 bytes
+ok   revocation file, the same on chain 56 with a two-space indent: 4,118 bytes (over 4,096)
+ok   Delegation typehash as stated in Test Cases
+ok   Delegation typehash differs from every type of this draft
+ok   ManifestContent typehash as stated in Test Cases
+ok   ManifestContent typehash differs from every type of this draft
+ok   ChannelKeys typehash as stated in Test Cases
+ok   ChannelKeys typehash differs from every type of this draft
+
+--- check_thread.py ---
+ok   thread case 0: a revocation message placed before the accept, issued before it: the accept is refused, the thread is cancelled
+ok   thread case 1: the same revocation from the site list: the same result
+ok   thread case 2: a revocation message placed before the accept but issued after the delivery: where it appears does not matter
+ok   thread case 3: a dated revocation and a refused mandate: the dated one applies, the site list found for the refused mandate does not count
+ok   thread case 4: two revocations, an early and a late one: R is the early one, a delivery between them is refused
+ok   thread case 5: a site revocation issued after the delivery and before the verdict: the thread stays Settled
+ok   thread case 6: the same revocation as a message after the verdict: the same result
+ok   thread case 7: a revocation issued after `at`: not cancelled yet
+ok   thread case 8: a revocation that covers neither the mandate nor any date: revocation-mismatch, no R
+ok   thread case 9: cancelled and expired at once: Cancelled comes first
+ok   thread case 10: no revocation, past the mandate's expiry: Expired
+ok   thread case 11: an accept signed exactly at R is allowed (only after R is refused)
+ok   thread case 12: a delivery signed exactly at R is allowed, and accepted
+ok   thread case 13: R equal to at cancels
+ok   thread case 14: R one second after at does not cancel yet
+ok   cases 0 and 1 give the same R, state and problems
+ok   cases 5 and 6 give the same R, state and problems
+
+thread checks passed: 0 failure(s)
+
+all checks passed: 0 failure(s)
