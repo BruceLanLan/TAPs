@@ -276,6 +276,8 @@ ADDR = re.compile(r"^0x[0-9a-f]{40}$")
 TOKEN_ID = re.compile(r"^eip155:([1-9][0-9]*)/erc721:(0x[0-9a-f]{40})/(0|[1-9][0-9]*)$")
 DEC = re.compile(r"^(0|[1-9][0-9]*)$")
 TAPE_NAME = re.compile(r"^(0|[1-9][0-9]*)(\.[1-9][0-9]*)?\.(0|[1-9][0-9]*)\.tape$")
+# TAP-10 §2.1: a name without an area code is on BNB Smart Chain; area 3 is Base, area 2 is X Layer
+AREA_CHAIN = {None: 56, "3": 8453, "2": 196}
 STATES = {"unrevealed", "revealed"}
 
 
@@ -339,6 +341,9 @@ def _check_optional(tap: dict) -> None:
              "tap.content.container must be a lowercase address")
         _req(isinstance(con.get("name"), str) and TAPE_NAME.match(con["name"]) is not None,
              "tap.content.name must be a TAP-10 on-chain name")
+        area = TAPE_NAME.match(con["name"]).group(2)
+        _req(AREA_CHAIN.get(area[1:] if area else None) == con["chainId"],
+             "tap.content.name must denote the chain tap.content.chainId")
         paths = con.get("paths")
         _req(isinstance(paths, dict), "tap.content.paths must be an object")
         for k in ("image", "netlist", "metadata"):

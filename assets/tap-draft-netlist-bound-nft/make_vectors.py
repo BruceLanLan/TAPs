@@ -780,6 +780,7 @@ def section_content() -> dict:
         ("container_mixed_case", mut(C, ["tap", "content", "container"], "0x00000000000000000000000000000000000000DD"),
          "tap.content.container must be a lowercase address"),
         ("name_not_tap10", mut(C, ["tap", "content", "name"], "testBlonskr"), "tap.content.name must be a TAP-10 on-chain name"),
+        ("name_other_chain", mut(C, ["tap", "content", "chainId"], 8453), "tap.content.name must denote the chain tap.content.chainId"),
         ("paths_missing", mut(C, ["tap", "content", "paths"], delete=True), "tap.content.paths must be an object"),
         ("paths_image_number", mut(C, ["tap", "content", "paths", "image"], 1), "tap.content.paths.image must be a non-empty string"),
         ("paths_metadata_empty", mut(C, ["tap", "content", "paths", "metadata"], ""), "tap.content.paths.metadata must be a non-empty string"),

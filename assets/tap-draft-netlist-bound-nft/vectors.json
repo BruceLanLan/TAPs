@@ -217,6 +217,48 @@
      "name": "Example #1",
      "tap": {
       "content": {
+       "chainId": 8453,
+       "container": "0x00000000000000000000000000000000000000dd",
+       "lock": "0x00000000000000000000000000000000000000ee",
+       "name": "1.2.282.tape",
+       "paths": {
+        "image": "images/1.png",
+        "metadata": "token/1.json",
+        "netlist": "netlists/1.tapnet"
+       }
+      },
+      "id": "eip155:196/erc721:0x00000000000000000000000000000000000000aa/1",
+      "image": {
+       "sha256": "0x6105d6cc76af400325e94d588ce511be5bfdbb73b437dc51eca43917d7a43e3d",
+       "uris": [
+        "https://example.invalid/images/1.png"
+       ]
+      },
+      "netlist": {
+       "bytes": 41,
+       "format": "tapnet/1",
+       "latch": 1,
+       "nIn": 2,
+       "nOut": 1,
+       "nand": 3,
+       "sha256": "0xfc026475b8786a706f6831d13838bb256ab0e1be5ae65e2ded1ae39a99420900",
+       "uris": [
+        "https://example.invalid/netlists/1.tapnet"
+       ]
+      },
+      "state": "revealed",
+      "v": 1
+     }
+    },
+    "error": "tap.content.name must denote the chain tap.content.chainId",
+    "name": "name_other_chain"
+   },
+   {
+    "document": {
+     "image": "https://example.invalid/images/1.png",
+     "name": "Example #1",
+     "tap": {
+      "content": {
        "chainId": 196,
        "container": "0x00000000000000000000000000000000000000dd",
        "lock": "0x00000000000000000000000000000000000000ee",
