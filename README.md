@@ -12,6 +12,9 @@ TAPs are the public, numbered documents in which the TapeOut community proposes,
 | [TAP-11](TAPs/TAP-11.md) | TapeAPI Service Manifest and Holder Delegation | Application | Draft |
 | [TAP-12](TAPs/TAP-12.md) | Sealed Commitments and Verdicts over TapeSend | Application | Draft |
 | [TAP-13](TAPs/TAP-13.md) | Signed Responses for Container Services | Application | Draft |
+| [TAP-14](TAPs/TAP-14.md) | Private Channels Between Containers | Application | Draft |
+| [TAP-15](TAPs/TAP-15.md) | MCP Tools as Container Service Methods | Application | Draft |
+| [TAP-16](TAPs/TAP-16.md) | Attested Reads from Independent Container Services | Application | Draft |
 
 Drafts that are proposed but not yet merged are the open pull requests.
 
