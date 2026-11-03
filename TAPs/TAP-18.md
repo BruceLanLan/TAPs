@@ -214,7 +214,7 @@ A holder may publish a revocation in the principal's site under the registry key
 
 A holder SHOULD write the file without insignificant whitespace (Rationale). A verifier reads it at the pinned block of §4 from the site store chosen as in TAP-11 §2.2 step 3 (the first listed for that chain that has any path for the container), verifying it as TAP-10 §6.1 and §7.1 steps 3–5 do, with this exact key and without the landing rules of TAP-10 §7.2 step 4. Then:
 
-1. `chunkCount` 0 means **none published**, unless the verifier keeps a floor for this principal (§6.3);
+1. `chunkCount` 0 means **none published**, unless the verifier keeps a floor for this principal and its current holder (§6.3);
 2. the file is **invalid** when: its declared size exceeds 4,096 bytes; it fails TAP-10 §7.1 or has no on-chain SHA-256; its bytes are not UTF-8, begin with a byte order mark, are not JSON, repeat a member name or contain a member named `__proto__`, `constructor` or `prototype`; a member breaks the table above; `issued` is more than 300 seconds after `now`; `sig` is not a holder signature; or it fails the floor (§6.3);
 3. otherwise its revocation is **published**.
 
@@ -222,7 +222,7 @@ None published is not a problem. An invalid file is reported as `revocation-unav
 
 #### 6.3 Floor
 
-Whoever can write the principal's site can put back an older file or remove the current one. A verifier SHOULD keep, per chain and principal, the highest `issued` it has accepted from a revocation file (a **floor**), where the principals it checks cannot write. A verifier that keeps a floor treats as invalid a file whose `issued` is below the floor and a missing file (`chunkCount` 0) when a floor exists. A file whose `issued` equals the floor is accepted, whatever its content. To withdraw every revocation, a holder publishes a file with a higher `issued`, an empty list and `revokedBefore` 0.
+Whoever can write the principal's site can put back an older file or remove the current one. A verifier SHOULD keep, per chain, principal and holder, the highest `issued` it has accepted from a revocation file signed by that holder (a **floor**), where the principals it checks cannot write. A verifier that keeps a floor treats as invalid a file whose `issued` is below the floor and a missing file (`chunkCount` 0) when a floor exists for the current holder. A floor does not outlive a transfer: the new holder's files are judged against its own floor, as the delegation floor of TAP-11 §7.3 is kept per holder. A file whose `issued` equals the floor is accepted, whatever its content. To withdraw every revocation, a holder publishes a file with a higher `issued`, an empty list and `revokedBefore` 0.
 
 #### 6.4 Effect on a mandate
 
@@ -377,7 +377,7 @@ This TAP adds no contract, hub function, payload format or name syntax, and chan
 
 **Reading of TAP-10 §19 step 14.** Step 14 makes the result `unavailable` for "an earlier entry whose wallet cannot be determined". TAP-10 §19 uses that wording for step 8 ("the sending wallet of m could not be determined") and lists `indirect` separately as step 9, so the reference implementation reads the parenthesis as the step 8 case (§18.5 step 1 failing) and, for an earlier entry whose message is `indirect`, compares only its sending container. The other reading would make a payment `unavailable` whenever a message sent through a contract by anyone lies among the at most 60 entries between the transfer's block and the payment message. This is the authors' reading, not a requirement of this TAP; if the TAP-10 editors read step 14 otherwise, the reference implementation will follow them.
 
-**Differences between this text and the reference implementation.** Revocation in a thread (§7.5, §7.6) and the reading of the revocation file (§6.2: `chunkCount`, the first site store with a path, the implementations of TAP-10 §6.1, a byte order mark refused) are aligned since 1.7.1. The four rows of the table of differences in earlier revisions of this draft are closed by TapeAPI 2.0.0, at the commit named under Reference Implementation; the table says in which release each was closed and how:
+**Differences between this text and the reference implementation.** Revocation in a thread (§7.5, §7.6) and the reading of the revocation file (§6.2: `chunkCount`, the first site store with a path, the implementations of TAP-10 §6.1, a byte order mark refused) are aligned since 1.7.1. The four rows of the table of differences in earlier revisions of this draft are closed by TapeAPI 2.0.0, at the commit named under Reference Implementation; the table says in which release each was closed and how: One difference is open: the reference implementation keeps its revocation floor (`revocationFloor`, TapeAPI 2.4.0) per principal, not per principal and holder (§6.3).
 
 | Area | This TAP | Closed in | How, at that commit |
 |---|---|---|---|
