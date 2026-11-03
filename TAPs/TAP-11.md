@@ -7,6 +7,7 @@ discussions-to: https://github.com/TapeOutProtocol/TAPs/issues/7
 status: Draft
 type: Application
 created: 2026-09-30
+updated: 2026-10-09
 requires: TAP-10
 license: CC0-1.0
 ---
@@ -244,31 +245,31 @@ This TAP adds no contract, hub function, payload format or name syntax, and chan
 
 **Existing manifests.** The manifest format is unchanged. Two rules that the earlier text stated as recommendations are now requirements, and the reference implementation already enforced both: rejecting duplicate member names, and the 366-day bound. The live manifest of `11.1013.tape` satisfies both (Test Cases).
 
-**Differences between this text and the reference implementation.** The reference implementation (Reference Implementation, commit `fda84db`) was written to the earlier text and does not yet conform to this TAP. The known differences, and the planned changes:
+**Differences between this text and the reference implementation.** The reference implementation (Reference Implementation, commit `4a1ac4f`, version 1.8.1) resolves a service as this TAP says when it is created with the option `conform: 'tap10'`, its TAP-10 conformance mode, which that version marks experimental. Its default resolution path was written to the earlier text and has not changed within its 1.x versions; a client that needs this TAP's verdicts uses the conformance mode. The rows below list, for each area, what the default path does, what the conformance mode does, and what this TAP says:
 
-| Area | Reference implementation today | This TAP | Plan |
+| Area | Default path (1.8.1) | `conform: 'tap10'` (1.8.1) | This TAP |
 |---|---|---|---|
-| Container derivation | `hub.accountOf(circuits, tokenId)` | `opener.accountOf` under TAP-10 §4.2 | Read the opener. For the accepted hub implementations both return the same ERC-6551 address (checked for `11.1013.tape` at BNB Smart Chain block 124890135) |
-| Container address input | Reads the manifest from that container, then takes the processor contract and #ID from the manifest and checks that they derive the container and that the factory knows the processor contract; does not call `token()` or find the processor number | TAP-10 §4.3 before any file is read; the manifest's identity values are only compared (§2.2 step 5) | Resolve under TAP-10 §4.3 first. Both paths accept the same circuit, because the container is derived from the processor contract and #ID |
-| Label input | With a directory contract configured by the caller (there is no default), any other string is looked up there as a label | Not an input form (§2.1) | Keep label lookup outside resolution under this TAP |
-| Missing file | Detected by `fileInfo.size` 0 | `chunkCount` 0 (§2.2 step 3, TAP-10 §7.1) | Use `chunkCount` |
-| Decoding | Replaces bytes that are not valid UTF-8 and drops a leading byte order mark before parsing | Both make the manifest invalid (§3.1) | Decode strictly |
-| Opened | Not read | TAP-10 §4.2 step 5, §6.2 `not-opened` | Read `isOpened` |
-| Activation | Not checked | TAP-10 §6.2 `unpaid` ends resolution | Check `isLive` and `isContainerLive`. The author's two services, `11.1013.tape` and `12.1013.tape`, were not activated when read on 2026-09-30 and resolve as `unpaid` under this TAP until their holder activates them |
-| Implementation pinning | Checks the hub and site store slots and by default only warns | Site store and payment contract, fail-closed (`store-changed`) | Check the payment contract too; make fail-closed the default (announced as a security fix, with an opt-out, or in a major version) |
-| Pinned block | Reads at `latest` by default; optional pinning uses the finality tag and a timestamp age | One pinned block per resolution, freshness by block lag (TAP-10 §5.3) | Adopt TAP-10 §5.3 |
-| Input without chain information | Resolved on the caller's or configured chain only | Every active chain, `ambiguous` (TAP-10 §4.1) | Resolve on every active chain |
-| Name ranges | #ID and processor number up to 78 digits | TAP-10 §3.1 ranges | Apply TAP-10 §3.1 |
-| What counts as an answer | Some JSON-RPC errors are compared across nodes as answers | Only results and reverts are answers (TAP-10 §1) | Treat other errors as node failures |
-| Keeping results | Keeps `accountOf` answers and the implementation slots for up to 300 seconds across resolutions | Holder and site status are relied on for at most 60 seconds; only the processor table is kept (§7.1, TAP-10 §11) | Reread per resolution, keeping the processor table |
-| Chain check | Does not check `eth_chainId` when resolving | Recommended (TAP-10 §5.4) | Add the check |
-| Outcome names | `MANIFEST_INVALID` (also for a missing file, a non-existent token, `no-hash` and `incomplete`), `DELEGATION_INVALID`, `NOT_FOUND`, `RPC_DISAGREE`, `RPC_UNAVAILABLE`, `RPC_STALE` | §2.3 and TAP-10 names | Add the §2.3 name to each error, keeping the existing codes |
+| Container derivation | `hub.accountOf(circuits, tokenId)` | `opener.accountOf`, compared with a local ERC-6551 derivation | `opener.accountOf` under TAP-10 §4.2. For the accepted hub implementations both return the same ERC-6551 address (checked for `11.1013.tape` at BNB Smart Chain block 124890135) |
+| Container address input | Reads the manifest from that container, then takes the processor contract and #ID from the manifest and checks that they derive the container and that the factory knows the processor contract; does not call `token()` or find the processor number | TAP-10 §4.3 before any file is read: `token()`, `isCPU`, the processor number (a processor table shipped with the SDK, each hit confirmed by one `cpuAt` at the pinned block, otherwise a paged scan of `cpuAt`), then `opener.accountOf` must derive the given address | TAP-10 §4.3 before any file is read; the manifest's identity values are only compared (§2.2 step 5) |
+| Label input | With a directory contract configured by the caller (there is no default), any other string is looked up there as a label | An input error; the inputs are those of TAP-10 §3.4 and the object forms for a container and for a processor contract with an #ID | Not an input form (§2.1) |
+| Missing file | Detected by `fileInfo.size` 0 | `chunkCount` 0 is `no-manifest` | `chunkCount` 0 (§2.2 step 3, TAP-10 §7.1) |
+| Decoding | Replaces bytes that are not valid UTF-8 and drops a leading byte order mark before parsing | Both make the manifest invalid | Both make the manifest invalid (§3.1) |
+| Opened | Not read | `isOpened` is read; `not-opened` ends resolution | TAP-10 §4.2 step 5, §6.2 `not-opened` |
+| Activation | Not checked | `isLive` and `isContainerLive` are read; `unpaid` ends resolution | TAP-10 §6.2 `unpaid` ends resolution. The author's two services, `11.1013.tape` and `12.1013.tape`, were not activated when the Test Cases were recorded (2026-09-30) and resolved as `unpaid`; their holder activated them on 2026-10-01, and on 2026-10-09 `isContainerLive` was true for both containers when read from two operators at BNB Smart Chain block 126658102 (hash `0x152776aae99baff145411961ab761000d7825f21046648848d053a8a02b8b8ea`) |
+| Implementation pinning | Reads the hub's and the site store's implementation slots and by default only warns | Site store and payment contract, read at the pinned block, fail-closed (`store-changed`); the hub's slot is still read under the warning-only check | Site store and payment contract, fail-closed (`store-changed`) |
+| Pinned block | Reads at `latest` by default; the optional pinning uses a finality tag and a timestamp age | One block per resolution, chosen as TAP-10 §5.3 says (each operator's lowest head, the Q-th highest minus 2, read by its hash) and refused as `stale-block` by block lag | One pinned block per resolution, freshness by block lag (TAP-10 §5.3) |
+| Input without chain information | Resolved on the caller's or configured chain only | Only with the further option `allChains: true`: every active chain, each at its own pinned block, `ambiguous` when more than one resolves it. Without that option a container address is resolved on the client's chain when it is a container of that chain and is otherwise refused as `unsupported`, and a processor contract with an #ID given as one string is refused as `unsupported` before any request; neither is answered `not-tapeout` | Every active chain, `ambiguous` (TAP-10 §4.1) |
+| Agreement for the holder | Default agreement for every read | `eth_chainId`, `ownerOf` and a contract holder's `eth_getCode` and `isValidSignature` under strict agreement; every other read under default agreement | Strict agreement for `ownerOf` and the EIP-1271 call is recommended (§2.2); every read needs at least default agreement |
+| What counts as an answer | Some JSON-RPC errors are compared across nodes as answers | Only results and reverts are answers; any other error is a node failure | Only results and reverts are answers (TAP-10 §1) |
+| Keeping results | Keeps `accountOf` and `cpuAt` answers and the implementation slots for up to 300 seconds across resolutions | Only the processor table is kept; the holder, opened, activation and the implementation slots are read again at a new pinned block, and a kept service is resolved again before a call once it is 60 seconds old | Holder and site status are relied on for at most 60 seconds; only the processor table is kept (§7.1, TAP-10 §11) |
+| Chain check | Does not check `eth_chainId` when resolving | Checked once per client, under strict agreement, before its first read is adopted | Recommended (TAP-10 §5.4) |
+| Outcome names | `MANIFEST_INVALID` (also for a missing file, a non-existent token, `no-hash` and `incomplete`), `DELEGATION_INVALID`, `NOT_FOUND`, `RPC_DISAGREE`, `RPC_UNAVAILABLE`, `RPC_STALE` | Every error carries the §2.3 or TAP-10 name in `error.data.status`; the codes are kept, and `SITE_STATUS` is added for `not-opened` and `unpaid` | §2.3 and TAP-10 names |
 
-Apart from the rows above, a client built to the earlier text and a client of this TAP reach the same verdict on the same manifest. The earlier text also defined a label directory, a shell capability and MCP and AI bindings (Rationale, "Left out"); a client of this TAP ignores the `mcp` and `ai` members as unknown members.
+The name ranges of TAP-10 §3.1 (#ID at most 10^18, processor number at most 10^9) apply on both paths since version 1.4.0; the earlier version of this table listed them as a difference. Apart from the rows above, the default path and a client of this TAP reach the same verdict on the same manifest. The earlier text also defined a label directory, a shell capability and MCP and AI bindings (Rationale, "Left out"); a client of this TAP ignores the `mcp` and `ai` members as unknown members.
 
 ## Test Cases
 
-Vector files are in `assets/tap-11/`. Each gives inputs and exact expected outputs. The reference implementation at the fixed commit below reproduces `delegation.json`, `content-signature.json` and `canonical-json.json` (the last from `sdk/src/canon.js`), and the file verification and delegation recovery of `mainnet-11-1013.json`. The reads that this TAP adds from TAP-10 (opener, `isOpened`, activation, the payment contract's implementation slot) were recorded with plain `eth_call` and `eth_getStorageAt`; the reference implementation does not make them yet (Backwards Compatibility).
+Vector files are in `assets/tap-11/`. Each gives inputs and exact expected outputs. The reference implementation at the fixed commit below reproduces `delegation.json`, `content-signature.json` and `canonical-json.json` (the last from `sdk/src/canon.js`), the file verification and delegation recovery of `mainnet-11-1013.json`, and, under `conform: 'tap10'`, the whole resolution of `mainnet-11-1013-resolved.json` and `mainnet-12-1013-resolved.json` (its own pinned block, so a new run reads a later block). The reads that this TAP adds from TAP-10 (opener, `isOpened`, activation, the payment contract's implementation slot) were recorded with plain `eth_call` and `eth_getStorageAt`; the reference implementation makes them under `conform: 'tap10'` and not on its default path (Backwards Compatibility).
 
 **`delegation.json`** (§4). The domain separators, a worked example on all three chains, two signatures by a published test key, and rejections. For `container = 0x0000000000000000000000000000000000000002`, `signer = 0x0000000000000000000000000000000000000003`, `expires = 1790000000`:
 
@@ -303,18 +304,35 @@ The test holder key `0x` followed by 64 digits `1` (address `0x19E7E376E7C213B7E
 
 Expected outcome at that block: **`unpaid`**. The file also gives the exact 3,414 manifest bytes (their SHA-256 equals the declared hash) and what steps 3–6 produce with them: `signer` `0xaB70dEe8e1CEabb1D10eDFeBcbe0c313c53cf154`, `expires` 1798190813, delegation digest `0x2477541749b1b28de5dba42ee4d9f252e904dfb9042eb15068527e3213fb4a7b`, which recovers to the holder. Two rejections: another service's valid manifest served from this container, and this manifest with its `container` replaced, are both `manifest-invalid`.
 
+**`mainnet-11-1013-resolved.json` and `mainnet-12-1013-resolved.json`** (§2). Mainnet vector ending in `resolved`, recorded 2026-10-09, after the holder activated both names on 2026-10-01. The services `11.1013.tape` and `12.1013.tape` on BNB Smart Chain, each resolved at its own pinned block, chosen by the reference implementation as TAP-10 §5.3 says: block 126658959 (hash `0x02ecbf9d24fee5a1f800494e0f146d97de79766d45cbf4aca24a6204607ec47d`) and block 126658973 (hash `0xc4bbddc3d1145064954e919104b0ca1c3ff964ffc1a22d44f1b31ff209899864`). Each file lists every `eth_call` and `eth_getStorageAt` made at that block, with target, calldata and return value, and the operators that gave that answer: `bsc-dataseed.bnbchain.org`, `bsc-mainnet.public.blastapi.io`, `rpc-bsc.48.club` (the three default nodes of the reference implementation, which adopted `ownerOf` under strict agreement) and, replaying the same calls at the same block hash, `bsc-rpc.publicnode.com`; all four answers were identical for every read. The mainnet vectors are reproducible only within the node retention window, which differs by operator: the recorded `eth_call` data and return values are the vector. Results:
+
+| Value | `11.1013.tape` | `12.1013.tape` |
+|---|---|---|
+| Container (`opener.accountOf`), opened | `0x1b2A657BcBa9D3229f57aC2f4FcbEE2AA756aAe8`, true | `0x9cD838625251576c199B2DeF7A17e50266843185`, true |
+| `ownerOf` (holder) | `0x086bFB1908B1DF8C0c4412f28E4DD22Bdd52d715` | `0x086bFB1908B1DF8C0c4412f28E4DD22Bdd52d715` |
+| `isLive(name, container)`, `isContainerLive(container)` | true, true | true, true |
+| Site store and payment contract implementations | `0x1d279D138A4D803378a7d4557c056f1beD53c261`, `0xaa226181a6588d3f9AC0035e5f3dBaF311039bCE` (both accepted) | the same |
+| Manifest | 3,414 bytes, SHA-256 `0xee57f304f8316802978695e8e9f14e89ce1f9e5c79123b5a583fdcfd3b52c37a` | 901 bytes, SHA-256 `0x593116a7fde831acc782a33dacc74406ec52e94fc91a7d3d9d2fab677afdfa9b` |
+| `signer`, `delegation.expires` | `0xaB70dEe8e1CEabb1D10eDFeBcbe0c313c53cf154`, 1798190813 | `0x3cF7fb12C72653ba8415515387dBa9eF0353a0DD`, 1798219806 |
+| Delegation digest, recovered address | `0x2477541749b1b28de5dba42ee4d9f252e904dfb9042eb15068527e3213fb4a7b`, the holder | `0xf7bfac35220e3bc63e813fd09f707d6b5e35d77e4f1fab152447d046344786bc`, the holder |
+
+Expected outcome: **`resolved`**, for any `now` from the pinned block's timestamp up to `expires`. Each file also gives the exact manifest bytes (their SHA-256 equals the declared hash) and the output of the reference implementation's resolution (`resolution`).
+
 ## Reference Implementation
 
-The TapeAPI SDK at [BruceLanLan/tapeapi, commit `fda84db889d2a732915f264a799af24073177a85`](https://github.com/BruceLanLan/tapeapi/tree/fda84db889d2a732915f264a799af24073177a85) (version 1.3.0, MIT licensed):
+The TapeAPI SDK at [BruceLanLan/tapeapi, commit `4a1ac4fe2a0b2e3327652a794794765dd5da98ef`](https://github.com/BruceLanLan/tapeapi/tree/4a1ac4fe2a0b2e3327652a794794765dd5da98ef) (version 1.8.1, MIT licensed). A client created with `createTapeAPI({ conform: 'tap10' })` resolves as §2 says; the SDK's default path differs from this text as listed under Backwards Compatibility.
 
 | Location | Covers |
 |---|---|
-| `sdk/src/index.js` (`resolve`, `verifyDelegation`) | §2, §4.3–§4.4, §7.3 (`delegationFloor`) |
+| `sdk/src/index.js` (`resolveConform`, `identifyAt`, `conformManifest`, `finishConform`, `siteStatus`) | §2 under `conform: 'tap10'`; §7.1 (a kept service is resolved again before a call once it is 60 seconds old, `CONFORM_TTL_MS`) |
+| `sdk/src/index.js` (`resolve`, `verifyDelegation`, `holderApproves`, `contentSigProblem`) | The default path; §4.3–§4.4, §5.2–§5.3 (`requireContentSig`), §7.3 (`delegationFloor`) |
 | `sdk/src/manifest.js` | §3 |
 | `sdk/src/sig.js` | §4.1, §5 |
 | `sdk/src/canon.js` | §6 |
-| `sdk/src/rpc.js`, `sdk/src/chains.js` | Node agreement, chain table, names |
-| `spec/vectors/verify.py` | An independent Python implementation of §4–§6, checked against the repository's own vectors and an earlier recording of the `11.1013.tape` manifest; it does not read the files in Test Cases |
+| `sdk/src/rpc.js` (`tap10Block`; the read options `answers: 'tap10'` and `strict`), `sdk/src/chains.js`, `sdk/src/processors-snapshot.js` | The pinned block of TAP-10 §5.3, what counts as an answer, default and strict agreement, the chain table, names and their ranges, the processor table |
+| `sdk/test/conform-tap10.test.mjs`, `sdk/test/conform-strict-holder.test.mjs`, `sdk/test/conform-allchains.test.mjs` | Tests of the conformance mode against a simulated chain: input forms, the order of §2.2 and TAP-10 §6.2, the pinned block, strict agreement for `ownerOf` and EIP-1271, input without chain information |
+| `docs/guides/upgrade-1.0.md`, section "The TAP-10 conformance mode" | How the mode is enabled, what it does differently from the default path, and its limits |
+| `spec/vectors/verify.py` | An independent Python implementation of §4–§6, checked against the repository's own vectors and an earlier recording of the `11.1013.tape` manifest (`sdk/test/fixtures/mainnet-11-1013-manifest.json`); it does not read the files in Test Cases |
 
 The differences from this text are listed under Backwards Compatibility. The services `https://api.tapeapi.fun` (`11.1013.tape`) and `https://relay.tapeapi.fun` (`12.1013.tape`) on BNB Smart Chain publish manifests in this format.
 
@@ -346,7 +364,7 @@ Processor contracts are read for `ownerOf` `0x6352211e`; a contract holder for `
 - **Clock.** Expiry is compared with the client's clock, unlike TAP-10's block-lag freshness. A client with a slow clock accepts an expired delegation; one with a fast clock rejects a valid one. Clients that care can compare with the pinned block's timestamp as well.
 - **Activation.** Resolving under this TAP requires the name to be activated (§2.2 step 2, TAP-10 §6.3). As TAP-10 §6.3 says, the site store can still be read without it; a client that reads a manifest that way has not resolved the service under this TAP.
 - **Transport and meaning.** `https://` protects the connection to an endpoint, not the truth of what it returns. A manifest proves who stands behind a service, not that its methods behave as described; signed answers, defined by later TAPs, make behaviour attributable rather than correct.
-- **What the holder sees when signing.** Wallets show the `verifyingContract` field of EIP-712 typed data, so a holder who signs a delegation or a content signature sees the DeWEB hub named as the verifying contract (§1). That is expected and harmless: the hub is never called and nothing is authorised on it (§4.1). A holder should check the other fields shown, namely the container, the signer and the expiry, and that the domain name is `TapeAPI`.
+- **What the holder sees when signing.** Wallets show the `verifyingContract` field of EIP-712 typed data, so a holder who signs a delegation or a content signature sees the DeWEB hub named as the verifying contract (§1). That is expected and harmless: the hub is never called and nothing is authorised on it (§4.1). A holder should check the other fields shown and that the domain name is `TapeAPI`. The fields differ between the two signatures: a delegation shows the container, the signer and the expiry; a content signature shows the container and the content hash.
 - **Parsing.** Manifests are attacker-controlled. The 64 KiB bound, the rejection of repeated and prototype member names and the canonical JSON restrictions limit parser differences and prototype pollution.
 - **Privacy.** Resolution reads only public chain state. Calling an endpoint reveals the caller's network address and request to the provider.
 
