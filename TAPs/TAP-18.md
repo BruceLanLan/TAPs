@@ -1,5 +1,5 @@
 ---
-tap: TBD
+tap: 18
 title: Container Agent Mandates and Task Messages, Phase 0
 description: Phase 0 of the container-agent Ideas #40 and #41, a holder-signed mandate saying which agent may act for a circuit container on which task, and the signed messages of one task, checked by counterparties and enforced by nothing.
 author: Bruce (@BruceLanLan)
@@ -12,7 +12,7 @@ requires: TAP-10, TAP-11, TAP-13
 license: CC0-1.0
 ---
 
-# TAP-TBD: Container Agent Mandates and Task Messages, Phase 0
+# TAP-18: Container Agent Mandates and Task Messages, Phase 0
 
 ## Summary
 
@@ -388,7 +388,7 @@ This TAP adds no contract, hub function, payload format or name syntax, and chan
 
 ## Test Cases
 
-The files are in `assets/tap-draft-container-agent/`. Keys and addresses are test values; the holder key is the published test key `0x` followed by 64 digits `1` (address `0x19E7E376E7C213B7E7e7e46cc70A5dD086DAff2A`), as in TAP-11.
+The files are in `assets/tap-18/`. Keys and addresses are test values; the holder key is the published test key `0x` followed by 64 digits `1` (address `0x19E7E376E7C213B7E7e7e46cc70A5dD086DAff2A`), as in TAP-11.
 
 - **`vectors.json`**: copied unchanged from the reference implementation's `spec/vectors/container-agent.json` (at the commit named under Reference Implementation every one of these members has the same values; only the wording of the `comment` inside `domain` differs): domain, type strings and hashes, a task, three mandates (one naming a token and caps, signed only to show that it still hashes), the first mandate on chain 196, an offer, two verdicts and two revocations, each with `structHash`, digest and signature.
 - **`worked-examples.json`**: the first mandate and the offer as `eth_signTypedData_v4` payloads with every intermediate value.
