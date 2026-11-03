@@ -1,5 +1,5 @@
 ---
-tap: TBD
+tap: 16
 title: Attested Reads from Independent Container Services
 description: How a client asks several independent container services the same read-only question about a chain, accepts the answer only when every signed answer is identical, and keeps two conflicting signed answers as evidence.
 author: Bruce (@BruceLanLan)
@@ -11,7 +11,7 @@ requires: TAP-10, TAP-11, TAP-13
 license: CC0-1.0
 ---
 
-# TAP-TBD: Attested Reads from Independent Container Services
+# TAP-16: Attested Reads from Independent Container Services
 
 ## Summary
 
@@ -246,7 +246,7 @@ The differences in how the reference implementation resolves a service are liste
 
 ## Test Cases
 
-The vector files are in `assets/tap-draft-attested-reads/` (the directory name follows the question in #7). Keys, containers, holders and endpoints in them are test values; the private keys are published test keys. The services are given as already resolved: container, holder, signer and live endpoint are inputs, not read from a chain. The Ethereum values are real: `totalSupply()` of `0xdAC17F958D2ee523a2206206994597C13D831ec7` at block 20000000 (hash `0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183`) returns `0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50`, read on 2026-09-28 with identical answers from four node operators. The `id` `tap23-vector-1` is an opaque test value kept from the earlier vectors; to keep their signatures unchanged, the vectors use it in the request to every service, whereas a client following §7.3 gives each request its own `id`. No outcome depends on it.
+The vector files are in `assets/tap-16/`. Keys, containers, holders and endpoints in them are test values; the private keys are published test keys. The services are given as already resolved: container, holder, signer and live endpoint are inputs, not read from a chain. The Ethereum values are real: `totalSupply()` of `0xdAC17F958D2ee523a2206206994597C13D831ec7` at block 20000000 (hash `0xd24fd73f794058a3807db926d8898c6481e902b7edb91ce0d479d6760f276183`) returns `0x00000000000000000000000000000000000000000000000000b8bc8118ccdd50`, read on 2026-09-28 with identical answers from four node operators. The `id` `tap23-vector-1` is an opaque test value kept from the earlier vectors; to keep their signatures unchanged, the vectors use it in the request to every service, whereas a client following §7.3 gives each request its own `id`. No outcome depends on it.
 
 **`attested-read.json`** (§2–§7). Three services A, B and C (containers `0x…0a77e1`, `0x…0a77e2`, `0x…0a77e3`; test keys `0x44…44`, `0x55…55`, `0x66…66`; different holders, origins and signers), the descriptor, the request `{ "chainId": 1, "call": { "to": "0xdAC17F958D2ee523a2206206994597C13D831ec7", "data": "0x18160ddd" }, "block": 20000000 }`, and 15 cases. Each case lists the signed envelopes with their digest, EIP-191 digest and recovered address, the expected §7.6 outcome, and what the reference implementation reports:
 
