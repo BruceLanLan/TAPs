@@ -1,6 +1,6 @@
 {
  "tap": "TAP-draft-ai-usage-receipts, Specification §5.2",
- "source": "Computed with sdk/src/ai.js scanSse at https://github.com/BruceLanLan/tapeapi/tree/fda84db889d2a732915f264a799af24073177a85; each value was also recomputed with an independent whole-text parser and with the incremental scanner fed one byte at a time.",
+ "source": "Computed with sdk/src/ai.js scanSse at https://github.com/BruceLanLan/tapeapi/tree/fda84db889d2a732915f264a799af24073177a85; each value was also recomputed with an independent whole-text parser and with the incremental scanner fed one byte at a time. The last two cases (bytes that are not valid UTF-8) were added on 2026-11-03 and computed from the text of §5.2 with an independent parser that reproduces every other case.",
  "note": "streamBase64 is the exact byte sequence (standard base64); streamText is the same text for reading; a case whose bytes are not valid UTF-8 gives streamHex instead, and notThisHash, the hash after replacing them with U+FFFD, which is wrong. responseSha256 is SHA-256, lowercase hex, of the concatenation of each dispatched event's data, as the bytes received, followed by one LF byte, events whose data is exactly the sentinel left out. hashedDataCount is the number of data values hashed.",
  "cases": [
   {
