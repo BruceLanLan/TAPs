@@ -20,7 +20,7 @@ This TAP lets an NFT carry, next to its picture, a real TapeOut circuit that any
 
 ## Abstract
 
-A netlist-bound NFT is an ERC-721 token whose metadata, and optionally whose contract, bind it to an image and to a netlist in the `tapnet/1` format defined here (a TAP-02 netlist without REF records, with its input and output counts). The TAP specifies that format and its hash, a hook through which other Standards TAPs define further netlist formats, how a netlist is traced back to the TapeOut circuit it was copied from, a global token identifier for the chains of TAP-10, a collection manifest that commits pools of images and netlists by Merkle roots before the reveal (over a token range or an explicit token set), a keyed permutation that assigns pool entries to tokens from one random seed, and the `tap` member of the token metadata. Like ERC-721, it has a mandatory core with two conformance levels, L0 (metadata only, reachable by an existing contract that can only change its base URI) and L1 (the on-chain interface `ITapNetlistNFT`, implemented by the collection or a companion contract), plus extensions: TokenSet (required of an L1 contract in set mode), Companion (required of every companion), the optional Eval extension that lets contracts run a token's netlist, and rules for hosting content in TapeOut containers. Bridging, Proof-of-Design attributes and a structural netlist hash are separate TAP-721 extension proposals.
+A netlist-bound NFT is an ERC-721 token whose metadata, and optionally whose contract, bind it to an image and to a netlist in the `tapnet/1` format defined here (a TAP-02 netlist without REF records, with its input and output counts). The TAP specifies that format and its hash, a hook through which other Standards TAPs define further netlist formats, how a netlist is traced back to the TapeOut circuit it was copied from, a global token identifier for the chains of TAP-10, a collection manifest that commits pools of images and netlists by Merkle roots before the reveal (over a token range or an explicit token set), a keyed permutation that assigns pool entries to tokens from one random seed, and the `tap` member of the token metadata. Like ERC-721, it has a mandatory core with two conformance levels, L0 (metadata only, reachable by an existing contract that can only change its base URI) and L1 (the on-chain interface `ITapNetlistNFT`, implemented by the collection or a companion contract), plus extensions: TokenSet (required of an L1 contract in set mode), Companion (required of every companion), the optional Eval extension that lets contracts run a token's netlist, and rules for hosting content in TapeOut containers. Bridging, Proof-of-Design attributes and a structural netlist hash are separate extension proposals.
 
 ## Motivation
 
@@ -30,20 +30,20 @@ The motivating case is TapeCode-Test1, an existing 10,000-token ERC-721 collecti
 
 Without one text, a wallet, an explorer or a game cannot read two such collections the same way, and holders cannot check that a reveal was fair. Existing standards cover the pieces around the binding but not the binding itself: ERC-721 gives ownership and a metadata URI; ERC-4906 signals metadata changes; TAP-02 defines netlists and how they evaluate; TAP-10 defines chains, on-chain names and verified reads of files stored in TapeOut containers. This TAP reuses all four and adds only what is missing.
 
-ERC-721 became the common base for NFTs because it is one short document that every wallet implements and that later ERCs extend. This TAP aims to play the same role for netlist-bound NFTs on TapeOut chains. The authors therefore request the number 721 (proposal name TAP-721, mirroring ERC-721); because TAP-01 §6.1 otherwise assigns the lowest free number above 10, this needs the editors' agreement. This text and its extension drafts say "TAP-721" for readability; if the editors assign another number, the drafts take that number.
+ERC-721 became the common base for NFTs because it is one short document that every wallet implements and that later ERCs extend. This TAP aims to play the same role for netlist-bound NFTs on TapeOut chains. The authors have asked in #66 for the number 721, mirroring ERC-721; the editors assign a number when they merge a draft (TAP-01 §6.1). Until then, this text and its extension drafts refer to it by its file name, `TAP-draft-netlist-bound-nft`.
 
 ## Specification
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in RFC 2119 and RFC 8174 when, and only when, they appear in all capitals.
 
-**Every L1 contract MUST implement the `ITapNetlistNFT` and ERC-165 interfaces** (and ERC-4906), subject to the rules of §8.2. An existing ERC-721 contract that cannot be changed reaches L1 through a companion contract (§8.3), or conforms at L0 (§8.1), the metadata-only conformance path for existing contracts: an L0 collection implements no TAP-721 interface and conforms by publishing token metadata that follows §7, with, when it reveals, a manifest and reveal that follow §5 and §6. At both levels, the token metadata of every TAP-721 token MUST follow §7.
+**Every L1 contract MUST implement the `ITapNetlistNFT` and ERC-165 interfaces** (and ERC-4906), subject to the rules of §8.2. An existing ERC-721 contract that cannot be changed reaches L1 through a companion contract (§8.3), or conforms at L0 (§8.1), the metadata-only conformance path for existing contracts: an L0 collection implements no interface of this TAP and conforms by publishing token metadata that follows §7, with, when it reveals, a manifest and reveal that follow §5 and §6. At both levels, the token metadata of every netlist-bound NFT MUST follow §7.
 
 The core (§1–§8.2) is followed by extensions in the same document:
 
-- **TAP-721 Companion extension** (§8.3, `ITapCompanion`): every companion contract MUST implement it;
-- **TAP-721 Eval extension** (§8.4, `ITapNetlistEval`): an L1 contract MAY implement it;
-- **TAP-721 TokenSet extension** (§8.5, `ITapNetlistTokenSet`): an L1 contract whose manifest uses set mode (§5.4) MUST implement it, and one in range mode MAY;
-- **TAP-721 container hosting and locking** (§8.6): SHOULD-level rules for collections that serve content from TapeOut containers.
+- **Companion extension** (§8.3, `ITapCompanion`): every companion contract MUST implement it;
+- **Eval extension** (§8.4, `ITapNetlistEval`): an L1 contract MAY implement it;
+- **TokenSet extension** (§8.5, `ITapNetlistTokenSet`): an L1 contract whose manifest uses set mode (§5.4) MUST implement it, and one in range mode MAY;
+- **Container hosting and locking** (§8.6): SHOULD-level rules for collections that serve content from TapeOut containers.
 
 ### Conformance summary
 
@@ -60,10 +60,10 @@ This table is a guide to the sections below; where it and a section differ, the 
 | Token metadata (`tap` member) | Core: L0 and L1 | §7 | — |
 | L0 | Conformance level | §8.1 | — |
 | L1 | Conformance level | §8.2 | `ITapNetlistNFT` (`0x282b67f6`), ERC-165 (`0x01ffc9a7`), ERC-4906 (`0x49064906`) |
-| TAP-721 Companion extension | Conditional: L1 for an existing ERC-721 | §8.3 | `ITapCompanion` (`0x12b40a6c`) |
-| TAP-721 Eval extension | Optional | §8.4 | `ITapNetlistEval` (`0xec7d7e20`) |
-| TAP-721 TokenSet extension | Conditional: an L1 contract in set mode | §8.5 | `ITapNetlistTokenSet` (`0x3f7177c7`) |
-| TAP-721 container hosting and locking | Recommended for content in TapeOut containers | §8.6, §7.5 | — |
+| Companion extension | Conditional: L1 for an existing ERC-721 | §8.3 | `ITapCompanion` (`0x12b40a6c`) |
+| Eval extension | Optional | §8.4 | `ITapNetlistEval` (`0xec7d7e20`) |
+| TokenSet extension | Conditional: an L1 contract in set mode | §8.5 | `ITapNetlistTokenSet` (`0x3f7177c7`) |
+| Container hosting and locking | Recommended for content in TapeOut containers | §8.6, §7.5 | — |
 
 ### 1. Terms
 
@@ -132,7 +132,7 @@ For a token whose netlist is in such a format: the netlist value in pool entries
 
 A tool that does not support the format MUST still fetch the netlist file when it can, and MUST treat the token as invalid if bytes 0–5 of that file are not `TAPNET` or its byte 6 is `0x01`. Otherwise it MUST display the token's netlist as unverifiable, not as invalid, and MUST report the edition check (§6.4, §7.3 item 3) of such tokens as unverifiable. It MUST NOT display an unverifiable netlist as verified; because it cannot perform the checks of §7.4, it does not show such a token as a checked netlist-bound NFT.
 
-`storeNetlist`, `netlistFile`, `netlistOf`, source verification (§3.2, and with it `tap.source`), the TAP-721 Eval extension (§8.4) and TAPs written for `tapnet/1` apply to `tapnet/1` files only, unless a TAP states otherwise.
+`storeNetlist`, `netlistFile`, `netlistOf`, source verification (§3.2, and with it `tap.source`), the Eval extension (§8.4) and TAPs written for `tapnet/1` apply to `tapnet/1` files only, unless a TAP states otherwise.
 
 ### 3. Source circuits
 
@@ -174,7 +174,7 @@ Images, netlist files, token-set files and manifests are located by URIs. A list
 
 A tool MUST check the SHA-256 of any bytes it fetches against the hash given for that content and MUST treat any URI, gateway or server as untrusted.
 
-Content served from a TapeOut container is also subject to the TAP-721 container hosting and locking rules (§8.6).
+Content served from a TapeOut container is also subject to the container hosting and locking rules (§8.6).
 
 A container proves that a file with a given hash exists at a path; it does not prove which token receives that file. That binding is established by the metadata (L0) or by the on-chain interface (L1, §8).
 
@@ -398,7 +398,7 @@ A tool that uses `tap.content`:
 
 ### 8. Conformance and extensions
 
-§8.1 and §8.2 define the two conformance levels of the core. §8.3–§8.6 define the TAP-721 extensions; a contract reports through ERC-165 exactly the extension interfaces it implements.
+§8.1 and §8.2 define the two conformance levels of the core. §8.3–§8.6 define the extensions; a contract reports through ERC-165 exactly the extension interfaces it implements.
 
 #### 8.1 L0: metadata
 
@@ -411,7 +411,7 @@ A contract conforms at L1 if it implements `ITapNetlistNFT` below, ERC-165 (repo
 1. `manifestHash()` and `masterSeed()` once non-zero, and `pools()` and `tokenRange()` once set (non-empty, `supply` ≥ 1), never change; `pools()[i]` equals the label, field mask and root of the manifest's `pools[i]`;
 2. `entryIndexOf(t, p)` returns `permute(poolSeed_p, n, x)` with the index `x` of §6.3 once `masterSeed()` is non-zero, and reverts before, for a token that is not covered (outside the range, or outside the token set, §5.4), and for a pool index that does not exist. If the manifest's `reveal.source` is `none`, the contract sets `masterSeed()` to `0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff` when the manifest is committed, `entryIndexOf(t, p)` returns the index `x`, and the seed counts as set for item 5. For any other source the contract MUST NOT record zero or that value as the master seed;
 3. `bind` records, for any caller, the entry a token receives, after verifying a Merkle proof (§5.3) against the pool root at index `entryIndexOf(t, p)`; it is idempotent. An implementation MAY also record every entry of a pool in one call or over several calls, after rebuilding the pool's root from the full list of values and checking it against the committed root; once the seed is set, `netlistHashOf` and `imageHashOf` then answer for every covered token without `bind`;
-4. A netlist hash is known when `bind` has recorded it; when, after `masterSeed()` is set, a permissionless function has recorded it by deriving it from a pool recorded under item 3 for a token that receives it (in the reference implementation, `markKnown(uint256 tokenId)`); when it arrived with a token under a bridging TAP; or, in a mint-bound contract (below), when a token has been minted with it; the hash stays known if that token is later burned. `storeNetlist` accepts only `tapnet/1` files whose SHA-256 is a known netlist hash and whose length is at most 49,152 bytes, and makes them readable through `netlistFile` and `netlistOf`. It SHOULD check validity (§2.2) on chain, and MUST do so if the contract implements the TAP-721 Eval extension (§8.4). The layout behind `NetlistStored.pointer` is informative; clients read files through `netlistFile`. Revert data is not part of this interface;
+4. A netlist hash is known when `bind` has recorded it; when, after `masterSeed()` is set, a permissionless function has recorded it by deriving it from a pool recorded under item 3 for a token that receives it (in the reference implementation, `markKnown(uint256 tokenId)`); when it arrived with a token under a bridging TAP; or, in a mint-bound contract (below), when a token has been minted with it; the hash stays known if that token is later burned. `storeNetlist` accepts only `tapnet/1` files whose SHA-256 is a known netlist hash and whose length is at most 49,152 bytes, and makes them readable through `netlistFile` and `netlistOf`. It SHOULD check validity (§2.2) on chain, and MUST do so if the contract implements the Eval extension (§8.4). The layout behind `NetlistStored.pointer` is informative; clients read files through `netlistFile`. Revert data is not part of this interface;
 5. `frozen()` returns true only when the manifest is committed, the seed is set and no account can change `tokenURI`, the manifest, the pools or the seed; once true it never returns false. A contract behind an upgradeable proxy is not frozen while its upgrade path exists;
 6. It emits ERC-4906 `MetadataUpdate` or `BatchMetadataUpdate` whenever the metadata of a token may have changed (commit, reveal, bind, recording a pool or a token set, freeze), so that marketplaces refresh. In set mode, or when `tokenRange()` returns `supply` = 0, a `BatchMetadataUpdate` over `0 … 2^256 − 1` satisfies this. A mint-bound contract (below) emits `MetadataUpdate(tokenId)` at every mint, and MAY emit an event of its own that records the hashes.
 
@@ -419,7 +419,7 @@ How the manifest is committed, the seed written, pools and token sets recorded a
 
 `tokenURI` of an L1 collection MUST still follow §7, and the values in its metadata MUST equal what the interface returns, except for a field that no pool carries (§5.2), for which the interface returns zero.
 
-An L1 contract whose manifest uses set mode (§5.4) MUST also implement the TAP-721 TokenSet extension (§8.5).
+An L1 contract whose manifest uses set mode (§5.4) MUST also implement the TokenSet extension (§8.5).
 
 **Bridged copies.** A copy of the collection on another chain, created by a bridging TAP that builds on this one, MAY implement `ITapNetlistNFT` without the manifest: there `entryIndexOf` and `bind` MAY revert with an error that the bridging TAP defines, and `netlistHashOf` and `imageHashOf` return the hashes that arrived with the token. In such a copy, `collection()` returns the copy itself, `tokenRange()` MAY return `supply` = 0 for an unbounded range, `frozen()` MAY stay false, and the metadata's `tap.id` is the identifier of the home token (§4.1). In every implementation `netlistHashOf` and `imageHashOf` return zero only while no hash is known for the token, or permanently for a field that no pool carries (§5.2).
 
@@ -456,7 +456,7 @@ interface ITapNetlistNFT {
 
 `values` in `bind` holds the entry's 32-byte field values in field order (image, then netlist). The function selectors, ERC-165 interface identifiers and event topics are listed in Test Cases.
 
-#### 8.3 TAP-721 Companion extension
+#### 8.3 Companion extension
 
 An existing ERC-721 contract that cannot be changed MAY reach L1 through a companion: a separate contract on the same chain that implements `ITapNetlistNFT` with `collection()` returning the existing contract. The binding is two-way:
 
@@ -475,7 +475,7 @@ interface ITapCompanion {
 
 A companion's `frozen()` returns true only when no account can change the companion's manifest, pools or seed, the companion is endorsed or named by the collection, and the existing contract can no longer change `tokenURI`. A companion MAY read the existing contract's freeze flag live, but MUST latch the first `true` it observes and SHOULD offer a permissionless function that latches it, so that `frozen()` never returns to false. ERC-4906 events of a companion come from the companion's address; marketplaces that watch only the collection may not see them.
 
-#### 8.4 TAP-721 Eval extension (optional)
+#### 8.4 Eval extension (optional)
 
 An L1 contract MAY also let any contract on its chain run a token's netlist. It then implements `ITapNetlistEval` and reports its ERC-165 identifier `0xec7d7e20`.
 
@@ -496,7 +496,7 @@ interface ITapNetlistEval {
 
 Because files have no REF records, the cost of a beat is proportional to the file size, and a caller can read the metrics before calling.
 
-#### 8.5 TAP-721 TokenSet extension
+#### 8.5 TokenSet extension
 
 An L1 contract whose manifest uses set mode (§5.4) MUST also implement `ITapNetlistTokenSet` and report its ERC-165 identifier `0x3f7177c7`. In set mode `tokenRange()` returns `(0, count)`, `tokenSetHash()` returns `tokenSet.sha256`, and `entryIndexOf` reverts until the token set file has been recorded on chain and checked against `tokenSet.sha256`. Until then, `tokenAt` and `indexOf` MUST revert. An L1 contract in range mode MAY implement the interface; it then returns zero from `tokenSetHash()`, `firstTokenId + i` from `tokenAt(i)` and `t − firstTokenId` from `indexOf(t)`. Tools tell the modes apart by `tokenSetHash()` being non-zero, not by `tokenRange()`.
 
@@ -511,7 +511,7 @@ interface ITapNetlistTokenSet {
 }
 ```
 
-#### 8.6 TAP-721 container hosting and locking
+#### 8.6 Container hosting and locking
 
 This section applies to collections that serve content (§4.2) or metadata from a TapeOut container, and to the tools that display them; `tap.content` (§7.5) describes such content in the metadata. It defines no interface.
 
@@ -559,11 +559,11 @@ Tools SHOULD show whether the container that serves a collection's content is lo
 
 **The Eval extension.** Proof-of-Design mining runs on BNB Smart Chain only. On the other chains, the point of carrying a real netlist is that contracts can use it: games, puzzles and competitions that call the circuit of a token. The extension makes the netlist a callable function on the collection's own chain, with the same semantics as a TapeOut processor, without taping it out again.
 
-**One topic.** The file format, source check, identifier, manifest, reveal and metadata are what a wallet needs to check one token end to end; L1 adds on-chain reads of the same values and nothing else. If editors prefer a narrower text, the TAP-721 Eval extension (§8.4) is the first part that can stand alone, and `tapnet/1` (§2) could become its own format TAP; `TAP-draft-netlist-structural-hash` already depends only on it.
+**One topic.** The file format, source check, identifier, manifest, reveal and metadata are what a wallet needs to check one token end to end; L1 adds on-chain reads of the same values and nothing else. If editors prefer a narrower text, the Eval extension (§8.4) is the first part that can stand alone, and `tapnet/1` (§2) could become its own format TAP; `TAP-draft-netlist-structural-hash` already depends only on it.
 
 **Existing specifications.** The token identifier is CAIP-19, because wallets and indexers already parse it. The hashes are served by dedicated functions rather than ERC-7496 traits because they are fixed by the manifest and proven by Merkle proofs, while ERC-7496 traits are values an owner may set; `TAP-draft-pod-attributes` uses ERC-7496 for facts that are snapshots of another contract. No existing ERC defines a committed, publicly recomputable reveal, so §5–§6 define one with the smallest primitives available on all chains.
 
-**Relationship to other TAPs.** Five proposals extend TAP-721 and require it, as ERC-4906 and ERC-7496 extend ERC-721: `TAP-draft-netlist-nft-bridging` (moving TAP-721 tokens between chains), `TAP-draft-pod-attributes` (Proof-of-Design attributes for TAP-721 tokens), `TAP-draft-netlist-structural-hash` (a structural hash of `tapnet/1` files), `TAP-draft-design-credits` (checked publication facts and signed credit statements about netlists) and `TAP-draft-soulbound-credentials` (non-transferable tokens bound to a netlist at mint). They are separate TAPs for four reasons. One topic per TAP: each can be reviewed, accepted or rejected without reopening this one. Upgradeable dependencies: bridging depends on a message layer and its own security analysis, and the PoD attributes read contracts that can be upgraded; neither should hold this core back or tie it to their changes. Application type: PoD facts (task, burns, cost, optimal-first status) change over time and belong to one application, so they are an Application TAP, while this one is a Standards TAP. Algorithm evolution: recognising one design under renumbered gates has known limits, and its algorithm can change without changing the netlist hash of §2.3.
+**Relationship to other TAPs.** Five proposals extend this TAP and require it, as ERC-4906 and ERC-7496 extend ERC-721: `TAP-draft-netlist-nft-bridging` (moving netlist-bound NFTs between chains), `TAP-draft-pod-attributes` (Proof-of-Design attributes for netlist-bound NFTs), `TAP-draft-netlist-structural-hash` (a structural hash of `tapnet/1` files), `TAP-draft-design-credits` (checked publication facts and signed credit statements about netlists) and `TAP-draft-soulbound-credentials` (non-transferable tokens bound to a netlist at mint). They are separate TAPs for four reasons. One topic per TAP: each can be reviewed, accepted or rejected without reopening this one. Upgradeable dependencies: bridging depends on a message layer and its own security analysis, and the PoD attributes read contracts that can be upgraded; neither should hold this core back or tie it to their changes. Application type: PoD facts (task, burns, cost, optimal-first status) change over time and belong to one application, so they are an Application TAP, while this one is a Standards TAP. Algorithm evolution: recognising one design under renumbered gates has known limits, and its algorithm can change without changing the netlist hash of §2.3.
 
 **Names used by other drafts (informative).** §7.1 lets other TAPs define further members of `tap`, and §5.1 further members of the manifest. The following names are used by drafts that build on this one (all submitted as pull requests to the TAPs repository); a new member should not reuse them.
 
@@ -617,10 +617,10 @@ Interfaces (each ERC-165 identifier is the XOR of its selectors; recomputed with
 
 | Interface | Status | ERC-165 id | Functions (selector) |
 |---|---|---|---|
-| `ITapNetlistNFT` | TAP-721 core (L1) | `0x282b67f6` | `bind(uint256,uint256,bytes32[],bytes32[])` `0x25944f76`, `collection()` `0x7de1e536`, `entryIndexOf(uint256,uint256)` `0x6b3b2d25`, `frozen()` `0x054f7d9c`, `imageHashOf(uint256)` `0xa7257a04`, `manifestHash()` `0x337f3f32`, `masterSeed()` `0x3982d13f`, `netlistFile(bytes32)` `0x5267c429`, `netlistHashOf(uint256)` `0x32d9b670`, `netlistOf(uint256)` `0xae502e0b`, `pools()` `0xc5c51dca`, `storeNetlist(bytes)` `0xf8b0cc86`, `tokenRange()` `0x40698418` |
-| `ITapNetlistTokenSet` | TAP-721 TokenSet extension (set mode) | `0x3f7177c7` | `tokenSetHash()` `0xa36c08c6`, `tokenCount()` `0x9f181b5e`, `tokenAt(uint256)` `0x92a91a3a`, `indexOf(uint256)` `0x91ac7e65` |
-| `ITapCompanion` | TAP-721 Companion extension | `0x12b40a6c` | `endorse()` `0xf4fbaf58`, `endorsedBy()` `0xe64fa534` |
-| `ITapNetlistEval` | TAP-721 Eval extension (optional) | `0xec7d7e20` | `evalOf(uint256,bytes)` `0x3097c028`, `stepOf(uint256,bytes,bytes)` `0x6ff2b6b8`, `evalFile(bytes32,bytes)` `0xf822bb64`, `stepFile(bytes32,bytes,bytes)` `0x4b3ab3d4` |
+| `ITapNetlistNFT` | Core (L1) | `0x282b67f6` | `bind(uint256,uint256,bytes32[],bytes32[])` `0x25944f76`, `collection()` `0x7de1e536`, `entryIndexOf(uint256,uint256)` `0x6b3b2d25`, `frozen()` `0x054f7d9c`, `imageHashOf(uint256)` `0xa7257a04`, `manifestHash()` `0x337f3f32`, `masterSeed()` `0x3982d13f`, `netlistFile(bytes32)` `0x5267c429`, `netlistHashOf(uint256)` `0x32d9b670`, `netlistOf(uint256)` `0xae502e0b`, `pools()` `0xc5c51dca`, `storeNetlist(bytes)` `0xf8b0cc86`, `tokenRange()` `0x40698418` |
+| `ITapNetlistTokenSet` | TokenSet extension (set mode) | `0x3f7177c7` | `tokenSetHash()` `0xa36c08c6`, `tokenCount()` `0x9f181b5e`, `tokenAt(uint256)` `0x92a91a3a`, `indexOf(uint256)` `0x91ac7e65` |
+| `ITapCompanion` | Companion extension | `0x12b40a6c` | `endorse()` `0xf4fbaf58`, `endorsedBy()` `0xe64fa534` |
+| `ITapNetlistEval` | Eval extension (optional) | `0xec7d7e20` | `evalOf(uint256,bytes)` `0x3097c028`, `stepOf(uint256,bytes,bytes)` `0x6ff2b6b8`, `evalFile(bytes32,bytes)` `0xf822bb64`, `stepFile(bytes32,bytes,bytes)` `0x4b3ab3d4` |
 
 Other identifiers used in this TAP: ERC-165 `0x01ffc9a7`, ERC-4906 `0x49064906`, `isCPU(address)` `0x5f5a364f`, ERC-173 `owner()` `0x8da5cb5b`.
 
