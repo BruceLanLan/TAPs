@@ -1,0 +1,238 @@
+{
+  "note": "Generated from the reference implementation at BruceLanLan/tapeapi@4a1ac4fe2a0b2e3327652a794794765dd5da98ef (TapeAPI 1.8.1, with the option labels: 'v2') (sdk/src/channel.js, sdk/src/sig.js, sdk/src/canon.js). Hex is lowercase; values without 0x are raw hex. Every field is an input or an exact expected output unless it is under \"example\".",
+  "covers": "Inputs every implementation must reject (or, where marked, accept). Keys, invite and frames are those of handshake.json and session.json; now = 1789000000 unless stated. sdkError is the reference implementation's message and is informative only.",
+  "cases": [
+    {
+      "case": "X25519 key with the top bit of byte 31 set as a static key",
+      "expected": "reject",
+      "key": "f35746b523704a780b88c374769fd09c4c01a3b2873675594d12167d3efda8a5",
+      "sdkError": "public key has its top bit set"
+    },
+    {
+      "case": "X25519 key u = 2^255 - 19 (not canonical) as a static key",
+      "expected": "reject",
+      "key": "edffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f",
+      "sdkError": "public key is not canonical"
+    },
+    {
+      "case": "X25519 key u = 0 (low order) as a static key",
+      "expected": "reject",
+      "key": "0000000000000000000000000000000000000000000000000000000000000000",
+      "sdkError": "X25519 with public key failed (invalid or low-order key)"
+    },
+    {
+      "case": "X25519 key u = 1 (low order) as a static key",
+      "expected": "reject",
+      "key": "0100000000000000000000000000000000000000000000000000000000000000",
+      "sdkError": "X25519 with public key failed (invalid or low-order key)"
+    },
+    {
+      "case": "X25519 key u = 325606250916557431795983626356110631294008115727848805560023387167927233504 (low order) as a static key",
+      "expected": "reject",
+      "key": "e0eb7a7c3b41b8ae1656e3faf19fc46ada098deb9c32b1fd866205165f49b800",
+      "sdkError": "X25519 with public key failed (invalid or low-order key)"
+    },
+    {
+      "case": "X25519 key u = 39382357235489614581723060781553021112529911719440698176882885853963445705823 (low order) as a static key",
+      "expected": "reject",
+      "key": "5f9c95bca3508c24b1d0b1559c83ef5b04445cc4581c8e86d8224eddd09f1157",
+      "sdkError": "X25519 with public key failed (invalid or low-order key)"
+    },
+    {
+      "case": "X25519 key u = p - 1 (low order) as a static key",
+      "expected": "reject",
+      "key": "ecffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff7f",
+      "sdkError": "X25519 with public key failed (invalid or low-order key)"
+    },
+    {
+      "case": "X25519 key u = 1 as the invite ephemeral e",
+      "expected": "reject",
+      "sdkError": "X25519 with the initiator ephemeral failed (invalid or low-order key)"
+    },
+    {
+      "case": "Ed25519 key that is the identity point (small order)",
+      "expected": "reject",
+      "key": "0100000000000000000000000000000000000000000000000000000000000000",
+      "sdkError": "ed25519 key is a small-order point"
+    },
+    {
+      "case": "Ed25519 key that is not on the curve",
+      "expected": "reject",
+      "key": "0200000000000000000000000000000000000000000000000000000000000000",
+      "sdkError": "ed25519 key is not a point on Ed25519"
+    },
+    {
+      "case": "Invite whose exp is more than 3600 s after now (now = 1789000000, exp = 1789003601)",
+      "expected": "reject",
+      "sdkError": "invite.exp is further ahead than any honest initiator would set"
+    },
+    {
+      "case": "Invite at now = exp (1789000600): expired",
+      "expected": "reject",
+      "sdkError": "invite expired at 1789000600"
+    },
+    {
+      "case": "Invite whose from names a container other than the peer whose key was looked up",
+      "expected": "reject",
+      "sdkError": "invite.from does not name the peer whose key was supplied"
+    },
+    {
+      "case": "Invite whose from.chainId is 8453 while the key was looked up on chain 56",
+      "expected": "reject",
+      "sdkError": "invite.from does not name the peer whose key was supplied"
+    },
+    {
+      "case": "Invite with keys \"tape-channel/v2\" (unknown key kind)",
+      "expected": "reject",
+      "sdkError": "invite.keys names no key kind this client knows"
+    },
+    {
+      "case": "Invite listing a relay without its container",
+      "expected": "reject",
+      "sdkError": "each relay needs its container address"
+    },
+    {
+      "case": "Invite listing a relay over plain http on a non-loopback host",
+      "expected": "reject",
+      "sdkError": "relay url must be https (http only for a loopback host)"
+    },
+    {
+      "case": "Invite listing five relays",
+      "expected": "reject",
+      "sdkError": "relays must be an array of at most 4"
+    },
+    {
+      "case": "Invite whose cid was already accepted (replayed invite, responder keeps a seen set)",
+      "expected": "reject",
+      "sdkError": "channel 697f8ba7adb6dae6fa02182440464f73 was already accepted: refusing a replayed invite"
+    },
+    {
+      "case": "Accept computed by the responder over an invite whose relays were altered in transit (to https://evil.example/tapeapi/v1): the initiator's check of accept.confirm fails",
+      "expected": "reject",
+      "accept": {
+        "t": "accept",
+        "cid": "697f8ba7adb6dae6fa02182440464f73",
+        "e": "f1368a893e4ebdc30447b930a172a1678f0e277574148811eafc11eabc0dbd0f",
+        "confirm": "d94ccdaa1458b7171f9e713c3b7258befe54b4886700d400fcb14f4061937138"
+      },
+      "sdkError": "accept.confirm does not verify: the peer does not hold the static key published for its container"
+    },
+    {
+      "case": "After the rejected accept above, the genuine accept (handshake.json) still completes the same pending handshake",
+      "expected": "accept",
+      "ready": {
+        "t": "ready",
+        "cid": "697f8ba7adb6dae6fa02182440464f73",
+        "confirm": "aa1180ec0a32e9af361eeab8f1f520aa3cd87e244b4c23875ad5ea45831d3103"
+      }
+    },
+    {
+      "case": "Accept with the last hex digit of confirm changed",
+      "expected": "reject",
+      "accept": {
+        "t": "accept",
+        "cid": "697f8ba7adb6dae6fa02182440464f73",
+        "e": "f1368a893e4ebdc30447b930a172a1678f0e277574148811eafc11eabc0dbd0f",
+        "confirm": "1a2e701d721634ea79c6bf591a2a567243791f087bd3a1daf24f5c01c5317270"
+      },
+      "sdkError": "accept.confirm does not verify: the peer does not hold the static key published for its container"
+    },
+    {
+      "case": "Genuine accept arriving at now = exp",
+      "expected": "reject",
+      "sdkError": "the invite expired before it was accepted"
+    },
+    {
+      "case": "Responder opens an initiator frame before any ready has verified",
+      "expected": "reject",
+      "sdkError": "initiator has not confirmed yet: refusing inbound frames"
+    },
+    {
+      "case": "Ready arriving at now = exp",
+      "expected": "reject",
+      "sdkError": "ready arrived after the invite expired at 1789000600"
+    },
+    {
+      "case": "Ready with the last hex digit of confirm changed",
+      "expected": "reject",
+      "ready": {
+        "t": "ready",
+        "cid": "697f8ba7adb6dae6fa02182440464f73",
+        "confirm": "aa1180ec0a32e9af361eeab8f1f520aa3cd87e244b4c23875ad5ea45831d3100"
+      },
+      "sdkError": "ready.confirm does not verify: the initiator does not hold the static key published for its container"
+    },
+    {
+      "case": "Initiator frame seq 0 delivered a second time (replay)",
+      "expected": "reject",
+      "sdkError": "frame 0 is not after 0: replayed, duplicated or reordered"
+    },
+    {
+      "case": "Initiator frame seq 1 delivered first: accepted, gap reported",
+      "expected": "accept",
+      "skipped": 1
+    },
+    {
+      "case": "Initiator frame seq 0 delivered after seq 1 (reordered)",
+      "expected": "reject",
+      "sdkError": "frame 0 is not after 1: replayed, duplicated or reordered"
+    },
+    {
+      "case": "Initiator frame seq 0 with one ciphertext bit flipped",
+      "expected": "reject",
+      "sdkError": "frame failed authentication: tampered, misdirected or not for this channel"
+    },
+    {
+      "case": "Initiator frame seq 0 with its seq field rewritten to 5",
+      "expected": "reject",
+      "sdkError": "frame failed authentication: tampered, misdirected or not for this channel"
+    },
+    {
+      "case": "Initiator frame seq 0 handed back to the initiator (reflection: wrong direction key and AAD)",
+      "expected": "reject",
+      "sdkError": "frame failed authentication: tampered, misdirected or not for this channel"
+    },
+    {
+      "case": "Frame shorter than 24 bytes",
+      "expected": "reject",
+      "sdkError": "frame too short"
+    },
+    {
+      "case": "Frame longer than 8 + 16384 + 16 bytes",
+      "expected": "reject",
+      "sdkError": "frame too long"
+    },
+    {
+      "case": "Sealing a plaintext of 16385 bytes",
+      "expected": "reject",
+      "sdkError": "frame of 16385 bytes exceeds 16384"
+    },
+    {
+      "case": "Authentic frame whose plaintext is not UTF-8, opened as text (must not advance the counter)",
+      "expected": "reject",
+      "sdkError": "frame is authentic but not UTF-8: open it without { text: true } to get the bytes"
+    },
+    {
+      "case": "The same frame (seq 2; seq 0 and 1 of this session were sealed but never delivered) opened again as bytes after the rejection above: accepted, gap of 2 reported",
+      "expected": "accept",
+      "seq": 2,
+      "data": "fffe",
+      "skipped": 2
+    },
+    {
+      "case": "Wire message of unknown type 0x06",
+      "expected": "reject",
+      "sdkError": "unknown wire type 6"
+    },
+    {
+      "case": "Handshake wire (0x01) whose JSON repeats a member name",
+      "expected": "reject",
+      "sdkError": "handshake message is not UTF-8 JSON (strict parse: no duplicate or prototype keys)"
+    },
+    {
+      "case": "Handshake wire (0x01) whose t is neither accept nor ready",
+      "expected": "reject",
+      "sdkError": "unknown handshake message"
+    }
+  ]
+}
