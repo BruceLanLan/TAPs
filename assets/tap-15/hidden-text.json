@@ -1,0 +1,304 @@
+{
+  "tap": "TAP-draft-mcp-tools, Specification §3.4 and §6 step 4",
+  "source": "Generated with invisibleProblems of sdk/src/mcp.js at https://github.com/BruceLanLan/tapeapi/tree/d991f5e27429e13a480025bc3bdb8c2c29231574 (TapeAPI 1.5.0) on Node.js 22 (Unicode 17.0); refused and the code points of problems were recomputed by hidden-text-check.py in this directory, written from the text of this TAP.",
+  "rule": "refused is true when a string or member name, at any depth, in the covered members of a tool contains a hidden code point (§3.4). problems is informative: the reference lists, for each string or member name that contains one, the tool, the place and the first hidden code point in it.",
+  "cases": [
+    {
+      "name": "plain text in several scripts, with marks, NBSP and an ideographic space",
+      "toolsJson": "[{\"name\":\"weather\",\"title\":\"Weather\",\"description\":\"Weather for a city. 查询城市天气。東京の天気。날씨. Météo « Montréal ». é, ñ, IPA ˈwɛðər. 100 €, a　b.\",\"inputSchema\":{\"type\":\"object\",\"properties\":{\"city\":{\"type\":\"string\",\"description\":\"City name, e.g. \\\"北京\\\"\"}},\"required\":[\"city\"]}}]",
+      "refused": false,
+      "problems": []
+    },
+    {
+      "name": "emoji with and without U+FE0F, keycaps, U+FE0E text style, flags",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"⚠️ careful ❤️ thanks, 1️⃣ #️⃣ *️⃣, ☺︎ ✔︎, ©️ ™️, 😀 🌧️ 🇯🇵\"}]",
+      "refused": false,
+      "problems": []
+    },
+    {
+      "name": "LF and tab in a description, also a nested one",
+      "toolsJson": "[{\"name\":\"w\",\"description\":\"Line one.\\n\\tLine two.\",\"inputSchema\":{\"type\":\"object\",\"properties\":{\"q\":{\"type\":\"string\",\"description\":\"a\\nb\"}}}}]",
+      "refused": false,
+      "problems": []
+    },
+    {
+      "name": "a name that starts with an emoji and U+FE0F",
+      "toolsJson": "[{\"name\":\"⚠️ok\",\"title\":\"fine\"}]",
+      "refused": false,
+      "problems": []
+    },
+    {
+      "name": "U+200B ZERO WIDTH SPACE in a description",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"Weather​for a city\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+200B"
+      ]
+    },
+    {
+      "name": "tag characters (U+E0020-E007F) spelling text",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"Weather󠁣󠁡󠁬󠁬󠀠󠁸\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+E0063"
+      ]
+    },
+    {
+      "name": "U+202E RIGHT-TO-LEFT OVERRIDE",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"abc‮def\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+202E"
+      ]
+    },
+    {
+      "name": "U+00AD SOFT HYPHEN",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"weath­er\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+00AD"
+      ]
+    },
+    {
+      "name": "a ZWJ emoji sequence (U+200D)",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"family 👨‍👩‍👧 emoji\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+200D"
+      ]
+    },
+    {
+      "name": "a ZWJ in running text",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"zero‍width joiner\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+200D"
+      ]
+    },
+    {
+      "name": "LF in a title (only a description may carry LF or tab)",
+      "toolsJson": "[{\"name\":\"w\",\"title\":\"two\\nlines\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"w\": title: U+000A"
+      ]
+    },
+    {
+      "name": "U+0007 in a description",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"bell\\u0007\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+0007"
+      ]
+    },
+    {
+      "name": "tab in an enum value",
+      "toolsJson": "[{\"name\":\"w\",\"inputSchema\":{\"type\":\"object\",\"properties\":{\"u\":{\"type\":\"string\",\"enum\":[\"a\\tb\"]}}}}]",
+      "refused": true,
+      "problems": [
+        "tool \"w\": inputSchema.properties.u.enum[0]: U+0009"
+      ]
+    },
+    {
+      "name": "text spelled in variation selectors after an emoji",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"Weather for a city 😀󠅓󠅑󠅜󠅜󠄐󠅣󠅕󠅞󠅔󠅏󠅖󠅙󠅜󠅕\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+E0153"
+      ]
+    },
+    {
+      "name": "U+FE0F after a letter",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"a letter is no emoji a️\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+FE0F"
+      ]
+    },
+    {
+      "name": "two U+FE0F in a row after an emoji",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"two ⚠️️\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+FE0F"
+      ]
+    },
+    {
+      "name": "U+FE00 after an emoji",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"VS1 ⚠︀\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+FE00"
+      ]
+    },
+    {
+      "name": "U+FE0F at the start of a string",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"️ lead\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+FE0F"
+      ]
+    },
+    {
+      "name": "an ideographic variation sequence (U+E0100)",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"葛󠄀城市\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+E0100"
+      ]
+    },
+    {
+      "name": "Mongolian free variation selectors spelling text",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"Weather for a city.᠌᠍᠋᠏᠌᠍᠋᠌᠌᠍᠏᠋᠌᠍᠏᠋᠋᠍᠋᠋᠌᠏᠍᠋\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+180C"
+      ]
+    },
+    {
+      "name": "U+034F COMBINING GRAPHEME JOINER",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"x͏y\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+034F"
+      ]
+    },
+    {
+      "name": "U+115F HANGUL CHOSEONG FILLER",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"xᅟy\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+115F"
+      ]
+    },
+    {
+      "name": "U+1160 HANGUL JUNGSEONG FILLER",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"xᅠy\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+1160"
+      ]
+    },
+    {
+      "name": "U+3164 HANGUL FILLER",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"xㅤy\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+3164"
+      ]
+    },
+    {
+      "name": "U+FFA0 HALFWIDTH HANGUL FILLER",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"xﾠy\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+FFA0"
+      ]
+    },
+    {
+      "name": "U+17B4 KHMER VOWEL INHERENT AQ",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"x឴y\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+17B4"
+      ]
+    },
+    {
+      "name": "U+180E MONGOLIAN VOWEL SEPARATOR",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"x᠎y\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+180E"
+      ]
+    },
+    {
+      "name": "U+2065 unassigned, Default_Ignorable",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"x⁥y\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+2065"
+      ]
+    },
+    {
+      "name": "U+FFF0 unassigned, Default_Ignorable",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"x￰y\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+FFF0"
+      ]
+    },
+    {
+      "name": "U+E0080 unassigned, Default_Ignorable",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"x󠂀y\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+E0080"
+      ]
+    },
+    {
+      "name": "U+E0FFF unassigned, Default_Ignorable",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"x󠿿y\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+E0FFF"
+      ]
+    },
+    {
+      "name": "U+1BCA0 SHORTHAND FORMAT LETTER OVERLAP",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"x𛲠y\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+1BCA0"
+      ]
+    },
+    {
+      "name": "U+2800 BRAILLE PATTERN BLANK",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"x⠀y\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+2800"
+      ]
+    },
+    {
+      "name": "U+1D159 MUSICAL SYMBOL NULL NOTEHEAD",
+      "toolsJson": "[{\"name\":\"weather\",\"description\":\"x𝅙y\"}]",
+      "refused": true,
+      "problems": [
+        "tool \"weather\": description: U+1D159"
+      ]
+    },
+    {
+      "name": "in a tool name and in a property name",
+      "toolsJson": "[{\"name\":\"wㅤ\",\"inputSchema\":{\"type\":\"object\",\"properties\":{\"k⠀\":{\"type\":\"string\"}}}}]",
+      "refused": true,
+      "problems": [
+        "tool \"w<U+3164>\": name: U+3164",
+        "tool \"w<U+3164>\": inputSchema.properties key \"k<U+2800>\": U+2800"
+      ]
+    },
+    {
+      "name": "in an enum value under a hidden property name",
+      "toolsJson": "[{\"name\":\"w\",\"inputSchema\":{\"type\":\"object\",\"properties\":{\"k᠋\":{\"type\":\"string\",\"enum\":[\"a󠂀\"]}}}}]",
+      "refused": true,
+      "problems": [
+        "tool \"w\": inputSchema.properties key \"k<U+180B>\": U+180B",
+        "tool \"w\": inputSchema.properties[\"k<U+180B>\"].enum[0]: U+E0080"
+      ]
+    },
+    {
+      "name": "in outputSchema and annotations",
+      "toolsJson": "[{\"name\":\"w\",\"outputSchema\":{\"type\":\"object\",\"description\":\"x​y\"},\"annotations\":{\"title\":\"a⁠b\"}}]",
+      "refused": true,
+      "problems": [
+        "tool \"w\": outputSchema.description: U+200B",
+        "tool \"w\": annotations.title: U+2060"
+      ]
+    },
+    {
+      "name": "in a member that is not covered (_meta): not checked",
+      "toolsJson": "[{\"name\":\"w\",\"description\":\"ok\",\"_meta\":{\"note\":\"x​y\"}}]",
+      "refused": false,
+      "problems": []
+    }
+  ]
+}
