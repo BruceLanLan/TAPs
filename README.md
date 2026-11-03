@@ -15,6 +15,8 @@ TAPs are the public, numbered documents in which the TapeOut community proposes,
 | [TAP-14](TAPs/TAP-14.md) | Private Channels Between Containers | Application | Draft |
 | [TAP-15](TAPs/TAP-15.md) | MCP Tools as Container Service Methods | Application | Draft |
 | [TAP-16](TAPs/TAP-16.md) | Attested Reads from Independent Container Services | Application | Draft |
+| [TAP-17](TAPs/TAP-17.md) | AI Usage Receipts for Container Services | Application | Draft |
+| [TAP-18](TAPs/TAP-18.md) | Container Agent Mandates and Task Messages, Phase 0 | Application | Draft |
 
 Drafts that are proposed but not yet merged are the open pull requests.
 
