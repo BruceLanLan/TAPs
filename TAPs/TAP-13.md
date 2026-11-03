@@ -7,6 +7,7 @@ discussions-to: https://github.com/TapeOutProtocol/TAPs/issues/9
 status: Draft
 type: Application
 created: 2026-09-30
+updated: 2026-10-10
 requires: TAP-10, TAP-11
 license: CC0-1.0
 ---
@@ -205,19 +206,19 @@ An earlier envelope version used the prefix `TAPI-1/resp/v1` and covered neither
 Two public services have signed every answer, errors included, with this envelope since 2026-09-27, and the TapeAPI SDK 1.x verifies it (Reference Implementation). Nothing in this TAP changes a byte they send or accept. Compared with the TapeAPI document, this text:
 
 - states that a `params` that is present but not an object is refused bound to `params` `{}` (binding rule 2), which the reference provider already does, and that an unparseable request is bound to the path segment as its method;
-- requires a client's `id` to be well-formed Unicode, which neither the reference client nor the reference provider checks yet;
+- requires a client's `id` to be well-formed Unicode. Since version 1.5.0 the reference client refuses such an `id` before it sends anything, and the reference provider treats it as invalid and answers under binding rule 1 (§4);
 - leaves out the client-side error codes of the TapeAPI SDK and describes client outcomes in words instead (§1, §8);
 - takes canonical JSON from TAP-11 §6 instead of defining it here;
 - keeps `TOOLS_CHANGED` only as a reserved code (§6, reserved names), because the tool-server binding that used it is not part of TAP-11; the reference implementation's tool-server proxy still sends it;
 - moves AI usage receipts and their lookup method to a separate proposal (Rationale);
-- keeps the request member `voucher` and the codes `PAYMENT_REQUIRED` and `BAD_VOUCHER` only as reserved names (§6), because the payment TAP that would define them has not been proposed; the reference provider and SDK still send and act on them, with the voucher format and `error.data` of the TapeAPI document "TAPI-22" (called "TAP-22" until 2026-09-30; not a TAP number);
+- keeps the request member `voucher` and the codes `PAYMENT_REQUIRED` and `BAD_VOUCHER` only as reserved names (§6), because the payment TAP that would define them is proposed in pull request #52 and is not a TAP yet; the reference provider and SDK still send and act on them, with the voucher format and `error.data` of the TapeAPI document "TAPI-22" (called "TAP-22" until 2026-09-30; not a TAP number);
 - widens `METHOD_NOT_FOUND` to a request that asks a method for something its descriptor does not offer (§6), so that another TAP can use the code for, say, a chain that a method does not list, rather than adding a code for that one case. The reference provider sends `METHOD_NOT_FOUND` for an unknown method, and its attested-read example already sends it for an unlisted chain.
 
 Where the reference implementation's resolution of a service differs from TAP-10, the difference is listed in TAP-11; this TAP adds none.
 
 ## Test Cases
 
-The vector files are in `assets/tap-13/`. They were generated with the reference implementation at the commit given below and checked with the canonicalisation and recovery routines of the independent Python implementation at the same commit. Keys and addresses in them are test values.
+The vector files are in `assets/tap-13/`. They were generated with the reference implementation at commit `fda84db` (version 1.3.0) and checked with the canonicalisation and recovery routines of the independent Python implementation at the same commit. The reference implementation at the fixed commit below (version 1.8.1) reproduces every value in them (`sdk/src/canon.js`, `sdk/src/sig.js`), and so does the independent Python implementation at that commit (`spec/vectors/verify.py`). Keys and addresses in them are test values.
 
 The canonical JSON vectors of TAP-11 (its Test Cases, `canonical-json.json`) apply to this TAP unchanged. This TAP adds:
 
@@ -242,15 +243,15 @@ recovers        0x1563915e194D8CfBA1943570603F7606A3115508
 
 ## Reference Implementation
 
-TapeAPI 1.3.0, at commit [`fda84db889d2a732915f264a799af24073177a85`](https://github.com/BruceLanLan/tapeapi/tree/fda84db889d2a732915f264a799af24073177a85):
+TapeAPI 1.8.1, at commit [`4a1ac4fe2a0b2e3327652a794794765dd5da98ef`](https://github.com/BruceLanLan/tapeapi/tree/4a1ac4fe2a0b2e3327652a794794765dd5da98ef):
 
-- [`sdk/src/canon.js`](https://github.com/BruceLanLan/tapeapi/blob/fda84db889d2a732915f264a799af24073177a85/sdk/src/canon.js): canonical JSON (TAP-11 §6) and the strict parser (§2);
-- [`sdk/src/sig.js`](https://github.com/BruceLanLan/tapeapi/blob/fda84db889d2a732915f264a799af24073177a85/sdk/src/sig.js): the digest, signing and low-`s` recovery (§5);
-- [`server/src/index.js`](https://github.com/BruceLanLan/tapeapi/blob/fda84db889d2a732915f264a799af24073177a85/server/src/index.js): a provider (§3, §4, §6, §7);
-- [`sdk/src/index.js`](https://github.com/BruceLanLan/tapeapi/blob/fda84db889d2a732915f264a799af24073177a85/sdk/src/index.js): client verification (§8);
-- [`spec/vectors/verify.py`](https://github.com/BruceLanLan/tapeapi/blob/fda84db889d2a732915f264a799af24073177a85/spec/vectors/verify.py): an independent Python implementation of the canonical JSON and of §5, with Keccak-256 and secp256k1 recovery written from their specifications.
+- [`sdk/src/canon.js`](https://github.com/BruceLanLan/tapeapi/blob/4a1ac4fe2a0b2e3327652a794794765dd5da98ef/sdk/src/canon.js): canonical JSON (TAP-11 §6) and the strict parser (§2);
+- [`sdk/src/sig.js`](https://github.com/BruceLanLan/tapeapi/blob/4a1ac4fe2a0b2e3327652a794794765dd5da98ef/sdk/src/sig.js): the digest, signing and low-`s` recovery (§5);
+- [`server/src/index.js`](https://github.com/BruceLanLan/tapeapi/blob/4a1ac4fe2a0b2e3327652a794794765dd5da98ef/server/src/index.js): a provider (§3, §4, §6, §7);
+- [`sdk/src/index.js`](https://github.com/BruceLanLan/tapeapi/blob/4a1ac4fe2a0b2e3327652a794794765dd5da98ef/sdk/src/index.js): client verification (§8);
+- [`spec/vectors/verify.py`](https://github.com/BruceLanLan/tapeapi/blob/4a1ac4fe2a0b2e3327652a794794765dd5da98ef/spec/vectors/verify.py): an independent Python implementation of the canonical JSON and of §5, with Keccak-256 and secp256k1 recovery written from their specifications.
 
-Two services answer with this envelope: `https://api.tapeapi.fun` (container `0x1b2A657BcBa9D3229f57aC2f4FcbEE2AA756aAe8`, #11 of processor `0xe02c26c7432A7121168AA9B610DE24eCf9a1a414` on BNB Smart Chain) and `https://relay.tapeapi.fun` (container `0x9cD838625251576c199B2DeF7A17e50266843185`, #12 of the same processor). They are not audited. Under TAP-11 they do not resolve at the time of writing, because their names are not activated (see Backwards Compatibility there); the envelopes they send are unaffected.
+Two services answer with this envelope: `https://api.tapeapi.fun` (container `0x1b2A657BcBa9D3229f57aC2f4FcbEE2AA756aAe8`, #11 of processor `0xe02c26c7432A7121168AA9B610DE24eCf9a1a414` on BNB Smart Chain) and `https://relay.tapeapi.fun` (container `0x9cD838625251576c199B2DeF7A17e50266843185`, #12 of the same processor). They are not audited. Their holder activated both names on 2026-10-01. On 2026-10-09 `isContainerLive` was true for both containers when read from two operators at BNB Smart Chain block 126658102 (hash `0x152776aae99baff145411961ab761000d7825f21046648848d053a8a02b8b8ea`), so under TAP-11 they no longer end resolution as `unpaid` (TAP-10 §6.2). The envelopes they send were never affected.
 
 ## Deployments
 
