@@ -1,5 +1,5 @@
 ---
-tap: TBD
+tap: 19
 title: Private Group Conversations Between Containers
 description: An owner-run, end-to-end encrypted group of up to 32 circuit containers, with a group key per epoch sealed to each member's channel key, a roster that relays and chain observers cannot read, and messages signed by their senders.
 author: Bruce (@BruceLanLan)
@@ -11,7 +11,7 @@ requires: TAP-10, TAP-14
 license: CC0-1.0
 ---
 
-# TAP-TBD: Private Group Conversations Between Containers
+# TAP-19: Private Group Conversations Between Containers
 
 ## Summary
 
@@ -307,7 +307,7 @@ The wire formats and signatures are unchanged. The labels of this TAP are the re
 
 ## Test Cases
 
-Test vectors are in `assets/tap-draft-private-groups/` (directory name as asked in #7). Every file gives inputs and exact expected outputs:
+Test vectors are in `assets/tap-19/`. Every file gives inputs and exact expected outputs:
 
 | File | Covers |
 |---|---|
