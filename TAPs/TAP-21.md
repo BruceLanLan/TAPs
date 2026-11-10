@@ -1,5 +1,5 @@
 ---
-tap: TBD
+tap: 21
 title: Proof-Verified Reads
 description: How a client checks the TapeOut state it reads over JSON-RPC against EIP-1186 Merkle proofs of a pinned block's stateRoot, and where that state is stored in the listed TapeOut contract implementations.
 author: Bruce (@BruceLanLan)
@@ -11,7 +11,7 @@ requires: TAP-10
 license: CC0-1.0
 ---
 
-# TAP-TBD: Proof-Verified Reads
+# TAP-21: Proof-Verified Reads
 
 ## Summary
 
@@ -243,7 +243,7 @@ Nothing in TAP-10 changes, and a client that does not implement this TAP is unaf
 
 ## Test Cases
 
-Test vectors are in `assets/tap-draft-proof-verified-reads/` (directory name as asked in #7). Every file gives inputs and exact expected outputs:
+Test vectors are in `assets/tap-21/`. Every file gives inputs and exact expected outputs:
 
 | File | Covers |
 |---|---|
