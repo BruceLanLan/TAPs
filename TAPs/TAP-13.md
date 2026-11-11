@@ -199,7 +199,7 @@ Another TAP MAY define a signed statement that uses the preimage, digest and sig
 
 ## Backwards Compatibility
 
-This specification was published in the TapeAPI repository under the self-assigned name "TAP-21" (renamed "TAPI-21" on 2026-09-30). Neither name is a TAP number; editors assign the number of this TAP. The constant `TAPI-1/resp/v2` is a historical wire constant, not a TAP number, and never changes. Every envelope already issued depends on the canonical JSON of TAP-11 §6, which is the one the TapeAPI documents used.
+This specification was published in the TapeAPI repository as TAPI-21 (its name began with `TAP-` until 2026-09-30). That is a TapeAPI document name, not a TAP number; editors assign the number of this TAP. The constant `TAPI-1/resp/v2` is a historical wire constant, not a TAP number, and never changes. Every envelope already issued depends on the canonical JSON of TAP-11 §6, which is the one the TapeAPI documents used.
 
 An earlier envelope version used the prefix `TAPI-1/resp/v1` and covered neither the request nor `ok`. It is superseded; such envelopes do not verify under §5 and are rejected.
 
